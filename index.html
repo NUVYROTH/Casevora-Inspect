@@ -105,6 +105,8 @@ details summary{cursor:pointer;font-weight:700}
 .desc-guide .dg-list{display:grid;grid-template-columns:auto auto 1fr;gap:3px 8px;align-items:center}
 .desc-guide .dg-n{width:18px;height:18px;border-radius:50%;background:var(--brand);color:#fff;font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
 .desc-guide .dg-foot{font-size:12px;margin-top:6px}
+.phrases{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}
+.chip{font-size:13px;padding:4px 10px;border-radius:999px;background:#f3ece0;text-align:left}
 .aires .sheet{border:1px solid var(--line);border-top:3px solid var(--brand);border-radius:8px;background:#fff;padding:10px 12px;margin-top:10px}
 .aires .sheet-t{font-weight:700;margin-bottom:6px}
 .aires .draft{white-space:pre-wrap;background:#fff;border:1px solid var(--line);border-radius:6px;padding:8px 10px}
@@ -664,7 +666,8 @@ function renderDetail(){
             <select id="rvResult"><option value="">— 請選擇 —</option>
               ${Object.entries(REVIEW_RESULT).map(([k,t])=>`<option value="${k}">${t}</option>`).join('')}
             </select></div>
-          <div class="full"><label class="f">複查說明</label><textarea id="rvNote" rows="2" placeholder="依現場實際複查情形填寫"></textarea></div>
+          <div class="full"><label class="f">複查說明</label><textarea id="rvNote" rows="2" placeholder="依現場實際複查情形填寫，或按下方按鈕快速帶入"></textarea>
+            <div class="phrases"><span class="small muted">快速帶入：</span>${RV_PHRASES.map((t,i)=>`<button type="button" class="chip" onclick="addRvPhrase(${i})">${esc(t)}</button>`).join('')}</div></div>
         </div>
         <div class="row" style="margin-top:8px"><button class="primary" onclick="addReview()">新增複查紀錄並儲存</button></div>
       </div>
@@ -1023,6 +1026,17 @@ function flash(t){
 }
 
 /* ---------- 複查 ---------- */
+const RV_PHRASES = [
+  '經現場複查，確認改善措施已完成，符合要求。',
+  '經複查，原缺失仍未改善完成，請持續改善並於期限內重新提出佐證。',
+  '經確認改善措施已執行，惟仍須持續追蹤其執行成效。'
+];
+/* 空白時直接帶入；已有文字時接在後面換行 */
+function addRvPhrase(i){
+  const ta = $('#rvNote'); if(!ta || ta.disabled) return;
+  const t = RV_PHRASES[i]; ta.value = ta.value.trim() ? ta.value.replace(/\s+$/,'') + '\n' + t : t;
+  ta.focus();
+}
 function addReview(){
   if(!cur.improveContent.trim()){ say('請先填寫「如何改善」，再新增複查紀錄。'); return; }
   const date = $('#rvDate').value, result = $('#rvResult').value;
