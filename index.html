@@ -231,6 +231,82 @@ function storageUsedMB(){
   try{ return ((localStorage.getItem(KEY)||'').length*2/1024/1024).toFixed(2); }catch(e){ return '?'; }
 }
 
+/* =========================================================
+   照片：存在瀏覽器的大容量空間 IndexedDB（一樣只在這台電腦、這個瀏覽器）
+   案件資料裡只記「ph:編號」，照片本身另外存；不能用 IndexedDB 時，照樣存在案件資料裡
+   ========================================================= */
+const PH = { db:null, ok:false, cache:new Map() };
+const isRef = p => typeof p==='string' && p.startsWith('ph:');
+function phOpen(){
+  return new Promise(res => {
+    try{
+      const rq = indexedDB.open('qaHygienePhotos', 1);
+      rq.onupgradeneeded = () => rq.result.createObjectStore('p');
+      rq.onsuccess = () => { PH.db = rq.result; PH.ok = true; res(true); };
+      rq.onerror = () => res(false); rq.onblocked = () => res(false);
+    }catch(e){ res(false); }
+  });
+}
+function phReq(mode, fn){
+  return new Promise((res, rej) => {
+    try{ const r = fn(PH.db.transaction('p', mode).objectStore('p')); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }
+    catch(e){ rej(e); }
+  });
+}
+function phNewId(){ return 'ph:' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,8); }
+async function phPut(id, data){ await phReq('readwrite', st => st.put(data, id)); PH.cache.set(id, data); }
+async function phGet(id){
+  if(!isRef(id)) return id;
+  if(PH.cache.has(id)) return PH.cache.get(id);
+  if(!PH.ok) return '';
+  try{ const v = await phReq('readonly', st => st.get(id)) || ''; if(v) PH.cache.set(id, v); return v; }catch(e){ return ''; }
+}
+const phSync = p => isRef(p) ? (PH.cache.get(p) || '') : p;
+/* 畫面上的 <img data-ph> 先顯示空白，再從 IndexedDB 補上照片 */
+async function hydrate(root){
+  const imgs = [...(root||document).querySelectorAll('img[data-ph]')];
+  for(const im of imgs){ const v = await phGet(im.dataset.ph); if(v) im.src = v; else im.alt = '（照片找不到）'; }
+}
+async function preloadPhotos(rs){
+  await Promise.all(rs.flatMap(r => r.photos.concat(r.improvePhotos)).filter(isRef).map(phGet));
+}
+/* 舊資料：把存在案件資料裡的照片搬進 IndexedDB */
+async function phMoveOut(list){
+  let moved = 0;
+  for(const r of list){
+    for(const f of ['photos','improvePhotos']){
+      const arr = r[f] || [];
+      for(let i=0;i<arr.length;i++){
+        if(typeof arr[i]==='string' && arr[i].startsWith('data:')){ const id = phNewId(); await phPut(id, arr[i]); arr[i] = id; moved++; }
+      }
+    }
+  }
+  return moved;
+}
+/* 刪掉沒有任何案件用到的照片（一天內新增的先不刪，可能是別的分頁還沒儲存的） */
+async function phCleanup(){
+  try{
+    const used = new Set(records.flatMap(r => (r.photos||[]).concat(r.improvePhotos||[])).filter(isRef));
+    const keys = await phReq('readonly', st => st.getAllKeys());
+    const dayAgo = Date.now() - 86400000;
+    for(const k of keys){
+      const t = parseInt(String(k).slice(3).split('-')[0], 36);
+      if(!used.has(k) && t < dayAgo){ await phReq('readwrite', st => st.delete(k)); PH.cache.delete(k); }
+    }
+  }catch(e){}
+}
+async function storageWarn(){
+  try{
+    if(!navigator.storage || !navigator.storage.estimate || window.__warned) return;
+    const e = await navigator.storage.estimate();
+    if(e.quota && e.usage/e.quota > 0.8){ window.__warned = true; say('提醒：瀏覽器的儲存空間已用約 80% 以上。請盡快按「下載備份」，並封存舊的已結案案件。'); }
+  }catch(e){}
+}
+async function storageText(){
+  const el = $('#usedMB'); if(!el) return;
+  try{ const e = navigator.storage && navigator.storage.estimate ? await navigator.storage.estimate() : null; el.textContent = e ? (e.usage/1024/1024).toFixed(1)+' MB' : storageUsedMB()+' MB'; }catch(x){ el.textContent = storageUsedMB()+' MB'; }
+}
+
 /* ---------- 小工具 ---------- */
 const $ = s => document.querySelector(s);
 /* 頁面內的提示與確認視窗（claude.ai 版不會顯示瀏覽器的 alert／confirm 視窗） */
@@ -445,14 +521,14 @@ async function showList(){
             <li><b>換電腦或換瀏覽器就看不到</b>原本的資料（例如 Chrome 存的資料，Edge 看不到）。</li>
             <li>請<b>固定用同一個瀏覽器、從同一個網址開啟</b>（建議加入書籤）。網址不同（例如電腦裡的 HTML 檔與網路上的網址）會被當成不同地方，資料不互通。</li>
             <li><b>清除瀏覽器資料／Cookie</b>、使用無痕模式，資料會消失或不會被保存。</li>
-            <li>儲存空間約 5MB，照片會自動壓縮，但照片多時仍可能存滿。目前已使用約 <b>${storageUsedMB()} MB</b>。</li>
+            <li>照片會自動壓縮，存在瀏覽器的大容量儲存空間（IndexedDB），一樣<b>只在這台電腦、這個瀏覽器</b>。可放的數量依電腦剩餘空間而定，通常可放數千張。目前已使用約 <b id="usedMB">…</b>。</li>
             <li>無法多人共用同一份資料。</li>
             <li>建議<b>定期按「下載備份」</b>，備份檔可用「從備份還原」匯回（還原會取代目前資料）。</li>
           </ul>
         </div>
       </details>
     </div>`;
-  renderTable();
+  renderTable(); storageText();
 }
 function tab(k, t, n){ return `<button class="${listFilter===k?'on':''}" onclick="listFilter='${k}';listPage=1;showList()">${t}（${n}）</button>`; }
 
@@ -556,7 +632,7 @@ function fld(f, label, type='text', opt={}){
 }
 function photoBox(field){
   return `<div class="photos" id="ph_${field}">${cur[field].map((p,i)=>`
-      <div class="ph"><img src="${p}" alt="照片${i+1}"><button class="x lockable" onclick="removePhoto('${field}',${i})">✕</button></div>`).join('')}
+      <div class="ph"><img src="${phSync(p)}" ${isRef(p)?`data-ph="${p}"`:''} alt="照片${i+1}"><button class="x lockable" onclick="removePhoto('${field}',${i})">✕</button></div>`).join('')}
     </div>
     <div class="row" style="margin-top:6px">
       <button class="lockable" onclick="this.nextElementSibling.click()">＋ 加入照片</button>
@@ -697,7 +773,7 @@ function renderDetail(){
       <span class="spacer"></span>
       <span class="muted small">${r.updatedAt?'最後儲存：'+esc(r.updatedAt):'尚未儲存'}</span>
     </div></div>`;
-  refresh();
+  refresh(); hydrate($('#app'));
 }
 
 /* 依目前內容更新提醒、條件區塊、狀態等 */
@@ -814,7 +890,14 @@ function addPhotos(field, input){
         const c = document.createElement('canvas');
         c.width = Math.round(img.width*s); c.height = Math.round(img.height*s);
         c.getContext('2d').drawImage(img,0,0,c.width,c.height);
-        cur[field].push(c.toDataURL('image/jpeg',0.6));
+        const url = c.toDataURL('image/jpeg',0.6);
+        if(PH.ok){
+          const id = phNewId();
+          phPut(id, url).then(() => { cur[field].push(id); dirty = true; renderPhotoBox(field); refresh(); })
+            .catch(() => say('照片存不進去，瀏覽器的儲存空間可能已滿。請先「下載備份」，並封存舊的已結案案件。'));
+          return;
+        }
+        cur[field].push(url);
         dirty = true; renderPhotoBox(field); refresh();
       };
       img.src = fr.result;
@@ -824,7 +907,7 @@ function addPhotos(field, input){
 }
 function removePhoto(field,i){ cur[field].splice(i,1); dirty=true; renderPhotoBox(field); refresh(); }
 function renderPhotoBox(field){
-  $('#ph_'+field).innerHTML = cur[field].map((p,i)=>`<div class="ph"><img src="${p}" alt="照片${i+1}"><button class="x lockable" onclick="removePhoto('${field}',${i})">✕</button></div>`).join('');
+  $('#ph_'+field).innerHTML = cur[field].map((p,i)=>`<div class="ph"><img src="${phSync(p)}" ${isRef(p)?`data-ph="${p}"`:''} alt="照片${i+1}"><button class="x lockable" onclick="removePhoto('${field}',${i})">✕</button></div>`).join('');
 }
 
 /* ---------- 文字整理（範本，非 AI） ---------- */
@@ -1088,6 +1171,7 @@ function saveRecord(silent){
   dirty = false;
   try{ const used = (localStorage.getItem(KEY)||'').length + (localStorage.getItem(KEY_T)||'').length;
     if(used > 4000000 && !window.__warned){ window.__warned = true; say('提醒：本機儲存空間已用約 80% 以上。請盡快按「下載備份」，並考慮減少照片。'); } }catch(e){}
+  storageWarn();
   if(isNew && !silent){ showList(); flash('已儲存 '+r.id); return true; }
   renderDetail();
   if(!silent) flash('已儲存');
@@ -1156,12 +1240,13 @@ function rangeLabel(){
   const ym = (listYear?listYear+' 年':'全部年份') + (listMonth?' '+parseInt(listMonth,10)+' 月':'');
   return ym + '｜' + tabName + (listSearch.trim()?'｜搜尋「'+listSearch.trim()+'」':'');
 }
-function beforeAfterReport(){
+async function beforeAfterReport(){
   const picked = listSel.size ? records.filter(r=>listSel.has(r.id) && !r.deleted) : filteredRecords();
   if(!picked.length){ say('目前沒有案件可以做報告。'); return; }
   const rs = picked.slice().sort((a,b)=> (a.foundDate||'').localeCompare(b.foundDate||'') || a.id.localeCompare(b.id));
   const label = listSel.size ? '勾選的案件' : rangeLabel();
-  const imgs = (arr) => arr.length ? arr.map(p=>`<img src="${p}" alt="">`).join('') : '<div class="none">（無照片）</div>';
+  await preloadPhotos(rs);
+  const imgs = (arr) => arr.length ? arr.map(p=>`<img src="${phSync(p)}" alt="">`).join('') : '<div class="none">（無照片）</div>';
   const blocks = rs.map(r => { const lr = lastReview(r); return `<section class="case">
     <div class="hd"><b>${esc(r.id)}</b><span>${fmtDate(r.foundDate)}</span><span>${esc(r.area)}</span><span class="st">${esc(statusOf(r).t)}${isOverdue(r)?'（逾期）':''}</span></div>
     <table>
@@ -1230,8 +1315,12 @@ async function download(content, name, type){
 }
 
 /* ---------- 備份 / 還原 ---------- */
-function backup(){
-  download(JSON.stringify({app:'qaHygieneTracker', version:2, exportedAt:new Date().toISOString(), records:live(), tombs}, null, 1),
+async function backup(){
+  /* 備份檔裡放照片本身（不是編號），換電腦還原時照片才會跟著過去 */
+  const rs = live();
+  await preloadPhotos(rs);
+  const out = rs.map(r => Object.assign({}, r, { photos:r.photos.map(phSync).filter(Boolean), improvePhotos:r.improvePhotos.map(phSync).filter(Boolean) }));
+  download(JSON.stringify({app:'qaHygieneTracker', version:2, exportedAt:new Date().toISOString(), records:out, tombs}, null, 1),
     `hygiene_backup_${today()}.json`, 'application/json');
 }
 function restore(input){
@@ -1246,7 +1335,9 @@ function restore(input){
       const trashN = records.filter(r=>r.deleted).length;
       if(!(await ask(`備份檔內有 ${incoming.length} 筆紀錄。\n還原會「取代」目前瀏覽器中的 ${live().length} 筆資料，目前「最近刪除」裡的 ${trashN} 筆案件也會一併被取代，確定嗎？`))) return;
       const old = records, oldT = tombs.slice();
-      records = incoming.map(r=>Object.assign(blankRecord(), migrate(r)));
+      const next = incoming.map(r=>Object.assign(blankRecord(), migrate(r)));
+      if(PH.ok){ try{ await phMoveOut(next); }catch(e){ say('照片存不進去，瀏覽器的儲存空間可能已滿，還原已取消，目前資料沒有變動。'); return; } }
+      records = next;
       const have = new Set(tombs.map(t=>t.id));
       (Array.isArray(data.tombs)?data.tombs:[]).forEach(t=>{ if(t && t.id && !have.has(t.id)) tombs.push(t); });
       if(!persistAll()){ records = old; tombs = oldT; return; }
@@ -1484,8 +1575,9 @@ async function printReport(){
   if(inClaude()){ say('claude.ai 版無法開啟列印視窗。請到網址版按「列印／存成 PDF」。'); return; }
   if(dirty && !(await ask('有尚未儲存的修改，列印內容會包含這些修改（但尚未儲存）。要繼續嗎？'))) return;
   const r = cur;
+  await preloadPhotos([r]);
   const row = (k,v) => `<tr><th>${k}</th><td>${v||''}</td></tr>`;
-  const imgs = arr => arr.length ? arr.map(p=>`<img src="${p}">`).join('') : '無';
+  const imgs = arr => arr.length ? arr.map(p=>`<img src="${phSync(p)}">`).join('') : '無';
   $('#print').innerHTML = `
     <h1>衛生缺失改善追蹤紀錄</h1>
     <div style="text-align:center;margin-bottom:10px">編號：${esc(r.id)}　狀態：${statusOf(r).t}${isOverdue(r)?'（逾期）':''}　列印日期：${fmtDate(today())}</div>
@@ -1519,10 +1611,22 @@ async function printReport(){
   const tick = () => { const c = window.scrollY > 40; if(c!==on){ on = c; const h = document.querySelector('header.topbar'); if(h) h.classList.toggle('compact', c); } };
   window.addEventListener('scroll', tick, {passive:true}); tick();
 })();
-(function init(){
+(async function init(){
   try{ localStorage.setItem('__t','1'); localStorage.removeItem('__t'); }
   catch(e){ say('注意：目前瀏覽器無法保存資料（可能是無痕模式或已封鎖網站資料），關閉後資料會遺失。'); }
   purgeExpired();
+  $('#app').innerHTML = '<div class="empty">資料載入中…</div>';
+  if(await phOpen()){
+    try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
+    const hasOld = records.some(r => (r.photos||[]).concat(r.improvePhotos||[]).some(p => typeof p==='string' && p.startsWith('data:')));
+    if(hasOld){
+      $('#app').innerHTML = '<div class="empty">第一次使用新版：正在把照片搬到大容量儲存空間，請稍候，不要關閉頁面…</div>';
+      const before = JSON.stringify(records);
+      try{ if(await phMoveOut(records)) persistAll(); }
+      catch(e){ records = JSON.parse(before); say('照片搬移沒有完成，資料維持原樣，下次打開會再試一次。'); }
+    }
+    phCleanup();
+  }
   showList();
 })();
 </script>
