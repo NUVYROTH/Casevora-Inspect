@@ -783,6 +783,11 @@ function onField(e){
     cur.deadline = addDays(cur.foundDate,7);
     document.querySelector('[data-f=deadline]').value = cur.deadline;
   }
+  /* 通知日期預設為發現日期：沒手動改過時，跟著發現日期變 */
+  if(f==='foundDate' && cur.foundDate && oldFound && cur.notifyDate===oldFound){
+    cur.notifyDate = cur.foundDate;
+    document.querySelector('[data-f=notifyDate]').value = cur.notifyDate;
+  }
   if(f==='foundDate' && cur.foundDate && oldFound && cur.improveDate===addDays(oldFound,7)){
     cur.improveDate = addDays(cur.foundDate,7);
     document.querySelector('[data-f=improveDate]').value = cur.improveDate;
