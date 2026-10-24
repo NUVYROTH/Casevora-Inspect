@@ -431,17 +431,20 @@ function renderTable(){
   if(listPage>pages) listPage = pages;
   if(listPage<1) listPage = 1;
   const rs = all.slice((listPage-1)*pageSize, listPage*pageSize);
-  const vis = new Set(rs.filter(r=>!r.closed).map(r=>r.id));
+  const vis = new Set(rs.map(r=>r.id));
   listSel = new Set([...listSel].filter(id=>vis.has(id)));
   if(!rs.length){ $('#tableBox').innerHTML = `<div class="empty">${live().length?'沒有符合條件的紀錄':'目前還沒有紀錄，請按「新增衛生缺失」開始'}</div>`; return; }
   const n = listSel.size;
+  const nDel = [...listSel].filter(id=>{ const r=records.find(x=>x.id===id); return r && !r.closed; }).length;
+  const allOn = rs.length && rs.every(r=>listSel.has(r.id));
   $('#tableBox').innerHTML = `<div class="row" style="margin-bottom:8px">
-      <button id="listDel" class="danger" onclick="listDelete()" ${n?'':'disabled'}>刪除${n?'（'+n+'）':''}</button>
-      <span class="muted small">${n?'已勾選 '+n+' 筆':'勾選案件後可刪除；已結案的案件不能刪除'}</span></div>
+      <button id="listDel" class="danger" onclick="listDelete()" ${nDel?'':'disabled'}>刪除${nDel?'（'+nDel+'）':''}</button>
+      <button onclick="beforeAfterReport()">🖼 改善前後報告${n?'（勾選 '+n+' 件）':'（清單 '+all.length+' 件）'}</button>
+      <span class="muted small">${n?'已勾選 '+n+' 筆'+(n>nDel?'；其中已結案 '+(n-nDel)+' 筆不能刪除，刪除時會略過':''):'勾選案件後可刪除或只做這幾件的報告；沒勾選時，報告包含清單上所有符合條件的案件'}</span></div>
     <div style="overflow-x:auto"><table>
-    <thead><tr><th></th><th>編號</th><th>發現日期</th><th>缺失區域</th><th>缺失描述</th><th>分類</th><th>負責單位／人員</th><th>改善期限</th><th>狀態</th></tr></thead>
+    <thead><tr><th><input type="checkbox" id="liAll" title="全選本頁" aria-label="全選本頁" ${allOn?'checked':''} onchange="listAll(this.checked)"></th><th>編號</th><th>發現日期</th><th>缺失區域</th><th>缺失描述</th><th>分類</th><th>負責單位／人員</th><th>改善期限</th><th>狀態</th></tr></thead>
     <tbody>${rs.map(r=>`<tr class="click" onclick="openRecord('${r.id}')">
-      <td onclick="event.stopPropagation()"><input type="checkbox" class="liChk" data-id="${esc(r.id)}" ${r.closed?'disabled title="已結案不能刪除，要先撤銷結案"':''} ${listSel.has(r.id)?'checked':''} onchange="listToggle(this)"></td>
+      <td onclick="event.stopPropagation()"><input type="checkbox" class="liChk" data-id="${esc(r.id)}" ${listSel.has(r.id)?'checked':''} onchange="listToggle(this)"></td>
       <td>${esc(r.id)}</td><td>${fmtDate(r.foundDate)}</td><td>${esc(r.area)}</td>
       <td>${esc((r.rawDesc||'').slice(0,40))}${(r.rawDesc||'').length>40?'…':''}</td>
       <td class="small">${esc(CAT[r.category]||'未分類')}${r.consecutive?'<br><span class="muted">連續兩天</span>':''}${r.recurred?'<br><span class="muted">通知後再發生</span>':''}</td>
@@ -461,6 +464,11 @@ function goPage(d){ listPage += d; listSel = new Set(); renderTable(); }
 function setPageSize(v){
   pageSize = parseInt(v,10) || 20; listPage = 1; listSel = new Set();
   try{ localStorage.setItem('qaHygieneTracker_pageSize', String(pageSize)); }catch(e){}
+  renderTable();
+}
+function listAll(on){
+  const all = filteredRecords();
+  all.slice((listPage-1)*pageSize, listPage*pageSize).forEach(r => on ? listSel.add(r.id) : listSel.delete(r.id));
   renderTable();
 }
 function listToggle(el){ const id=el.dataset.id; if(el.checked) listSel.add(id); else listSel.delete(id); renderTable(); }
@@ -955,6 +963,52 @@ async function reopen(){
   if(!(await ask('確定撤銷結案？撤銷後此紀錄將回到追蹤狀態，可再修改。'))) return;
   Object.assign(cur, {closed:false, closedBy:'', closedDate:'', closeNote:'', closeBasis:''}); closeBasisUI='pass';
   saveRecord(true); flash('已撤銷結案');
+}
+
+/* ---------- 改善前後報告（下載 HTML，打開後可列印／存 PDF） ---------- */
+function rangeLabel(){
+  const tabName = {open:'未結案',over:'逾期',ready:'待結案確認',closed:'已結案',all:'全部'}[listFilter];
+  const ym = (listYear?listYear+' 年':'全部年份') + (listMonth?' '+parseInt(listMonth,10)+' 月':'');
+  return ym + '｜' + tabName + (listSearch.trim()?'｜搜尋「'+listSearch.trim()+'」':'');
+}
+function beforeAfterReport(){
+  const picked = listSel.size ? records.filter(r=>listSel.has(r.id) && !r.deleted) : filteredRecords();
+  if(!picked.length){ say('目前沒有案件可以做報告。'); return; }
+  const rs = picked.slice().sort((a,b)=> (a.foundDate||'').localeCompare(b.foundDate||'') || a.id.localeCompare(b.id));
+  const label = listSel.size ? '勾選的案件' : rangeLabel();
+  const imgs = (arr) => arr.length ? arr.map(p=>`<img src="${p}" alt="">`).join('') : '<div class="none">（無照片）</div>';
+  const blocks = rs.map(r => { const lr = lastReview(r); return `<section class="case">
+    <div class="hd"><b>${esc(r.id)}</b><span>${fmtDate(r.foundDate)}</span><span>${esc(r.area)}</span><span class="st">${esc(statusOf(r).t)}${isOverdue(r)?'（逾期）':''}</span></div>
+    <table>
+      <tr><th>缺失描述</th><td>${nl2br(r.rawDesc)}</td></tr>
+      <tr><th>如何改善</th><td>${nl2br(r.improveContent)||'（尚未填寫）'}</td></tr>
+      <tr><th>改善執行單位</th><td>${esc(improveByText(r))||'—'}</td></tr>
+      <tr><th>最近一次複查</th><td>${lr?fmtDate(lr.date)+'　'+REVIEW_RESULT[lr.result]+(lr.note?'　'+esc(lr.note):''):'尚未複查'}</td></tr>
+    </table>
+    <div class="ba"><div><h4>改善前</h4><div class="ph">${imgs(r.photos)}</div></div><div><h4>改善後</h4><div class="ph">${imgs(r.improvePhotos)}</div></div></div>
+  </section>`; }).join('');
+  const html = `<!DOCTYPE html><html lang="zh-Hant-TW"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>衛生缺失改善前後對照報告</title><style>
+body{font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;color:#16213a;margin:0;padding:24px;font-size:13px;line-height:1.6}
+h1{font-size:20px;margin:0;text-align:center} .meta{text-align:center;color:#5d6779;margin:4px 0 6px}
+.tip{background:#f8ecd4;color:#6b4f1d;border-radius:6px;padding:6px 10px;margin:0 0 16px;text-align:center}
+.case{border:1px solid #c9bda6;border-top:4px solid #16213a;border-radius:6px;padding:10px 12px;margin-bottom:16px;break-inside:avoid}
+.hd{display:flex;flex-wrap:wrap;gap:4px 14px;margin-bottom:6px} .hd .st{margin-left:auto;font-weight:700}
+table{width:100%;border-collapse:collapse} th,td{border:1px solid #c9bda6;padding:4px 6px;text-align:left;vertical-align:top} th{width:110px;background:#f3ece0;white-space:nowrap}
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px} h4{margin:0 0 4px;font-size:13px;border-left:3px solid #b8955a;padding-left:6px}
+.ph{display:flex;flex-wrap:wrap;gap:4px} .ph img{box-sizing:border-box;width:calc(50% - 2px);aspect-ratio:4/3;object-fit:cover;border:1px solid #ccc}
+.none{color:#5d6779} .sign{display:flex;justify-content:space-between;margin-top:30px}
+@media print{.tip{display:none} body{padding:0} .case,th{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@page{margin:12mm}
+</style></head><body>
+<h1>衛生缺失改善前後對照報告</h1>
+<div class="meta">範圍：${esc(label)}　共 ${rs.length} 件　製表日期：${fmtDate(today())}</div>
+<div class="tip">按 Ctrl + P（手機用瀏覽器的「列印／分享」）即可列印或存成 PDF。</div>
+${blocks}
+<div class="sign"><span>負責單位：＿＿＿＿＿＿＿＿</span><span>品管確認：＿＿＿＿＿＿＿＿</span><span>主管：＿＿＿＿＿＿＿＿</span></div>
+</body></html>`;
+  download(html, `hygiene_before_after_${today()}.html`, 'text/html;charset=utf-8');
+  flash('已產生報告（共 '+rs.length+' 件）');
 }
 
 /* ---------- 匯出報表（CSV，Excel 可開） ---------- */
