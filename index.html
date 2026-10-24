@@ -99,7 +99,8 @@ details summary{cursor:pointer;font-weight:700}
 .pager{margin-top:10px}
 .pager select{width:auto;padding:4px 6px}
 /* 案件頁：電腦上左右並排（左：案件內容，右：文字整理），手機上下排列 */
-.split{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:16px;align-items:start}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+main:has(.split){max-width:1320px}
 .split .side{position:sticky;top:12px;max-height:calc(100vh - 90px);overflow:auto}
 @media (max-width:900px){ .split{grid-template-columns:1fr} .split .side{position:static;max-height:none;overflow:visible} }
 #print{display:none}
@@ -553,7 +554,7 @@ function renderDetail(){
     <div class="card side">
       <h2><span class="no">2</span>文字整理（整理「缺失描述」）</h2>
       <div class="notice info small">
-        <b>說明：</b>第一版<b>沒有內建 AI</b>。若要真正的 AI 自動整理，未來需要另外串接 AI 服務。目前提供兩種方式：<br>
+        <b>說明：</b>網址版<b>沒有 AI</b>；claude.ai 版可以用「產生分析」。共有三種方式：<br>
         ①「範本整理」：依固定格式，<b>只用你填寫的資料</b>組成正式文字（不是 AI，不會推測原因或結果）。<br>
         ②「複製 AI 提示詞」：把資料與限制條件組成一段文字，貼到你慣用的 AI 工具，再把結果貼回「缺失描述」欄位。<br>
         ③「產生分析」：以稽核老師的角度分析這筆缺失，建議缺失描述怎麼寫（僅限 claude.ai 版）。
