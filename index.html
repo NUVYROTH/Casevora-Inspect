@@ -605,6 +605,8 @@ function refresh(){
   if(!show.risk && r.riskControl) document.querySelector('[data-show=risk]').hidden=false;
   if(!show.cause && r.causeAnalysis) document.querySelector('[data-show=cause]').hidden=false;
 
+  const rv = $('#rvDate');
+  if(rv){ rv.max = today(); if(r.foundDate) rv.min = r.foundDate; else rv.removeAttribute('min'); }
   renderReviews();
   renderClose();
   applyLock();
