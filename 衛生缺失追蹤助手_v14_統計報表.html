@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>衛生缺失追蹤助手</title>
+<style>
+:root{
+  --bg:#f4f6f5; --card:#ffffff; --ink:#1d2a26; --muted:#5f6f69; --line:#d9e0dd;
+  --brand:#1f6f5c; --brand-soft:#e3f1ec; --warn:#b45309; --warn-soft:#fff4e0;
+  --bad:#b42318; --bad-soft:#fdecea; --ok:#167a3e; --ok-soft:#e6f5ec; --info:#1d4f91; --info-soft:#e8f0fb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,sans-serif;font-size:15px;line-height:1.6}
+header{background:var(--brand);color:#fff;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header h1{margin:0;font-size:20px;font-weight:700;letter-spacing:.5px}
+header .sub{font-size:13px;opacity:.85}
+main{max-width:1100px;margin:0 auto;padding:20px 16px 100px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-bottom:16px}
+.card h2{margin:0 0 12px;font-size:17px;display:flex;align-items:center;gap:8px}
+.card h2 .no{background:var(--brand);color:#fff;border-radius:50%;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;font-size:13px;flex:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px 16px}
+.full{grid-column:1/-1}
+label.f{display:block;font-size:13px;color:var(--muted);margin-bottom:4px;font-weight:600}
+.req::after{content:" *";color:var(--bad)}
+input[type=text],input[type=date],select,textarea{width:100%;padding:8px 10px;border:1px solid #c5cfcb;border-radius:6px;font:inherit;background:#fff;color:inherit}
+textarea{min-height:70px;resize:vertical}
+input:disabled,select:disabled,textarea:disabled{background:#f1f3f2;color:#444}
+button{font:inherit;cursor:pointer;border-radius:6px;border:1px solid #c5cfcb;background:#fff;color:var(--ink);padding:7px 14px}
+button:hover{background:#f0f3f2}
+button.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+button.primary:hover{background:#185a4a}
+button.danger{color:var(--bad);border-color:#e7b4ae}
+button:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.spacer{flex:1}
+.check{display:flex;gap:8px;align-items:flex-start;padding:6px 0}
+.check input{margin-top:5px}
+.badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}
+.s-todo{background:var(--info-soft);color:var(--info)}
+.s-review{background:#efe9fb;color:#5b3a9c}
+.s-track{background:var(--warn-soft);color:var(--warn)}
+.s-ready{background:var(--ok-soft);color:var(--ok)}
+.s-closed{background:#e9ecea;color:#4b5a55}
+.s-over{background:var(--bad-soft);color:var(--bad)}
+.notice{border-radius:8px;padding:10px 14px;font-size:14px;margin:8px 0}
+.notice.info{background:var(--info-soft);color:#173d70}
+.notice.warn{background:var(--warn-soft);color:#7a3d06}
+.notice.bad{background:var(--bad-soft);color:#7d1a12}
+.notice.ok{background:var(--ok-soft);color:#0f5a2d}
+.notice ul{margin:4px 0 0;padding-left:20px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{border-bottom:1px solid var(--line);padding:8px 8px;text-align:left;vertical-align:top}
+th{background:#f7f9f8;color:var(--muted);font-weight:600;white-space:nowrap}
+tbody tr.click{cursor:pointer}
+tbody tr.click:hover{background:#f3f8f6}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.photos{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.photos .ph{position:relative}
+.photos img{width:110px;height:110px;object-fit:cover;border-radius:6px;border:1px solid var(--line);display:block}
+.photos .x{position:absolute;top:3px;right:3px;padding:0 6px;font-size:12px;line-height:18px;background:rgba(255,255,255,.9)}
+.tabs button{border-radius:999px;padding:4px 14px}
+.tabs button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.savebar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 16px;box-shadow:0 -2px 8px rgba(0,0,0,.05)}
+.savebar .in{max-width:1100px;margin:0 auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.dl-input{border:2px solid #7c3aed!important;background:#f6f0ff!important}
+.dl-input.bad{border-color:var(--bad)!important;background:var(--bad-soft)!important}
+.rv-input{border:2px solid #7c3aed!important;background:#f6f0ff!important}
+.rv-hint{font-size:12px;color:#5b3a9c;margin-top:3px}
+.dl-hint{font-size:12px;color:#5b3a9c;margin-top:3px}
+.ferr{color:var(--bad);font-size:13px;font-weight:700;margin-top:3px}
+.dirty{color:var(--warn);font-weight:700;font-size:14px}
+.checks li{list-style:none;padding:2px 0}
+.checks{padding-left:0;margin:6px 0}
+.subbox{border:1px dashed #c5cfcb;border-radius:8px;padding:12px 14px;margin-top:10px;background:#fbfcfc}
+details summary{cursor:pointer;font-weight:700}
+.empty{text-align:center;padding:40px;color:var(--muted)}
+#print{display:none}
+
+/* ---------- 統計頁 ---------- */
+.st-head{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.st-title{font-size:20px;font-weight:700;margin:0}
+.st-sum{border-radius:8px;padding:12px 14px;font-size:16px;font-weight:700;margin:8px 0 14px;line-height:1.5}
+.st-sum.ok{background:var(--ok-soft);color:#0f5a2d}
+.st-sum.warn{background:var(--warn-soft);color:#7a3d06}
+.st-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px}
+.st-tile{border:1px solid var(--line);border-radius:10px;padding:12px 10px;text-align:center;background:#fff}
+.st-tile .n{font-size:34px;font-weight:700;line-height:1.1}
+.st-tile .l{font-size:14px;font-weight:700;margin-top:4px}
+.st-tile .d{font-size:12px;color:var(--muted);margin-top:2px}
+.st-tile.t-done .n{color:var(--ok)} .st-tile.t-open .n{color:var(--info)} .st-tile.t-over .n{color:var(--bad)}
+.st-tile.t-over{border-color:#e7b4ae;background:var(--bad-soft)}
+.st-extra{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.st-extra .box{flex:1 1 240px;border:2px dashed #e7b4ae;border-radius:10px;padding:10px 14px;background:#fff}
+.st-extra .box.del{border-color:#c5cfcb}
+.st-extra .n{font-size:26px;font-weight:700;color:var(--bad)} .st-extra .del .n{color:var(--ink)}
+.st-extra .l{font-weight:700}
+.st-note{font-size:12px;color:var(--muted);margin:2px 0 10px}
+.st-sec{margin:18px 0 6px;font-size:16px;font-weight:700;border-left:4px solid var(--brand);padding-left:8px;break-after:avoid}
+.st-bar{display:grid;grid-template-columns:minmax(80px,170px) 1fr 44px;gap:8px;align-items:center;margin:4px 0;font-size:14px}
+.st-bar .b{background:#eef3f1;border-radius:4px;height:16px}
+.st-bar .b i{display:block;height:16px;background:var(--brand);border-radius:4px;min-width:2px}
+.st-bar .v{text-align:right;font-weight:700}
+.st-chart svg{width:100%;min-width:560px;height:auto;display:block}
+.st-scroll{overflow-x:auto}
+.st-leg{display:flex;gap:16px;font-size:13px;margin:4px 0}
+.st-leg span::before{content:"";display:inline-block;width:22px;height:0;border-top:3px solid;vertical-align:middle;margin-right:6px}
+.st-leg .a::before{border-color:var(--brand)} .st-leg .c::before{border-color:var(--bad);border-top-style:dashed}
+@media (max-width:640px){ .st-tiles{grid-template-columns:repeat(2,1fr)} .st-tile .n{font-size:30px} }
+@page{margin:12mm}
+@media print{
+  body{background:#fff;font-size:12px}
+  header,main,.savebar{display:none!important}
+  #print{display:block}
+  #print h1{font-size:18px;text-align:center;margin:0 0 4px}
+  #print table{font-size:12px;margin-bottom:10px}
+  #print th,#print td{border:1px solid #999;padding:5px 6px}
+  #print th{background:#eee;width:130px;color:#000}
+  #print h3{font-size:14px;margin:12px 0 4px}
+  #print img{width:120px;height:120px;object-fit:cover;margin:2px;border:1px solid #ccc}
+  .sign{display:flex;justify-content:space-between;margin-top:30px}
+  #print .st-tile,#print .st-extra .box,#print .st-sum{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #print .st-bar .b i,#print .st-chart svg{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #print .st-table th,#print .st-table td{border:1px solid #999;padding:4px 6px}
+  #print .st-table th{width:auto;background:#eee}
+  #print .st-chart svg{min-width:0;max-height:300px}
+  #print .st-block{break-inside:avoid}
+  #print .st-scroll{overflow:visible}
+  #print .st-sec,#print .st-chart,#print .st-bar{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>食品工廠衛生缺失與改善追蹤助手</h1>
+    <div class="sub">第一版｜資料保存在本機瀏覽器（不上傳）</div>
+  </div>
+</header>
+<main id="app"></main>
+<div id="print"></div>
+
+<script>
+/* =========================================================
+   資料保存：瀏覽器 localStorage（只存在這台電腦、這個瀏覽器）
+   ========================================================= */
+const KEY = 'qaHygieneTracker_v1';
+const KEY_T = 'qaHygieneTracker_v1_tombs';
+let records = loadAll();
+let tombs = loadTombs();
+let trashSel = new Set();
+let listSel = new Set();
+const live = () => records.filter(r=>!r.deleted);
+let cur = null;      // 正在編輯的紀錄（副本）
+let dirty = false;   // 是否有未儲存的修改
+let listFilter = 'open';
+let listSearch = '';
+
+function loadAll(){
+  try{ return (JSON.parse(localStorage.getItem(KEY)) || []).map(migrate); }catch(e){ return []; }
+}
+function loadTombs(){ try{ return JSON.parse(localStorage.getItem(KEY_T)) || []; }catch(e){ return []; } }
+function persistAll(){
+  try{ localStorage.setItem(KEY, JSON.stringify(records)); localStorage.setItem(KEY_T, JSON.stringify(tombs)); return true; }
+  catch(e){ alert('儲存失敗！\n瀏覽器的儲存空間可能已滿。請先「下載備份」。'); return false; }
+}
+function persist(){
+  try{ localStorage.setItem(KEY, JSON.stringify(records)); return true; }
+  catch(e){
+    alert('儲存失敗！\n瀏覽器的儲存空間可能已滿（通常是照片太多）。\n請刪除部分照片，或先「下載備份」後刪除舊的已結案紀錄。');
+    return false;
+  }
+}
+function storageUsedMB(){
+  try{ return ((localStorage.getItem(KEY)||'').length*2/1024/1024).toFixed(2); }catch(e){ return '?'; }
+}
+
+/* ---------- 小工具 ---------- */
+const $ = s => document.querySelector(s);
+function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function today(){ const d=new Date(); return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10); }
+const DEPTS=['生產課','儲運','其它'];
+function whoText(d,n){ return [d,n].filter(x=>x&&String(x).trim()).join('／'); }
+function ownerText(r){ return whoText(r.ownerDept,r.ownerNote); }
+function improveByText(r){ return whoText(r.improveDept,r.improveNote); }
+function migrate(r){
+  if(r.formalDesc){ r.rawDesc=r.formalDesc; r.formalDesc=''; }
+  if(r.owner && !r.ownerDept){ r.ownerDept='其它'; r.ownerNote=r.owner; }
+  if(r.improveBy && !r.improveDept){ r.improveDept='其它'; r.improveNote=r.improveBy; }
+  delete r.owner; delete r.improveBy; return r;
+}
+function deptSel(f,label,idAttr,r){ return `<div><label class="f" ${idAttr?`id="${idAttr}"`:''}>${label}</label><select data-f="${f}"><option value="">— 請選擇 —</option>${DEPTS.map(d=>`<option value="${d}" ${r[f]===d?'selected':''}>${d}</option>`).join('')}</select></div>`; }
+function addDays(ymd,n){ const [y,m,d]=ymd.split('-').map(Number); const t=new Date(y,m-1,d+n); return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0'); }
+let showDlErr=false;
+function dlError(r){ if(!r.deadline) return '請填改善期限'; if(r.foundDate && r.deadline<r.foundDate) return '改善期限不能早於發現日期'; return ''; }
+function fmtDate(s){ if(!s) return ''; const [y,m,d]=s.split('-'); return `${y}/${m}/${d}`; }
+function nl2br(s){ return esc(s).replace(/\n/g,'<br>'); }
+
+const CAT = {
+  general:  '可立即改善的一般缺失',
+  schedule: '需要安排時間改善的缺失',
+  major:    '重大缺失'
+};
+const REVIEW_RESULT = { pass:'通過', fail:'未通過', recur:'缺失再次發生' };
+
+function blankRecord(){
+  return {
+    id:'', createdAt:'', updatedAt:'',
+    foundDate: today(), area:'', finder:'', rawDesc:'',
+    category:'', consecutive:false, recurred:false,
+    ownerDept:'', ownerNote:'', deadline: addDays(today(),7), notifyTarget:'', notifyDate: today(),
+    photos:[],
+    riskControl:'', causeAnalysis:'', prevention:'',
+    improveContent:'', improveDate: addDays(today(),7), improveDept:'', improveNote:'', improveEvidence:'', improvePhotos:[],
+    reviews:[],
+    closed:false, closedBy:'', closedDate:'', closeNote:'', closeBasis:''
+  };
+}
+function genId(){
+  const d = today().replace(/-/g,'');
+  const pre = 'QA-'+d+'-';
+  let mx = 0;
+  records.concat(tombs).forEach(r => { if(r.id && r.id.startsWith(pre)){ const n = parseInt(r.id.slice(pre.length),10); if(n>mx) mx=n; } });
+  return `${pre}${String(mx+1).padStart(3,'0')}`;
+}
+
+/* ---------- 規則判斷（依使用者提供之管理程序） ---------- */
+function lastReview(r){ return r.reviews.length ? r.reviews[r.reviews.length-1] : null; }
+function isOverdue(r){ return !r.closed && r.deadline && r.deadline < today() && !(lastReview(r) && lastReview(r).result==='pass'); }
+
+function statusOf(r){
+  if(r.closed) return {t:'已結案', c:'s-closed'};
+  const lr = lastReview(r);
+  if(lr && lr.result==='pass') return {t:'待品管確認結案', c:'s-ready'};
+  if(lr) return {t:'持續追蹤（複查'+REVIEW_RESULT[lr.result]+'）', c:'s-track'};
+  if(r.improveContent) return {t:'待複查', c:'s-review'};
+  return {t:'待改善', c:'s-todo'};
+}
+function badges(r){
+  const s = statusOf(r);
+  let h = `<span class="badge ${s.c}">${s.t}</span>`;
+  if(isOverdue(r)) h += ` <span class="badge s-over">逾期</span>`;
+  return h;
+}
+
+function ruleHints(r){
+  const h = [];
+  if(!r.category) h.push('尚未選擇缺失分類。分類請由品管／品保人員判定，系統不會自動判斷。');
+  if(r.category==='general') h.push('一般缺失：記錄問題、通知相關人員改善，並確認改善結果。');
+  if(r.category==='schedule') h.push('需安排時間改善：須記錄負責單位、改善期限及追蹤情形。');
+  if(r.category==='major') h.push('重大缺失：應立即通知相關單位，並要求先採取必要的風險控制措施。');
+  if(r.consecutive) h.push('相同缺失連續兩天發生：應追蹤改善。');
+  if(r.recurred) h.push('已通知改善後再次發生：應確認發生原因，並追蹤改善。');
+  return h;
+}
+
+let closeBasisUI='pass';
+function closeChecks(r){
+  const c = [];
+  const add = (ok, t) => c.push({ok:!!ok, t});
+  add(r.category, '已由品管／品保人員選擇缺失分類');
+    if(r.category==='schedule'){ add(ownerText(r), '已填寫負責單位'); add(r.deadline, '已填寫改善期限'); }
+  if(r.category==='major') add(r.riskControl.trim(), '已記錄風險控制措施');
+  if(r.recurred){ add(r.causeAnalysis.trim(), '已確認發生原因'); ; }
+  add(r.improveContent.trim(), '已填寫如何改善');
+  const lr = lastReview(r);
+  if(closeBasisUI==='other'){ const nt = ($('#clNote') ? $('#clNote').value : r.closeNote)||''; add(nt.trim(), '結案依據選「其它」，並已填寫結案說明'); }
+  else add(lr && lr.result==='pass', '最近一次複查結果為「通過」（或下方結案依據選「其它」並填寫說明）');
+  return c;
+}
+
+/* =========================================================
+   清單頁
+   ========================================================= */
+function showList(){
+  if(dirty && !confirm('有尚未儲存的修改，確定要離開嗎？')) return;
+  cur = null; dirty = false; listSel = new Set();
+  const counts = {
+    all: live().length,
+    open: live().filter(r=>!r.closed).length,
+    over: live().filter(isOverdue).length,
+    ready: live().filter(r=>!r.closed && lastReview(r)?.result==='pass').length,
+    closed: live().filter(r=>r.closed).length
+  };
+  $('#app').innerHTML = `
+    <div class="card">
+      <div class="row">
+        <button class="primary" onclick="openRecord()">＋ 新增衛生缺失</button>
+        <span class="spacer"></span>
+        <button onclick="showTrash()">最近刪除（${records.filter(r=>r.deleted).length}）</button>
+        <button onclick="showStats()">統計報表</button>
+        <button onclick="exportCSV()">匯出報表（Excel 可開）</button>
+        <button onclick="backup()">下載備份</button>
+        <button onclick="$('#restoreFile').click()">從備份還原</button>
+        <input type="file" id="restoreFile" accept=".json" hidden onchange="restore(this)">
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row tabs" style="margin-bottom:12px">
+        ${tab('open','未結案',counts.open)}
+        ${tab('over','逾期',counts.over)}
+        ${tab('ready','待結案確認',counts.ready)}
+        ${tab('closed','已結案',counts.closed)}
+        ${tab('all','全部',counts.all)}
+        <span class="spacer"></span>
+        <input type="text" placeholder="搜尋缺失區域、描述、負責單位、編號…" style="max-width:280px" value="${esc(listSearch)}" oninput="listSearch=this.value;renderTable()">
+      </div>
+      <div id="tableBox"></div>
+    </div>
+
+    <div class="card">
+      <details>
+        <summary>使用說明</summary>
+        <ol class="small">
+          <li>按「新增衛生缺失」，填寫發現日期、缺失區域、缺失描述，並由品管／品保人員選擇分類。</li>
+          <li>在「文字整理」區按「範本整理」或「複製 AI 提示詞」，產生正式缺失內容的草稿，<b>確認無誤後再套用</b>。</li>
+          <li>按「儲存」。之後可從清單點選該筆紀錄，繼續填寫改善情形。</li>
+          <li>改善完成後，新增「複查紀錄」。複查未通過或缺失再次發生時，狀態會變成「持續追蹤」，不能結案。</li>
+          <li>結案條件全部符合後，由品管人員填寫姓名並確認結案。</li>
+          <li>清單頁可「匯出報表」；單筆紀錄頁可「列印／存成 PDF」。</li>
+        </ol>
+      </details>
+    </div>
+
+    <div class="card">
+      <details>
+        <summary>資料保存方式與限制（請務必閱讀）</summary>
+        <div class="small">
+          <p>本工具將資料保存在<b>這台電腦的這個瀏覽器</b>中（瀏覽器內建儲存空間 localStorage），不會上傳到任何伺服器。關閉網頁後重新開啟，資料仍會保留。</p>
+          <ul>
+            <li><b>換電腦或換瀏覽器就看不到</b>原本的資料（例如 Chrome 存的資料，Edge 看不到）。</li>
+            <li>請<b>固定從同一個位置開啟這個 HTML 檔</b>；部分瀏覽器若檔案搬到別的資料夾，可能讀不到原本的資料。</li>
+            <li><b>清除瀏覽器資料／Cookie</b>、使用無痕模式，資料會消失或不會被保存。</li>
+            <li>儲存空間約 5MB，照片會自動壓縮，但照片多時仍可能存滿。目前已使用約 <b>${storageUsedMB()} MB</b>。</li>
+            <li>無法多人共用同一份資料。</li>
+            <li>建議<b>定期按「下載備份」</b>，備份檔可用「從備份還原」匯回（還原會取代目前資料）。</li>
+          </ul>
+        </div>
+      </details>
+    </div>`;
+  renderTable();
+}
+function tab(k, t, n){ return `<button class="${listFilter===k?'on':''}" onclick="listFilter='${k}';showList()">${t}（${n}）</button>`; }
+
+function filteredRecords(){
+  let rs = live();
+  if(listFilter==='open') rs = rs.filter(r=>!r.closed);
+  if(listFilter==='over') rs = rs.filter(isOverdue);
+  if(listFilter==='ready') rs = rs.filter(r=>!r.closed && lastReview(r)?.result==='pass');
+  if(listFilter==='closed') rs = rs.filter(r=>r.closed);
+  const q = listSearch.trim().toLowerCase();
+  if(q) rs = rs.filter(r => [r.id,r.area,r.rawDesc,ownerText(r)].join(' ').toLowerCase().includes(q));
+  return rs.sort((a,b)=> (b.foundDate||'').localeCompare(a.foundDate||'') || b.id.localeCompare(a.id));
+}
+function renderTable(){
+  const rs = filteredRecords();
+  const vis = new Set(rs.filter(r=>!r.closed).map(r=>r.id));
+  listSel = new Set([...listSel].filter(id=>vis.has(id)));
+  if(!rs.length){ $('#tableBox').innerHTML = `<div class="empty">${live().length?'沒有符合條件的紀錄':'目前還沒有紀錄，請按「新增衛生缺失」開始'}</div>`; return; }
+  const n = listSel.size;
+  $('#tableBox').innerHTML = `<div class="row" style="margin-bottom:8px">
+      <button id="listDel" class="danger" onclick="listDelete()" ${n?'':'disabled'}>刪除${n?'（'+n+'）':''}</button>
+      <span class="muted small">${n?'已勾選 '+n+' 筆':'勾選案件後可刪除；已結案的案件不能刪除'}</span></div>
+    <div style="overflow-x:auto"><table>
+    <thead><tr><th></th><th>編號</th><th>發現日期</th><th>缺失區域</th><th>缺失描述</th><th>分類</th><th>負責單位／人員</th><th>改善期限</th><th>狀態</th></tr></thead>
+    <tbody>${rs.map(r=>`<tr class="click" onclick="openRecord('${r.id}')">
+      <td onclick="event.stopPropagation()"><input type="checkbox" class="liChk" data-id="${esc(r.id)}" ${r.closed?'disabled title="已結案不能刪除，要先撤銷結案"':''} ${listSel.has(r.id)?'checked':''} onchange="listToggle(this)"></td>
+      <td>${esc(r.id)}</td><td>${fmtDate(r.foundDate)}</td><td>${esc(r.area)}</td>
+      <td>${esc((r.rawDesc||'').slice(0,40))}${(r.rawDesc||'').length>40?'…':''}</td>
+      <td class="small">${esc(CAT[r.category]||'未分類')}${r.consecutive?'<br><span class="muted">連續兩天</span>':''}${r.recurred?'<br><span class="muted">通知後再發生</span>':''}</td>
+      <td>${esc(ownerText(r))}</td><td>${fmtDate(r.deadline)}</td><td>${badges(r)}</td></tr>`).join('')}
+    </tbody></table></div>`;
+}
+function listToggle(el){ const id=el.dataset.id; if(el.checked) listSel.add(id); else listSel.delete(id); renderTable(); }
+function listDelete(){
+  const ids = [...listSel].filter(id=>{ const r=records.find(x=>x.id===id); return r && !r.closed && !r.deleted; });
+  if(!ids.length) return;
+  if(!confirm(`確定要刪除選取的 ${ids.length} 筆嗎？`)) return;
+  const done = [];
+  records.forEach(r => { if(ids.includes(r.id)){ r.deleted = true; r.deletedAt = today(); done.push(r); } });
+  if(!persistAll()){ done.forEach(r=>{ r.deleted=false; delete r.deletedAt; }); return; }
+  listSel = new Set(); showList(); flash('已移到「最近刪除」（'+done.length+' 筆）');
+}
+
+/* =========================================================
+   單筆紀錄頁
+   ========================================================= */
+function openRecord(id){
+  const r = id ? records.find(x=>x.id===id) : blankRecord();
+  cur = JSON.parse(JSON.stringify(r));
+  cur = Object.assign(blankRecord(), migrate(cur));
+  dirty = false; showDlErr = false; closeBasisUI = 'pass';
+  renderDetail();
+  window.scrollTo(0,0);
+}
+
+function fld(f, label, type='text', opt={}){
+  const v = cur[f] ?? '';
+  const cls = opt.req ? 'f req' : 'f';
+  const lab = `<label class="${cls}" ${opt.reqId?`id="${opt.reqId}"`:''}>${label}</label>`;
+  let input;
+  if(type==='textarea') input = `<textarea data-f="${f}" placeholder="${esc(opt.ph||'')}" ${opt.rows?`rows="${opt.rows}"`:''}>${esc(v)}</textarea>`;
+  else input = `<input type="${type}" data-f="${f}" value="${esc(v)}" placeholder="${esc(opt.ph||'')}">`;
+  return `<div class="${opt.full?'full':''}">${lab}${input}</div>`;
+}
+function photoBox(field){
+  return `<div class="photos" id="ph_${field}">${cur[field].map((p,i)=>`
+      <div class="ph"><img src="${p}" alt="照片${i+1}"><button class="x lockable" onclick="removePhoto('${field}',${i})">✕</button></div>`).join('')}
+    </div>
+    <div class="row" style="margin-top:6px">
+      <button class="lockable" onclick="this.nextElementSibling.click()">＋ 加入照片</button>
+      <input type="file" accept="image/*" multiple hidden onchange="addPhotos('${field}',this)">
+      <span class="muted small">照片會自動壓縮後保存，每區最多 10 張。</span>
+    </div>`;
+}
+
+function renderDetail(){
+  const r = cur;
+  const isNew = !r.id;
+  $('#app').innerHTML = `
+    <div class="row" style="margin-bottom:12px">
+      <button onclick="showList()">← 返回清單</button>
+      <h2 style="margin:0 8px;font-size:18px">${isNew?'新增衛生缺失｜編號 '+esc(genId()):esc(r.id)}</h2>
+      <span id="stBadge"></span>
+      <span class="spacer"></span>
+      ${isNew?'':`<button onclick="printReport()">列印／存成 PDF</button><button class="danger lockable" onclick="deleteRecord()">刪除此筆</button>`}
+    </div>
+    ${isNew?'<div class="muted small" style="margin:-4px 0 10px">編號在按「儲存」時確定。同時開兩個分頁新增時，儲存時的編號可能會變，請以儲存後顯示的為準。</div>':''}
+    <div class="muted small" style="margin:-4px 0 10px">缺失單編號＝本案編號（新增衛生缺失即視同開立缺失單）。</div>
+    <div id="closedNotice"></div>
+
+    <!-- 1 基本資料 -->
+    <div class="card">
+      <h2><span class="no">1</span>缺失基本資料與分類</h2>
+      <div class="grid">
+        ${fld('foundDate','發現日期','date',{req:1})}
+        ${fld('area','缺失區域','text',{req:1,ph:'例：包裝區、前處理室、冷藏庫'})}
+        ${fld('finder','巡檢人員','text',{ph:'例：品保 王小明'})}
+        ${fld('rawDesc','缺失描述','textarea',{req:1,full:1,ph:'例：輸送帶下方有積水跟殘渣，沒有清乾淨'})}
+        <div>
+          <label class="f req">缺失分類（由品管／品保人員判定）</label>
+          <select data-f="category">
+            <option value="">— 請選擇 —</option>
+            ${Object.entries(CAT).map(([k,t])=>`<option value="${k}" ${r.category===k?'selected':''}>${t}</option>`).join('')}
+          </select>
+        </div>
+        <div class="full">
+          <label class="f">發生情形（如符合請勾選）</label>
+          <label class="check"><input type="checkbox" data-f="consecutive" ${r.consecutive?'checked':''}> 相同缺失連續兩天發生</label>
+          <label class="check"><input type="checkbox" data-f="recurred" ${r.recurred?'checked':''}> 已通知改善後，再次發生相同問題（改善完成後，於下一週再次發生相同問題）</label>
+        </div>
+        ${deptSel('ownerDept','負責單位','ownerLab',r)}
+        ${fld('ownerNote','負責人或說明','text',{ph:'例：李組長；選「其它」請寫明單位'})}
+        <div><label class="f req" id="deadlineLab">改善期限</label><input type="date" data-f="deadline" class="dl-input" value="${esc(r.deadline||'')}"><div class="dl-hint">（預設一週改善，從發現日期起算）</div><div class="ferr" id="errDeadline"></div></div>
+        ${fld('notifyTarget','已通知對象','text',{ph:'例：生產課 李組長、廠長'})}
+        ${fld('notifyDate','通知日期','date')}
+        <div class="full"><label class="f">缺失照片</label>${photoBox('photos')}</div>
+      </div>
+      <div id="ruleHint"></div>
+    </div>
+
+    <!-- 2 文字整理 -->
+    <div class="card">
+      <h2><span class="no">2</span>文字整理（整理上方「缺失描述」）</h2>
+      <div class="notice info small">
+        <b>說明：</b>第一版<b>沒有內建 AI</b>。若要真正的 AI 自動整理，未來需要另外串接 AI 服務。目前提供兩種方式：<br>
+        ①「範本整理」：依固定格式，<b>只用你填寫的資料</b>組成正式文字（不是 AI，不會推測原因或結果）。<br>
+        ②「複製 AI 提示詞」：把資料與限制條件組成一段文字，貼到你慣用的 AI 工具，再把結果貼回下方欄位。
+      </div>
+      <div class="row lockrow">
+        <button class="lockable" onclick="makeDraft()">範本整理</button>
+        <button class="lockable" onclick="makePrompt()">複製 AI 提示詞</button>
+      </div>
+      <div id="draftBox"></div>
+      <div class="grid" style="margin-top:12px">
+      </div>
+    </div>
+
+    <!-- 4 改善情形 -->
+    <div class="card">
+      <h2><span class="no">3</span>實際改善情形</h2>
+      <div data-show="risk" class="subbox"><div class="grid">${fld('riskControl','已採取的風險控制措施（重大缺失必填）','textarea',{full:1,req:1,ph:'請依實際採取的措施填寫，例如：\n・已將相關產品／設備隔離，並貼上「暫停使用」標示\n・已用圍欄或隔板區隔缺失區域\n・已暫停該區作業，並通知相關單位'})}</div></div>
+      <div data-show="cause" class="subbox"><div class="grid">${fld('causeAnalysis','發生原因確認','textarea',{full:1,req:1,ph:'請填寫經確認的原因，勿以推測代替'})}</div></div>
+      <div class="grid" style="margin-top:10px">
+        ${fld('improveContent','如何改善','textarea',{full:1,ph:'請填寫如何改善（由改善單位自行判斷）'})}
+        ${fld('prevention','預防再發措施','textarea',{full:1,ph:'描述如何防止問題再次發生'})}
+        <div><label class="f">預計改善完成日期</label><input type="date" data-f="improveDate" class="dl-input" value="${esc(r.improveDate||'')}"><div class="dl-hint">（預設一週改善，從發現日期起算）</div></div>
+        ${deptSel('improveDept','改善執行單位',null,r)}
+        ${fld('improveNote','執行人或說明','text',{ph:'例：王小明；選「其它」請寫明單位'})}
+        <div class="full"><label class="f">改善後照片</label>${photoBox('improvePhotos')}</div>
+      </div>
+    </div>
+
+    <!-- 5 複查 -->
+    <div class="card">
+      <h2><span class="no">4</span>複查紀錄</h2>
+      <div id="reviewList"></div>
+      <div class="subbox lockarea" id="reviewForm">
+        <b>新增複查紀錄</b>
+        <div class="grid" style="margin-top:8px">
+          <div><label class="f req">複查日期</label><input type="date" id="rvDate" class="rv-input" value="${addDays(today(),7)}"><div class="rv-hint">（預設一週後複查）</div></div>
+          <div><label class="f">複查人員</label><input type="text" id="rvBy"></div>
+          <div><label class="f req">複查結果</label>
+            <select id="rvResult"><option value="">— 請選擇 —</option>
+              ${Object.entries(REVIEW_RESULT).map(([k,t])=>`<option value="${k}">${t}</option>`).join('')}
+            </select></div>
+          <div class="full"><label class="f">複查說明</label><textarea id="rvNote" rows="2" placeholder="依現場實際複查情形填寫"></textarea></div>
+        </div>
+        <div class="row" style="margin-top:8px"><button class="primary" onclick="addReview()">新增複查紀錄並儲存</button></div>
+      </div>
+    </div>
+
+    <!-- 6 結案 -->
+    <div class="card">
+      <h2><span class="no">5</span>品管人員結案確認</h2>
+      <div id="closeArea"></div>
+    </div>
+
+    <div class="savebar"><div class="in">
+      <button class="primary lockable" onclick="saveRecord()">儲存</button>
+      <button onclick="showList()">返回清單</button>
+      <span id="dirtyMark"></span>
+      <span class="spacer"></span>
+      <span class="muted small">${r.updatedAt?'最後儲存：'+esc(r.updatedAt):'尚未儲存'}</span>
+    </div></div>`;
+  refresh();
+}
+
+/* 依目前內容更新提醒、條件區塊、狀態等 */
+function refresh(){
+  const r = cur;
+  $('#stBadge').innerHTML = r.id ? badges(r) : '';
+  $('#dirtyMark').innerHTML = dirty ? '<span class="dirty">● 有尚未儲存的修改</span>' : '';
+
+  const hints = ruleHints(r);
+  let hintHtml = hints.length ? `<div class="notice ${r.category==='major'?'bad':'warn'}"><b>依管理程序應辦理：</b><ul>${hints.map(h=>`<li>${esc(h)}</li>`).join('')}</ul></div>` : '';
+  if(isOverdue(r)) hintHtml += `<div class="notice bad"><b>已逾期：</b>改善期限 ${fmtDate(r.deadline)} 已過，尚未複查通過，請持續追蹤。</div>`;
+  $('#ruleHint').innerHTML = hintHtml;
+
+  $('#ownerLab').classList.toggle('req', r.category==='schedule');
+  $('#deadlineLab').classList.add('req');
+  const de = showDlErr ? dlError(r) : '';
+  $('#errDeadline').textContent = de;
+  document.querySelector('[data-f=deadline]').classList.toggle('bad', !!de);
+
+  const show = { risk: r.category==='major', cause: r.recurred };
+  document.querySelectorAll('[data-show]').forEach(el => el.hidden = !show[el.dataset.show]);
+  // 未要求時仍可填寫：若已有內容則顯示
+  if(!show.risk && r.riskControl) document.querySelector('[data-show=risk]').hidden=false;
+  if(!show.cause && r.causeAnalysis) document.querySelector('[data-show=cause]').hidden=false;
+
+  renderReviews();
+  renderClose();
+  applyLock();
+}
+
+function renderReviews(){
+  const r = cur;
+  if(!r.reviews.length){ $('#reviewList').innerHTML = `<div class="muted small">尚無複查紀錄。${r.improveContent?'':'（需先填寫並儲存「如何改善」才能新增複查）'}</div>`; return; }
+  const lr = lastReview(r);
+  $('#reviewList').innerHTML = `<table><thead><tr><th>次數</th><th>複查日期</th><th>複查人員</th><th>結果</th><th>說明</th><th></th></tr></thead><tbody>
+    ${r.reviews.map((v,i)=>`<tr><td>第 ${i+1} 次</td><td>${fmtDate(v.date)}</td><td>${esc(v.by)}</td>
+      <td><span class="badge ${v.result==='pass'?'s-ready':'s-track'}">${REVIEW_RESULT[v.result]}</span></td>
+      <td>${nl2br(v.note)}</td><td><button class="small danger lockable" onclick="delReview(${i})">刪除</button></td></tr>`).join('')}
+    </tbody></table>
+    ${lr.result!=='pass'?`<div class="notice warn">最近一次複查結果為「${REVIEW_RESULT[lr.result]}」，<b>須繼續追蹤，不得結案</b>。請更新「實際改善情形」後再新增一次複查。
+      ${lr.result==='recur'&&!r.recurred?'<br>若此為「已通知改善後再次發生」，請品管人員確認是否勾選第 1 區的相關選項。':''}</div>`:''}`;
+}
+
+function renderClose(){
+  const r = cur;
+  if(r.closed){
+    $('#closeArea').innerHTML = `<div class="notice ok"><b>已結案</b>｜結案依據：${r.closeBasis==='other'?'其它':'複查通過'}｜結案人員：${esc(r.closedBy)}｜結案日期：${fmtDate(r.closedDate)}${r.closeNote?'<br>結案說明：'+nl2br(r.closeNote):''}</div>
+      <button onclick="reopen()">撤銷結案（誤按時使用）</button>`;
+    $('#closedNotice').innerHTML = `<div class="notice ok">此紀錄已結案，內容已鎖定，不能修改。</div>`;
+    return;
+  }
+  $('#closedNotice').innerHTML = '';
+  const keep = { by: $('#clBy')?$('#clBy').value:'', date: $('#clDate')?$('#clDate').value:'', note: $('#clNote')?$('#clNote').value:'', ok: $('#clConfirm')?$('#clConfirm').checked:false };
+  const cs = closeChecks(r);
+  const allOk = cs.every(c=>c.ok);
+  $('#closeArea').innerHTML = `
+    <div class="small"><b>結案條件檢核</b>（全部符合才能結案）</div>
+    <ul class="checks">${cs.map(c=>`<li>${c.ok?'<span style="color:var(--ok)">✔</span>':'<span style="color:var(--bad)">✘</span>'} ${esc(c.t)}</li>`).join('')}</ul>
+    ${!r.id?'<div class="notice warn small">請先儲存此筆紀錄。</div>':''}
+    ${allOk&&r.id?'':'<div class="notice warn small">尚未符合結案條件，請繼續追蹤。</div>'}
+    <div class="grid" style="margin-top:8px">
+      <div><label class="f req">結案依據</label><select id="clBasis" onchange="closeBasisUI=this.value;renderClose()" ${r.id?'':'disabled'}><option value="pass" ${closeBasisUI==='pass'?'selected':''}>複查通過</option><option value="other" ${closeBasisUI==='other'?'selected':''}>其它（須填結案說明，例如硬體設備無法改善）</option></select></div>
+      <div><label class="f req">結案確認人員（品管人員）</label><input type="text" id="clBy" ${r.id?'':'disabled'}></div>
+      <div><label class="f req">結案日期</label><input type="date" id="clDate" value="${today()}" ${r.id?'':'disabled'}></div>
+      <div class="full"><label class="f ${closeBasisUI==='other'?'req':''}">結案說明${closeBasisUI==='other'?'（選「其它」時必填，請寫明為什麼能結案）':''}</label><textarea id="clNote" rows="2" onchange="renderClose()" ${r.id?'':'disabled'}></textarea></div>
+    </div>
+    <label class="check"><input type="checkbox" id="clConfirm" ${r.id?'':'disabled'}> 本人為品管人員，已確認改善完成並符合結案條件。</label>
+    <button class="primary" onclick="doClose()" ${r.id?'':'disabled'}>確認結案</button>`;
+  if($('#clBy')){ $('#clBy').value=keep.by; if(keep.date) $('#clDate').value=keep.date; $('#clNote').value=keep.note; $('#clConfirm').checked=keep.ok; }
+}
+
+function applyLock(){
+  const locked = cur.closed;
+  document.querySelectorAll('#app [data-f], #app .lockable, #reviewForm input, #reviewForm select, #reviewForm textarea, #reviewForm button')
+    .forEach(el => el.disabled = locked);
+  if(locked) $('#reviewForm').hidden = true;
+}
+
+/* 欄位輸入即更新 */
+document.addEventListener('input', onField);
+document.addEventListener('change', onField);
+function onField(e){
+  const el = e.target; const f = el.dataset && el.dataset.f;
+  if(!f || !cur) return;
+  const oldFound = cur.foundDate;
+  cur[f] = el.type==='checkbox' ? el.checked : el.value;
+  if(f==='foundDate' && cur.foundDate && oldFound && cur.deadline===addDays(oldFound,7)){
+    cur.deadline = addDays(cur.foundDate,7);
+    document.querySelector('[data-f=deadline]').value = cur.deadline;
+  }
+  if(f==='foundDate' && cur.foundDate && oldFound && cur.improveDate===addDays(oldFound,7)){
+    cur.improveDate = addDays(cur.foundDate,7);
+    document.querySelector('[data-f=improveDate]').value = cur.improveDate;
+  }
+  dirty = true;
+  refresh();
+}
+window.addEventListener('beforeunload', e => { if(dirty){ e.preventDefault(); e.returnValue=''; } });
+
+/* ---------- 照片 ---------- */
+function addPhotos(field, input){
+  let files = [...input.files]; input.value='';
+  if(files.some(f=>!/^image\//.test(f.type))){ alert('請上傳圖檔'); return; }
+  if(cur[field].length + files.length > 10){ alert('每個照片區最多 10 張'); return; }
+  files.forEach(file => {
+    const fr = new FileReader();
+    fr.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const max = 900, s = Math.min(1, max/Math.max(img.width,img.height));
+        const c = document.createElement('canvas');
+        c.width = Math.round(img.width*s); c.height = Math.round(img.height*s);
+        c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+        cur[field].push(c.toDataURL('image/jpeg',0.6));
+        dirty = true; renderPhotoBox(field); refresh();
+      };
+      img.src = fr.result;
+    };
+    fr.readAsDataURL(file);
+  });
+}
+function removePhoto(field,i){ cur[field].splice(i,1); dirty=true; renderPhotoBox(field); refresh(); }
+function renderPhotoBox(field){
+  $('#ph_'+field).innerHTML = cur[field].map((p,i)=>`<div class="ph"><img src="${p}" alt="照片${i+1}"><button class="x lockable" onclick="removePhoto('${field}',${i})">✕</button></div>`).join('');
+}
+
+/* ---------- 文字整理（範本，非 AI） ---------- */
+function tidy(s){
+  s = String(s||'').trim().replace(/\s+/g,' ').replace(/,/g,'，').replace(/;/g,'；');
+  if(s && !/[。！？.!?]$/.test(s)) s += '。';
+  return s;
+}
+/* 去掉先前範本整理加上的開頭，避免再按時一層層疊上去 */
+function stripPrefix(t){
+  return String(t||'').trim().replace(/^(?:(?:\d{4}\/\d{1,2}\/\d{1,2}|【待補：發現日期】)於「[^」]*」巡查時發現：\s*)+/, '');
+}
+function makeDraft(){
+  const r = cur, miss = [];
+  if(!r.foundDate) miss.push('發現日期');
+  if(!r.area.trim()) miss.push('缺失區域');
+  if(!r.rawDesc.trim()) miss.push('缺失描述');
+  if(!r.category) miss.push('缺失分類（需品管／品保人員判定）');
+  if(!ownerText(r)) miss.push('負責單位');
+  if(r.category==='schedule' && !r.deadline) miss.push('改善期限');
+  const P = t => `【待補：${t}】`;
+
+  const desc = `${r.foundDate?fmtDate(r.foundDate):P('發現日期')}於「${r.area.trim()||P('缺失區域')}」巡查時發現：${tidy(stripPrefix(r.rawDesc))||P('缺失描述')}`;
+
+  $('#draftBox').innerHTML = `<div class="subbox">
+    <div class="small muted">以下為<b>範本整理草稿（非 AI 產生）</b>，僅使用你填寫的內容。可直接修改後再套用。</div>
+    ${miss.length?`<div class="notice warn small"><b>資料不足，請補充：</b>${miss.map(esc).join('、')}</div>`:''}
+    <label class="f" style="margin-top:8px">正式缺失內容（草稿）</label><textarea id="dDesc" rows="3">${esc(desc)}</textarea>
+    <div class="row" style="margin-top:8px">
+      <button class="primary" onclick="applyDraft()">確認並套用到下方欄位</button>
+      <button onclick="$('#draftBox').innerHTML=''">取消</button>
+    </div></div>`;
+}
+function applyDraft(){
+  if(cur.rawDesc.trim() && !confirm('上方「缺失描述」已有內容，套用後會被取代，確定嗎？')) return;
+  cur.rawDesc = $('#dDesc').value;
+  document.querySelector('[data-f=rawDesc]').value = cur.rawDesc;
+  $('#draftBox').innerHTML = ''; dirty = true; refresh();
+}
+function makePrompt(){
+  const r = cur;
+  const text =
+`你是食品工廠品保文件整理助手。請「只根據下列資料」整理文字，並遵守：
+1. 不可自行捏造或推測缺失原因、改善事實、複查結果。
+2. 不可判定或更改缺失分類、風險等級，也不可判定是否結案。
+3. 資料不足時，請在最後列出「需補充的資料」，不要自行補上。
+4. 使用繁體中文，用語符合台灣食品工廠日常文件習慣，簡潔正式。
+
+【資料】
+發現日期：${r.foundDate||'（未填）'}
+區域：${r.area||'（未填）'}
+原始缺失描述：${r.rawDesc||'（未填）'}
+缺失分類（品管判定）：${CAT[r.category]||'（未判定）'}
+相同缺失連續兩天發生：${r.consecutive?'是':'否'}
+已通知改善後再次發生：${r.recurred?'是':'否'}
+負責單位／人員：${ownerText(r)||'（未填）'}
+改善期限：${r.deadline||'（未填）'}
+
+【工廠管理程序（整理缺失內容時參考，不要增加其他規定）】
+- 可立即改善的一般缺失：記錄問題、通知相關人員改善，並確認結果。
+- 需要安排時間改善的缺失：記錄負責單位、改善期限及追蹤情形。
+- 重大缺失：立即通知相關單位、開立缺失單，並要求先採取必要的風險控制措施。
+- 相同缺失連續兩天發生：應開立缺失單並追蹤改善。
+- 已通知改善後再次發生相同問題：應開立缺失單，並要求確認原因及提出預防再發措施。
+
+【請輸出】
+一、正式缺失內容
+二、需補充的資料（若無則寫「無」）`;
+  $('#draftBox').innerHTML = `<div class="subbox">
+    <div class="small">提示詞已產生並嘗試複製。請貼到你慣用的 AI 工具，<b>檢查結果是否正確</b>後，再手動貼回上方「缺失描述」欄位。</div>
+    <textarea id="promptText" rows="10" style="margin-top:8px">${esc(text)}</textarea>
+    <div class="row" style="margin-top:8px"><button onclick="copyPrompt()">再複製一次</button><button onclick="$('#draftBox').innerHTML=''">關閉</button><span id="copyMsg" class="small muted"></span></div>
+  </div>`;
+  copyPrompt();
+}
+function copyPrompt(){
+  const ta = $('#promptText'); ta.select();
+  const ok = () => $('#copyMsg').textContent = '已複製到剪貼簿';
+  const fallback = () => { try{ document.execCommand('copy') ? ok() : ($('#copyMsg').textContent='請手動全選複製'); }catch(e){ $('#copyMsg').textContent='請手動全選複製'; } };
+  if(navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(ta.value).then(ok, fallback); else fallback();
+}
+
+/* ---------- 儲存 / 刪除 ---------- */
+function saveRecord(silent){
+  const r = cur, miss = [];
+  if(!r.foundDate) miss.push('發現日期');
+  if(!r.area.trim()) miss.push('缺失區域');
+  if(!r.rawDesc.trim()) miss.push('缺失描述');
+  if(miss.length){ alert('請先填寫：' + miss.join('、')); return false; }
+  if(dlError(r)){
+    showDlErr = true; refresh();
+    const el = document.querySelector('[data-f=deadline]'); el.scrollIntoView({block:'center'}); el.focus();
+    return false;
+  }
+  const isNew = !r.id;
+  if(isNew){ r.id = genId(); r.createdAt = new Date().toLocaleString('zh-TW'); }
+  r.updatedAt = new Date().toLocaleString('zh-TW');
+  const backupList = records.slice();
+  const i = records.findIndex(x=>x.id===r.id);
+  const copy = JSON.parse(JSON.stringify(r));
+  if(i>=0) records[i] = copy; else records.push(copy);
+  if(!persist()){ records = backupList; if(isNew) r.id=''; return false; }
+  dirty = false;
+  try{ const used = (localStorage.getItem(KEY)||'').length + (localStorage.getItem(KEY_T)||'').length;
+    if(used > 4000000 && !window.__warned){ window.__warned = true; alert('提醒：本機儲存空間已用約 80% 以上。請盡快按「下載備份」，並考慮減少照片。'); } }catch(e){}
+  if(isNew && !silent){ showList(); flash('已儲存 '+r.id); return true; }
+  renderDetail();
+  if(!silent) flash('已儲存');
+  return true;
+}
+function deleteRecord(){
+  if(!confirm('確定要刪除嗎？')) return;
+  const rec = records.find(x=>x.id===cur.id);
+  if(!rec) return;
+  rec.deleted = true; rec.deletedAt = today();
+  if(!persistAll()){ rec.deleted = false; delete rec.deletedAt; return; }
+  dirty = false; showList(); flash('已移到「最近刪除」');
+}
+function flash(t){
+  const d = document.createElement('div');
+  d.textContent = t;
+  d.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#1f6f5c;color:#fff;padding:8px 20px;border-radius:6px;z-index:99;box-shadow:0 2px 8px rgba(0,0,0,.2)';
+  document.body.appendChild(d); setTimeout(()=>d.remove(),1500);
+}
+
+/* ---------- 複查 ---------- */
+function addReview(){
+  if(!cur.improveContent.trim()){ alert('請先填寫「如何改善」，再新增複查紀錄。'); return; }
+  const date = $('#rvDate').value, result = $('#rvResult').value;
+  if(!date || !result){ alert('請填寫複查日期與複查結果。'); return; }
+  cur.reviews.push({date, by:$('#rvBy').value.trim(), result, note:$('#rvNote').value.trim()});
+  if(saveRecord(true)) flash('已新增複查紀錄並儲存'); else cur.reviews.pop();
+}
+function delReview(i){
+  if(!confirm(`確定刪除第 ${i+1} 次複查紀錄？`)) return;
+  cur.reviews.splice(i,1); saveRecord(true);
+}
+
+/* ---------- 結案 ---------- */
+function doClose(){
+  { const bad=closeChecks(cur).filter(c=>!c.ok); if(bad.length){ alert('尚未符合結案條件，還缺：\n- '+bad.map(c=>c.t).join('\n- ')); return; } }
+  const by = $('#clBy').value.trim(), date = $('#clDate').value;
+  if(!by || !date){ alert('請填寫結案確認人員與結案日期。'); return; }
+  if(!$('#clConfirm').checked){ alert('請勾選品管人員確認聲明。'); return; }
+  if(!confirm('確定要結案嗎？結案後內容會鎖定')) return;
+  Object.assign(cur, {closed:true, closedBy:by, closedDate:date, closeNote:$('#clNote').value.trim(), closeBasis:closeBasisUI});
+  const cid=cur.id; if(saveRecord(true)){ showList(); flash('已結案 '+cid); } else cur.closed=false;
+}
+function reopen(){
+  if(!confirm('確定撤銷結案？撤銷後此紀錄將回到追蹤狀態，可再修改。')) return;
+  Object.assign(cur, {closed:false, closedBy:'', closedDate:'', closeNote:'', closeBasis:''}); closeBasisUI='pass';
+  saveRecord(true); flash('已撤銷結案');
+}
+
+/* ---------- 匯出報表（CSV，Excel 可開） ---------- */
+function exportCSV(){
+  const rs = filteredRecords();
+  if(!rs.length){ alert('目前篩選條件下沒有紀錄可匯出。'); return; }
+  const head = ['編號','狀態','是否逾期','發現日期','缺失區域','巡檢人員','缺失描述','缺失分類','連續兩天發生','通知後再次發生',
+    '負責單位/人員','改善期限','已通知對象','通知日期','缺失單編號','風險控制措施',
+    '發生原因','預防再發措施','如何改善','預計改善完成日期','改善執行人員','缺失照片數','改善照片數',
+    '複查次數','最近複查日期','最近複查結果','複查歷程','結案依據','結案人員','結案日期','結案說明','最後儲存'];
+  const rows = rs.map(r=>{
+    const lr = lastReview(r);
+    return [r.id, statusOf(r).t, isOverdue(r)?'是':'否', r.foundDate, r.area, r.finder, r.rawDesc, CAT[r.category]||'未分類',
+      r.consecutive?'是':'否', r.recurred?'是':'否', ownerText(r), r.deadline, r.notifyTarget, r.notifyDate,
+      r.id, r.riskControl, r.causeAnalysis, r.prevention, r.improveContent, r.improveDate, improveByText(r),
+      r.photos.length, r.improvePhotos.length, r.reviews.length, lr?lr.date:'', lr?REVIEW_RESULT[lr.result]:'',
+      r.reviews.map((v,i)=>`第${i+1}次 ${v.date} ${REVIEW_RESULT[v.result]} ${v.by} ${v.note}`).join('\n'),
+      (r.closed?(r.closeBasis==='other'?'其它':'複查通過'):''), r.closedBy, r.closedDate, r.closeNote, r.updatedAt];
+  });
+  const csv = [head, ...rows].map(row => row.map(v => '"' + String(v??'').replace(/"/g,'""') + '"').join(',')).join('\r\n');
+  download('﻿'+csv, `hygiene_report_${today()}.csv`, 'text/csv;charset=utf-8');
+}
+function download(content, name, type){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([content],{type}));
+  a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+
+/* ---------- 備份 / 還原 ---------- */
+function backup(){
+  download(JSON.stringify({app:'qaHygieneTracker', version:2, exportedAt:new Date().toISOString(), records:live(), tombs}, null, 1),
+    `hygiene_backup_${today()}.json`, 'application/json');
+}
+function restore(input){
+  const file = input.files[0]; input.value='';
+  if(!file) return;
+  const fr = new FileReader();
+  fr.onload = () => {
+    try{
+      const data = JSON.parse(fr.result);
+      if(!data || !Array.isArray(data.records)) throw 0;
+      const incoming = data.records.filter(r=>!r.deleted);
+      const trashN = records.filter(r=>r.deleted).length;
+      if(!confirm(`備份檔內有 ${incoming.length} 筆紀錄。\n還原會「取代」目前瀏覽器中的 ${live().length} 筆資料，目前「最近刪除」裡的 ${trashN} 筆案件也會一併被取代，確定嗎？`)) return;
+      const old = records, oldT = tombs.slice();
+      records = incoming.map(r=>Object.assign(blankRecord(), migrate(r)));
+      const have = new Set(tombs.map(t=>t.id));
+      (Array.isArray(data.tombs)?data.tombs:[]).forEach(t=>{ if(t && t.id && !have.has(t.id)) tombs.push(t); });
+      if(!persistAll()){ records = old; tombs = oldT; return; }
+      flash('還原完成'); showList();
+    }catch(e){ alert('無法讀取：這不是本工具的備份檔。'); }
+  };
+  fr.readAsText(file);
+}
+
+
+/* ---------- 最近刪除頁 ---------- */
+function trashList(){ return records.filter(r=>r.deleted).sort((a,b)=>(b.deletedAt||'').localeCompare(a.deletedAt||'') || b.id.localeCompare(a.id)); }
+function ymdNum(d){ const [y,m,dd]=d.split('-').map(Number); return Date.UTC(y,m-1,dd); }
+function daysLeft(r){ return Math.round((ymdNum(addDays(r.deletedAt||today(),30)) - ymdNum(today()))/86400000); }
+function showTrash(){ trashSel = new Set(); renderTrash(); window.scrollTo(0,0); }
+function renderTrash(){
+  const rs = trashList(), n = trashSel.size;
+  $('#app').innerHTML = `
+    <div class="row" style="margin-bottom:12px"><button onclick="showList()">← 返回清單</button><h2 style="margin:0 8px;font-size:18px">最近刪除</h2></div>
+    <div class="card">
+      <div class="notice info small">已刪除超過 30 天的案件，會在下次打開本工具時永久刪除。</div>
+      <div class="row" style="margin:8px 0">
+        <button id="trAll" onclick="trashAll()" ${rs.length?'':'disabled'}>全選</button>
+        <button id="trNone" onclick="trashNone()" ${n?'':'disabled'}>全部不選</button>
+        <button id="trRestore" onclick="trashRestore()" ${n?'':'disabled'}>還原</button>
+        <button id="trPerm" class="danger" onclick="trashPerm()" ${n?'':'disabled'}>永久刪除</button>
+        <span class="muted small" id="trHint">${n?('已勾選 '+n+' 筆'):'請先勾選案件'}</span>
+      </div>
+      ${rs.length ? `<div style="overflow-x:auto"><table><thead><tr><th></th><th>編號</th><th>刪除日期</th><th>缺失區域</th><th>缺失描述</th><th>保留</th></tr></thead><tbody>
+        ${rs.map(r=>`<tr><td><input type="checkbox" class="trChk" data-id="${esc(r.id)}" ${trashSel.has(r.id)?'checked':''} onchange="trashToggle(this)"></td>
+          <td>${esc(r.id)}</td><td>${fmtDate(r.deletedAt)}</td><td>${esc(r.area)}</td><td>${esc((r.rawDesc||'').slice(0,40))}</td><td class="small muted">剩 ${Math.max(daysLeft(r),0)} 天</td></tr>`).join('')}
+      </tbody></table></div>` : '<div class="empty">目前沒有刪除的案件</div>'}
+    </div>`;
+}
+function trashToggle(el){ const id=el.dataset.id; if(el.checked) trashSel.add(id); else trashSel.delete(id); renderTrash(); }
+function trashAll(){ trashSel = new Set(trashList().map(r=>r.id)); renderTrash(); }
+function trashNone(){ trashSel = new Set(); renderTrash(); }
+function trashRestore(){
+  if(!trashSel.size) return;
+  const ids = [...trashSel]; const done = [];
+  records.forEach(r => { if(ids.includes(r.id) && r.deleted){ r.deleted=false; delete r.deletedAt; done.push(r); } });
+  if(!persistAll()){ done.forEach(r=>{ r.deleted=true; r.deletedAt=today(); }); return; }
+  trashSel = new Set(); renderTrash(); flash('已還原 '+done.length+' 筆');
+}
+function trashPerm(){
+  const n = trashSel.size; if(!n) return;
+  if(!confirm(`確定要永久刪除選取的 ${n} 筆嗎？永久刪除後無法復原。`)) return;
+  const ids = new Set(trashSel), oldR = records, oldT = tombs.slice();
+  records.filter(r=>ids.has(r.id)).forEach(r => tombs.push({id:r.id, foundDate:r.foundDate, deletedAt:r.deletedAt||today(), purgedAt:today()}));
+  records = records.filter(r=>!ids.has(r.id));
+  if(!persistAll()){ records = oldR; tombs = oldT; return; }
+  trashSel = new Set(); renderTrash(); flash('已永久刪除 '+n+' 筆');
+}
+function purgeExpired(){
+  const exp = records.filter(r => r.deleted && r.deletedAt && today() > addDays(r.deletedAt,30));
+  if(!exp.length) return;
+  const ids = new Set(exp.map(r=>r.id));
+  exp.forEach(r => tombs.push({id:r.id, foundDate:r.foundDate, deletedAt:r.deletedAt, purgedAt:today()}));
+  records = records.filter(r=>!ids.has(r.id));
+  persistAll();
+}
+
+
+/* ---------- 統計報表（月／季／年） ---------- */
+let statView='month', statY=null, statM=null, statQ=null;
+const pad2 = n => String(n).padStart(2,'0');
+const lastDay = (y,m) => new Date(y,m,0).getDate();
+function stInit(){ if(statY===null){ const t=today(); statY=+t.slice(0,4); statM=+t.slice(5,7); statQ=Math.ceil(statM/3); } }
+function stA(){ return statView==='month'?statM:statView==='quarter'?statQ:0; }
+function periodRange(view,y,a){
+  if(view==='month') return {start:`${y}-${pad2(a)}-01`, end:`${y}-${pad2(a)}-${pad2(lastDay(y,a))}`, label:`${y} 年 ${a} 月`, short:`${a}月`, y, a};
+  if(view==='quarter'){ const m1=(a-1)*3+1, m3=a*3; return {start:`${y}-${pad2(m1)}-01`, end:`${y}-${pad2(m3)}-${pad2(lastDay(y,m3))}`, label:`${y} 年第 ${a} 季（${m1}～${m3} 月）`, short:`${y} Q${a}`, y, a}; }
+  return {start:`${y}-01-01`, end:`${y}-12-31`, label:`${y} 年`, short:`${y}`, y, a:0};
+}
+function shiftPeriod(view,y,a,k){
+  if(view==='month'){ const t=y*12+(a-1)+k; return {y:Math.floor(t/12), a:t%12+1}; }
+  if(view==='quarter'){ const t=y*4+(a-1)+k; return {y:Math.floor(t/4), a:t%4+1}; }
+  return {y:y+k, a:0};
+}
+/* 實際完成日：第一次「複查通過」的日期；若是以「其它」依據結案，則用結案日 */
+function doneDate(r){
+  const p = r.reviews.find(v=>v.result==='pass' && v.date);
+  if(p) return p.date;
+  return (r.closed && r.closedDate) ? r.closedDate : '';
+}
+function daysBetween(a,b){ const [y1,m1,d1]=a.split('-').map(Number), [y2,m2,d2]=b.split('-').map(Number); return Math.round((new Date(y2,m2-1,d2)-new Date(y1,m1-1,d1))/86400000); }
+function statCompute(range){
+  const t = today();
+  const L = range.end < t ? range.end : t;               // 本期最後一個有效日
+  const nx = addDays(range.end,1), asOf = nx < t ? nx : t; // 期限早於此日 = 已過期
+  const inP = d => d && d >= range.start && d <= range.end;
+  const done = r => { const c=doneDate(r); return c && c<=L; };
+  const late = r => r.deadline && r.deadline < asOf;
+  const cases = live().filter(r=>inP(r.foundDate));
+  const g = {done:[], open:[], over:[]};
+  cases.forEach(r=>{
+    const c = doneDate(r);
+    if(c && c<=L && (!r.deadline || c<=r.deadline)) g.done.push(r);
+    else if(late(r)) g.over.push(r);
+    else g.open.push(r);
+  });
+  const cross = live().filter(r=>r.foundDate && r.foundDate<range.start && !done(r) && late(r))
+      .sort((a,b)=>a.deadline<b.deadline?-1:1);
+  const dm = new Map();
+  records.filter(r=>r.deleted).forEach(r=>dm.set(r.id,r.foundDate));
+  tombs.forEach(tb=>dm.set(tb.id,tb.foundDate));
+  let del = 0; dm.forEach(fd=>{ if(inP(fd)) del++; });
+  const area = new Map();
+  cases.forEach(r=>{ const k=(r.area||'').trim()||'（未填）'; area.set(k,(area.get(k)||0)+1); });
+  const areaList = [...area.entries()].sort((a,b)=>b[1]-a[1] || (a[0]<b[0]?-1:1));
+  const overSet = new Set(g.over.map(r=>r.id));
+  const cats = [['general',CAT.general],['schedule',CAT.schedule],['major',CAT.major],['', '未分類']].map(([k,n])=>{
+    const rs = cases.filter(r=>(r.category||'')===k);
+    return {name:n, n:rs.length, over:rs.filter(r=>overSet.has(r.id)).length};
+  });
+  return {range, total:cases.length, done:g.done.length, open:g.open.length, over:g.over.length, cross, del, areaList, cats, asOf, L};
+}
+function statSeries(view,y,a){
+  const N = view==='month'?12:view==='quarter'?4:5, out=[];
+  for(let i=-(N-1);i<=0;i++){ const q=shiftPeriod(view,y,a,i), rg=periodRange(view,q.y,q.a), c=statCompute(rg);
+    out.push({label:rg.short, y:q.y, a:q.a, total:c.total, over:c.over}); }
+  return out;
+}
+function lineChart(ser,view){
+  if(!ser.some(p=>p.total>0||p.over>0)) return '<div class="empty" style="padding:20px">尚無資料</div>';
+  const W=640,H=250,L=38,R=18,T=26,B=46, iw=W-L-R, ih=H-T-B;
+  const mx=Math.max(...ser.map(p=>Math.max(p.total,p.over)),1), step=Math.max(1,Math.ceil(mx/4)), top=step*4;
+  const X=i=>L+(ser.length===1?iw/2:iw*i/(ser.length-1)), Y=v=>T+ih-ih*v/top;
+  let g='';
+  for(let k=0;k<=4;k++){ const v=k*step; g+=`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="#d9e0dd"/><text x="${L-6}" y="${Y(v)+4}" font-size="11" text-anchor="end" fill="#5c6b66">${v}</text>`; }
+  const pts=k=>ser.map((p,i)=>`${X(i)},${Y(p[k])}`).join(' ');
+  g+=`<polyline points="${pts('total')}" fill="none" stroke="#1f6b57" stroke-width="3"/>`;
+  g+=`<polyline points="${pts('over')}" fill="none" stroke="#c0392b" stroke-width="3" stroke-dasharray="7 4"/>`;
+  ser.forEach((p,i)=>{
+    g+=`<circle cx="${X(i)}" cy="${Y(p.total)}" r="4" fill="#1f6b57"/><circle cx="${X(i)}" cy="${Y(p.over)}" r="4" fill="#c0392b"/>`;
+    if(p.total>0) g+=`<text x="${X(i)}" y="${Y(p.total)-9}" font-size="13" font-weight="700" text-anchor="middle" fill="#1f6b57">${p.total}</text>`;
+    if(p.over>0 && p.over!==p.total) g+=`<text x="${X(i)}" y="${Y(p.over)+19}" font-size="13" font-weight="700" text-anchor="middle" fill="#c0392b">${p.over}</text>`;
+    const lb = view==='month' ? (p.a===1||i===0 ? `${p.a}月` : `${p.a}月`) : p.label;
+    g+=`<text x="${X(i)}" y="${H-B+18}" font-size="12" text-anchor="middle" fill="#2a3a35">${esc(lb)}</text>`;
+    if(view==='month' && (i===0||p.a===1)) g+=`<text x="${X(i)}" y="${H-B+34}" font-size="11" text-anchor="middle" fill="#5c6b66">${p.y}</text>`;
+  });
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="趨勢折線圖">${g}</svg>`;
+}
+function statHTML(view,y,a){
+  const rg=periodRange(view,y,a), c=statCompute(rg);
+  const pv=shiftPeriod(view,y,a,-1), pc=statCompute(periodRange(view,pv.y,pv.a));
+  const pw = view==='month'?'上月':view==='quarter'?'上季':'去年', tw = view==='month'?`${a} 月`:view==='quarter'?`第 ${a} 季`:`${y} 年`;
+  const diff = c.over-pc.over;
+  const cmp = diff>0?`比${pw}多 ${diff} 件`:diff<0?`比${pw}少 ${-diff} 件`:`與${pw}相同`;
+  const bad = c.over+c.cross.length>0;
+  const sum = c.total===0 && c.cross.length===0 && c.del===0
+    ? `${rg.label}：尚無資料`
+    : `${tw}新增 ${c.total} 件缺失，結案 ${c.done} 件；逾期 ${c.over} 件（${cmp}）；另有 ${c.cross.length} 件前期缺失仍未完成、已過期限。`;
+  const maxA = c.areaList.length?c.areaList[0][1]:1;
+  const ser = statSeries(view,y,a);
+  const trendName = view==='month'?'最近 12 個月':view==='quarter'?'最近 4 季':'最近 5 年';
+  return `
+    <div class="st-sum ${bad?'warn':'ok'}">${esc(sum)}</div>
+    <div class="st-tiles">
+      <div class="st-tile"><div class="n">${c.total}</div><div class="l">新增</div><div class="d">發現日期在本期</div></div>
+      <div class="st-tile t-done"><div class="n">${c.done}</div><div class="l">結案</div><div class="d">期限內完成</div></div>
+      <div class="st-tile t-open"><div class="n">${c.open}</div><div class="l">尚未結案</div><div class="d">未完成、期限未到</div></div>
+      <div class="st-tile t-over"><div class="n">${c.over}</div><div class="l">逾期</div><div class="d">${esc(cmp)}</div></div>
+    </div>
+    <div class="st-note">新增 ＝ 結案 ＋ 尚未結案 ＋ 逾期（${c.done} ＋ ${c.open} ＋ ${c.over} ＝ ${c.done+c.open+c.over}）。「結案」指複查通過或已結案、且在改善期限內完成；超過期限才完成的算「逾期」。</div>
+    <div class="st-extra">
+      <div class="box"><div class="n">${c.cross.length}</div><div class="l">跨月逾期（不含在上面四項）</div><div class="st-note" style="margin:0">前期新增、尚未完成且已過期限的案件（累計）</div></div>
+      <div class="box del"><div class="n">${c.del}</div><div class="l">刪除件數（不立案）</div><div class="st-note" style="margin:0">本期發現日期、已刪除未列入新增的案件。新增 ${c.total} ＋ 刪除 ${c.del} ＝ ${c.total+c.del}</div></div>
+    </div>
+
+    <div class="st-sec">跨月逾期明細（需追蹤）</div>
+    ${c.cross.length?`<div class="st-scroll"><table class="st-table"><thead><tr><th>編號</th><th>發現日期</th><th>缺失區域</th><th>負責單位／人員</th><th>改善期限</th><th>已逾期</th></tr></thead><tbody>
+      ${c.cross.map(r=>`<tr${view?` class="click" onclick="openRecord('${r.id}')"`:''}><td>${esc(r.id)}</td><td>${fmtDate(r.foundDate)}</td><td>${esc(r.area)}</td><td>${esc(ownerText(r))}</td><td>${fmtDate(r.deadline)}</td><td>${Math.max(1,daysBetween(r.deadline,c.asOf))} 天</td></tr>`).join('')}</tbody></table></div>`:'<div class="muted small">沒有跨月逾期的案件。</div>'}
+
+    <div class="st-sec">哪個區域缺失最多（${esc(tw)}新增，全部區域）</div>
+    ${c.areaList.length?c.areaList.map(([n,v])=>`<div class="st-bar"><div>${esc(n)}</div><div class="b"><i style="width:${Math.round(v/maxA*100)}%"></i></div><div class="v">${v}</div></div>`).join(''):'<div class="muted small">尚無資料</div>'}
+
+    <div class="st-sec">缺失類別（${esc(tw)}新增）</div>
+    <table class="st-table"><thead><tr><th>類別</th><th>件數</th><th>其中逾期</th></tr></thead><tbody>
+      ${c.cats.filter(x=>x.n>0||x.name!=='未分類').map(x=>`<tr><td>${esc(x.name)}</td><td><b>${x.n}</b></td><td>${x.over?`<b style="color:var(--bad)">${x.over}</b>`:'0'}</td></tr>`).join('')}</tbody></table>
+
+    <div class="st-block"><div class="st-sec">趨勢（${trendName}）</div>
+    <div class="st-leg"><span class="a">總件數（新增）</span><span class="c">逾期件數</span></div>
+    <div class="st-chart st-scroll">${lineChart(ser,view)}</div></div>`;
+}
+function showStats(){
+  if(dirty && !confirm('有尚未儲存的修改，確定要離開嗎？')) return;
+  cur=null; dirty=false; stInit(); renderStats(); window.scrollTo(0,0);
+}
+function setStat(k,v){
+  if(k==='view') statView=v; else if(k==='y') statY=+v; else if(k==='m') statM=+v; else if(k==='q') statQ=+v;
+  renderStats();
+}
+function renderStats(){
+  stInit();
+  const all=[...live().map(r=>r.foundDate), ...records.filter(r=>r.deleted).map(r=>r.foundDate), ...tombs.map(t=>t.foundDate)].filter(Boolean);
+  const cy=+today().slice(0,4); let y0=Math.min(cy-1,...all.map(d=>+d.slice(0,4)));
+  const yOpts=[]; for(let y=y0;y<=cy+1;y++) yOpts.push(y);
+  if(!yOpts.includes(statY)) yOpts.push(statY);
+  const vt=(k,n)=>`<button class="${statView===k?'on':''}" onclick="setStat('view','${k}')">${n}</button>`;
+  const rg=periodRange(statView,statY,stA());
+  $('#app').innerHTML = `
+    <div class="row" style="margin-bottom:12px"><button onclick="showList()">← 返回清單</button><h2 style="margin:0 8px;font-size:18px">統計報表</h2></div>
+    <div class="card">
+      <div class="row tabs" style="margin-bottom:10px">${vt('month','月報')}${vt('quarter','季報')}${vt('year','年報')}
+        <span class="spacer"></span>
+        <button onclick="printStats()">列印／存成 PDF</button></div>
+      <div class="row" style="margin-bottom:6px">
+        <select style="width:auto" onchange="setStat('y',this.value)">${yOpts.map(y=>`<option value="${y}" ${y===statY?'selected':''}>${y} 年</option>`).join('')}</select>
+        ${statView==='month'?`<select style="width:auto" onchange="setStat('m',this.value)">${[1,2,3,4,5,6,7,8,9,10,11,12].map(m=>`<option value="${m}" ${m===statM?'selected':''}>${m} 月</option>`).join('')}</select>`:''}
+        ${statView==='quarter'?`<select style="width:auto" onchange="setStat('q',this.value)">${[1,2,3,4].map(q=>`<option value="${q}" ${q===statQ?'selected':''}>第 ${q} 季</option>`).join('')}</select>`:''}
+      </div>
+      <h3 class="st-title" style="margin:6px 0">${esc(rg.label)}</h3>
+      <div id="statBody">${statHTML(statView,statY,stA())}</div>
+    </div>`;
+}
+function printStats(){
+  const rg=periodRange(statView,statY,stA());
+  const name = statView==='month'?'月報':statView==='quarter'?'季報':'年報';
+  $('#print').innerHTML = `<h1>衛生缺失統計${name}</h1><div style="text-align:center;margin-bottom:10px">${esc(rg.label)}　列印日期：${fmtDate(today())}</div>`+statHTML(statView,statY,stA()).replace(/ class="click" onclick="[^"]*"/g,'');
+  window.print();
+}
+
+/* ---------- 列印單筆報表 ---------- */
+function printReport(){
+  if(dirty && !confirm('有尚未儲存的修改，列印內容會包含這些修改（但尚未儲存）。要繼續嗎？')) return;
+  const r = cur;
+  const row = (k,v) => `<tr><th>${k}</th><td>${v||''}</td></tr>`;
+  const imgs = arr => arr.length ? arr.map(p=>`<img src="${p}">`).join('') : '無';
+  $('#print').innerHTML = `
+    <h1>衛生缺失改善追蹤紀錄</h1>
+    <div style="text-align:center;margin-bottom:10px">編號：${esc(r.id)}　狀態：${statusOf(r).t}${isOverdue(r)?'（逾期）':''}　列印日期：${fmtDate(today())}</div>
+    <h3>一、缺失基本資料</h3><table>
+      ${row('發現日期',fmtDate(r.foundDate))}${row('缺失區域',esc(r.area))}${row('巡檢人員',esc(r.finder))}
+      ${row('缺失分類',esc(CAT[r.category]||'未分類'))}
+      ${row('發生情形',[r.consecutive?'相同缺失連續兩天發生':'', r.recurred?'已通知改善後再次發生':''].filter(Boolean).join('；')||'—')}
+      ${row('負責單位／人員',esc(ownerText(r)))}${row('改善期限',fmtDate(r.deadline))}
+      ${row('已通知對象／日期',esc(r.notifyTarget)+(r.notifyDate?'（'+fmtDate(r.notifyDate)+'）':''))}
+      ${row('缺失描述',nl2br(r.rawDesc))}
+      ${row('缺失照片',imgs(r.photos))}</table>
+    <h3>二、缺失單與追蹤要求</h3><table>
+      ${row('缺失單編號（＝案件編號）',esc(r.id))}
+      ${row('風險控制措施',nl2br(r.riskControl))}${row('發生原因',nl2br(r.causeAnalysis))}${row('預防再發措施',nl2br(r.prevention))}</table>
+    <h3>三、實際改善情形</h3><table>
+      ${row('如何改善',nl2br(r.improveContent))}${row('預計改善完成日期',fmtDate(r.improveDate))}
+      ${row('改善執行單位／人員',esc(improveByText(r)))}${row('改善後照片',imgs(r.improvePhotos))}</table>
+    <h3>四、複查紀錄</h3>
+    ${r.reviews.length?`<table><tr><th style="width:auto">次數</th><th style="width:auto">日期</th><th style="width:auto">複查人員</th><th style="width:auto">結果</th><th style="width:auto">說明</th></tr>
+      ${r.reviews.map((v,i)=>`<tr><td>第${i+1}次</td><td>${fmtDate(v.date)}</td><td>${esc(v.by)}</td><td>${REVIEW_RESULT[v.result]}</td><td>${nl2br(v.note)}</td></tr>`).join('')}</table>`:'<p>尚無複查紀錄</p>'}
+    <h3>五、結案確認</h3><table>
+      ${row('結案依據',r.closeBasis==='other'?'其它':'複查通過')}${row('結案人員（品管）',esc(r.closedBy))}${row('結案日期',fmtDate(r.closedDate))}${row('結案說明',nl2br(r.closeNote))}</table>
+    <div class="sign"><span>負責單位簽名：＿＿＿＿＿＿＿＿</span><span>品保：＿＿＿＿＿＿＿＿</span><span>品管確認：＿＿＿＿＿＿＿＿</span></div>`;
+  setTimeout(()=>window.print(), 100);
+}
+
+/* ---------- 啟動 ---------- */
+(function init(){
+  try{ localStorage.setItem('__t','1'); localStorage.removeItem('__t'); }
+  catch(e){ alert('注意：目前瀏覽器無法保存資料（可能是無痕模式或已封鎖網站資料），關閉後資料會遺失。'); }
+  purgeExpired();
+  showList();
+})();
+</script>
+</body>
+</html>
