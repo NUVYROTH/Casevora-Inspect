@@ -16,7 +16,16 @@
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,sans-serif;font-size:15px;line-height:1.6}
-header.topbar{background:var(--brand);color:#fffdf8;border-bottom:3px solid var(--gold)}
+header.topbar{background:var(--brand);color:#fffdf8;border-bottom:3px solid var(--gold);position:sticky;top:0;z-index:50;transition:box-shadow .2s}
+/* 往下捲動時，標題列縮小並固定在最上方 */
+header.topbar.compact{box-shadow:0 2px 10px rgba(0,0,0,.25)}
+header.topbar .tbin,header.topbar .logo,header.topbar .bname,header.topbar .bsub{transition:all .2s}
+header.topbar.compact .tbin{padding-top:6px;padding-bottom:6px}
+header.topbar.compact .logo{width:42px;height:42px}
+header.topbar.compact .bname{font-size:28px}
+header.topbar.compact .bsub{font-size:13px;letter-spacing:.12em}
+@media(max-width:600px){header.topbar.compact .tbmeta{display:none}}
+@media (prefers-reduced-motion:reduce){header.topbar,header.topbar .tbin,header.topbar .logo,header.topbar .bname,header.topbar .bsub{transition:none}}
 .tbin{max-width:1320px;margin:0 auto;padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;justify-content:space-between}
 .brand{display:flex;align-items:center;gap:16px}
 .logo{width:76px;height:76px;border-radius:50%;flex:none;display:block;box-shadow:0 0 0 1px rgba(184,149,90,.5),0 2px 8px rgba(0,0,0,.35)}
@@ -116,7 +125,7 @@ details summary{cursor:pointer;font-weight:700}
 /* 案件頁：電腦上左右並排（左：案件內容，右：文字整理），手機上下排列 */
 .split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
 main:has(.split){max-width:1320px}
-.split .side{position:sticky;top:12px;max-height:calc(100vh - 90px);overflow:auto}
+.split .side{position:sticky;top:76px;max-height:calc(100vh - 150px);overflow:auto}
 @media (max-width:900px){ .split{grid-template-columns:1fr} .split .side{position:static;max-height:none;overflow:visible} }
 #print{display:none}
 
@@ -1504,6 +1513,12 @@ async function printReport(){
 }
 
 /* ---------- 啟動 ---------- */
+/* 捲動超過一點點就把標題列縮小 */
+(function(){
+  let on = false;
+  const tick = () => { const c = window.scrollY > 40; if(c!==on){ on = c; const h = document.querySelector('header.topbar'); if(h) h.classList.toggle('compact', c); } };
+  window.addEventListener('scroll', tick, {passive:true}); tick();
+})();
 (function init(){
   try{ localStorage.setItem('__t','1'); localStorage.removeItem('__t'); }
   catch(e){ say('注意：目前瀏覽器無法保存資料（可能是無痕模式或已封鎖網站資料），關閉後資料會遺失。'); }
