@@ -337,7 +337,7 @@ async function showList(){
   };
   const years = [...new Set(live().map(r=>(r.foundDate||'').slice(0,4)).filter(Boolean).concat(today().slice(0,4)))].sort().reverse();
   $('#app').innerHTML = `
-    <div class="honest">本機儲存 · 僅在此裝置此瀏覽器有效 · 可匯出備份<div class="honest-warn">⚠️ 請勿使用無痕視窗，關閉後資料會全部消失。</div></div>
+    <div class="honest">本機儲存 · 僅在此裝置此瀏覽器有效 · 可匯出備份<div class="honest-warn">⚠️ 注意：使用無痕視窗，關閉後資料會遺失。</div></div>
     <div class="card">
       <div class="row">
         <button class="primary" onclick="openRecord()">＋ 新增衛生缺失</button>
