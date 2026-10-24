@@ -87,6 +87,10 @@ tbody tr.click:hover{background:#f7f1e6}
 .subbox{border:1px dashed var(--field);border-radius:8px;padding:12px 14px;margin-top:10px;background:#fbf7ef}
 details summary{cursor:pointer;font-weight:700}
 .empty{text-align:center;padding:40px;color:var(--muted)}
+.modal{position:fixed;inset:0;background:rgba(22,33,58,.45);display:flex;align-items:center;justify-content:center;z-index:200;padding:16px}
+.modal .box{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:10px;max-width:440px;width:100%;padding:18px 20px;box-shadow:0 8px 30px rgba(0,0,0,.25)}
+.modal .msg{white-space:pre-wrap;margin-bottom:14px}
+.modal .row{justify-content:flex-end}
 .ainote{font-size:13px;background:var(--warn-soft);color:#6b4f1d;border:1px solid #ecd9b4;border-radius:8px;padding:9px 12px;margin:10px 0 0}
 .aires h4{margin:12px 0 4px;font-size:14px;border-left:3px solid var(--gold);padding-left:6px}
 .aires ul{margin:0;padding-left:20px}
@@ -189,12 +193,12 @@ function loadAll(){
 function loadTombs(){ try{ return JSON.parse(localStorage.getItem(KEY_T)) || []; }catch(e){ return []; } }
 function persistAll(){
   try{ localStorage.setItem(KEY, JSON.stringify(records)); localStorage.setItem(KEY_T, JSON.stringify(tombs)); return true; }
-  catch(e){ alert('儲存失敗！\n瀏覽器的儲存空間可能已滿。請先「下載備份」。'); return false; }
+  catch(e){ say('儲存失敗！\n瀏覽器的儲存空間可能已滿。請先「下載備份」。'); return false; }
 }
 function persist(){
   try{ localStorage.setItem(KEY, JSON.stringify(records)); return true; }
   catch(e){
-    alert('儲存失敗！\n瀏覽器的儲存空間可能已滿（通常是照片太多）。\n請刪除部分照片，或先「下載備份」後刪除舊的已結案紀錄。');
+    say('儲存失敗！\n瀏覽器的儲存空間可能已滿（通常是照片太多）。\n請刪除部分照片，或先「下載備份」後刪除舊的已結案紀錄。');
     return false;
   }
 }
@@ -204,6 +208,21 @@ function storageUsedMB(){
 
 /* ---------- 小工具 ---------- */
 const $ = s => document.querySelector(s);
+/* 頁面內的提示與確認視窗（claude.ai 版不會顯示瀏覽器的 alert／confirm 視窗） */
+function dialog(msg, okText, cancelText){
+  return new Promise(res => {
+    const m = document.createElement('div'); m.className = 'modal';
+    m.innerHTML = `<div class="box" role="dialog" aria-modal="true"><div class="msg"></div><div class="row">${cancelText?`<button id="dlgNo">${cancelText}</button>`:''}<button class="primary" id="dlgYes">${okText}</button></div></div>`;
+    m.querySelector('.msg').textContent = msg;
+    const done = v => { m.remove(); res(v); };
+    m.querySelector('#dlgYes').onclick = () => done(true);
+    if(cancelText) m.querySelector('#dlgNo').onclick = () => done(false);
+    document.body.appendChild(m); m.querySelector('#dlgYes').focus();
+  });
+}
+const ask = msg => dialog(msg, '確定', '取消');
+const say = msg => { dialog(msg, '知道了'); };
+const inClaude = () => typeof claude !== 'undefined';
 function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function today(){ const d=new Date(); return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10); }
 const DEPTS=['生產課','儲運','其它'];
@@ -299,8 +318,8 @@ function closeChecks(r){
 /* =========================================================
    清單頁
    ========================================================= */
-function showList(){
-  if(dirty && !confirm('有尚未儲存的修改，確定要離開嗎？')) return;
+async function showList(){
+  if(dirty && !(await ask('有尚未儲存的修改，確定要離開嗎？'))) return;
   cur = null; dirty = false; listSel = new Set();
   const base = inPeriod(live());
   const counts = {
@@ -442,10 +461,10 @@ function setPageSize(v){
   renderTable();
 }
 function listToggle(el){ const id=el.dataset.id; if(el.checked) listSel.add(id); else listSel.delete(id); renderTable(); }
-function listDelete(){
+async function listDelete(){
   const ids = [...listSel].filter(id=>{ const r=records.find(x=>x.id===id); return r && !r.closed && !r.deleted; });
   if(!ids.length) return;
-  if(!confirm(`確定要刪除選取的 ${ids.length} 筆嗎？`)) return;
+  if(!(await ask(`確定要刪除選取的 ${ids.length} 筆嗎？`))) return;
   const done = [];
   records.forEach(r => { if(ids.includes(r.id)){ r.deleted = true; r.deletedAt = today(); done.push(r); } });
   if(!persistAll()){ done.forEach(r=>{ r.deleted=false; delete r.deletedAt; }); return; }
@@ -702,8 +721,8 @@ window.addEventListener('beforeunload', e => { if(dirty){ e.preventDefault(); e.
 /* ---------- 照片 ---------- */
 function addPhotos(field, input){
   let files = [...input.files]; input.value='';
-  if(files.some(f=>!/^image\//.test(f.type))){ alert('請上傳圖檔'); return; }
-  if(cur[field].length + files.length > 10){ alert('每個照片區最多 10 張'); return; }
+  if(files.some(f=>!/^image\//.test(f.type))){ say('請上傳圖檔'); return; }
+  if(cur[field].length + files.length > 10){ say('每個照片區最多 10 張'); return; }
   files.forEach(file => {
     const fr = new FileReader();
     fr.onload = () => {
@@ -757,8 +776,8 @@ function makeDraft(){
       <button onclick="$('#draftBox').innerHTML=''">取消</button>
     </div></div>`;
 }
-function applyDraft(){
-  if(cur.rawDesc.trim() && !confirm('「缺失描述」已有內容，套用後會被取代，確定嗎？')) return;
+async function applyDraft(){
+  if(cur.rawDesc.trim() && !(await ask('「缺失描述」已有內容，套用後會被取代，確定嗎？'))) return;
   cur.rawDesc = $('#dDesc').value;
   document.querySelector('[data-f=rawDesc]').value = cur.rawDesc;
   $('#draftBox').innerHTML = ''; dirty = true; refresh();
@@ -814,9 +833,9 @@ let aiBusy = false, aiLast = null;
 async function aiAnalyze(){
   const r = cur;
   if(aiBusy) return;
-  if(!r.rawDesc.trim()){ alert('請先填寫「缺失描述」，再按「產生分析」。'); return; }
+  if(!r.rawDesc.trim()){ say('請先填寫「缺失描述」，再按「產生分析」。'); return; }
   const text = [r.area, r.finder, r.rawDesc, r.ownerNote, r.notifyTarget].join(' ');
-  if(PII_RE.test(text)){ alert('偵測到疑似電話或身分證字號。請先刪除個人資料，改用代稱後再分析。'); return; }
+  if(PII_RE.test(text)){ say('偵測到疑似電話或身分證字號。請先刪除個人資料，改用代稱後再分析。'); return; }
   const st = $('#aiStatus');
   let sample = null;
   try{ sample = (typeof claude!=='undefined' && claude && claude.use) ? await claude.use('sample') : null; }catch(e){}
@@ -848,8 +867,8 @@ function renderAI(j){
     <div class="row" style="margin-top:10px"><button onclick="$('#draftBox').innerHTML=''">關閉</button></div>
   </div>`;
 }
-function applyAIDraft(){
-  if(cur.rawDesc.trim() && !confirm('「缺失描述」已有內容，套用後會被取代，確定嗎？')) return;
+async function applyAIDraft(){
+  if(cur.rawDesc.trim() && !(await ask('「缺失描述」已有內容，套用後會被取代，確定嗎？'))) return;
   cur.rawDesc = $('#aiDraft').value;
   document.querySelector('[data-f=rawDesc]').value = cur.rawDesc;
   dirty = true; refresh(); flash('已套用，記得按「儲存」');
@@ -867,7 +886,7 @@ function saveRecord(silent){
   if(!r.foundDate) miss.push('發現日期');
   if(!r.area.trim()) miss.push('缺失區域');
   if(!r.rawDesc.trim()) miss.push('缺失描述');
-  if(miss.length){ alert('請先填寫：' + miss.join('、')); return false; }
+  if(miss.length){ say('請先填寫：' + miss.join('、')); return false; }
   if(dlError(r)){
     showDlErr = true; refresh();
     const el = document.querySelector('[data-f=deadline]'); el.scrollIntoView({block:'center'}); el.focus();
@@ -883,14 +902,14 @@ function saveRecord(silent){
   if(!persist()){ records = backupList; if(isNew) r.id=''; return false; }
   dirty = false;
   try{ const used = (localStorage.getItem(KEY)||'').length + (localStorage.getItem(KEY_T)||'').length;
-    if(used > 4000000 && !window.__warned){ window.__warned = true; alert('提醒：本機儲存空間已用約 80% 以上。請盡快按「下載備份」，並考慮減少照片。'); } }catch(e){}
+    if(used > 4000000 && !window.__warned){ window.__warned = true; say('提醒：本機儲存空間已用約 80% 以上。請盡快按「下載備份」，並考慮減少照片。'); } }catch(e){}
   if(isNew && !silent){ showList(); flash('已儲存 '+r.id); return true; }
   renderDetail();
   if(!silent) flash('已儲存');
   return true;
 }
-function deleteRecord(){
-  if(!confirm('確定要刪除嗎？')) return;
+async function deleteRecord(){
+  if(!(await ask('確定要刪除嗎？'))) return;
   const rec = records.find(x=>x.id===cur.id);
   if(!rec) return;
   rec.deleted = true; rec.deletedAt = today();
@@ -906,31 +925,31 @@ function flash(t){
 
 /* ---------- 複查 ---------- */
 function addReview(){
-  if(!cur.improveContent.trim()){ alert('請先填寫「如何改善」，再新增複查紀錄。'); return; }
+  if(!cur.improveContent.trim()){ say('請先填寫「如何改善」，再新增複查紀錄。'); return; }
   const date = $('#rvDate').value, result = $('#rvResult').value;
-  if(!date || !result){ alert('請填寫複查日期與複查結果。'); return; }
-  if(date > today()){ alert('複查日期不能晚於今天。'); return; }
-  if(cur.foundDate && date < cur.foundDate){ alert('複查日期不能早於發現日期。'); return; }
+  if(!date || !result){ say('請填寫複查日期與複查結果。'); return; }
+  if(date > today()){ say('複查日期不能晚於今天。'); return; }
+  if(cur.foundDate && date < cur.foundDate){ say('複查日期不能早於發現日期。'); return; }
   cur.reviews.push({date, by:$('#rvBy').value.trim(), result, note:$('#rvNote').value.trim()});
   if(saveRecord(true)) flash('已新增複查紀錄並儲存'); else cur.reviews.pop();
 }
-function delReview(i){
-  if(!confirm(`確定刪除第 ${i+1} 次複查紀錄？`)) return;
+async function delReview(i){
+  if(!(await ask(`確定刪除第 ${i+1} 次複查紀錄？`))) return;
   cur.reviews.splice(i,1); saveRecord(true);
 }
 
 /* ---------- 結案 ---------- */
-function doClose(){
-  { const bad=closeChecks(cur).filter(c=>!c.ok); if(bad.length){ alert('尚未符合結案條件，還缺：\n- '+bad.map(c=>c.t).join('\n- ')); return; } }
+async function doClose(){
+  { const bad=closeChecks(cur).filter(c=>!c.ok); if(bad.length){ say('尚未符合結案條件，還缺：\n- '+bad.map(c=>c.t).join('\n- ')); return; } }
   const by = $('#clBy').value.trim(), date = $('#clDate').value;
-  if(!by || !date){ alert('請填寫結案確認人員與結案日期。'); return; }
-  if(!$('#clConfirm').checked){ alert('請勾選品管人員確認聲明。'); return; }
-  if(!confirm('確定要結案嗎？結案後內容會鎖定')) return;
+  if(!by || !date){ say('請填寫結案確認人員與結案日期。'); return; }
+  if(!$('#clConfirm').checked){ say('請勾選品管人員確認聲明。'); return; }
+  if(!(await ask('確定要結案嗎？結案後內容會鎖定'))) return;
   Object.assign(cur, {closed:true, closedBy:by, closedDate:date, closeNote:$('#clNote').value.trim(), closeBasis:closeBasisUI});
   const cid=cur.id; if(saveRecord(true)){ showList(); flash('已結案 '+cid); } else cur.closed=false;
 }
-function reopen(){
-  if(!confirm('確定撤銷結案？撤銷後此紀錄將回到追蹤狀態，可再修改。')) return;
+async function reopen(){
+  if(!(await ask('確定撤銷結案？撤銷後此紀錄將回到追蹤狀態，可再修改。'))) return;
   Object.assign(cur, {closed:false, closedBy:'', closedDate:'', closeNote:'', closeBasis:''}); closeBasisUI='pass';
   saveRecord(true); flash('已撤銷結案');
 }
@@ -938,7 +957,7 @@ function reopen(){
 /* ---------- 匯出報表（CSV，Excel 可開） ---------- */
 function exportCSV(){
   const rs = filteredRecords();
-  if(!rs.length){ alert('目前篩選條件下沒有紀錄可匯出。'); return; }
+  if(!rs.length){ say('目前篩選條件下沒有紀錄可匯出。'); return; }
   const head = ['編號','狀態','是否逾期','發現日期','缺失區域','巡檢人員','缺失描述','缺失分類','連續兩天發生','通知後再次發生',
     '負責單位/人員','改善期限','已通知對象','通知日期','缺失單編號','風險控制措施',
     '發生原因','預防再發措施','如何改善','預計改善完成日期','改善執行人員','缺失照片數','改善照片數',
@@ -975,20 +994,20 @@ function restore(input){
   const file = input.files[0]; input.value='';
   if(!file) return;
   const fr = new FileReader();
-  fr.onload = () => {
+  fr.onload = async () => {
     try{
       const data = JSON.parse(fr.result);
       if(!data || !Array.isArray(data.records)) throw 0;
       const incoming = data.records.filter(r=>!r.deleted);
       const trashN = records.filter(r=>r.deleted).length;
-      if(!confirm(`備份檔內有 ${incoming.length} 筆紀錄。\n還原會「取代」目前瀏覽器中的 ${live().length} 筆資料，目前「最近刪除」裡的 ${trashN} 筆案件也會一併被取代，確定嗎？`)) return;
+      if(!(await ask(`備份檔內有 ${incoming.length} 筆紀錄。\n還原會「取代」目前瀏覽器中的 ${live().length} 筆資料，目前「最近刪除」裡的 ${trashN} 筆案件也會一併被取代，確定嗎？`))) return;
       const old = records, oldT = tombs.slice();
       records = incoming.map(r=>Object.assign(blankRecord(), migrate(r)));
       const have = new Set(tombs.map(t=>t.id));
       (Array.isArray(data.tombs)?data.tombs:[]).forEach(t=>{ if(t && t.id && !have.has(t.id)) tombs.push(t); });
       if(!persistAll()){ records = old; tombs = oldT; return; }
       flash('還原完成'); showList();
-    }catch(e){ alert('無法讀取：這不是本工具的備份檔。'); }
+    }catch(e){ say('無法讀取：這不是本工具的備份檔。'); }
   };
   fr.readAsText(file);
 }
@@ -1028,9 +1047,9 @@ function trashRestore(){
   if(!persistAll()){ done.forEach(r=>{ r.deleted=true; r.deletedAt=today(); }); return; }
   trashSel = new Set(); renderTrash(); flash('已還原 '+done.length+' 筆');
 }
-function trashPerm(){
+async function trashPerm(){
   const n = trashSel.size; if(!n) return;
-  if(!confirm(`確定要永久刪除選取的 ${n} 筆嗎？永久刪除後無法復原。`)) return;
+  if(!(await ask(`確定要永久刪除選取的 ${n} 筆嗎？永久刪除後無法復原。`))) return;
   const ids = new Set(trashSel), oldR = records, oldT = tombs.slice();
   records.filter(r=>ids.has(r.id)).forEach(r => tombs.push({id:r.id, foundDate:r.foundDate, deletedAt:r.deletedAt||today(), purgedAt:today()}));
   records = records.filter(r=>!ids.has(r.id));
@@ -1169,8 +1188,8 @@ function statHTML(view,y,a){
     <div class="st-leg"><span class="a">總件數（新增）</span><span class="c">逾期件數</span></div>
     <div class="st-chart st-scroll">${lineChart(ser,view)}</div></div>`;
 }
-function showStats(){
-  if(dirty && !confirm('有尚未儲存的修改，確定要離開嗎？')) return;
+async function showStats(){
+  if(dirty && !(await ask('有尚未儲存的修改，確定要離開嗎？'))) return;
   cur=null; dirty=false; stInit(); renderStats(); window.scrollTo(0,0);
 }
 function setStat(k,v){
@@ -1201,6 +1220,7 @@ function renderStats(){
     </div>`;
 }
 function printStats(){
+  if(inClaude()){ say('claude.ai 版無法開啟列印視窗。請到網址版按「列印／存成 PDF」，或改用「匯出報表」。'); return; }
   const rg=periodRange(statView,statY,stA());
   const name = statView==='month'?'月報':statView==='quarter'?'季報':'年報';
   $('#print').innerHTML = `<h1>衛生缺失統計${name}</h1><div style="text-align:center;margin-bottom:10px">${esc(rg.label)}　列印日期：${fmtDate(today())}</div>`+statHTML(statView,statY,stA()).replace(/ class="click" onclick="[^"]*"/g,'');
@@ -1208,8 +1228,9 @@ function printStats(){
 }
 
 /* ---------- 列印單筆報表 ---------- */
-function printReport(){
-  if(dirty && !confirm('有尚未儲存的修改，列印內容會包含這些修改（但尚未儲存）。要繼續嗎？')) return;
+async function printReport(){
+  if(inClaude()){ say('claude.ai 版無法開啟列印視窗。請到網址版按「列印／存成 PDF」。'); return; }
+  if(dirty && !(await ask('有尚未儲存的修改，列印內容會包含這些修改（但尚未儲存）。要繼續嗎？'))) return;
   const r = cur;
   const row = (k,v) => `<tr><th>${k}</th><td>${v||''}</td></tr>`;
   const imgs = arr => arr.length ? arr.map(p=>`<img src="${p}">`).join('') : '無';
@@ -1242,7 +1263,7 @@ function printReport(){
 /* ---------- 啟動 ---------- */
 (function init(){
   try{ localStorage.setItem('__t','1'); localStorage.removeItem('__t'); }
-  catch(e){ alert('注意：目前瀏覽器無法保存資料（可能是無痕模式或已封鎖網站資料），關閉後資料會遺失。'); }
+  catch(e){ say('注意：目前瀏覽器無法保存資料（可能是無痕模式或已封鎖網站資料），關閉後資料會遺失。'); }
   purgeExpired();
   showList();
 })();
