@@ -100,7 +100,11 @@ details summary{cursor:pointer;font-weight:700}
 .ainote{font-size:13px;background:var(--warn-soft);color:#6b4f1d;border:1px solid #ecd9b4;border-radius:8px;padding:9px 12px;margin:10px 0 0}
 .aires h4{margin:12px 0 4px;font-size:14px;border-left:3px solid var(--gold);padding-left:6px}
 .aires ul{margin:0;padding-left:20px}
-.desc-guide{font-size:12.5px;line-height:1.7;background:#f3ece0;border-radius:6px;padding:6px 10px;margin-top:-6px}
+.desc-guide{font-size:13px;line-height:1.6;background:#f3ece0;border-radius:6px;padding:8px 12px;margin-top:-6px}
+.desc-guide .dg-t{font-weight:700;margin-bottom:4px}
+.desc-guide .dg-list{display:grid;grid-template-columns:auto auto 1fr;gap:3px 8px;align-items:center}
+.desc-guide .dg-n{width:18px;height:18px;border-radius:50%;background:var(--brand);color:#fff;font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+.desc-guide .dg-foot{font-size:12px;margin-top:6px}
 .aires .sheet{border:1px solid var(--line);border-top:3px solid var(--brand);border-radius:8px;background:#fff;padding:10px 12px;margin-top:10px}
 .aires .sheet-t{font-weight:700;margin-bottom:6px}
 .aires .draft{white-space:pre-wrap;background:#fff;border:1px solid var(--line);border-radius:6px;padding:8px 10px}
@@ -571,7 +575,17 @@ function renderDetail(){
         ${fld('area','缺失區域','text',{req:1,ph:'例：包裝區、前處理室、冷藏庫'})}
         ${fld('finder','巡檢人員','text',{ph:'例：品保 王小明'})}
         ${fld('rawDesc','缺失描述','textarea',{req:1,full:1,rows:4,ph:'例：包裝線輸送帶下方地面有積水及魚羹殘渣，範圍約 1 平方公尺，當時正在包裝作業中，附近有未封口的成品。'})}
-        <div class="full desc-guide"><b>描述寫到位，請包含：</b>①<b>哪裡</b>：區域＋設備或作業點　②<b>看到什麼</b>：髒污、破損、掉落、未覆蓋……　③<b>多少</b>：數量、範圍或程度　④<b>當時狀態</b>：作業中、清洗後或停機　⑤<b>附近有沒有</b>產品、包材或食品接觸面<br><span class="muted">口語寫就好，AI 會整理成正式的缺失事實描述。請勿寫人名、電話，改用「作業員 A」等代稱。</span></div>
+        <div class="full desc-guide">
+          <div class="dg-t">描述寫到位，請包含這 5 點：</div>
+          <div class="dg-list">
+            <span class="dg-n">1</span><b>哪裡</b><span>區域＋設備或作業點</span>
+            <span class="dg-n">2</span><b>看到什麼</b><span>髒污、破損、掉落、未覆蓋……</span>
+            <span class="dg-n">3</span><b>多少</b><span>數量、範圍或程度</span>
+            <span class="dg-n">4</span><b>當時狀態</b><span>作業中、清洗後或停機</span>
+            <span class="dg-n">5</span><b>附近有沒有</b><span>產品、包材或食品接觸面</span>
+          </div>
+          <div class="muted dg-foot">口語寫就好，AI 會整理成正式的缺失事實描述。請勿寫人名、電話，改用「作業員 A」等代稱。</div>
+        </div>
         <div>
           <label class="f req">缺失類別</label>
           <select data-f="defType">
