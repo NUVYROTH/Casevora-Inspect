@@ -297,7 +297,7 @@ function blankRecord(){
     id:'', createdAt:'', updatedAt:'',
     foundDate: today(), area:'', finder:'', rawDesc:'', defType:'', defTypeV:3,
     category:'', consecutive:false, recurred:false,
-    ownerDept:'', ownerNote:'', deadline: addDays(today(),7), notifyTarget:'', notifyDate: today(),
+    ownerDept:'', ownerNote:'', deadline: addDays(today(),7), notifyTarget:'',
     photos:[],
     riskControl:'', causeAnalysis:'', prevention:'',
     improveContent:'', improveDate: addDays(today(),7), improveDept:'', improveNote:'', improveEvidence:'', improvePhotos:[],
@@ -615,7 +615,6 @@ function renderDetail(){
         ${fld('ownerNote','負責人或說明','text',{ph:'例：李組長；選「其它」請寫明單位'})}
         <div><label class="f req" id="deadlineLab">改善期限</label><input type="date" data-f="deadline" class="dl-input" value="${esc(r.deadline||'')}"><div class="dl-hint">（預設一週改善，從發現日期起算）</div><div class="ferr" id="errDeadline"></div></div>
         ${fld('notifyTarget','已通知對象','text',{ph:'例：生產課 李組長、廠長'})}
-        ${fld('notifyDate','通知日期','date')}
         <div class="full"><label class="f">缺失照片</label>${photoBox('photos')}</div>
       </div>
       <div id="ruleHint"></div>
@@ -782,11 +781,6 @@ function onField(e){
   if(f==='foundDate' && cur.foundDate && oldFound && cur.deadline===addDays(oldFound,7)){
     cur.deadline = addDays(cur.foundDate,7);
     document.querySelector('[data-f=deadline]').value = cur.deadline;
-  }
-  /* 通知日期預設為發現日期：沒手動改過時，跟著發現日期變 */
-  if(f==='foundDate' && cur.foundDate && oldFound && cur.notifyDate===oldFound){
-    cur.notifyDate = cur.foundDate;
-    document.querySelector('[data-f=notifyDate]').value = cur.notifyDate;
   }
   if(f==='foundDate' && cur.foundDate && oldFound && cur.improveDate===addDays(oldFound,7)){
     cur.improveDate = addDays(cur.foundDate,7);
@@ -1200,13 +1194,13 @@ function exportCSV(){
   const rs = live().slice().sort((a,b)=> (a.foundDate||'').localeCompare(b.foundDate||'') || a.id.localeCompare(b.id));
   if(!rs.length){ say('目前沒有任何案件可以匯出。'); return; }
   const head = ['編號','狀態','是否逾期','發現日期','缺失區域','巡檢人員','缺失描述','缺失類別','缺失等級','連續兩天發生','通知後再次發生',
-    '負責單位/人員','改善期限','已通知對象','通知日期','缺失單編號','風險控制措施',
+    '負責單位/人員','改善期限','已通知對象','缺失單編號','風險控制措施',
     '發生原因','預防再發措施','如何改善','預計改善完成日期','改善執行人員','缺失照片數','改善照片數',
     '複查次數','最近複查日期','最近複查結果','複查歷程','結案依據','結案人員','結案日期','結案說明','最後儲存'];
   const rows = rs.map(r=>{
     const lr = lastReview(r);
     return [r.id, statusOf(r).t, isOverdue(r)?'是':'否', r.foundDate, r.area, r.finder, r.rawDesc, typeName(r.defType)||'未選類別', CAT[r.category]||'未判定',
-      r.consecutive?'是':'否', r.recurred?'是':'否', ownerText(r), r.deadline, r.notifyTarget, r.notifyDate,
+      r.consecutive?'是':'否', r.recurred?'是':'否', ownerText(r), r.deadline, r.notifyTarget,
       r.id, r.riskControl, r.causeAnalysis, r.prevention, r.improveContent, r.improveDate, improveByText(r),
       r.photos.length, r.improvePhotos.length, r.reviews.length, lr?lr.date:'', lr?REVIEW_RESULT[lr.result]:'',
       r.reviews.map((v,i)=>`第${i+1}次 ${v.date} ${REVIEW_RESULT[v.result]} ${v.by} ${v.note}`).join('\n'),
@@ -1491,7 +1485,7 @@ async function printReport(){
       ${row('缺失類別',esc(typeName(r.defType)||'未選類別'))}${row('缺失等級',esc(CAT[r.category]||'未判定'))}
       ${row('發生情形',[r.consecutive?'相同缺失連續兩天發生':'', r.recurred?'已通知改善後再次發生':''].filter(Boolean).join('；')||'—')}
       ${row('負責單位／人員',esc(ownerText(r)))}${row('改善期限',fmtDate(r.deadline))}
-      ${row('已通知對象／日期',esc(r.notifyTarget)+(r.notifyDate?'（'+fmtDate(r.notifyDate)+'）':''))}
+      ${row('已通知對象',esc(r.notifyTarget))}
       ${row('缺失描述',nl2br(r.rawDesc))}
       ${row('缺失照片',imgs(r.photos))}</table>
     <h3>二、缺失單與追蹤要求</h3><table>
