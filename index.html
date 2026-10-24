@@ -76,6 +76,13 @@ tbody tr.click:hover{background:#f3f8f6}
 .subbox{border:1px dashed #c5cfcb;border-radius:8px;padding:12px 14px;margin-top:10px;background:#fbfcfc}
 details summary{cursor:pointer;font-weight:700}
 .empty{text-align:center;padding:40px;color:var(--muted)}
+.filters select{width:auto;padding:6px 8px}
+.pager{margin-top:10px}
+.pager select{width:auto;padding:4px 6px}
+/* 案件頁：電腦上左右並排（左：案件內容，右：文字整理），手機上下排列 */
+.split{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:16px;align-items:start}
+.split .side{position:sticky;top:12px;max-height:calc(100vh - 90px);overflow:auto}
+@media (max-width:900px){ .split{grid-template-columns:1fr} .split .side{position:static;max-height:none;overflow:visible} }
 #print{display:none}
 
 /* ---------- 統計頁 ---------- */
@@ -156,6 +163,12 @@ let cur = null;      // 正在編輯的紀錄（副本）
 let dirty = false;   // 是否有未儲存的修改
 let listFilter = 'open';
 let listSearch = '';
+let listYear = '';   // '' = 全部
+let listMonth = '';  // '' = 全部
+let listPage = 1;
+const PAGE_SIZES = [20,30,50,100];
+let pageSize = 20;
+try{ const ps = parseInt(localStorage.getItem('qaHygieneTracker_pageSize'),10); if(PAGE_SIZES.includes(ps)) pageSize = ps; }catch(e){}
 
 function loadAll(){
   try{ return (JSON.parse(localStorage.getItem(KEY)) || []).map(migrate); }catch(e){ return []; }
@@ -276,13 +289,15 @@ function closeChecks(r){
 function showList(){
   if(dirty && !confirm('有尚未儲存的修改，確定要離開嗎？')) return;
   cur = null; dirty = false; listSel = new Set();
+  const base = inPeriod(live());
   const counts = {
-    all: live().length,
-    open: live().filter(r=>!r.closed).length,
-    over: live().filter(isOverdue).length,
-    ready: live().filter(r=>!r.closed && lastReview(r)?.result==='pass').length,
-    closed: live().filter(r=>r.closed).length
+    all: base.length,
+    open: base.filter(r=>!r.closed).length,
+    over: base.filter(isOverdue).length,
+    ready: base.filter(r=>!r.closed && lastReview(r)?.result==='pass').length,
+    closed: base.filter(r=>r.closed).length
   };
+  const years = [...new Set(live().map(r=>(r.foundDate||'').slice(0,4)).filter(Boolean).concat(today().slice(0,4)))].sort().reverse();
   $('#app').innerHTML = `
     <div class="card">
       <div class="row">
@@ -305,7 +320,18 @@ function showList(){
         ${tab('closed','已結案',counts.closed)}
         ${tab('all','全部',counts.all)}
         <span class="spacer"></span>
-        <input type="text" placeholder="搜尋缺失區域、描述、負責單位、編號…" style="max-width:280px" value="${esc(listSearch)}" oninput="listSearch=this.value;renderTable()">
+        <input type="text" placeholder="搜尋缺失區域、描述、負責單位、編號…" style="max-width:280px" value="${esc(listSearch)}" oninput="listSearch=this.value;listPage=1;renderTable()">
+      </div>
+      <div class="row filters" style="margin-bottom:12px">
+        <span class="small muted">發現日期：</span>
+        <select aria-label="年份" onchange="listYear=this.value;listPage=1;showList()">
+          <option value="">全部年份</option>
+          ${years.map(y=>`<option value="${y}" ${listYear===y?'selected':''}>${y} 年</option>`).join('')}
+        </select>
+        <select aria-label="月份" onchange="listMonth=this.value;listPage=1;showList()">
+          <option value="">全部月份</option>
+          ${Array.from({length:12},(_,i)=>String(i+1).padStart(2,'0')).map(m=>`<option value="${m}" ${listMonth===m?'selected':''}>${parseInt(m,10)} 月</option>`).join('')}
+        </select>
       </div>
       <div id="tableBox"></div>
     </div>
@@ -331,7 +357,7 @@ function showList(){
           <p>本工具將資料保存在<b>這台電腦的這個瀏覽器</b>中（瀏覽器內建儲存空間 localStorage），不會上傳到任何伺服器。關閉網頁後重新開啟，資料仍會保留。</p>
           <ul>
             <li><b>換電腦或換瀏覽器就看不到</b>原本的資料（例如 Chrome 存的資料，Edge 看不到）。</li>
-            <li>請<b>固定從同一個位置開啟這個 HTML 檔</b>；部分瀏覽器若檔案搬到別的資料夾，可能讀不到原本的資料。</li>
+            <li>請<b>固定用同一個瀏覽器、從同一個網址開啟</b>（建議加入書籤）。網址不同（例如電腦裡的 HTML 檔與網路上的網址）會被當成不同地方，資料不互通。</li>
             <li><b>清除瀏覽器資料／Cookie</b>、使用無痕模式，資料會消失或不會被保存。</li>
             <li>儲存空間約 5MB，照片會自動壓縮，但照片多時仍可能存滿。目前已使用約 <b>${storageUsedMB()} MB</b>。</li>
             <li>無法多人共用同一份資料。</li>
@@ -342,10 +368,19 @@ function showList(){
     </div>`;
   renderTable();
 }
-function tab(k, t, n){ return `<button class="${listFilter===k?'on':''}" onclick="listFilter='${k}';showList()">${t}（${n}）</button>`; }
+function tab(k, t, n){ return `<button class="${listFilter===k?'on':''}" onclick="listFilter='${k}';listPage=1;showList()">${t}（${n}）</button>`; }
 
+/* 年份、月份（依發現日期） */
+function inPeriod(rs){
+  return rs.filter(r => {
+    const d = r.foundDate || '';
+    if(listYear && d.slice(0,4)!==listYear) return false;
+    if(listMonth && d.slice(5,7)!==listMonth) return false;
+    return true;
+  });
+}
 function filteredRecords(){
-  let rs = live();
+  let rs = inPeriod(live());
   if(listFilter==='open') rs = rs.filter(r=>!r.closed);
   if(listFilter==='over') rs = rs.filter(isOverdue);
   if(listFilter==='ready') rs = rs.filter(r=>!r.closed && lastReview(r)?.result==='pass');
@@ -355,7 +390,11 @@ function filteredRecords(){
   return rs.sort((a,b)=> (b.foundDate||'').localeCompare(a.foundDate||'') || b.id.localeCompare(a.id));
 }
 function renderTable(){
-  const rs = filteredRecords();
+  const all = filteredRecords();
+  const pages = Math.max(1, Math.ceil(all.length/pageSize));
+  if(listPage>pages) listPage = pages;
+  if(listPage<1) listPage = 1;
+  const rs = all.slice((listPage-1)*pageSize, listPage*pageSize);
   const vis = new Set(rs.filter(r=>!r.closed).map(r=>r.id));
   listSel = new Set([...listSel].filter(id=>vis.has(id)));
   if(!rs.length){ $('#tableBox').innerHTML = `<div class="empty">${live().length?'沒有符合條件的紀錄':'目前還沒有紀錄，請按「新增衛生缺失」開始'}</div>`; return; }
@@ -371,7 +410,22 @@ function renderTable(){
       <td>${esc((r.rawDesc||'').slice(0,40))}${(r.rawDesc||'').length>40?'…':''}</td>
       <td class="small">${esc(CAT[r.category]||'未分類')}${r.consecutive?'<br><span class="muted">連續兩天</span>':''}${r.recurred?'<br><span class="muted">通知後再發生</span>':''}</td>
       <td>${esc(ownerText(r))}</td><td>${fmtDate(r.deadline)}</td><td>${badges(r)}</td></tr>`).join('')}
-    </tbody></table></div>`;
+    </tbody></table></div>
+    <div class="row pager">
+      <button onclick="goPage(-1)" ${listPage<=1?'disabled':''}>上一頁</button>
+      <span class="small">第 ${listPage}／${pages} 頁（共 ${all.length} 件）</span>
+      <button onclick="goPage(1)" ${listPage>=pages?'disabled':''}>下一頁</button>
+      <span class="spacer"></span>
+      <label class="small muted">每頁
+        <select onchange="setPageSize(this.value)">${PAGE_SIZES.map(n=>`<option value="${n}" ${n===pageSize?'selected':''}>${n}</option>`).join('')}</select> 件</label>
+    </div>`;
+}
+/* 換頁時，勾選會自動取消（避免刪除看不到的案件） */
+function goPage(d){ listPage += d; listSel = new Set(); renderTable(); }
+function setPageSize(v){
+  pageSize = parseInt(v,10) || 20; listPage = 1; listSel = new Set();
+  try{ localStorage.setItem('qaHygieneTracker_pageSize', String(pageSize)); }catch(e){}
+  renderTable();
 }
 function listToggle(el){ const id=el.dataset.id; if(el.checked) listSel.add(id); else listSel.delete(id); renderTable(); }
 function listDelete(){
@@ -431,6 +485,7 @@ function renderDetail(){
     <div class="muted small" style="margin:-4px 0 10px">缺失單編號＝本案編號（新增衛生缺失即視同開立缺失單）。</div>
     <div id="closedNotice"></div>
 
+    <div class="split">
     <!-- 1 基本資料 -->
     <div class="card">
       <h2><span class="no">1</span>缺失基本資料與分類</h2>
@@ -461,21 +516,20 @@ function renderDetail(){
       <div id="ruleHint"></div>
     </div>
 
-    <!-- 2 文字整理 -->
-    <div class="card">
-      <h2><span class="no">2</span>文字整理（整理上方「缺失描述」）</h2>
+    <!-- 2 文字整理（電腦上在右邊） -->
+    <div class="card side">
+      <h2><span class="no">2</span>文字整理（整理「缺失描述」）</h2>
       <div class="notice info small">
         <b>說明：</b>第一版<b>沒有內建 AI</b>。若要真正的 AI 自動整理，未來需要另外串接 AI 服務。目前提供兩種方式：<br>
         ①「範本整理」：依固定格式，<b>只用你填寫的資料</b>組成正式文字（不是 AI，不會推測原因或結果）。<br>
-        ②「複製 AI 提示詞」：把資料與限制條件組成一段文字，貼到你慣用的 AI 工具，再把結果貼回下方欄位。
+        ②「複製 AI 提示詞」：把資料與限制條件組成一段文字，貼到你慣用的 AI 工具，再把結果貼回「缺失描述」欄位。
       </div>
       <div class="row lockrow">
         <button class="lockable" onclick="makeDraft()">範本整理</button>
         <button class="lockable" onclick="makePrompt()">複製 AI 提示詞</button>
       </div>
       <div id="draftBox"></div>
-      <div class="grid" style="margin-top:12px">
-      </div>
+    </div>
     </div>
 
     <!-- 4 改善情形 -->
@@ -500,7 +554,7 @@ function renderDetail(){
       <div class="subbox lockarea" id="reviewForm">
         <b>新增複查紀錄</b>
         <div class="grid" style="margin-top:8px">
-          <div><label class="f req">複查日期</label><input type="date" id="rvDate" class="rv-input" value="${addDays(today(),7)}"><div class="rv-hint">（預設一週後複查）</div></div>
+          <div><label class="f req">複查日期</label><input type="date" id="rvDate" class="rv-input" value="${today()}" max="${today()}" ${r.foundDate?`min="${esc(r.foundDate)}"`:''}></div>
           <div><label class="f">複查人員</label><input type="text" id="rvBy"></div>
           <div><label class="f req">複查結果</label>
             <select id="rvResult"><option value="">— 請選擇 —</option>
@@ -560,11 +614,11 @@ function renderReviews(){
   const r = cur;
   if(!r.reviews.length){ $('#reviewList').innerHTML = `<div class="muted small">尚無複查紀錄。${r.improveContent?'':'（需先填寫並儲存「如何改善」才能新增複查）'}</div>`; return; }
   const lr = lastReview(r);
-  $('#reviewList').innerHTML = `<table><thead><tr><th>次數</th><th>複查日期</th><th>複查人員</th><th>結果</th><th>說明</th><th></th></tr></thead><tbody>
+  $('#reviewList').innerHTML = `<div style="overflow-x:auto"><table><thead><tr><th>次數</th><th>複查日期</th><th>複查人員</th><th>結果</th><th>說明</th><th></th></tr></thead><tbody>
     ${r.reviews.map((v,i)=>`<tr><td>第 ${i+1} 次</td><td>${fmtDate(v.date)}</td><td>${esc(v.by)}</td>
       <td><span class="badge ${v.result==='pass'?'s-ready':'s-track'}">${REVIEW_RESULT[v.result]}</span></td>
       <td>${nl2br(v.note)}</td><td><button class="small danger lockable" onclick="delReview(${i})">刪除</button></td></tr>`).join('')}
-    </tbody></table>
+    </tbody></table></div>
     ${lr.result!=='pass'?`<div class="notice warn">最近一次複查結果為「${REVIEW_RESULT[lr.result]}」，<b>須繼續追蹤，不得結案</b>。請更新「實際改善情形」後再新增一次複查。
       ${lr.result==='recur'&&!r.recurred?'<br>若此為「已通知改善後再次發生」，請品管人員確認是否勾選第 1 區的相關選項。':''}</div>`:''}`;
 }
@@ -679,12 +733,12 @@ function makeDraft(){
     ${miss.length?`<div class="notice warn small"><b>資料不足，請補充：</b>${miss.map(esc).join('、')}</div>`:''}
     <label class="f" style="margin-top:8px">正式缺失內容（草稿）</label><textarea id="dDesc" rows="3">${esc(desc)}</textarea>
     <div class="row" style="margin-top:8px">
-      <button class="primary" onclick="applyDraft()">確認並套用到下方欄位</button>
+      <button class="primary" onclick="applyDraft()">確認並套用到「缺失描述」</button>
       <button onclick="$('#draftBox').innerHTML=''">取消</button>
     </div></div>`;
 }
 function applyDraft(){
-  if(cur.rawDesc.trim() && !confirm('上方「缺失描述」已有內容，套用後會被取代，確定嗎？')) return;
+  if(cur.rawDesc.trim() && !confirm('「缺失描述」已有內容，套用後會被取代，確定嗎？')) return;
   cur.rawDesc = $('#dDesc').value;
   document.querySelector('[data-f=rawDesc]').value = cur.rawDesc;
   $('#draftBox').innerHTML = ''; dirty = true; refresh();
@@ -719,7 +773,7 @@ function makePrompt(){
 一、正式缺失內容
 二、需補充的資料（若無則寫「無」）`;
   $('#draftBox').innerHTML = `<div class="subbox">
-    <div class="small">提示詞已產生並嘗試複製。請貼到你慣用的 AI 工具，<b>檢查結果是否正確</b>後，再手動貼回上方「缺失描述」欄位。</div>
+    <div class="small">提示詞已產生並嘗試複製。請貼到你慣用的 AI 工具，<b>檢查結果是否正確</b>後，再手動貼回「缺失描述」欄位。</div>
     <textarea id="promptText" rows="10" style="margin-top:8px">${esc(text)}</textarea>
     <div class="row" style="margin-top:8px"><button onclick="copyPrompt()">再複製一次</button><button onclick="$('#draftBox').innerHTML=''">關閉</button><span id="copyMsg" class="small muted"></span></div>
   </div>`;
@@ -780,6 +834,8 @@ function addReview(){
   if(!cur.improveContent.trim()){ alert('請先填寫「如何改善」，再新增複查紀錄。'); return; }
   const date = $('#rvDate').value, result = $('#rvResult').value;
   if(!date || !result){ alert('請填寫複查日期與複查結果。'); return; }
+  if(date > today()){ alert('複查日期不能晚於今天。'); return; }
+  if(cur.foundDate && date < cur.foundDate){ alert('複查日期不能早於發現日期。'); return; }
   cur.reviews.push({date, by:$('#rvBy').value.trim(), result, note:$('#rvNote').value.trim()});
   if(saveRecord(true)) flash('已新增複查紀錄並儲存'); else cur.reviews.pop();
 }
