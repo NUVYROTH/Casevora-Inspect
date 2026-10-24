@@ -27,7 +27,7 @@ header.topbar{background:var(--brand);color:#fffdf8;border-bottom:3px solid var(
 @media(max-width:600px){.logo{width:60px;height:60px}.bname{font-size:38px}.bsub{font-size:14.5px;letter-spacing:.14em}}
 .alert{display:flex;gap:12px;align-items:flex-start;background:#fdecea;color:#8a1c12;border:1px solid #e3a59c;border-left:5px solid #8a1c12;border-radius:8px;padding:12px 14px;margin-bottom:12px;font-size:14px;line-height:1.7}
 .atag{flex:none;background:#8a1c12;color:#fff;font-weight:700;font-size:12.5px;border-radius:4px;padding:2px 8px;margin-top:2px;letter-spacing:.1em}
-.honest-warn{font-size:14px;color:var(--bad);margin-top:2px}
+.bang{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:#8a1c12;color:#fff;font-size:11px;font-weight:700;margin-right:5px;vertical-align:1px}
 .honest{font-weight:700;font-size:17px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:8px;padding:8px 12px;margin-bottom:16px}
 main{max-width:1100px;margin:0 auto;padding:20px 16px 100px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-bottom:16px}
@@ -339,15 +339,15 @@ async function showList(){
   };
   const years = [...new Set(live().map(r=>(r.foundDate||'').slice(0,4)).filter(Boolean).concat(today().slice(0,4)))].sort().reverse();
   $('#app').innerHTML = `
-    <div class="alert" role="note"><span class="atag">重要</span><div><b>案件資料存在這台電腦的瀏覽器裡。</b>清除瀏覽資料時，若勾選「<b>Cookie 和其他網站資料</b>」，<b>所有案件會被刪除，且無法復原</b>。請不要使用無痕視窗，並每兩週至一個月按一次「<b>下載備份</b>」。${inClaude()?'<br>分享本工具給品管時，請使用「<b>Can view（可以檢視）</b>」權限，對方即可完整使用。':''}</div></div>
-    <div class="honest">本機儲存 · 僅在此裝置此瀏覽器有效 · 可匯出備份<div class="honest-warn">⚠️ 注意：使用無痕視窗，關閉後資料會遺失。</div></div>
+    <div class="alert" role="note"><span class="atag">重要</span><div><b>案件資料存在這台電腦的瀏覽器裡。</b>清除瀏覽資料時，若勾選「<b>Cookie 和其他網站資料</b>」，<b>所有案件會被刪除，且無法復原</b>。請不要使用無痕視窗，並每兩週至一個月按一次「<b>下載備份</b>」。<br><span class="bang">!</span>注意：使用無痕視窗，關閉後資料會遺失。${inClaude()?'<br>分享本工具給品管時，請使用「<b>Can view（可以檢視）</b>」權限，對方即可完整使用。':''}</div></div>
+    <div class="honest">本機儲存 · 僅在此裝置此瀏覽器有效 · 可匯出備份</div>
     <div class="card">
       <div class="row">
         <button class="primary" onclick="openRecord()">＋ 新增衛生缺失</button>
         <button class="gold" onclick="showStats()">📊 統計報表</button>
         <span class="spacer"></span>
         <button onclick="showTrash()">最近刪除（${records.filter(r=>r.deleted).length}）</button>
-        <button onclick="exportCSV()">匯出報表（Excel 可開）</button>
+        <button onclick="exportCSV()">匯出全部報表（Excel 可開）</button>
         <button onclick="backup()">下載備份</button>
         <button onclick="$('#restoreFile').click()">從備份還原</button>
         <input type="file" id="restoreFile" accept=".json" hidden onchange="restore(this)">
@@ -387,7 +387,7 @@ async function showList(){
           <li>按「儲存」。之後可從清單點選該筆紀錄，繼續填寫改善情形。</li>
           <li>改善完成後，新增「複查紀錄」。複查未通過或缺失再次發生時，狀態會變成「持續追蹤」，不能結案。</li>
           <li>結案條件全部符合後，由品管人員填寫姓名並確認結案。</li>
-          <li>清單頁可「匯出報表」；單筆紀錄頁可「列印／存成 PDF」。</li>
+          <li>清單頁可「匯出全部報表」（全部案件，含歷年）與「改善前後報告」；單筆紀錄頁可「列印／存成 PDF」。</li>
         </ol>
       </details>
     </div>
@@ -1019,8 +1019,9 @@ ${blocks}
 
 /* ---------- 匯出報表（CSV，Excel 可開） ---------- */
 function exportCSV(){
-  const rs = filteredRecords();
-  if(!rs.length){ say('目前篩選條件下沒有紀錄可匯出。'); return; }
+  /* 匯出全部案件（含歷年、所有狀態），不受清單篩選影響；不含「最近刪除」 */
+  const rs = live().slice().sort((a,b)=> (a.foundDate||'').localeCompare(b.foundDate||'') || a.id.localeCompare(b.id));
+  if(!rs.length){ say('目前沒有任何案件可以匯出。'); return; }
   const head = ['編號','狀態','是否逾期','發現日期','缺失區域','巡檢人員','缺失描述','缺失分類','連續兩天發生','通知後再次發生',
     '負責單位/人員','改善期限','已通知對象','通知日期','缺失單編號','風險控制措施',
     '發生原因','預防再發措施','如何改善','預計改善完成日期','改善執行人員','缺失照片數','改善照片數',
@@ -1035,7 +1036,7 @@ function exportCSV(){
       (r.closed?(r.closeBasis==='other'?'其它':'複查通過'):''), r.closedBy, r.closedDate, r.closeNote, r.updatedAt];
   });
   const csv = [head, ...rows].map(row => row.map(v => '"' + String(v??'').replace(/"/g,'""') + '"').join(',')).join('\r\n');
-  download('﻿'+csv, `hygiene_report_${today()}.csv`, 'text/csv;charset=utf-8');
+  download('﻿'+csv, `hygiene_report_all_${today()}.csv`, 'text/csv;charset=utf-8');
 }
 async function download(content, name, type){
   try{
@@ -1283,7 +1284,7 @@ function renderStats(){
     </div>`;
 }
 function printStats(){
-  if(inClaude()){ say('claude.ai 版無法開啟列印視窗。請到網址版按「列印／存成 PDF」，或改用「匯出報表」。'); return; }
+  if(inClaude()){ say('claude.ai 版無法開啟列印視窗。請到網址版按「列印／存成 PDF」，或改用「匯出全部報表」。'); return; }
   const rg=periodRange(statView,statY,stA());
   const name = statView==='month'?'月報':statView==='quarter'?'季報':'年報';
   $('#print').innerHTML = `<h1>衛生缺失統計${name}</h1><div style="text-align:center;margin-bottom:10px">${esc(rg.label)}　列印日期：${fmtDate(today())}</div>`+statHTML(statView,statY,stA()).replace(/ class="click" onclick="[^"]*"/g,'');
