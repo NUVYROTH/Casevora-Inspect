@@ -41,6 +41,8 @@ button{font:inherit;cursor:pointer;border-radius:6px;border:1px solid var(--fiel
 button:hover{background:#f3ece0}
 button.primary{background:var(--brand);border-color:var(--brand);color:#fff}
 button.primary:hover{background:#22304f}
+button.gold{background:var(--gold);border-color:var(--gold);color:#16213a;font-weight:700}
+button.gold:hover{background:#a6844c}
 button.danger{color:var(--bad);border-color:#e7b4ae}
 button:disabled{opacity:.45;cursor:not-allowed}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
@@ -336,9 +338,9 @@ async function showList(){
     <div class="card">
       <div class="row">
         <button class="primary" onclick="openRecord()">＋ 新增衛生缺失</button>
+        <button class="gold" onclick="showStats()">📊 統計報表</button>
         <span class="spacer"></span>
         <button onclick="showTrash()">最近刪除（${records.filter(r=>r.deleted).length}）</button>
-        <button onclick="showStats()">統計報表</button>
         <button onclick="exportCSV()">匯出報表（Excel 可開）</button>
         <button onclick="backup()">下載備份</button>
         <button onclick="$('#restoreFile').click()">從備份還原</button>
