@@ -174,6 +174,76 @@ details summary{cursor:pointer;font-weight:700}
 .phrases{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}
 .thumb{width:52px;height:52px;object-fit:cover;border-radius:6px;border:1px solid var(--line);display:block;margin:0 auto;background:#efe7d8}
 .thc{text-align:center;width:64px}
+/* 工作台版面（比照 Casevoras 客訴工作台） */
+.sbrand,.slab,.sfoot{display:none}
+.crumb{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;color:var(--muted);margin:0 0 12px}
+.crumb b{color:var(--ink)}
+.lbadge{background:var(--ok-soft);color:var(--ok);border-radius:999px;padding:3px 12px;font-weight:700;font-size:12.5px;white-space:nowrap}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:.18em;color:var(--gold);margin-bottom:2px}
+.ptitle.big{display:block}
+.ptitle.big h1{font-size:28px;margin:0 0 4px}
+.ptitle.big span{font-size:14.5px}
+.kpi{padding-right:58px}
+.kic{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:9px;background:#f3ece0;color:#8a6a35;display:flex;align-items:center;justify-content:center}
+.kic.kw{background:var(--bad-soft);color:var(--bad)}
+.case{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-top:10px;background:var(--card)}
+.case .cinfo{display:flex;gap:12px;align-items:flex-start;flex:1 1 100%;min-width:0}
+.case .cinfo>div{min-width:0}
+.case .xsel{flex:none;width:18px;height:18px;margin:4px 0 0;accent-color:var(--brand)}
+.case .cths{display:flex;gap:6px;flex:none}
+.case .cth{width:64px;height:64px;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);text-align:center;line-height:1.3}
+.case .cth img{width:100%;height:100%;object-fit:cover;display:block}
+.case .tg{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:2px}
+.tag{font-size:12px;background:var(--bg);border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:0 9px}
+.tag.cat{color:var(--brand);border-color:var(--brand)}
+.tag.lv-schedule{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.tag.lv-major{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+.steps{display:flex;flex-wrap:wrap;align-items:center;gap:2px 6px;font-size:12px;color:var(--muted);margin:4px 0 2px}
+.steps span.done{color:var(--ink)}
+.steps span.done::before{content:"✓ "}
+.steps span.now{color:#fffdf8;background:var(--brand);border-radius:10px;padding:1px 8px;font-weight:600}
+.steps span.now.trk{background:var(--warn)}
+.steps i{font-style:normal;color:var(--gold)}
+.case .ti{font-weight:600;font-size:16px;cursor:pointer;overflow-wrap:anywhere}
+.case .mt{font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:0 14px}
+.case .mt span{white-space:nowrap}
+.case .ac{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-left:auto}
+.case .ac button{padding:5px 12px;font-size:13px}
+.age{font-size:12.5px;font-weight:700;white-space:nowrap}
+.age.late{color:var(--bad)}
+.age.ok{color:var(--muted)}
+.selall{display:inline-flex;align-items:center;gap:6px;font-size:14px}
+.selall input{width:18px;height:18px;accent-color:var(--brand)}
+.flowh{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid var(--line)}
+.flowh b{font-size:16px}
+.flowh span{font-size:13px;color:var(--muted)}
+.fsteps{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.fstep{border:1px solid var(--line);border-radius:10px;padding:14px;background:#fff}
+.fno{font-size:11.5px;font-weight:800;letter-spacing:.12em;color:var(--gold);margin-bottom:6px}
+.fstep b{font-size:14.5px}
+.fstep p{margin:6px 0 0;font-size:12.5px;color:var(--muted);line-height:1.6}
+@media(min-width:900px){
+  header.topbar{display:none}
+  body{padding-left:248px}
+  .appg{display:block}
+  .sbrand{display:flex;align-items:center;gap:12px;padding:6px 8px 18px}
+  .sbrand img{width:44px;height:44px;border-radius:50%;box-shadow:0 0 0 1px rgba(184,149,90,.6)}
+  .sbn{font:400 28px/1 "Pinyon Script",Georgia,serif;color:#e2c891}
+  .sbs{font-size:10.5px;letter-spacing:.16em;color:#9fb0cf;margin-top:4px}
+  .slab{display:block;font-size:11px;letter-spacing:.14em;color:#8796b3;padding:0 10px 8px}
+  .sfoot{display:block;border-top:1px solid rgba(255,255,255,.12);margin-top:12px;padding:12px 10px 4px;font-size:12px;line-height:1.7;color:#9fb0cf}
+  .sfoot b{color:#d6deec;font-weight:600;letter-spacing:.04em}
+  .snav{position:fixed;left:0;top:0;bottom:0;width:248px;height:auto;min-height:0;z-index:20;overflow:auto;background:#1a2a44;border:0;border-radius:0;padding:18px 14px}
+  .snav button{color:#d6deec;padding:11px 12px;white-space:nowrap}
+  .snav button:hover{background:rgba(255,255,255,.08);color:#fff}
+  .snav button.on,.snav button.on:hover{background:#2c4166;color:#fff}
+  .snav .ic{background:rgba(255,255,255,.1);color:#fff}
+  .snav button.on .ic{background:var(--gold)}
+  .crumb{margin:-4px -2px 14px;padding:0 0 12px;border-bottom:1px solid var(--line)}
+  .savebar{left:248px}
+  .split .side{top:16px;max-height:calc(100vh - 100px)}
+}
+@media(max-width:600px){ .kpi{padding-right:40px} .kic{width:26px;height:26px;top:10px;right:8px} .kic svg{width:15px;height:15px} .ptitle.big h1{font-size:24px} .eyebrow{font-size:11px} .case .cth{width:52px;height:52px} }
 .seg{display:inline-flex;gap:2px;background:#f3ece0;border:1px solid var(--line);border-radius:999px;padding:4px}
 .seg button{border:0;background:none;border-radius:999px;padding:6px 18px;font-weight:700;color:var(--muted)}
 .seg button.on,.seg button.on:hover{background:var(--brand);color:#fffdf8}
@@ -272,11 +342,14 @@ main:has(.split){max-width:1320px}
 </div></header>
 <main><div class="appg">
   <nav class="snav" id="side" aria-label="功能選單">
+    <div class="sbrand"><img id="sbLogo" alt="Casevoras 標誌" width="44" height="44"><div><div class="sbn">Casevoras</div><div class="sbs">FOOD QUALITY TOOLS</div></div></div>
+    <div class="slab">工作台 WORKSPACE</div>
     <button data-v="list" onclick="showList()"><span class="ic">📋</span>缺失清單</button>
     <button data-v="stats" onclick="showStats()"><span class="ic">📊</span>統計分析</button>
     <button data-v="trash" onclick="showTrash()"><span class="ic">🗑️</span>最近刪除</button>
     <span class="spacer"></span>
     <button data-v="help" onclick="openGuide()"><span class="ic">?</span>使用說明</button>
+    <div class="sfoot"><b>CASEVORAS HYGIENE</b><br>個人工作站・本機資料模式<br>v16</div>
   </nav>
   <div id="app"></div>
 </div></main>
@@ -552,9 +625,10 @@ async function showList(){
   };
   const years = [...new Set(live().map(r=>(r.foundDate||'').slice(0,4)).filter(Boolean).concat(today().slice(0,4)))].sort().reverse();
   $('#app').innerHTML = `
+    ${crumbHTML('缺失清單')}
     <div class="alert alert1" role="note"><span class="atag">重要</span><div class="a1">本機儲存 · 僅在此裝置此瀏覽器有效 · 請勿用無痕視窗 · 定期下載備份</div><button class="alink" onclick="openGuide()">查看使用說明</button></div>
-    <div class="row" style="margin-bottom:10px">
-      <div class="ptitle"><h1>衛生缺失追蹤</h1><span>巡檢缺失與改善追蹤</span></div>
+    <div class="row" style="margin-bottom:10px;align-items:flex-end">
+      <div class="ptitle big"><div class="eyebrow">HYGIENE INSPECTION MANAGEMENT</div><h1>衛生缺失管理工作台</h1><span class="muted">從巡檢發現、改善追蹤到複查結案，讓每一筆缺失都有紀錄、有進度、有結果。</span></div>
       <button class="primary" onclick="openRecord()">＋ 新增衛生缺失</button>
     </div>
     <div class="row" style="margin-bottom:14px">
@@ -595,6 +669,7 @@ async function showList(){
     <div class="rcol">${panelsHTML()}</div>
     </div>
 
+    ${flowHTML()}
     <div class="card" id="guideCard">
       <details id="guide">
         <summary>使用說明（請務必閱讀）</summary>
@@ -636,10 +711,10 @@ function kpiHTML(){
   const tc = new Map(); Y.forEach(r=>{ if(r.defType) tc.set(r.defType,(tc.get(r.defType)||0)+1); });
   const top = [...tc.entries()].sort((a,b)=>b[1]-a[1])[0];
   return `<div class="kpis">
-    <div class="kpi"><div class="l">本月新增</div><div class="n">${nM}<small>件</small></div><div class="d">上月 ${nLM} 件</div></div>
-    <div class="kpi ${over.length?'warn':''}"><div class="l">未結案</div><div class="n">${open.length}<small>件</small></div><div class="d">${open.length?'其中逾期 '+over.length+' 件':'目前沒有未結案'}</div></div>
-    <div class="kpi"><div class="l">今年結案率</div><div class="n">${Y.length?Math.round(yClosed/Y.length*100)+'<small>%</small>':'—'}</div><div class="d">${Y.length?'今年 '+Y.length+' 件中結案 '+yClosed+' 件':'今年還沒有案件'}</div></div>
-    <div class="kpi"><div class="l">最多的缺失類別</div><div class="n nt">${top?esc(typeName(top[0])):'—'}</div><div class="d">${top?'今年 '+top[1]+' 件':'今年還沒有案件'}</div></div>
+    <div class="kpi"><span class="kic" aria-hidden="true">${KIC.doc}</span><div class="l">本月新增</div><div class="n">${nM}<small>件</small></div><div class="d">上月 ${nLM} 件</div></div>
+    <div class="kpi ${over.length?'warn':''}"><span class="kic ${over.length?'kw':''}" aria-hidden="true">${KIC.clock}</span><div class="l">未結案</div><div class="n">${open.length}<small>件</small></div><div class="d">${open.length?'其中逾期 '+over.length+' 件':'目前沒有未結案'}</div></div>
+    <div class="kpi"><span class="kic" aria-hidden="true">${KIC.check}</span><div class="l">今年結案率</div><div class="n">${Y.length?Math.round(yClosed/Y.length*100)+'<small>%</small>':'—'}</div><div class="d">${Y.length?'今年 '+Y.length+' 件中結案 '+yClosed+' 件':'今年還沒有案件'}</div></div>
+    <div class="kpi"><span class="kic" aria-hidden="true">${KIC.target}</span><div class="l">最多的缺失類別</div><div class="n nt">${top?esc(typeName(top[0])):'—'}</div><div class="d">${top?'今年 '+top[1]+' 件':'今年還沒有案件'}</div></div>
   </div>`;
 }
 function panelsHTML(){
@@ -656,6 +731,54 @@ function panelsHTML(){
       ${top3.length?top3.map(([k,n])=>`<div class="mbar"><div>${esc(typeName(k))}<div class="b"><i style="width:${Math.round(n/mx*100)}%"></i></div></div><div class="v">${n}</div></div>`).join(''):'<div class="muted small">今年還沒有案件。</div>'}</div>
     <div class="card"><div class="phd"><b>需要注意</b><span class="muted small">逾期最久</span></div>
       ${att.length?`<ul class="mini">${att.map(r=>`<li class="click" onclick="openRecord('${esc(r.id)}')"><span>${esc(r.id)}<br><span class="muted small">${esc(r.area)}</span></span><span class="badge s-over">逾期 ${Math.max(1,daysBetween(r.deadline,today()))} 天</span></li>`).join('')}</ul>`:'<div class="muted small">目前沒有逾期的案件。</div>'}</div>`;
+}
+const KIC = {
+  doc:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>',
+  clock:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  check:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  target:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/></svg>'
+};
+function crumbHTML(name){ return `<div class="crumb"><span>Casevoras / <b>${esc(name)}</b></span><span class="lbadge">● 本機資料模式</span></div>`; }
+/* 處理進度：待改善 → 待複查 → 待品管確認 → 已結案 */
+function stepsHTML(r){
+  const L = ['待改善','待複查','待品管確認','已結案'], t = statusOf(r).t;
+  const now = r.closed ? 3 : t==='待品管確認結案' ? 2 : (t==='待複查' || t.startsWith('持續追蹤')) ? 1 : 0;
+  const trk = t.startsWith('持續追蹤');
+  return '<div class="steps">'+L.map((x,i)=>`<span class="${i<now?'done':i===now?'now'+(trk&&i===1?' trk':''):''}">${trk&&i===1?'持續追蹤':x}</span>`).join('<i>›</i>')+'</div>';
+}
+function ageHTML(r){
+  if(r.closed || !r.deadline) return '';
+  const d = daysBetween(today(), r.deadline);
+  return d < 0 ? `<span class="age late">逾期 ${-d} 天</span>` : `<span class="age ok">剩 ${d} 天</span>`;
+}
+function cth(p,label){ return `<div class="cth" title="${label}">${p?`<img src="${phSync(p)}" ${isRef(p)?`data-ph="${p}"`:''} alt="${label}">`:label.replace('照片','<br>照片')}</div>`; }
+function caseHTML(r){
+  const desc = (r.rawDesc||'').trim();
+  return `<div class="case">
+    <div class="cinfo">
+      <input type="checkbox" class="xsel liChk" data-id="${esc(r.id)}" ${listSel.has(r.id)?'checked':''} onchange="listToggle(this)" aria-label="勾選 ${esc(r.id)}">
+      <div class="cths">${cth(r.photos[0],'改善前照片')}${cth(r.improvePhotos[0],'改善後照片')}</div>
+      <div>
+        <div class="tg"><span class="tag">${r.defType?esc(typeName(r.defType)):'未選類別'}</span><span class="tag lv-${r.category||'none'}">${LV_SHORT[r.category]||'等級未判定'}</span>${r.consecutive?'<span class="tag">連續兩天</span>':''}${r.recurred?'<span class="tag">再次發生</span>':''}</div>
+        ${stepsHTML(r)}
+        <div class="ti" onclick="openRecord('${esc(r.id)}')">${esc(desc.slice(0,48))}${desc.length>48?'…':''}</div>
+        <div class="mt"><span>編號：${esc(r.id)}</span><span>缺失區域：${esc(r.area)}</span><span>發現：${fmtDate(r.foundDate)}</span><span>負責：${esc(ownerText(r))||'—'}</span><span>期限：${fmtDate(r.deadline)||'—'}</span></div>
+      </div>
+    </div>
+    <div class="ac">${ageHTML(r)}<button onclick="openRecord('${esc(r.id)}')">編輯</button>${r.closed?'':`<button onclick="deleteOne('${esc(r.id)}')">刪除</button>`}</div>
+  </div>`;
+}
+async function deleteOne(id){
+  const r = records.find(x=>x.id===id); if(!r || r.closed) return;
+  if(!(await ask('確定要刪除嗎？'))) return;
+  r.deleted = true; r.deletedAt = today();
+  if(!persistAll()){ r.deleted = false; delete r.deletedAt; return; }
+  showList(); flash('已移到「最近刪除」');
+}
+function flowHTML(){
+  const S = [['案件建檔','記錄缺失區域、描述、類別與現場照片。'],['通知改善','指定負責單位與改善期限，通知相關人員。'],['改善執行','負責單位完成改善，上傳改善後照片。'],['複查確認','品管複查改善效果，未通過持續追蹤。'],['品管結案','確認結案，納入統計與趨勢回顧。']];
+  return `<div class="card"><div class="flowh"><div><b>標準處理流程</b><br><span>用一致流程管理每一筆缺失</span></div><button onclick="openGuide()">查看作業指南 →</button></div>
+    <div class="fsteps">${S.map(([t,d],i)=>`<div class="fstep"><div class="fno">STEP ${String(i+1).padStart(2,'0')}</div><b>${t}</b><p>${d}</p></div>`).join('')}</div></div>`;
 }
 function setSide(v){ document.querySelectorAll('#side button[data-v]').forEach(b=>b.classList.toggle('on', b.dataset.v===v)); }
 function tab(k, t, n){ return `<button class="${listFilter===k?'on':''}" onclick="listFilter='${k}';listPage=1;showList()">${t}（${n}）</button>`; }
@@ -693,20 +816,11 @@ function renderTable(){
   const nDel = [...listSel].filter(id=>{ const r=records.find(x=>x.id===id); return r && !r.closed; }).length;
   const allOn = rs.length && rs.every(r=>listSel.has(r.id));
   $('#tableBox').innerHTML = `<div class="lcount">共 ${all.length} 件</div><div class="row" style="margin-bottom:8px">
+      <label class="selall"><input type="checkbox" id="liAll" ${allOn?'checked':''} onchange="listAll(this.checked)">全選本頁</label>
       <button id="listDel" class="danger" onclick="listDelete()" ${nDel?'':'disabled'}>刪除${nDel?'（'+nDel+'）':''}</button>
-      <button onclick="beforeAfterReport()">🖼 改善前後報告${n?'（勾選 '+n+' 件）':'（清單 '+all.length+' 件）'}</button>
-      <span class="muted small">${n?'已勾選 '+n+' 筆'+(n>nDel?'；其中已結案 '+(n-nDel)+' 筆不能刪除，刪除時會略過':''):'勾選案件後可刪除或只做這幾件的報告；沒勾選時，報告包含清單上所有符合條件的案件'}</span></div>
-    <div style="overflow-x:auto"><table>
-    <thead><tr><th><input type="checkbox" id="liAll" title="全選本頁" aria-label="全選本頁" ${allOn?'checked':''} onchange="listAll(this.checked)"></th><th>編號／發現日期</th><th>缺失區域</th><th>缺失描述</th><th class="thc">改善前</th><th class="thc">改善後</th><th>類別／等級</th><th>改善期限</th><th>狀態</th></tr></thead>
-    <tbody>${rs.map(r=>`<tr class="click" onclick="openRecord('${r.id}')">
-      <td onclick="event.stopPropagation()"><input type="checkbox" class="liChk" data-id="${esc(r.id)}" ${listSel.has(r.id)?'checked':''} onchange="listToggle(this)"></td>
-      <td class="nw">${esc(r.id)}<br><span class="muted small">${fmtDate(r.foundDate)}</span></td>
-      <td>${esc(r.area)}${ownerText(r)?`<br><span class="muted small">${esc(ownerText(r))}</span>`:''}</td>
-      <td class="desc">${esc((r.rawDesc||'').slice(0,40))}${(r.rawDesc||'').length>40?'…':''}</td>
-      <td class="thc">${thumb(r.photos[0])}</td><td class="thc">${thumb(r.improvePhotos[0])}</td>
-      <td class="small">${r.defType?esc(typeName(r.defType)):'<span class="muted">未選類別</span>'}<br><span class="lv lv-${r.category||'none'}">${LV_SHORT[r.category]||'未判定'}</span>${r.consecutive?' <span class="muted">連續兩天</span>':''}${r.recurred?' <span class="muted">再次發生</span>':''}</td>
-      <td class="nw">${fmtDate(r.deadline)}</td><td>${badges(r)}</td></tr>`).join('')}
-    </tbody></table></div>
+      <button onclick="beforeAfterReport()">🖼 改善前後報告${n?'（勾選 '+n+' 件）':'（清單 '+all.length+' 件）'}</button></div>
+    <div class="muted small">${n?'已勾選 '+n+' 筆'+(n>nDel?'；其中已結案 '+(n-nDel)+' 筆不能刪除，刪除時會略過':''):'勾選案件後可刪除或只做這幾件的報告；沒勾選時，報告包含清單上所有符合條件的案件'}</div>
+    ${rs.map(caseHTML).join('')}
     <div class="row pager">
       <button onclick="goPage(-1)" ${listPage<=1?'disabled':''}>上一頁</button>
       <span class="small">第 ${listPage}／${pages} 頁（共 ${all.length} 件）</span>
@@ -782,6 +896,7 @@ function renderDetail(){
   const r = cur;
   const isNew = !r.id;
   $('#app').innerHTML = `
+    ${crumbHTML('缺失清單 / '+(cur.id||'新增'))}
     <div class="row" style="margin-bottom:12px">
       <button onclick="showList()">← 返回清單</button>
       <h2 style="margin:0 8px;font-size:18px">${isNew?'新增衛生缺失｜編號 '+esc(genId()):esc(r.id)}</h2>
@@ -1493,6 +1608,7 @@ function showTrash(){ trashSel = new Set(); setSide('trash'); renderTrash(); win
 function renderTrash(){
   const rs = trashList(), n = trashSel.size;
   $('#app').innerHTML = `
+    ${crumbHTML('最近刪除')}
     <div class="row" style="margin-bottom:12px"><button onclick="showList()">← 返回清單</button><h2 style="margin:0 8px;font-size:18px">最近刪除</h2></div>
     <div class="card">
       <div class="notice info small">已刪除超過 30 天的案件，會在下次打開本工具時永久刪除。</div>
@@ -1733,6 +1849,7 @@ function renderStats(){
   const vt=(k,n)=>`<button class="${statView===k?'on':''}" onclick="setStat('view','${k}')">${n}</button>`;
   const rg=periodRange(statView,statY,stA());
   $('#app').innerHTML = `
+    ${crumbHTML('統計分析')}
     <div class="alert alert1" role="note"><span class="atag">重要</span><div class="a1">本機儲存 · 僅在此裝置此瀏覽器有效 · 請勿用無痕視窗 · 定期下載備份</div><button class="alink" onclick="openGuide()">查看使用說明</button></div>
     <div class="row" style="margin-bottom:10px">
       <div class="ptitle"><h1>統計分析</h1><span>衛生缺失依月／季／年統計</span></div>
@@ -1804,6 +1921,7 @@ async function printReport(){
   window.addEventListener('scroll', tick, {passive:true}); tick();
 })();
 (async function init(){
+  try{ const lg = document.querySelector('header .logo'); if(lg) $('#sbLogo').src = lg.src; }catch(e){}
   try{ localStorage.setItem('__t','1'); localStorage.removeItem('__t'); }
   catch(e){ say('注意：目前瀏覽器無法保存資料（可能是無痕模式或已封鎖網站資料），關閉後資料會遺失。'); }
   purgeExpired();
