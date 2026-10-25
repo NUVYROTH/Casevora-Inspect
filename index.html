@@ -15,7 +15,7 @@
   --bad:#b42318; --bad-soft:#fdecea; --ok:#167a3e; --ok-soft:#e6f5ec; --info:#1d4f91; --info-soft:#e8f0fb;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,sans-serif;font-size:15px;line-height:1.6}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,sans-serif;font-size:15px;line-height:1.65}
 header.topbar{background:var(--brand);color:#fffdf8;border-bottom:3px solid var(--gold);position:sticky;top:0;z-index:50;transition:box-shadow .2s}
 /* 往下捲動時，標題列縮小並固定在最上方 */
 header.topbar.compact{box-shadow:0 2px 10px rgba(0,0,0,.25)}
@@ -34,7 +34,7 @@ header.topbar.compact .bsub{font-size:13px;letter-spacing:.12em}
 .tbmeta{font-size:12.5px;opacity:.85;display:flex;align-items:center;gap:10px}
 .ver{border:1px solid var(--gold);color:var(--gold);border-radius:999px;padding:0 8px;font-size:11.5px}
 @media(max-width:600px){.logo{width:60px;height:60px}.bname{font-size:38px}.bsub{font-size:14.5px;letter-spacing:.14em}}
-.alert{display:flex;gap:12px;align-items:flex-start;background:#fdecea;color:#8a1c12;border:1px solid #e3a59c;border-left:5px solid #8a1c12;border-radius:8px;padding:12px 14px;margin-bottom:12px;font-size:14px;line-height:1.7}
+.alert{display:flex;gap:12px;align-items:flex-start;background:#fdecea;color:#8a1c12;border:1px solid #e3a59c;border-left:5px solid #8a1c12;border-radius:8px;padding:12px 14px;margin:6px 0 12px;font-size:14px;line-height:1.7}
 .alert1{align-items:center;flex-wrap:wrap}
 .alert1 .a1{flex:1 1 260px;font-weight:700}
 .alink{flex:none;background:transparent;border:1px solid #e3a59c;color:#8a1c12;font-size:13px;padding:4px 10px}
@@ -92,7 +92,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 16px 100px}
   .kpi{padding:10px 12px} .kpi .n{font-size:25px} .kpi .n.nt{font-size:17px}
   .ptitle{flex:1 1 100%}
 }
-.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-bottom:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px;box-shadow:0 1px 2px rgba(22,33,58,.06)}
 .card h2{margin:0 0 12px;font-size:17px;display:flex;align-items:center;gap:8px}
 .card h2 .no{background:var(--brand);color:#fff;border-radius:50%;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;font-size:13px;flex:none}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px 16px}
@@ -181,10 +181,9 @@ details summary{cursor:pointer;font-weight:700}
 .lbadge{background:var(--ok-soft);color:var(--ok);border-radius:999px;padding:3px 12px;font-weight:700;font-size:12.5px;white-space:nowrap}
 .eyebrow{font-size:12px;font-weight:800;letter-spacing:.18em;color:var(--gold);margin-bottom:2px}
 .ptitle.big{display:block}
-.ptitle.big h1{font-size:28px;margin:0}
-.eyebrow.eb2{display:flex;align-items:center;gap:14px;margin:6px 0 10px;font-size:14px;letter-spacing:.22em}
-.eyebrow.eb2::before{content:"";width:40px;height:2px;background:var(--gold);flex:none}
-.ptitle.big span{display:block}
+.ptitle.big h1{font-size:28px;margin:0 0 2px;line-height:1.3}
+.eyebrow.eb2{display:flex;align-items:center;gap:10px;margin:0 0 8px;font-size:12px;letter-spacing:.22em}
+.eyebrow.eb2::before{content:"";width:28px;height:2px;background:var(--gold);border-radius:2px;flex:none}
 .ptitle.big span{font-size:14.5px}
 .kpi{padding-right:58px}
 .kic{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:9px;background:#f3ece0;color:#8a6a35;display:flex;align-items:center;justify-content:center}
@@ -193,8 +192,8 @@ details summary{cursor:pointer;font-weight:700}
 .kpi.info:before{background:var(--info)}
 .kic.kok{background:var(--ok-soft);color:#1e9e52}
 .kic.kin{background:var(--info-soft);color:var(--info)}
-.phead{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:14px}
-.phead .ptitle{flex:1 1 360px;min-width:0}
+.phead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:2px 0 14px}
+.phead .ptitle{flex:1 1 440px;min-width:0}
 .ptools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:flex-end}
 button.lite{background:var(--card);border-color:var(--line);color:var(--ink);font-size:13.5px;padding:6px 12px}
 button.lite:hover{background:#f3ece0}
