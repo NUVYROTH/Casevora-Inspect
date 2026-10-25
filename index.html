@@ -193,6 +193,16 @@ details summary{cursor:pointer;font-weight:700}
 .kic.kok{background:var(--ok-soft);color:#1e9e52}
 .kic.kin{background:var(--info-soft);color:var(--info)}
 .phead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:2px 0 14px}
+/* 清單頁標題區：左邊標題，右邊提醒＋本機資料模式，下面按鈕 */
+.hhead{display:flex;gap:16px 20px;flex-wrap:wrap;align-items:stretch;margin:0 0 14px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.hhead .ptitle{flex:1 1 380px;min-width:0}
+.hcrumb{font-size:13px;color:var(--muted);margin-top:6px}
+.hcrumb b{color:var(--ink)}
+.hright{flex:1 1 520px;min-width:0;display:flex;flex-direction:column;justify-content:space-between;gap:12px}
+.hstat{display:flex;align-items:center;gap:10px}
+.hstat .alert{flex:1;min-width:0;margin:0}
+.hright .ptools{justify-content:flex-end}
+@media(max-width:899px){ .hstat{flex-wrap:wrap} .hstat .alert{flex:1 1 100%} .hstat .lbadge{order:-1} .hright .ptools{justify-content:flex-start} }
 .phead .ptitle{flex:1 1 440px;min-width:0}
 .ptools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:flex-end}
 button.lite{background:var(--card);border-color:var(--line);color:var(--ink);font-size:13.5px;padding:6px 12px}
@@ -638,17 +648,26 @@ async function showList(){
   };
   const years = [...new Set(live().map(r=>(r.foundDate||'').slice(0,4)).filter(Boolean).concat(today().slice(0,4)))].sort().reverse();
   $('#app').innerHTML = `
-    ${crumbHTML('缺失清單')}
-    <div class="alert alert1" role="note"><span class="atag">重要</span><div class="a1">本機儲存 · 僅在此裝置此瀏覽器有效 · 請勿用無痕視窗 · 定期下載備份</div><button class="alink" onclick="openGuide()">查看使用說明</button></div>
-    <div class="phead">
-      <div class="ptitle big"><h1>衛生缺失管理工作台</h1><div class="eyebrow eb2">HYGIENE INSPECTION MANAGEMENT</div><span class="muted">從巡檢發現、改善追蹤到複查結案，讓每一筆缺失都有紀錄、有進度、有結果。</span></div>
-      <div class="ptools">
-        <button class="primary pnew" onclick="openRecord()">＋ 新增衛生缺失</button>
-        <button class="lite" onclick="showTrash()">最近刪除（${records.filter(r=>r.deleted).length}）</button>
-        <button class="lite" onclick="exportCSV()" title="匯出全部案件（含歷年），不受清單篩選影響；Excel 可開">匯出報表（Excel）</button>
-        <button class="lite" onclick="backup()" title="下載所有案件與照片的備份檔，換電腦時用「從備份還原」匯回">下載備份</button>
-        <button class="lite" onclick="$('#restoreFile').click()" title="用備份檔還原；會取代目前資料">從備份還原</button>
-        <input type="file" id="restoreFile" accept=".json" hidden onchange="restore(this)">
+    <div class="hhead">
+      <div class="ptitle big">
+        <h1>衛生缺失管理工作台</h1>
+        <div class="eyebrow eb2">HYGIENE INSPECTION MANAGEMENT</div>
+        <span class="muted">從巡檢發現、改善追蹤到複查結案，讓每一筆缺失都有紀錄、有進度、有結果。</span>
+        <div class="hcrumb">Casevoras / <b>缺失清單</b></div>
+      </div>
+      <div class="hright">
+        <div class="hstat">
+          <div class="alert alert1" role="note"><span class="atag">重要</span><div class="a1">本機儲存 · 僅在此裝置此瀏覽器有效 · 請勿用無痕視窗 · 定期下載備份</div><button class="alink" onclick="openGuide()">查看使用說明</button></div>
+          <span class="lbadge">● 本機資料模式</span>
+        </div>
+        <div class="ptools">
+          <button class="primary pnew" onclick="openRecord()">＋ 新增衛生缺失</button>
+          <button class="lite" onclick="showTrash()">最近刪除（${records.filter(r=>r.deleted).length}）</button>
+          <button class="lite" onclick="exportCSV()" title="匯出全部案件（含歷年），不受清單篩選影響；Excel 可開">匯出報表（Excel）</button>
+          <button class="lite" onclick="backup()" title="下載所有案件與照片的備份檔，換電腦時用「從備份還原」匯回">下載備份</button>
+          <button class="lite" onclick="$('#restoreFile').click()" title="用備份檔還原；會取代目前資料">從備份還原</button>
+          <input type="file" id="restoreFile" accept=".json" hidden onchange="restore(this)">
+        </div>
       </div>
     </div>
     ${kpiHTML()}
