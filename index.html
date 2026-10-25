@@ -181,7 +181,9 @@ details summary{cursor:pointer;font-weight:700}
 .lbadge{background:var(--ok-soft);color:var(--ok);border-radius:999px;padding:3px 12px;font-weight:700;font-size:12.5px;white-space:nowrap}
 .eyebrow{font-size:12px;font-weight:800;letter-spacing:.18em;color:var(--gold);margin-bottom:2px}
 .ptitle.big{display:block}
-.ptitle.big h1{font-size:28px;margin:0 0 4px}
+.ptitle.big h1{font-size:28px;margin:0}
+.eyebrow.eb2{margin:2px 0 8px;padding-left:2px}
+.ptitle.big span{display:block}
 .ptitle.big span{font-size:14.5px}
 .kpi{padding-right:58px}
 .kic{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:9px;background:#f3ece0;color:#8a6a35;display:flex;align-items:center;justify-content:center}
@@ -639,7 +641,7 @@ async function showList(){
     ${crumbHTML('缺失清單')}
     <div class="alert alert1" role="note"><span class="atag">重要</span><div class="a1">本機儲存 · 僅在此裝置此瀏覽器有效 · 請勿用無痕視窗 · 定期下載備份</div><button class="alink" onclick="openGuide()">查看使用說明</button></div>
     <div class="phead">
-      <div class="ptitle big"><div class="eyebrow">HYGIENE INSPECTION MANAGEMENT</div><h1>衛生缺失管理工作台</h1><span class="muted">從巡檢發現、改善追蹤到複查結案，讓每一筆缺失都有紀錄、有進度、有結果。</span></div>
+      <div class="ptitle big"><h1>衛生缺失管理工作台</h1><div class="eyebrow eb2">HYGIENE INSPECTION MANAGEMENT</div><span class="muted">從巡檢發現、改善追蹤到複查結案，讓每一筆缺失都有紀錄、有進度、有結果。</span></div>
       <div class="ptools">
         <button class="primary pnew" onclick="openRecord()">＋ 新增衛生缺失</button>
         <button class="lite" onclick="showTrash()">最近刪除（${records.filter(r=>r.deleted).length}）</button>
