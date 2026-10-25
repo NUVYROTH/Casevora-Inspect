@@ -35,6 +35,12 @@ header.topbar.compact .bsub{font-size:13px;letter-spacing:.12em}
 .ver{border:1px solid var(--gold);color:var(--gold);border-radius:999px;padding:0 8px;font-size:11.5px}
 @media(max-width:600px){.logo{width:60px;height:60px}.bname{font-size:38px}.bsub{font-size:14.5px;letter-spacing:.14em}}
 .alert{display:flex;gap:12px;align-items:flex-start;background:#fdecea;color:#8a1c12;border:1px solid #e3a59c;border-left:5px solid #8a1c12;border-radius:8px;padding:12px 14px;margin-bottom:12px;font-size:14px;line-height:1.7}
+.alert1{align-items:center;flex-wrap:wrap}
+.alert1 .a1{flex:1 1 260px;font-weight:700}
+.alink{flex:none;background:transparent;border:1px solid #e3a59c;color:#8a1c12;font-size:13px;padding:4px 10px}
+.alink:hover{background:#fff}
+.gh{margin:10px 0 4px;font-size:14px;border-left:3px solid var(--gold);padding-left:6px}
+#guide summary{font-size:15px}
 .alert .atitle{font-weight:700;font-size:15px;color:var(--ink);margin-bottom:2px}
 .atag{flex:none;background:#8a1c12;color:#fff;font-weight:700;font-size:12.5px;border-radius:4px;padding:2px 8px;margin-top:2px;letter-spacing:.1em}
 .honest{font-weight:700;font-size:17px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:8px;padding:8px 12px;margin-bottom:16px}
@@ -465,7 +471,7 @@ async function showList(){
   };
   const years = [...new Set(live().map(r=>(r.foundDate||'').slice(0,4)).filter(Boolean).concat(today().slice(0,4)))].sort().reverse();
   $('#app').innerHTML = `
-    <div class="alert" role="note"><span class="atag">重要</span><div><div class="atitle">本機儲存 · 僅在此裝置此瀏覽器有效 · 可匯出備份</div><b>案件資料存在這台電腦的瀏覽器裡。</b>清除瀏覽資料時，若勾選「<b>Cookie 和其他網站資料</b>」，<b>所有案件與照片會被刪除，且無法復原</b>。請不要使用無痕視窗（關閉後資料會遺失），並每兩週至一個月按一次「<b>下載備份</b>」。${inClaude()?'<br>分享本工具給品管時，請使用「<b>Can view（可以檢視）</b>」權限，對方即可完整使用。':''}</div></div>
+    <div class="alert alert1" role="note"><span class="atag">重要</span><div class="a1">本機儲存 · 僅在此裝置此瀏覽器有效 · 請勿用無痕視窗 · 定期下載備份</div><button class="alink" onclick="openGuide()">查看使用說明</button></div>
     <div class="card">
       <div class="row">
         <button class="primary" onclick="openRecord()">＋ 新增衛生缺失</button>
@@ -503,33 +509,31 @@ async function showList(){
       <div id="tableBox"></div>
     </div>
 
-    <div class="card">
-      <details>
-        <summary>使用說明</summary>
-        <ol class="small">
-          <li>按「新增衛生缺失」，填寫發現日期、缺失區域、缺失描述，選擇缺失類別，並由品管／品保人員選擇缺失等級。</li>
-          <li>在「文字整理」區按「範本整理」或「複製 AI 提示詞」，產生正式缺失內容的草稿，<b>確認無誤後再套用</b>。</li>
-          <li>按「儲存」。之後可從清單點選該筆紀錄，繼續填寫改善情形。</li>
-          <li>改善完成後，新增「複查紀錄」。複查未通過或缺失再次發生時，狀態會變成「持續追蹤」，不能結案。</li>
-          <li>結案條件全部符合後，由品管人員填寫姓名並確認結案。</li>
-          <li>清單頁可「匯出全部報表」（全部案件，含歷年）與「改善前後報告」；單筆紀錄頁可「列印／存成 PDF」。</li>
-        </ol>
-      </details>
-    </div>
-
-    <div class="card">
-      <details>
-        <summary>資料保存方式與限制（請務必閱讀）</summary>
+    <div class="card" id="guideCard">
+      <details id="guide">
+        <summary>使用說明（請務必閱讀）</summary>
         <div class="small">
-          <p>本工具將資料保存在<b>這台電腦的這個瀏覽器</b>中（瀏覽器內建儲存空間 localStorage），不會上傳到任何伺服器。關閉網頁後重新開啟，資料仍會保留。</p>
+          <h4 class="gh">資料保存與安全</h4>
+          <p>本工具將資料保存在<b>這台電腦的這個瀏覽器</b>中，不會上傳到任何伺服器。關閉網頁後重新開啟，資料仍會保留。</p>
           <ul>
+            <li>清除瀏覽資料時，若勾選「<b>Cookie 和其他網站資料</b>」，<b>所有案件與照片會被刪除，且無法復原</b>。</li>
+            <li><b>請不要使用無痕視窗</b>，關閉後資料會遺失。</li>
+            <li>請<b>每兩週至一個月按一次「下載備份」</b>，存到雲端硬碟；備份檔可用「從備份還原」匯回（還原會取代目前資料）。</li>
             <li><b>換電腦或換瀏覽器就看不到</b>原本的資料（例如 Chrome 存的資料，Edge 看不到）。</li>
             <li>請<b>固定用同一個瀏覽器、從同一個網址開啟</b>（建議加入書籤）。網址不同（例如電腦裡的 HTML 檔與網路上的網址）會被當成不同地方，資料不互通。</li>
-            <li><b>清除瀏覽器資料／Cookie</b>、使用無痕模式，資料會消失或不會被保存。</li>
             <li>照片會自動壓縮，存在瀏覽器的大容量儲存空間（IndexedDB），一樣<b>只在這台電腦、這個瀏覽器</b>。可放的數量依電腦剩餘空間而定，通常可放數千張。目前已使用約 <b id="usedMB">…</b>。</li>
             <li>無法多人共用同一份資料。</li>
-            <li>建議<b>定期按「下載備份」</b>，備份檔可用「從備份還原」匯回（還原會取代目前資料）。</li>
+            ${inClaude()?'<li>分享本工具給品管時，請使用「<b>Can view（可以檢視）</b>」權限，對方即可完整使用。</li>':''}
           </ul>
+          <h4 class="gh">操作步驟</h4>
+          <ol>
+            <li>按「新增衛生缺失」，填寫發現日期、缺失區域、缺失描述，選擇缺失類別，並由品管／品保人員選擇缺失等級。</li>
+            <li>在「文字整理」區按「範本整理」或「複製 AI 提示詞」（claude.ai 版另有「產生分析」），產生草稿，<b>確認無誤後再套用</b>。</li>
+            <li>按「儲存」。之後可從清單點選該筆紀錄，繼續填寫改善情形。</li>
+            <li>改善完成後，新增「複查紀錄」。複查未通過或缺失再次發生時，狀態會變成「持續追蹤」，不能結案。</li>
+            <li>結案條件全部符合後，由品管人員填寫姓名並確認結案。</li>
+            <li>清單頁可「匯出全部報表」（全部案件，含歷年）與「改善前後報告」；單筆紀錄頁可「列印／存成 PDF」。</li>
+          </ol>
         </div>
       </details>
     </div>`;
@@ -593,6 +597,8 @@ function renderTable(){
     </div>`;
   hydrate($('#tableBox'));
 }
+/* 「查看使用說明」：打開下面的說明並捲動過去 */
+function openGuide(){ const g = $('#guide'); if(!g) return; g.open = true; $('#guideCard').scrollIntoView({behavior:'smooth', block:'start'}); }
 /* 清單小照片：只顯示第一張 */
 function thumb(p){ return p ? `<img class="thumb" src="${phSync(p)}" ${isRef(p)?`data-ph="${p}"`:''} alt="">` : '<span class="muted small">—</span>'; }
 /* 換頁時，勾選會自動取消（避免刪除看不到的案件） */
