@@ -193,6 +193,21 @@ details summary{cursor:pointer;font-weight:700}
 .kic.kok{background:var(--ok-soft);color:#1e9e52}
 .kic.kin{background:var(--info-soft);color:var(--info)}
 .phead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:2px 0 14px}
+/* 清單頁標題卡 */
+.hcard{padding:20px 22px}
+.hc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.hc-top .ptitle{flex:1 1 360px;min-width:0}
+.eyebrow.eb3{margin:2px 0 6px;font-size:12.5px;letter-spacing:.06em;font-weight:600}
+.hc-mode{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.bnote{display:flex;gap:12px;align-items:flex-start;background:#fff4e0;border:1px solid #f0dcb4;border-radius:10px;padding:14px 16px;color:#5d4a2a;font-size:14px;line-height:1.7}
+.bnote svg{flex:none;color:#b45309;margin-top:2px}
+.bnote b{display:block;color:#7a3d06;font-size:15px;margin-bottom:2px}
+.linkbtn{border:0;background:none;padding:0 0 0 6px;color:#8a1c12;text-decoration:underline;font-size:13.5px}
+.linkbtn:hover{background:none;color:#b42318}
+.hc-bot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px}
+button.pillnew{border-radius:999px;padding:8px 18px;background:var(--brand);border-color:var(--brand);color:#fffdf8;font-weight:600}
+button.pillnew:hover{background:#22304f}
+@media(max-width:899px){ .hc-mode{align-items:flex-start} .hc-bot .ptools{justify-content:flex-start} }
 /* 清單頁標題區：左邊標題，右邊提醒＋本機資料模式，下面按鈕 */
 .hhead{display:flex;gap:16px 20px;flex-wrap:wrap;align-items:stretch;margin:0 0 14px;padding-bottom:14px;border-bottom:1px solid var(--line)}
 .hhead .ptitle{flex:1 1 380px;min-width:0}
@@ -648,25 +663,28 @@ async function showList(){
   };
   const years = [...new Set(live().map(r=>(r.foundDate||'').slice(0,4)).filter(Boolean).concat(today().slice(0,4)))].sort().reverse();
   $('#app').innerHTML = `
-    <div class="hhead">
-      <div class="ptitle big">
-        <h1>衛生缺失管理工作台</h1>
-        <div class="eyebrow eb2">HYGIENE INSPECTION MANAGEMENT</div>
-        <span class="muted">從巡檢發現、改善追蹤到複查結案，讓每一筆缺失都有紀錄、有進度、有結果。</span>
-        <div class="hcrumb">Casevoras / <b>缺失清單</b></div>
-      </div>
-      <div class="hright">
-        <div class="hstat">
-          <div class="alert alert1" role="note"><span class="atag">重要</span><div class="a1">本機儲存 · 僅在此裝置此瀏覽器有效 · 請勿用無痕視窗 · 定期下載備份</div><button class="alink" onclick="openGuide()">查看使用說明</button></div>
-          <span class="lbadge">● 本機資料模式</span>
+    <div class="card hcard">
+      <div class="hc-top">
+        <div class="ptitle big">
+          <h1>衛生缺失管理工作台</h1>
+          <div class="eyebrow eb3">HYGIENE INSPECTION MANAGEMENT</div>
+          <span class="muted">從巡檢發現、改善追蹤到複查結案，讓每一筆缺失都有紀錄、有進度、有結果。</span>
         </div>
+        <div class="hc-mode"><span class="lbadge">● 本機資料模式</span><span class="muted small">資料儲存於目前裝置</span></div>
+      </div>
+      <div class="bnote" role="note">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M12 8v5M12 16h.01"/></svg>
+        <div><b>資料備份提醒</b><div>資料儲存於目前瀏覽器（本機儲存，僅在此裝置此瀏覽器有效），清除瀏覽資料、使用無痕視窗或更換裝置可能導致資料遺失，請定期下載備份。<button class="linkbtn" onclick="openGuide()">查看使用說明</button></div></div>
+      </div>
+      <div class="hc-bot">
+        <div class="hcrumb">Casevoras / <b>缺失清單</b></div>
         <div class="ptools">
-          <button class="primary pnew" onclick="openRecord()">＋ 新增衛生缺失</button>
           <button class="lite" onclick="showTrash()">最近刪除（${records.filter(r=>r.deleted).length}）</button>
           <button class="lite" onclick="exportCSV()" title="匯出全部案件（含歷年），不受清單篩選影響；Excel 可開">匯出報表（Excel）</button>
           <button class="lite" onclick="backup()" title="下載所有案件與照片的備份檔，換電腦時用「從備份還原」匯回">下載備份</button>
           <button class="lite" onclick="$('#restoreFile').click()" title="用備份檔還原；會取代目前資料">從備份還原</button>
           <input type="file" id="restoreFile" accept=".json" hidden onchange="restore(this)">
+          <button class="pillnew" onclick="openRecord()">＋ 新增衛生缺失</button>
         </div>
       </div>
     </div>
