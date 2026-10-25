@@ -174,6 +174,17 @@ details summary{cursor:pointer;font-weight:700}
 .phrases{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}
 .thumb{width:52px;height:52px;object-fit:cover;border-radius:6px;border:1px solid var(--line);display:block;margin:0 auto;background:#efe7d8}
 .thc{text-align:center;width:64px}
+.seg{display:inline-flex;gap:2px;background:#f3ece0;border:1px solid var(--line);border-radius:999px;padding:4px}
+.seg button{border:0;background:none;border-radius:999px;padding:6px 18px;font-weight:700;color:var(--muted)}
+.seg button.on,.seg button.on:hover{background:var(--brand);color:#fffdf8}
+.chartfig{margin:0}
+.donut{display:flex;justify-content:center}
+.dleg{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12.5px;color:var(--muted);margin-top:6px}
+.dleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.hb{display:grid;grid-template-columns:minmax(70px,140px) 1fr 30px;gap:8px;align-items:center;font-size:13px;margin:7px 0}
+.hb .b{height:12px;background:#efe6d5;border-radius:4px}
+.hb .b i{display:block;height:12px;border-radius:0 4px 4px 0;background:var(--brand);min-width:3px}
+.hb .v{text-align:right;font-weight:700}
 input.lsearch{background:#f3ece0;border-color:var(--line)}
 .lfilter{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0 6px}
 .lfilter select{background:#f3ece0;border-color:var(--line)}
@@ -248,6 +259,7 @@ main:has(.split){max-width:1320px}
   #print .st-table th{width:auto;background:#eee}
   #print .st-chart svg{min-width:0;max-height:300px}
   #print .st-block{break-inside:avoid}
+  #print .dlbtn{display:none}
   #print .st-scroll{overflow:visible}
   #print .st-sec,#print .st-chart,#print .st-bar{break-inside:avoid}
 }
@@ -261,7 +273,7 @@ main:has(.split){max-width:1320px}
 <main><div class="appg">
   <nav class="snav" id="side" aria-label="功能選單">
     <button data-v="list" onclick="showList()"><span class="ic">📋</span>缺失清單</button>
-    <button data-v="stats" onclick="showStats()"><span class="ic">📊</span>統計報表</button>
+    <button data-v="stats" onclick="showStats()"><span class="ic">📊</span>統計分析</button>
     <button data-v="trash" onclick="showTrash()"><span class="ic">🗑️</span>最近刪除</button>
     <span class="spacer"></span>
     <button data-v="help" onclick="openGuide()"><span class="ic">?</span>使用說明</button>
@@ -544,7 +556,6 @@ async function showList(){
     <div class="row" style="margin-bottom:10px">
       <div class="ptitle"><h1>衛生缺失追蹤</h1><span>巡檢缺失與改善追蹤</span></div>
       <button class="primary" onclick="openRecord()">＋ 新增衛生缺失</button>
-      <button class="gold" onclick="showStats()">📊 統計報表</button>
     </div>
     <div class="row" style="margin-bottom:14px">
       <button onclick="showTrash()">最近刪除（${records.filter(r=>r.deleted).length}）</button>
@@ -1599,11 +1610,11 @@ function lineChart(ser,view){
   let g='';
   for(let k=0;k<=4;k++){ const v=k*step; g+=`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="#d9e0dd"/><text x="${L-6}" y="${Y(v)+4}" font-size="11" text-anchor="end" fill="#5c6b66">${v}</text>`; }
   const pts=k=>ser.map((p,i)=>`${X(i)},${Y(p[k])}`).join(' ');
-  g+=`<polyline points="${pts('total')}" fill="none" stroke="#1f6b57" stroke-width="3"/>`;
+  g+=`<polyline points="${pts('total')}" fill="none" stroke="#16213a" stroke-width="3"/>`;
   g+=`<polyline points="${pts('over')}" fill="none" stroke="#c0392b" stroke-width="3" stroke-dasharray="7 4"/>`;
   ser.forEach((p,i)=>{
-    g+=`<circle cx="${X(i)}" cy="${Y(p.total)}" r="4" fill="#1f6b57"/><circle cx="${X(i)}" cy="${Y(p.over)}" r="4" fill="#c0392b"/>`;
-    if(p.total>0) g+=`<text x="${X(i)}" y="${Y(p.total)-9}" font-size="13" font-weight="700" text-anchor="middle" fill="#1f6b57">${p.total}</text>`;
+    g+=`<circle cx="${X(i)}" cy="${Y(p.total)}" r="4" fill="#16213a"/><circle cx="${X(i)}" cy="${Y(p.over)}" r="4" fill="#c0392b"/>`;
+    if(p.total>0) g+=`<text x="${X(i)}" y="${Y(p.total)-9}" font-size="13" font-weight="700" text-anchor="middle" fill="#16213a">${p.total}</text>`;
     if(p.over>0 && p.over!==p.total) g+=`<text x="${X(i)}" y="${Y(p.over)+19}" font-size="13" font-weight="700" text-anchor="middle" fill="#c0392b">${p.over}</text>`;
     const lb = view==='month' ? (p.a===1||i===0 ? `${p.a}月` : `${p.a}月`) : p.label;
     g+=`<text x="${X(i)}" y="${H-B+18}" font-size="12" text-anchor="middle" fill="#2a3a35">${esc(lb)}</text>`;
@@ -1654,8 +1665,56 @@ function statHTML(view,y,a){
       ${c.cats.filter(x=>x.n>0||x.name!=='未判定').map(x=>`<tr><td>${esc(x.name)}</td><td><b>${x.n}</b></td><td>${x.over?`<b style="color:var(--bad)">${x.over}</b>`:'0'}</td></tr>`).join('')}</tbody></table>
 
     <div class="st-block"><div class="st-sec">趨勢（${trendName}）</div>
+    <figure class="chartfig" data-title="衛生缺失趨勢（${esc(trendName)}）">
     <div class="st-leg"><span class="a">總件數（新增）</span><span class="c">逾期件數</span></div>
-    <div class="st-chart st-scroll">${lineChart(ser,view)}</div></div>`;
+    <div class="st-chart st-scroll">${lineChart(ser,view)}</div>
+    ${ser.some(p=>p.total>0||p.over>0)?'<div class="row dlbtn" style="margin-top:6px"><button onclick="dlChart(this)">⬇ 下載圖片</button><span class="small muted"></span></div>':''}
+    </figure></div>`;
+}
+/* ---------- 統計：圖表下載成 PNG ---------- */
+async function chartPng(fig){
+  const sv = fig.querySelector('svg[role=img]'); if(!sv) throw new Error('沒有圖表');
+  const title = fig.dataset.title || '', vb = sv.viewBox.baseVal, W = vb.width, H = vb.height, tH = 36, lH = 30;
+  const F = 'Microsoft JhengHei,PingFang TC,Noto Sans TC,sans-serif';
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W+24}" height="${H+tH+lH}" viewBox="0 0 ${W+24} ${H+tH+lH}" font-family="${F}"><rect width="100%" height="100%" fill="#ffffff"/>`+
+    `<text x="14" y="25" font-size="15" font-weight="700" fill="#16213a">${esc(title)}</text>`+
+    `<g transform="translate(12,${tH})">${sv.innerHTML}</g>`+
+    `<line x1="20" y1="${H+tH+16}" x2="46" y2="${H+tH+16}" stroke="#16213a" stroke-width="3"/><text x="52" y="${H+tH+20}" font-size="13" fill="#16213a">總件數（新增）</text>`+
+    `<line x1="170" y1="${H+tH+16}" x2="196" y2="${H+tH+16}" stroke="#c0392b" stroke-width="3" stroke-dasharray="7 4"/><text x="202" y="${H+tH+20}" font-size="13" fill="#16213a">逾期件數</text></svg>`;
+  const img = new Image(); img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg); await img.decode();
+  const k = 2, c = document.createElement('canvas'); c.width = (W+24)*k; c.height = (H+tH+lH)*k;
+  const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0,0,c.width,c.height); g.drawImage(img,0,0,c.width,c.height);
+  return await new Promise((ok,no)=>c.toBlob(b=>b?ok(b):no(new Error('圖片產生失敗')),'image/png'));
+}
+async function dlChart(btn){
+  const fig = btn.closest('figure'), msg = btn.nextElementSibling; btn.disabled = true; msg.textContent = '產生中…';
+  try{ const b = await chartPng(fig); await download(b, ('Casevoras_'+(fig.dataset.title||'圖表')).replace(/[\\/:*?"<>|\s：（）]+/g,'_')+'.png', 'image/png'); msg.textContent = '已送出下載'; }
+  catch(e){ msg.textContent = '下載失敗，請重試'; }
+  btn.disabled = false; setTimeout(()=>{ msg.textContent=''; }, 3000);
+}
+/* ---------- 統計頁右側：處理狀態圓餅、類別、負責單位（今年） ---------- */
+function donutHTML(Y){
+  const L = ['待改善','待複查','持續追蹤','待品管確認結案','已結案'], ramp = ['#c3cde0','#9fb0cf','#5f76a3','#2c4372','#b8955a'];
+  const v = L.map(k=>Y.filter(r=>statusOf(r).t.replace(/（.*$/,'')===k).length), tot = v.reduce((a,b)=>a+b,0);
+  if(!tot) return '<div class="muted small">今年還沒有案件。</div>';
+  const S=170, rr=S/2-14, C=2*Math.PI*rr; let off=0;
+  const arcs = v.map((n,i)=>{ if(!n) return ''; const len=C*n/tot, a=`<circle cx="${S/2}" cy="${S/2}" r="${rr}" fill="none" stroke="${ramp[i]}" stroke-width="22" stroke-dasharray="${Math.max(len-(n<tot?2:0),0)} ${C}" stroke-dashoffset="${-off}" transform="rotate(-90 ${S/2} ${S/2})"><title>${L[i]} ${n} 件</title></circle>`; off+=len; return a; }).join('');
+  return `<div class="donut"><svg viewBox="0 0 ${S} ${S}" width="${S}" height="${S}" role="img" aria-label="今年處理狀態分布">${arcs}<text x="50%" y="48%" text-anchor="middle" font-size="26" font-weight="800" fill="#16213a">${Math.round(v[4]/tot*100)}%</text><text x="50%" y="62%" text-anchor="middle" font-size="12" fill="#5d6779">結案率</text></svg></div>
+    <div class="dleg">${L.map((k,i)=>`<span><i style="background:${ramp[i]}"></i>${k} ${v[i]}</span>`).join('')}</div>`;
+}
+function hbarHTML(rows){
+  if(!rows.length) return '<div class="muted small">今年還沒有案件。</div>';
+  const mx = Math.max(1,...rows.map(r=>r[1]));
+  return rows.map(([t,n])=>`<div class="hb"><span>${esc(t)}</span><span class="b"><i style="width:${n/mx*100}%"></i></span><span class="v">${n}</span></div>`).join('');
+}
+function statSideHTML(){
+  const yr = today().slice(0,4), Y = live().filter(r=>(r.foundDate||'').startsWith(yr));
+  const tc = new Map(); Y.forEach(r=>{ const k = r.defType ? typeName(r.defType) : '未選類別'; tc.set(k,(tc.get(k)||0)+1); });
+  const oc = new Map(); Y.forEach(r=>{ const k = r.ownerDept || '尚未指定'; oc.set(k,(oc.get(k)||0)+1); });
+  const sorted = m => [...m.entries()].sort((a,b)=>b[1]-a[1]);
+  return `<div class="card"><div class="phd"><b>處理狀態</b><span class="muted small">今年</span></div>${donutHTML(Y)}</div>
+    <div class="card"><div class="phd"><b>缺失類別</b><span class="muted small">今年</span></div>${hbarHTML(sorted(tc))}</div>
+    <div class="card"><div class="phd"><b>負責單位件數</b><span class="muted small">今年</span></div>${hbarHTML(sorted(oc))}</div>`;
 }
 async function showStats(){
   if(dirty && !(await ask('有尚未儲存的修改，確定要離開嗎？'))) return;
@@ -1674,11 +1733,16 @@ function renderStats(){
   const vt=(k,n)=>`<button class="${statView===k?'on':''}" onclick="setStat('view','${k}')">${n}</button>`;
   const rg=periodRange(statView,statY,stA());
   $('#app').innerHTML = `
-    <div class="row" style="margin-bottom:12px"><button onclick="showList()">← 返回清單</button><h2 style="margin:0 8px;font-size:18px">統計報表</h2></div>
+    <div class="alert alert1" role="note"><span class="atag">重要</span><div class="a1">本機儲存 · 僅在此裝置此瀏覽器有效 · 請勿用無痕視窗 · 定期下載備份</div><button class="alink" onclick="openGuide()">查看使用說明</button></div>
+    <div class="row" style="margin-bottom:10px">
+      <div class="ptitle"><h1>統計分析</h1><span>衛生缺失依月／季／年統計</span></div>
+      ${inClaude()?'':'<button onclick="printStats()">列印／存成 PDF</button>'}
+    </div>
+    ${kpiHTML()}
+    <div class="dgrid">
     <div class="card">
-      <div class="row tabs" style="margin-bottom:10px">${vt('month','月報')}${vt('quarter','季報')}${vt('year','年報')}
-        <span class="spacer"></span>
-        <button onclick="printStats()">列印／存成 PDF</button></div>
+      <div class="phd"><b>統計報表</b></div>
+      <div class="seg" style="margin-bottom:10px">${vt('year','年度')}${vt('quarter','每季')}${vt('month','每月')}</div>
       <div class="row" style="margin-bottom:6px">
         <select style="width:auto" onchange="setStat('y',this.value)">${yOpts.map(y=>`<option value="${y}" ${y===statY?'selected':''}>${y} 年</option>`).join('')}</select>
         ${statView==='month'?`<select style="width:auto" onchange="setStat('m',this.value)">${[1,2,3,4,5,6,7,8,9,10,11,12].map(m=>`<option value="${m}" ${m===statM?'selected':''}>${m} 月</option>`).join('')}</select>`:''}
@@ -1686,6 +1750,8 @@ function renderStats(){
       </div>
       <h3 class="st-title" style="margin:6px 0">${esc(rg.label)}</h3>
       <div id="statBody">${statHTML(statView,statY,stA())}</div>
+    </div>
+    <div class="rcol">${statSideHTML()}</div>
     </div>`;
 }
 function printStats(){
