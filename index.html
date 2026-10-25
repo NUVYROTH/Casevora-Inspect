@@ -195,7 +195,7 @@ details summary{cursor:pointer;font-weight:700}
 .ptools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:flex-end}
 button.lite{background:var(--card);border-color:var(--line);color:var(--ink);font-size:13.5px;padding:6px 12px}
 button.lite:hover{background:#f3ece0}
-button.pnew{padding:9px 18px;font-size:15px}
+button.pnew{font-size:13.5px;padding:6px 12px;border:1px solid var(--brand)}
 .case{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-top:10px;background:var(--card)}
 .case .cinfo{display:flex;gap:12px;align-items:flex-start;flex:1 1 100%;min-width:0}
 .case .cinfo>div{min-width:0}
@@ -641,12 +641,12 @@ async function showList(){
     <div class="phead">
       <div class="ptitle big"><div class="eyebrow">HYGIENE INSPECTION MANAGEMENT</div><h1>衛生缺失管理工作台</h1><span class="muted">從巡檢發現、改善追蹤到複查結案，讓每一筆缺失都有紀錄、有進度、有結果。</span></div>
       <div class="ptools">
+        <button class="primary pnew" onclick="openRecord()">＋ 新增衛生缺失</button>
         <button class="lite" onclick="showTrash()">最近刪除（${records.filter(r=>r.deleted).length}）</button>
         <button class="lite" onclick="exportCSV()" title="匯出全部案件（含歷年），不受清單篩選影響；Excel 可開">匯出報表（Excel）</button>
         <button class="lite" onclick="backup()" title="下載所有案件與照片的備份檔，換電腦時用「從備份還原」匯回">下載備份</button>
         <button class="lite" onclick="$('#restoreFile').click()" title="用備份檔還原；會取代目前資料">從備份還原</button>
         <input type="file" id="restoreFile" accept=".json" hidden onchange="restore(this)">
-        <button class="primary pnew" onclick="openRecord()">＋ 新增衛生缺失</button>
       </div>
     </div>
     ${kpiHTML()}
