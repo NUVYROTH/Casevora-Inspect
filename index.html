@@ -174,6 +174,11 @@ details summary{cursor:pointer;font-weight:700}
 .phrases{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}
 .thumb{width:52px;height:52px;object-fit:cover;border-radius:6px;border:1px solid var(--line);display:block;margin:0 auto;background:#efe7d8}
 .thc{text-align:center;width:64px}
+input.lsearch{background:#f3ece0;border-color:var(--line)}
+.lfilter{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0 6px}
+.lfilter select{background:#f3ece0;border-color:var(--line)}
+.lcount{font-size:13px;color:var(--muted);margin:2px 0 8px}
+@media(max-width:600px){ .lfilter{grid-template-columns:1fr 1fr} }
 #tableBox table{min-width:760px}
 #tableBox td.nw{white-space:nowrap}
 #tableBox td.desc{min-width:140px}
@@ -282,6 +287,7 @@ let listFilter = 'open';
 let listSearch = '';
 let listYear = '';   // '' = 全部
 let listMonth = '';  // '' = 全部
+let listType = '';   // '' = 全部缺失類別
 let listPage = 1;
 const PAGE_SIZES = [20,30,50,100];
 let pageSize = 20;
@@ -557,11 +563,13 @@ async function showList(){
         ${tab('ready','待結案確認',counts.ready)}
         ${tab('closed','已結案',counts.closed)}
         ${tab('all','全部',counts.all)}
-        <span class="spacer"></span>
-        <input type="text" placeholder="搜尋缺失區域、描述、類別、負責單位、編號…" style="max-width:280px" value="${esc(listSearch)}" oninput="listSearch=this.value;listPage=1;renderTable()">
       </div>
-      <div class="row filters" style="margin-bottom:12px">
-        <span class="small muted">發現日期：</span>
+      <input type="text" class="lsearch" id="lq" placeholder="搜尋 缺失區域／描述／類別／負責單位／編號" value="${esc(listSearch)}" oninput="listSearch=this.value;listPage=1;renderTable()">
+      <div class="lfilter">
+        <select aria-label="缺失類別" onchange="listType=this.value;listPage=1;showList()">
+          <option value="">全部缺失類別</option>
+          ${TYPES.map(([k,n])=>`<option value="${k}" ${listType===k?'selected':''}>${k} ${n}</option>`).join('')}
+        </select>
         <select aria-label="年份" onchange="listYear=this.value;listPage=1;showList()">
           <option value="">全部年份</option>
           ${years.map(y=>`<option value="${y}" ${listYear===y?'selected':''}>${y} 年</option>`).join('')}
@@ -647,6 +655,7 @@ function inPeriod(rs){
     const d = r.foundDate || '';
     if(listYear && d.slice(0,4)!==listYear) return false;
     if(listMonth && d.slice(5,7)!==listMonth) return false;
+    if(listType && r.defType!==listType) return false;
     return true;
   });
 }
@@ -668,11 +677,11 @@ function renderTable(){
   const rs = all.slice((listPage-1)*pageSize, listPage*pageSize);
   const vis = new Set(rs.map(r=>r.id));
   listSel = new Set([...listSel].filter(id=>vis.has(id)));
-  if(!rs.length){ $('#tableBox').innerHTML = `<div class="empty">${live().length?'沒有符合條件的紀錄':'目前還沒有紀錄，請按「新增衛生缺失」開始'}</div>`; return; }
+  if(!rs.length){ $('#tableBox').innerHTML = `<div class="lcount">共 0 件</div><div class="empty">${live().length?'沒有符合條件的紀錄':'目前還沒有紀錄，請按「新增衛生缺失」開始'}</div>`; return; }
   const n = listSel.size;
   const nDel = [...listSel].filter(id=>{ const r=records.find(x=>x.id===id); return r && !r.closed; }).length;
   const allOn = rs.length && rs.every(r=>listSel.has(r.id));
-  $('#tableBox').innerHTML = `<div class="row" style="margin-bottom:8px">
+  $('#tableBox').innerHTML = `<div class="lcount">共 ${all.length} 件</div><div class="row" style="margin-bottom:8px">
       <button id="listDel" class="danger" onclick="listDelete()" ${nDel?'':'disabled'}>刪除${nDel?'（'+nDel+'）':''}</button>
       <button onclick="beforeAfterReport()">🖼 改善前後報告${n?'（勾選 '+n+' 件）':'（清單 '+all.length+' 件）'}</button>
       <span class="muted small">${n?'已勾選 '+n+' 筆'+(n>nDel?'；其中已結案 '+(n-nDel)+' 筆不能刪除，刪除時會略過':''):'勾選案件後可刪除或只做這幾件的報告；沒勾選時，報告包含清單上所有符合條件的案件'}</span></div>
@@ -1355,7 +1364,7 @@ async function reopen(){
 function rangeLabel(){
   const tabName = {open:'未結案',over:'逾期',ready:'待結案確認',closed:'已結案',all:'全部'}[listFilter];
   const ym = (listYear?listYear+' 年':'全部年份') + (listMonth?' '+parseInt(listMonth,10)+' 月':'');
-  return ym + '｜' + tabName + (listSearch.trim()?'｜搜尋「'+listSearch.trim()+'」':'');
+  return ym + '｜' + tabName + (listType?'｜'+typeName(listType):'') + (listSearch.trim()?'｜搜尋「'+listSearch.trim()+'」':'');
 }
 async function beforeAfterReport(){
   const picked = listSel.size ? records.filter(r=>listSel.has(r.id) && !r.deleted) : filteredRecords();
