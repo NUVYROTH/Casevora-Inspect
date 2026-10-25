@@ -1655,8 +1655,16 @@ function showTrash(){ trashSel = new Set(); setSide('trash'); renderTrash(); win
 function renderTrash(){
   const rs = trashList(), n = trashSel.size;
   $('#app').innerHTML = `
-    ${crumbHTML('最近刪除')}
-    <div class="row" style="margin-bottom:12px"><button onclick="showList()">← 返回清單</button><h2 style="margin:0 8px;font-size:18px">最近刪除</h2></div>
+    <div class="hcard">
+      <div class="hc-top">
+        <div class="ptitle big"><h1>最近刪除</h1></div>
+        <span class="lbadge">● 本機資料模式</span>
+      </div>
+      <div class="hc-bot" style="margin-top:0">
+        <div class="hcrumb">Casevoras / <b>最近刪除</b></div>
+        <div class="ptools"><button class="lite" onclick="showList()">← 返回清單</button></div>
+      </div>
+    </div>
     <div class="card">
       <div class="notice info small">已刪除超過 30 天的案件，會在下次打開本工具時永久刪除。</div>
       <div class="row" style="margin:8px 0">
@@ -1896,11 +1904,16 @@ function renderStats(){
   const vt=(k,n)=>`<button class="${statView===k?'on':''}" onclick="setStat('view','${k}')">${n}</button>`;
   const rg=periodRange(statView,statY,stA());
   $('#app').innerHTML = `
-    ${crumbHTML('統計分析')}
-    <div class="alert alert1" role="note"><span class="atag">重要</span><div class="a1">本機儲存 · 僅在此裝置此瀏覽器有效 · 請勿用無痕視窗 · 定期下載備份</div><button class="alink" onclick="openGuide()">查看使用說明</button></div>
-    <div class="row" style="margin-bottom:10px">
-      <div class="ptitle"><h1>統計分析</h1><span>衛生缺失依月／季／年統計</span></div>
-      ${inClaude()?'':'<button onclick="printStats()">列印／存成 PDF</button>'}
+    <div class="hcard">
+      <div class="hc-top">
+        <div class="ptitle big"><h1>統計分析</h1><span class="muted">衛生缺失依月／季／年統計</span></div>
+        <span class="lbadge">● 本機資料模式</span>
+      </div>
+      <div class="alert alert1" role="note"><span class="atag">重要</span><div class="a1">本機儲存 · 僅在此裝置此瀏覽器有效 · 請勿用無痕視窗 · 定期下載備份</div><button class="alink" onclick="openGuide()">查看使用說明</button></div>
+      <div class="hc-bot">
+        <div class="hcrumb">Casevoras / <b>統計分析</b></div>
+        <div class="ptools">${inClaude()?'':'<button class="lite" onclick="printStats()">列印／存成 PDF</button>'}</div>
+      </div>
     </div>
     ${kpiHTML()}
     <div class="dgrid">
