@@ -58,6 +58,9 @@ button.danger{background:var(--bad);border-color:var(--bad);color:#fff;font-weig
 button.danger:hover{background:#8f1c13}
 button.danger:disabled{background:#efe7d8;border-color:var(--field);color:#8a8f99;font-weight:400}
 button:disabled{opacity:.45;cursor:not-allowed}
+/* v17 美化：互動回饋 */
+button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,149,90,.25)}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .spacer{flex:1}
 .check{display:flex;gap:8px;align-items:flex-start;padding:6px 0}
