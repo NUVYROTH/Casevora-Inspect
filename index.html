@@ -182,7 +182,8 @@ details summary{cursor:pointer;font-weight:700}
 .eyebrow{font-size:12px;font-weight:800;letter-spacing:.18em;color:var(--gold);margin-bottom:2px}
 .ptitle.big{display:block}
 .ptitle.big h1{font-size:28px;margin:0}
-.eyebrow.eb2{margin:2px 0 8px;padding-left:2px}
+.eyebrow.eb2{display:flex;align-items:center;gap:14px;margin:6px 0 10px;font-size:14px;letter-spacing:.22em}
+.eyebrow.eb2::before{content:"";width:40px;height:2px;background:var(--gold);flex:none}
 .ptitle.big span{display:block}
 .ptitle.big span{font-size:14.5px}
 .kpi{padding-right:58px}
@@ -256,7 +257,7 @@ button.pnew{font-size:13.5px;padding:6px 12px;border:1px solid var(--brand)}
   .split .side{top:16px;max-height:calc(100vh - 100px)}
 }
 @media(max-width:899px){ .crumb{display:none} .phead .ptitle{flex-basis:100%} .ptools{justify-content:flex-start} }
-@media(max-width:600px){ .kpi{padding-right:40px} .kic{width:26px;height:26px;top:10px;right:8px} .kic svg{width:15px;height:15px} .ptitle.big h1{font-size:24px} .eyebrow{font-size:11px} .case .cth{width:52px;height:52px} }
+@media(max-width:600px){ .kpi{padding-right:40px} .kic{width:26px;height:26px;top:10px;right:8px} .kic svg{width:15px;height:15px} .ptitle.big h1{font-size:24px} .eyebrow{font-size:11px} .eyebrow.eb2{font-size:11px;letter-spacing:.14em;gap:10px} .eyebrow.eb2::before{width:26px} .case .cth{width:52px;height:52px} }
 .seg{display:inline-flex;gap:2px;background:#f3ece0;border:1px solid var(--line);border-radius:999px;padding:4px}
 .seg button{border:0;background:none;border-radius:999px;padding:6px 18px;font-weight:700;color:var(--muted)}
 .seg button.on,.seg button.on:hover{background:var(--brand);color:#fffdf8}
