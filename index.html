@@ -99,7 +99,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 16px 100px}
 .full{grid-column:1/-1}
 label.f{display:block;font-size:13px;color:var(--muted);margin-bottom:4px;font-weight:600}
 .req::after{content:" *";color:var(--bad)}
-input[type=text],input[type=date],select,textarea{width:100%;padding:8px 10px;border:1px solid var(--field);border-radius:6px;font:inherit;background:#fff;color:inherit}
+input[type=text],input[type=date],select,textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:6px;font:inherit;background:var(--bg);color:inherit}
 textarea{min-height:70px;resize:vertical}
 input:disabled,select:disabled,textarea:disabled{background:#f3ece0;color:#444}
 button{font:inherit;cursor:pointer;border-radius:6px;border:1px solid var(--field);background:var(--card);color:var(--ink);padding:7px 14px}
@@ -114,7 +114,7 @@ button.danger:disabled{background:#efe7d8;border-color:var(--field);color:#8a8f9
 button:disabled{opacity:.45;cursor:not-allowed}
 /* v17 美化：互動回饋 */
 button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,149,90,.25)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,149,90,.25);background:#fff}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .spacer{flex:1}
 .check{display:flex;gap:8px;align-items:flex-start;padding:6px 0}
