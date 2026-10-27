@@ -553,6 +553,15 @@ function addDays(ymd,n){ const [y,m,d]=ymd.split('-').map(Number); const t=new D
 let showDlErr=false;
 function dlError(r){ if(!r.deadline) return '請填改善期限'; if(r.foundDate && r.deadline<r.foundDate) return '改善期限不能早於發現日期'; return ''; }
 function fmtDate(s){ if(!s) return ''; const [y,m,d]=s.split('-'); return `${y}/${m}/${d}`; }
+/* 搜尋欄輸入日期時，比對發現日期：2026/10/26、10/26、2026/10（整月）；/ - . 都可以 */
+function dateQuery(q){
+  const m = q.match(/^(\d{1,4})[\/\-.](\d{1,2})(?:[\/\-.](\d{1,2}))?$/); if(!m) return null;
+  const a=+m[1], b=+m[2], c=m[3]?+m[3]:0;
+  const eq = (y,mo,d) => s => { if(!s) return false; const [Y,M,D]=s.split('-').map(Number); return (!y||Y===y) && M===mo && (!d||D===d); };
+  if(c) return eq(a,b,c);
+  if(m[1].length===4) return eq(a,b,0);
+  return eq(0,a,b);
+}
 function nl2br(s){ return esc(s).replace(/\n/g,'<br>'); }
 
 /* 缺失等級（嚴重程度，由品管判定） */
@@ -694,7 +703,7 @@ async function showList(){
         ${tab('closed','已結案',counts.closed)}
         ${tab('all','全部',counts.all)}
       </div>
-      <input type="text" class="lsearch" id="lq" placeholder="搜尋 缺失區域／描述／類別／負責單位／編號" value="${esc(listSearch)}" oninput="listSearch=this.value;listPage=1;renderTable()">
+      <input type="text" class="lsearch" id="lq" placeholder="搜尋 發現日期（例：10/26）／缺失區域／描述／類別／負責單位／編號" value="${esc(listSearch)}" oninput="listSearch=this.value;listPage=1;renderTable()">
       <div class="lfilter">
         <select aria-label="缺失類別" onchange="listType=this.value;listPage=1;showList()">
           <option value="">全部缺失類別</option>
@@ -847,7 +856,9 @@ function filteredRecords(){
   if(listFilter==='ready') rs = rs.filter(r=>!r.closed && lastReview(r)?.result==='pass');
   if(listFilter==='closed') rs = rs.filter(r=>r.closed);
   const q = listSearch.trim().toLowerCase();
-  if(q) rs = rs.filter(r => [r.id,r.area,r.rawDesc,ownerText(r),typeName(r.defType)].join(' ').toLowerCase().includes(q));
+  const dq = dateQuery(q);
+  if(dq) rs = rs.filter(r => dq(r.foundDate));
+  else if(q) rs = rs.filter(r => [r.id,r.area,r.rawDesc,ownerText(r),typeName(r.defType)].join(' ').toLowerCase().includes(q));
   return rs.sort((a,b)=> (b.foundDate||'').localeCompare(a.foundDate||'') || b.id.localeCompare(a.id));
 }
 function renderTable(){
