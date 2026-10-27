@@ -1453,6 +1453,7 @@ function saveRecord(silent){
   if(!r.area.trim()) miss.push('缺失區域');
   if(!r.rawDesc.trim()) miss.push('缺失描述');
   if(!r.defType) miss.push('缺失類別');
+  if(!r.category) miss.push('缺失等級');
   if(miss.length){ say('請先填寫：' + miss.join('、')); return false; }
   if(dlError(r)){
     showDlErr = true; refresh();
