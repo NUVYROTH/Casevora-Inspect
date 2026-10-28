@@ -76,6 +76,19 @@ main{max-width:1440px;margin:0 auto;padding:20px 16px 100px}
 .mini{list-style:none;margin:0;padding:0}
 .mini li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line);font-size:13.5px}
 .mini li:last-child{border:0}
+/* 常用選項：下拉＋其它自己打字 */
+.combo .cmrow{display:flex;gap:6px;margin-top:6px}
+.combo .cmrow[hidden]{display:none}
+.combo .cmrow input{flex:1;min-width:0}
+button.cmadd{padding:4px 10px;font-size:13px;white-space:nowrap}
+.ogrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
+.ogrid .card{margin:0}
+.optl{list-style:none;margin:8px 0 10px;padding:0}
+.optl li{display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid var(--line)}
+.optl li span{flex:1;min-width:0;overflow-wrap:anywhere}
+.optl li button{padding:2px 9px;font-size:13px}
+.oadd{display:flex;gap:6px}.oadd input{flex:1;min-width:0}
+@media (max-width:899px){.ogrid{grid-template-columns:1fr}}
 .mini li.click{cursor:pointer}
 .mini li.click:hover{background:#f7f1e6}
 .mbar{display:grid;grid-template-columns:minmax(0,1fr) 34px;gap:8px;align-items:center;font-size:13.5px;margin:6px 0}
@@ -387,6 +400,7 @@ main:has(.split){max-width:1320px}
     <button data-v="list" onclick="showList()"><span class="ic">📋</span>缺失清單</button>
     <button data-v="stats" onclick="showStats()"><span class="ic">📊</span>統計分析</button>
     <button data-v="trash" onclick="showTrash()"><span class="ic">🗑️</span>最近刪除</button>
+    <button data-v="opts" onclick="showOpts()"><span class="ic">⚙️</span>常用選項</button>
     <span class="spacer"></span>
     <button data-v="help" onclick="openGuide()"><span class="ic">?</span>使用說明</button>
     <div class="sfoot"><b>CASEVORAS HYGIENE</b><br>個人工作站・本機資料模式<br>v16</div>
@@ -532,7 +546,42 @@ const say = msg => { dialog(msg, '知道了'); };
 const inClaude = () => typeof claude !== 'undefined';
 function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function today(){ const d=new Date(); return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10); }
-const DEPTS=['生產課','儲運','其它'];
+/* ---------- 常用選項（使用者自己設定的下拉清單，只存在這個瀏覽器；下載備份會一起帶走） ---------- */
+const KEY_O = 'qaHygieneTracker_v1_opts';
+const OPT_KINDS = { area:'缺失區域', people:'人員', dept:'單位' };
+function optList(a){ return Array.isArray(a) ? [...new Set(a.map(x=>String(x??'').trim()).filter(x=>x && x!=='其它'))] : []; }
+function loadOpts(){ let o = {}; try{ o = JSON.parse(localStorage.getItem(KEY_O)||'{}') || {}; }catch(e){}
+  return { area:optList(o.area), people:optList(o.people), dept: Array.isArray(o.dept) ? optList(o.dept) : ['生產課','儲運'] }; }
+let OPTS = loadOpts();
+function saveOpts(){ try{ localStorage.setItem(KEY_O, JSON.stringify(OPTS)); return true; }catch(e){ say('常用選項存不進去，瀏覽器的儲存空間可能已滿。'); return false; } }
+/* 下拉選常用；選「其它（自己打字）」才出現輸入框。值仍存在原本的欄位（data-f 或 id） */
+function combo(kind, v, attr, ph, dis){
+  v = v || '';
+  return `<div class="combo" data-kind="${kind}"><select class="cmsel lockable" aria-label="${OPT_KINDS[kind]}常用選項" onchange="comboPick(this)" ${dis?'disabled':''}>${comboOpts(kind, comboSel(kind,v))}</select>
+    <div class="cmrow" ${comboSel(kind,v)==='__o'?'':'hidden'}><input type="text" ${attr} value="${esc(v)}" placeholder="${esc(ph||'')}" ${dis?'disabled':''}><button type="button" class="cmadd lockable" onclick="comboAdd(this)" ${dis?'disabled':''}>＋加入常用</button></div></div>`;
+}
+function comboSel(kind, v){ return v ? (OPTS[kind].includes(v) ? v : '__o') : (OPTS[kind].length ? '' : '__o'); }
+function comboOpts(kind, sel){ return `<option value="">— 請選擇 —</option>${OPTS[kind].map(x=>`<option value="${esc(x)}" ${x===sel?'selected':''}>${esc(x)}</option>`).join('')}<option value="__o" ${sel==='__o'?'selected':''}>其它（自己打字）</option>`; }
+function comboPick(sel){
+  const row = sel.closest('.combo').querySelector('.cmrow'), inp = row.querySelector('input'), other = sel.value==='__o';
+  row.hidden = !other;
+  inp.value = other ? '' : sel.value;
+  inp.dispatchEvent(new Event('input', {bubbles:true}));
+  if(other) inp.focus();
+}
+/* 把下拉的選取狀態對回輸入框目前的值（清單變動、程式改值之後用） */
+function comboSync(box){
+  const kind = box.dataset.kind, inp = box.querySelector('input'), sel = box.querySelector('select'), k = comboSel(kind, inp.value);
+  sel.innerHTML = comboOpts(kind, k); box.querySelector('.cmrow').hidden = k!=='__o';
+}
+function comboAdd(btn){
+  const box = btn.closest('.combo'), kind = box.dataset.kind, v = box.querySelector('input').value.trim();
+  if(!v){ say('請先在框裡輸入要加入的'+OPT_KINDS[kind]+'。'); return; }
+  if(v==='其它'){ say('「其它」不能加入常用。'); return; }
+  if(!OPTS[kind].includes(v)){ OPTS[kind].push(v); if(!saveOpts()){ OPTS[kind].pop(); return; } }
+  document.querySelectorAll(`.combo[data-kind=${kind}]`).forEach(comboSync);
+  flash('已加入常用：'+v);
+}
 function whoText(d,n){ return [d,n].filter(x=>x&&String(x).trim()).join('／'); }
 function ownerText(r){ return whoText(r.ownerDept,r.ownerNote); }
 function improveByText(r){ return whoText(r.improveDept,r.improveNote); }
@@ -548,7 +597,11 @@ function migrate(r){
   if(r.improveBy && !r.improveDept){ r.improveDept='其它'; r.improveNote=r.improveBy; }
   delete r.owner; delete r.improveBy; return r;
 }
-function deptSel(f,label,idAttr,r){ return `<div><label class="f" ${idAttr?`id="${idAttr}"`:''}>${label}</label><select data-f="${f}"><option value="">— 請選擇 —</option>${DEPTS.map(d=>`<option value="${d}" ${r[f]===d?'selected':''}>${d}</option>`).join('')}</select></div>`; }
+function deptSel(f,label,idAttr,r){
+  /* 單位清單來自「常用選項」；舊案件用的單位就算已從清單移除，也照樣顯示 */
+  const list = [...OPTS.dept]; if(r[f] && r[f]!=='其它' && !list.includes(r[f])) list.push(r[f]); list.push('其它');
+  return `<div><label class="f" ${idAttr?`id="${idAttr}"`:''}>${label}</label><select data-f="${f}"><option value="">— 請選擇 —</option>${list.map(d=>`<option value="${esc(d)}" ${r[f]===d?'selected':''}>${esc(d)}</option>`).join('')}</select></div>`; }
+function cfld(kind, f, label, opt={}){ return `<div><label class="${opt.req?'f req':'f'}">${label}</label>${combo(kind, cur[f], `data-f="${f}"`, opt.ph)}</div>`; }
 function addDays(ymd,n){ const [y,m,d]=ymd.split('-').map(Number); const t=new Date(y,m-1,d+n); return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0'); }
 let showDlErr=false;
 function dlError(r){ if(!r.deadline) return '請填改善期限'; if(r.foundDate && r.deadline<r.foundDate) return '改善期限不能早於發現日期'; return ''; }
@@ -972,8 +1025,8 @@ function renderDetail(){
       <h2><span class="no">1</span>缺失基本資料、類別與等級</h2>
       <div class="grid">
         ${fld('foundDate','發現日期','date',{req:1})}
-        ${fld('area','缺失區域','text',{req:1,ph:'例：包裝區、前處理室、冷藏庫'})}
-        ${fld('finder','巡檢人員','text',{ph:'例：品保 王小明'})}
+        ${cfld('area','area','缺失區域',{req:1,ph:'例：包裝區、前處理室、冷藏庫'})}
+        ${cfld('people','finder','巡檢人員',{ph:'例：品保 王小明'})}
         ${fld('rawDesc','缺失描述','textarea',{req:1,full:1,rows:4,ph:'例：包裝線輸送帶下方地面有一大片積水和丸子殘渣，當時正在包裝作業中，旁邊有還沒封口的成品。'})}
         <div class="full desc-guide">
           <div class="dg-t">描述寫到位，請包含這 5 點：</div>
@@ -1007,9 +1060,9 @@ function renderDetail(){
           <label class="check"><input type="checkbox" data-f="recurred" ${r.recurred?'checked':''}> 已通知改善後，再次發生相同問題（改善完成後，於下一週再次發生相同問題）</label>
         </div>
         ${deptSel('ownerDept','負責單位','ownerLab',r)}
-        ${fld('ownerNote','負責人或說明','text',{ph:'例：李組長；選「其它」請寫明單位'})}
+        ${cfld('people','ownerNote','負責人或說明',{ph:'例：李組長；負責單位選「其它」請寫明單位'})}
         <div><label class="f req" id="deadlineLab">改善期限</label><input type="date" data-f="deadline" class="dl-input" value="${esc(r.deadline||'')}"><div class="dl-hint">（預設一週改善，從發現日期起算）</div><div class="ferr" id="errDeadline"></div></div>
-        ${fld('notifyTarget','已通知對象','text',{ph:'例：生產課 李組長、廠長'})}
+        ${cfld('people','notifyTarget','已通知對象',{ph:'例：生產課 李組長、廠長'})}
         <div class="full"><label class="f">缺失照片</label>${photoBox('photos')}</div>
       </div>
       <div id="ruleHint"></div>
@@ -1045,7 +1098,7 @@ function renderDetail(){
         ${fld('prevention','預防再發措施','textarea',{full:1,ph:'描述如何防止問題再次發生'})}
         <div><label class="f">預計改善完成日期</label><input type="date" data-f="improveDate" class="dl-input" value="${esc(r.improveDate||'')}"><div class="dl-hint">（預設一週改善，從發現日期起算）</div></div>
         ${deptSel('improveDept','改善執行單位',null,r)}
-        ${fld('improveNote','執行人或說明','text',{ph:'例：王小明；選「其它」請寫明單位'})}
+        ${cfld('people','improveNote','執行人或說明',{ph:'例：王小明；執行單位選「其它」請寫明單位'})}
         <div class="full"><label class="f">改善後照片</label>${photoBox('improvePhotos')}</div>
       </div>
     </div>
@@ -1058,7 +1111,7 @@ function renderDetail(){
         <b>新增複查紀錄</b>
         <div class="grid" style="margin-top:8px">
           <div><label class="f req">複查日期</label><input type="date" id="rvDate" class="rv-input" value="${today()}" max="${today()}" ${r.foundDate?`min="${esc(r.foundDate)}"`:''}></div>
-          <div><label class="f">複查人員</label><input type="text" id="rvBy"></div>
+          <div><label class="f">複查人員</label>${combo('people','','id="rvBy"')}</div>
           <div><label class="f req">複查結果</label>
             <select id="rvResult"><option value="">— 請選擇 —</option>
               ${Object.entries(REVIEW_RESULT).map(([k,t])=>`<option value="${k}">${t}</option>`).join('')}
@@ -1149,13 +1202,13 @@ function renderClose(){
     ${allOk&&r.id?'':'<div class="notice warn small">尚未符合結案條件，請繼續追蹤。</div>'}
     <div class="grid" style="margin-top:8px">
       <div><label class="f req">結案依據</label><select id="clBasis" onchange="closeBasisUI=this.value;renderClose()" ${r.id?'':'disabled'}><option value="pass" ${closeBasisUI==='pass'?'selected':''}>複查通過</option><option value="other" ${closeBasisUI==='other'?'selected':''}>其它（須填結案說明，例如硬體設備無法改善）</option></select></div>
-      <div><label class="f req">結案確認人員（品管人員）</label><input type="text" id="clBy" ${r.id?'':'disabled'}></div>
+      <div><label class="f req">結案確認人員（品管人員）</label>${combo('people','','id="clBy"','',!r.id)}</div>
       <div><label class="f req">結案日期</label><input type="date" id="clDate" value="${today()}" ${r.id?'':'disabled'}></div>
       <div class="full"><label class="f ${closeBasisUI==='other'?'req':''}">結案說明${closeBasisUI==='other'?'（選「其它」時必填，請寫明為什麼能結案）':''}</label><textarea id="clNote" rows="2" onchange="renderClose()" ${r.id?'':'disabled'}></textarea></div>
     </div>
     <label class="check"><input type="checkbox" id="clConfirm" ${r.id?'':'disabled'}> 本人為品管人員，已確認改善完成並符合結案條件。</label>
     <button class="primary" onclick="doClose()" ${r.id?'':'disabled'}>確認結案</button>`;
-  if($('#clBy')){ $('#clBy').value=keep.by; if(keep.date) $('#clDate').value=keep.date; $('#clNote').value=keep.note; $('#clConfirm').checked=keep.ok; }
+  if($('#clBy')){ $('#clBy').value=keep.by; comboSync($('#clBy').closest('.combo')); if(keep.date) $('#clDate').value=keep.date; $('#clNote').value=keep.note; $('#clConfirm').checked=keep.ok; }
 }
 
 function applyLock(){
@@ -1631,7 +1684,7 @@ async function backup(){
   const rs = live();
   await preloadPhotos(rs);
   const out = rs.map(r => Object.assign({}, r, { photos:r.photos.map(phSync).filter(Boolean), improvePhotos:r.improvePhotos.map(phSync).filter(Boolean) }));
-  download(JSON.stringify({app:'qaHygieneTracker', version:2, exportedAt:new Date().toISOString(), records:out, tombs}, null, 1),
+  download(JSON.stringify({app:'qaHygieneTracker', version:2, exportedAt:new Date().toISOString(), records:out, tombs, opts:OPTS}, null, 1),
     `hygiene_backup_${today()}.json`, 'application/json');
 }
 function restore(input){
@@ -1652,12 +1705,58 @@ function restore(input){
       const have = new Set(tombs.map(t=>t.id));
       (Array.isArray(data.tombs)?data.tombs:[]).forEach(t=>{ if(t && t.id && !have.has(t.id)) tombs.push(t); });
       if(!persistAll()){ records = old; tombs = oldT; return; }
+      /* 常用選項：跟目前的合併，不會刪掉現有的 */
+      if(data.opts){ Object.keys(OPT_KINDS).forEach(k=>{ OPTS[k] = optList([...OPTS[k], ...optList(data.opts[k])]); }); saveOpts(); }
       flash('還原完成'); showList();
     }catch(e){ say('無法讀取：這不是本工具的備份檔。'); }
   };
   fr.readAsText(file);
 }
 
+
+/* ---------- 常用選項頁 ---------- */
+const OPT_USE = { area:'缺失區域', people:'巡檢人員、負責人、已通知對象、執行人、複查人員、結案確認人員', dept:'負責單位、改善執行單位' };
+const OPT_PH = { area:'例：包裝區', people:'例：品保 王小明', dept:'例：生產課' };
+async function showOpts(){
+  if(dirty && !(await ask('有尚未儲存的修改，確定要離開嗎？'))) return;
+  cur=null; dirty=false; setSide('opts'); renderOpts(); window.scrollTo(0,0);
+}
+function renderOpts(){
+  $('#app').innerHTML = `
+    <div class="hcard">
+      <div class="hc-top"><div class="ptitle big"><h1>常用選項</h1></div><span class="lbadge">● 本機資料模式</span></div>
+      <div class="hc-bot" style="margin-top:0">
+        <div class="hcrumb">Casevoras / <b>常用選項</b></div>
+        <div class="ptools"><button class="lite" onclick="showList()">← 返回清單</button></div>
+      </div>
+    </div>
+    <div class="notice info small">把常用的區域、人員、單位加進來，填缺失單時就能用下拉選單直接選；不常用的請在下拉選「其它（自己打字）」。<br>
+      常用選項只存在此裝置此瀏覽器，「下載備份」會一起備份。刪除選項不會改到已經存好的案件。人員名稱不會送給 AI。</div>
+    <div class="ogrid">${Object.keys(OPT_KINDS).map(optCard).join('')}</div>`;
+}
+function optCard(k){
+  const L = OPTS[k];
+  return `<div class="card"><h2>${OPT_KINDS[k]}</h2><div class="muted small">用在：${OPT_USE[k]}</div>
+    ${L.length ? `<ul class="optl">${L.map((x,i)=>`<li><span>${esc(x)}</span>
+      <button onclick="optMove('${k}',${i},-1)" ${i?'':'disabled'} aria-label="上移">↑</button>
+      <button onclick="optMove('${k}',${i},1)" ${i<L.length-1?'':'disabled'} aria-label="下移">↓</button>
+      <button class="danger" onclick="optDel('${k}',${i})">刪除</button></li>`).join('')}</ul>` : '<div class="muted small" style="margin:10px 0">還沒有常用選項。</div>'}
+    ${k==='dept'?'<div class="muted small" style="margin-bottom:8px">下拉選單最後一定會有「其它」，不用另外加。</div>':''}
+    <div class="oadd"><input type="text" id="oi_${k}" placeholder="${OPT_PH[k]}" onkeydown="if(event.key==='Enter')optAdd('${k}')"><button class="primary" onclick="optAdd('${k}')">新增</button></div></div>`;
+}
+function optAdd(k){
+  const inp = $('#oi_'+k), v = inp.value.trim();
+  if(!v) return;
+  if(v==='其它'){ say('「其它」不能加入常用。'); return; }
+  if(OPTS[k].includes(v)){ say('「'+v+'」已經在清單裡了。'); return; }
+  OPTS[k].push(v); if(!saveOpts()){ OPTS[k].pop(); return; }
+  renderOpts(); $('#oi_'+k).focus();
+}
+function optMove(k,i,d){ const L = OPTS[k]; [L[i],L[i+d]] = [L[i+d],L[i]]; saveOpts(); renderOpts(); }
+async function optDel(k,i){
+  if(!(await ask('確定從常用選項移除「'+OPTS[k][i]+'」？（已經存好的案件不會改變）'))) return;
+  OPTS[k].splice(i,1); saveOpts(); renderOpts();
+}
 
 /* ---------- 最近刪除頁 ---------- */
 function trashList(){ return records.filter(r=>r.deleted).sort((a,b)=>(b.deletedAt||'').localeCompare(a.deletedAt||'') || b.id.localeCompare(a.id)); }
