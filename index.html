@@ -624,6 +624,15 @@ function deptSel(f,label,idAttr,r){
 function cfld(kind, f, label, opt={}){ return `<div><label class="${opt.req?'f req':'f'}">${label}</label>${combo(kind, cur[f], `data-f="${f}"`, opt.ph)}</div>`; }
 function addDays(ymd,n){ const [y,m,d]=ymd.split('-').map(Number); const t=new Date(y,m-1,d+n); return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0'); }
 let showDlErr=false;
+/* 改善期限預設：限期改善缺失 20 天，其他 7 天（從發現日期起算）；使用者自己改過的日期不會被蓋掉 */
+function dlDays(cat){ return cat==='schedule' ? 20 : 7; }
+function dlHint(cat){ return cat==='schedule' ? '（限期改善缺失預設 20 天，從發現日期起算）' : '（預設一週改善，從發現日期起算）'; }
+function dlIsDefault(r, found){ return !r.deadline || [7,20].some(n => r.deadline===addDays(found,n)); }
+function dlApplyDefault(){
+  if(!cur.foundDate || !dlIsDefault(cur, cur.foundDate)) return;
+  cur.deadline = addDays(cur.foundDate, dlDays(cur.category));
+  const el = document.querySelector('[data-f=deadline]'); if(el) el.value = cur.deadline;
+}
 function dlError(r){ if(!r.deadline) return '請填改善期限'; if(r.foundDate && r.deadline<r.foundDate) return '改善期限不能早於發現日期'; return ''; }
 function fmtDate(s){ if(!s) return ''; const [y,m,d]=s.split('-'); return `${y}/${m}/${d}`; }
 /* 搜尋欄輸入日期時，比對發現日期：2026/10/26、10/26、2026/10（整月）；/ - . 都可以 */
@@ -1082,7 +1091,7 @@ function renderDetail(){
         </div>
         ${deptSel('ownerDept','負責單位','ownerLab',r)}
         ${cfld('people','ownerNote','負責人或說明',{ph:'例：李組長；負責單位選「其它」請寫明單位'})}
-        <div><label class="f req" id="deadlineLab">改善期限</label><input type="date" data-f="deadline" class="dl-input" value="${esc(r.deadline||'')}"><div class="dl-hint">（預設一週改善，從發現日期起算）</div><div class="ferr" id="errDeadline"></div></div>
+        <div><label class="f req" id="deadlineLab">改善期限</label><input type="date" data-f="deadline" class="dl-input" value="${esc(r.deadline||'')}"><div class="dl-hint" id="dlHint">${dlHint(r.category)}</div><div class="ferr" id="errDeadline"></div></div>
         ${cfld('people','notifyTarget','已通知對象',{ph:'例：生產課 李組長、廠長'})}
         <div class="full"><label class="f">缺失照片</label>${photoBox('photos')}</div>
       </div>
@@ -1260,10 +1269,11 @@ function onField(e){
   if(!f || !cur) return;
   const oldFound = cur.foundDate;
   cur[f] = el.type==='checkbox' ? el.checked : el.value;
-  if(f==='foundDate' && cur.foundDate && oldFound && cur.deadline===addDays(oldFound,7)){
-    cur.deadline = addDays(cur.foundDate,7);
+  if(f==='foundDate' && cur.foundDate && oldFound && dlIsDefault(cur, oldFound)){
+    cur.deadline = addDays(cur.foundDate, dlDays(cur.category));
     document.querySelector('[data-f=deadline]').value = cur.deadline;
   }
+  if(f==='category'){ dlApplyDefault(); const h = $('#dlHint'); if(h) h.textContent = dlHint(cur.category); }
   if(f==='foundDate' && cur.foundDate && oldFound && cur.improveDate===addDays(oldFound,7)){
     cur.improveDate = addDays(cur.foundDate,7);
     document.querySelector('[data-f=improveDate]').value = cur.improveDate;
@@ -1534,7 +1544,7 @@ async function applyAISheet(k, lv){
   if(!(await ask(msg))) return;
   if(okType){ cur.defType = k; const el = document.querySelector('[data-f=defType]'); if(el) el.value = k; }
   if(text){ cur.rawDesc = text; document.querySelector('[data-f=rawDesc]').value = text; }
-  if(okLv){ cur.category = lv; const el = document.querySelector('[data-f=category]'); if(el) el.value = lv; }
+  if(okLv){ cur.category = lv; const el = document.querySelector('[data-f=category]'); if(el) el.value = lv; dlApplyDefault(); const h = $('#dlHint'); if(h) h.textContent = dlHint(lv); }
   dirty = true; refresh(); flash('已套用缺失單，記得按「儲存」');
 }
 function copyPrompt(){
