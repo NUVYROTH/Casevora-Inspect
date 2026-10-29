@@ -142,6 +142,25 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
 .notice{border-radius:8px;padding:10px 14px;font-size:14px;margin:8px 0}
 .notice.info{background:var(--info-soft);color:#173d70}
 .notice.warn{background:var(--warn-soft);color:#7a3d06}
+/* 文字整理：三種方式用圖卡呈現 */
+.aiw-h{font-size:14px;color:var(--muted);margin:6px 0 8px}
+.aiw{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:8px}
+.aiw-c{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;border:1px solid var(--line);border-radius:10px;background:var(--card);padding:14px 10px 12px}
+.aiw-c.ai{border-color:var(--gold);box-shadow:0 0 0 1px rgba(184,149,90,.25) inset}
+.aiw-c.off{opacity:.7}
+.aiw-ic{font-size:28px;line-height:1}
+.aiw-t{font-weight:700;font-size:15px}
+.aiw-tag{font-size:12px;padding:1px 9px;border-radius:999px;background:var(--ok-soft);color:var(--ok)}
+.aiw-tag.cl{background:var(--info-soft);color:var(--info)}
+.aiw-d{font-size:13px;color:var(--muted);line-height:1.55;flex:1}
+.aiw-c button{width:100%;margin-top:2px}
+@media (max-width:599px){
+  .aiw{grid-template-columns:1fr}
+  .aiw-c{display:grid;grid-template-columns:44px 1fr;column-gap:10px;row-gap:4px;text-align:left;align-items:start;padding:12px}
+  .aiw-ic{grid-row:1/4;align-self:center;text-align:center}
+  .aiw-tag{justify-self:start}
+  .aiw-c button{grid-column:1/3}
+}
 .notice.bad{background:var(--bad-soft);color:#7d1a12}
 .notice.ok{background:var(--ok-soft);color:#0f5a2d}
 .notice ul{margin:4px 0 0;padding-left:20px}
@@ -1071,16 +1090,29 @@ function renderDetail(){
     <!-- 2 文字整理（電腦上在右邊） -->
     <div class="card side">
       <h2><span class="no">2</span>文字整理（整理「缺失描述」）</h2>
-      <div class="notice info small">
-        <b>說明：</b>網址版<b>沒有 AI</b>；claude.ai 版可以用「產生分析」。共有三種方式：<br>
-        ①「範本整理」：依固定格式，<b>只用你填寫的資料</b>組成正式文字（不是 AI，不會推測原因或結果）。<br>
-        ②「複製 AI 提示詞」：把資料與限制條件組成一段文字，貼到你慣用的 AI 工具，再把結果貼回「缺失描述」欄位。<br>
-        ③「產生分析」：像稽核老師一樣開立缺失單，建議缺失類別、缺失描述與缺失等級（僅限 claude.ai 版）。
-      </div>
-      <div class="row lockrow">
-        <button class="lockable" onclick="makeDraft()">範本整理</button>
-        <button class="lockable" onclick="makePrompt()">複製 AI 提示詞</button>
-        <button class="primary lockable" id="aiGo" onclick="aiAnalyze()">產生分析</button>
+      <div class="aiw-h">三種整理方式，<b>選一種用就好</b></div>
+      <div class="aiw">
+        <div class="aiw-c">
+          <div class="aiw-ic">📝</div>
+          <div class="aiw-t">範本整理</div>
+          <span class="aiw-tag">兩版都能用・不是 AI</span>
+          <div class="aiw-d">依固定格式，<b>只用你填寫的資料</b>組成正式文字，不會推測原因或結果。</div>
+          <button class="lockable" onclick="makeDraft()">範本整理</button>
+        </div>
+        <div class="aiw-c">
+          <div class="aiw-ic">📋</div>
+          <div class="aiw-t">複製 AI 提示詞</div>
+          <span class="aiw-tag">兩版都能用</span>
+          <div class="aiw-d">按下複製 → 貼到你慣用的 AI 工具 → 把結果貼回「缺失描述」。</div>
+          <button class="lockable" onclick="makePrompt()">複製 AI 提示詞</button>
+        </div>
+        <div class="aiw-c ai ${inClaude()?'':'off'}">
+          <div class="aiw-ic">✨</div>
+          <div class="aiw-t">產生分析</div>
+          <span class="aiw-tag cl">僅限 claude.ai 版</span>
+          <div class="aiw-d">像稽核老師一樣開立缺失單，建議缺失類別、缺失描述與缺失等級。</div>
+          <button class="primary lockable" id="aiGo" onclick="aiAnalyze()">產生分析</button>
+        </div>
       </div>
       <p class="ainote">AI 分析需在 claude.ai 開啟本工具，每位使用者須使用<b>自己的 Claude 帳號登入</b>，用量計入各自的帳號。<br>請勿在描述中填寫員工或任何人的<b>姓名、電話、地址、身分證字號</b>等個人資料，請改用「品管人員」「作業員 A」等代稱。照片不會送給 AI。</p>
       <div id="aiStatus" class="small muted" style="margin-top:6px"></div>
