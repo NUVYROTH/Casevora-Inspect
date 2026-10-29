@@ -758,7 +758,7 @@ async function showList(){
         <div class="ptools">
           <button class="primary pnew" onclick="openRecord()">＋ 新增衛生缺失</button>
           <button class="lite" onclick="showTrash()">最近刪除（${records.filter(r=>r.deleted).length}）</button>
-          <button class="lite" onclick="exportCSV()" title="匯出全部案件（含歷年），不受清單篩選影響；Excel 可開">匯出報表（Excel）</button>
+          <button class="lite" onclick="exportPick()" title="選擇年份、月份後匯出；Excel 可開">匯出報表（Excel）</button>
           <button class="lite" onclick="backup()" title="下載所有案件與照片的備份檔，換電腦時用「從備份還原」匯回">下載備份</button>
           <button class="lite" onclick="$('#restoreFile').click()" title="用備份檔還原；會取代目前資料">從備份還原</button>
           <input type="file" id="restoreFile" accept=".json" hidden onchange="restore(this)">
@@ -820,7 +820,7 @@ async function showList(){
             <li>按「儲存」。之後可從清單點選該筆紀錄，繼續填寫改善情形。</li>
             <li>改善完成後，新增「複查紀錄」。複查未通過或缺失再次發生時，狀態會變成「持續追蹤」，不能結案。</li>
             <li>結案條件全部符合後，由品管人員填寫姓名並確認結案。</li>
-            <li>清單頁可「匯出報表（Excel）」（全部案件，含歷年）、「改善前後報告」與「改善前後 Excel（含照片）」；統計分析頁可「下載 Word 報表」（claude.ai 版也能用）；單筆紀錄頁可「列印／存成 PDF」。</li>
+            <li>清單頁可「匯出報表（Excel）」（可選年份／月份）、「改善前後報告」與「改善前後 Excel（含照片）」；統計分析頁可「下載 Word 報表」（claude.ai 版也能用）；單筆紀錄頁可「列印／存成 PDF」。</li>
           </ol>
         </div>
       </details>
@@ -1748,10 +1748,35 @@ async function beforeAfterExcel(){
 }
 
 /* ---------- 匯出報表（CSV，Excel 可開） ---------- */
-function exportCSV(){
-  /* 匯出全部案件（含歷年、所有狀態），不受清單篩選影響；不含「最近刪除」 */
-  const rs = live().slice().sort((a,b)=> (a.foundDate||'').localeCompare(b.foundDate||'') || a.id.localeCompare(b.id));
-  if(!rs.length){ say('目前沒有任何案件可以匯出。'); return; }
+/* 先選年份／月份（依發現日期），預設帶入清單目前的篩選 */
+function exportPick(){
+  const all = live();
+  if(!all.length){ say('目前沒有任何案件可以匯出。'); return; }
+  const years = [...new Set(all.map(r=>(r.foundDate||'').slice(0,4)).filter(Boolean))].sort().reverse();
+  const m = document.createElement('div'); m.className = 'modal';
+  m.innerHTML = `<div class="box" role="dialog" aria-modal="true" aria-label="匯出報表"><div class="msg"><b>匯出報表（Excel）</b><br><span class="small muted">依「發現日期」選擇要匯出的期間；所有狀態都會匯出，不含「最近刪除」。</span></div>
+    <div class="grid" style="grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+      <select id="exY" aria-label="年份"><option value="">全部年份</option>${years.map(y=>`<option value="${y}" ${listYear===y?'selected':''}>${y} 年</option>`).join('')}</select>
+      <select id="exM" aria-label="月份"><option value="">全部月份</option>${Array.from({length:12},(_,i)=>String(i+1).padStart(2,'0')).map(v=>`<option value="${v}" ${listMonth===v?'selected':''}>${parseInt(v,10)} 月</option>`).join('')}</select>
+    </div>
+    <div class="small muted" id="exN" style="margin-bottom:12px"></div>
+    <div class="row"><button id="exNo">取消</button><button class="primary" id="exGo">下載</button></div></div>`;
+  document.body.appendChild(m);
+  const pick = () => exportRows($('#exY').value, $('#exM').value);
+  const upd = () => { const n = pick().length; $('#exN').textContent = `符合的案件：${n} 件`; $('#exGo').disabled = !n; };
+  m.querySelectorAll('select').forEach(x => x.onchange = upd); upd();
+  $('#exNo').onclick = () => m.remove();
+  $('#exGo').onclick = () => { const y = $('#exY').value, mo = $('#exM').value; m.remove(); exportCSV(y, mo); };
+  $('#exY').focus();
+}
+function exportRows(y, mo){
+  return live().filter(r => { const d = r.foundDate||''; return (!y || d.slice(0,4)===y) && (!mo || d.slice(5,7)===mo); })
+    .sort((a,b)=> (a.foundDate||'').localeCompare(b.foundDate||'') || a.id.localeCompare(b.id));
+}
+function exportCSV(y='', mo=''){
+  /* 依選的年份／月份匯出（所有狀態），不受清單其他篩選影響；不含「最近刪除」 */
+  const rs = exportRows(y, mo);
+  if(!rs.length){ say('這個期間沒有案件可以匯出。'); return; }
   const head = ['編號','狀態','是否逾期','發現日期','缺失區域','巡檢人員','缺失描述','缺失類別','缺失等級','連續兩天發生','通知後再次發生',
     '負責單位/人員','改善期限','已通知對象','缺失單編號','風險控制措施',
     '發生原因','預防再發措施','如何改善','預計改善完成日期','改善執行人員','缺失照片數','改善照片數',
@@ -1766,7 +1791,9 @@ function exportCSV(){
       (r.closed?(r.closeBasis==='other'?'其它':'複查通過'):''), r.closedBy, r.closedDate, r.closeNote, r.updatedAt];
   });
   const csv = [head, ...rows].map(row => row.map(v => '"' + String(v??'').replace(/"/g,'""') + '"').join(',')).join('\r\n');
-  download('﻿'+csv, `hygiene_report_all_${today()}.csv`, 'text/csv;charset=utf-8');
+  const per = y ? y+(mo?'年'+parseInt(mo,10)+'月':'年') : (mo?'歷年'+parseInt(mo,10)+'月':'全部');
+  download('﻿'+csv, `Casevoras_衛生缺失報表_${per}_${today()}.csv`, 'text/csv;charset=utf-8');
+  flash('已匯出 '+rs.length+' 件');
 }
 async function download(content, name, type){
   try{
