@@ -785,7 +785,7 @@ async function showList(){
         ${tab('closed','已結案',counts.closed)}
         ${tab('all','全部',counts.all)}
       </div>
-      <input type="text" class="lsearch" id="lq" placeholder="搜尋 發現日期（例：10/26）／缺失區域／負責人員" value="${esc(listSearch)}" oninput="listSearch=this.value;listPage=1;renderTable()">
+      <input type="text" class="lsearch" id="lq" placeholder="搜尋 發現日期（例：10/26）／缺失區域／負責人員／編號" value="${esc(listSearch)}" oninput="listSearch=this.value;listPage=1;renderTable()">
       <div class="lfilter">
         <select aria-label="缺失類別" onchange="listType=this.value;listPage=1;showList()">
           <option value="">全部缺失類別</option>
@@ -940,8 +940,8 @@ function filteredRecords(){
   const q = listSearch.trim().toLowerCase();
   const dq = dateQuery(q);
   if(dq) rs = rs.filter(r => dq(r.foundDate));
-  /* 文字搜尋只看：缺失區域、負責單位／負責人、改善執行單位／執行人 */
-  else if(q) rs = rs.filter(r => [r.area,ownerText(r),improveByText(r)].join(' ').toLowerCase().includes(q));
+  /* 文字搜尋只看：編號、缺失區域、負責單位／負責人、改善執行單位／執行人 */
+  else if(q) rs = rs.filter(r => [r.id,r.area,ownerText(r),improveByText(r)].join(' ').toLowerCase().includes(q));
   return rs.sort((a,b)=> (b.foundDate||'').localeCompare(a.foundDate||'') || b.id.localeCompare(a.id));
 }
 function renderTable(){
