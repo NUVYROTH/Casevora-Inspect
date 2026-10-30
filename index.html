@@ -1851,6 +1851,12 @@ function exportCSV(y='', mo=''){
   flash('已匯出 '+rs.length+' 件');
 }
 async function download(content, name, type){
+  /* 檔案要準備一陣子（照片、圖表）時，瀏覽器會把「不是剛按下按鈕」的下載當成自動下載而擋掉；
+     這時改成跳出「下載檔案」按鈕，讓使用者親手按一下再下載 */
+  if(navigator.userActivation && !navigator.userActivation.isActive){
+    const ok = await dialog('檔案已準備好：\n'+name, '⬇ 下載檔案', '取消');
+    if(!ok) return;
+  }
   try{
     const dl = (typeof claude!=='undefined' && claude && claude.use) ? await claude.use('downloads') : null;
     if(dl){ await dl.save({filename:name, data:new Blob([content],{type})}); return; }
