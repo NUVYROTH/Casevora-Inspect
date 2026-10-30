@@ -1773,30 +1773,32 @@ function exportPick(){
   if(!all.length){ say('目前沒有任何案件可以匯出。'); return; }
   const years = [...new Set(all.map(r=>(r.foundDate||'').slice(0,4)).filter(Boolean))].sort().reverse();
   const m = document.createElement('div'); m.className = 'modal';
-  m.innerHTML = `<div class="box" role="dialog" aria-modal="true" aria-label="匯出報表"><div class="msg"><b>匯出報表（Excel）</b><br><span class="small muted">依「發現日期」選擇要匯出的期間；所有狀態都會匯出，不含「最近刪除」。</span></div>
+  m.innerHTML = `<div class="box" role="dialog" aria-modal="true" aria-label="匯出報表"><div class="msg"><b>匯出報表（Excel）</b><br><span class="small muted">依「發現日期」選擇期間，可只匯出未結案或已結案；不含「最近刪除」。</span></div>
     <div class="grid" style="grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
       <select id="exY" aria-label="年份"><option value="">全部年份</option>${years.map(y=>`<option value="${y}" ${listYear===y?'selected':''}>${y} 年</option>`).join('')}</select>
       <select id="exM" aria-label="月份"><option value="">全部月份</option>${Array.from({length:12},(_,i)=>String(i+1).padStart(2,'0')).map(v=>`<option value="${v}" ${listMonth===v?'selected':''}>${parseInt(v,10)} 月</option>`).join('')}</select>
     </div>
+    <select id="exS" aria-label="結案狀態" style="margin-bottom:8px"><option value="">狀態：全部（未結案＋已結案）</option><option value="open" ${listFilter==='open'?'selected':''}>狀態：只要未結案</option><option value="closed" ${listFilter==='closed'?'selected':''}>狀態：只要已結案</option></select>
     <select id="exF" aria-label="格式" style="margin-bottom:8px"><option value="form">格式：公司表單（改善追蹤表）</option><option value="full">格式：完整資料（全部欄位）</option></select>
     <div class="small muted" id="exN" style="margin-bottom:12px"></div>
     <div class="row"><button id="exNo">取消</button><button class="primary" id="exGo">下載</button></div></div>`;
   document.body.appendChild(m);
-  const pick = () => exportRows($('#exY').value, $('#exM').value);
+  const pick = () => exportRows($('#exY').value, $('#exM').value, $('#exS').value);
   const upd = () => { const n = pick().length; $('#exN').textContent = `符合的案件：${n} 件`; $('#exGo').disabled = !n; };
   m.querySelectorAll('select').forEach(x => x.onchange = upd); upd();
   $('#exNo').onclick = () => m.remove();
-  $('#exGo').onclick = () => { const y = $('#exY').value, mo = $('#exM').value, fm = $('#exF').value; m.remove(); fm==='form' ? exportForm(y, mo).catch(()=>say('Excel 產生失敗，請重試。')) : exportCSV(y, mo); };
+  $('#exGo').onclick = () => { const y = $('#exY').value, mo = $('#exM').value, st = $('#exS').value, fm = $('#exF').value; m.remove(); fm==='form' ? exportForm(y, mo, st).catch(()=>say('Excel 產生失敗，請重試。')) : exportCSV(y, mo, st); };
   $('#exY').focus();
 }
-function exportRows(y, mo){
-  return live().filter(r => { const d = r.foundDate||''; return (!y || d.slice(0,4)===y) && (!mo || d.slice(5,7)===mo); })
+const EX_ST = { open:'未結案', closed:'已結案' };
+function exportRows(y, mo, st=''){
+  return live().filter(r => { const d = r.foundDate||''; return (!y || d.slice(0,4)===y) && (!mo || d.slice(5,7)===mo) && (!st || (st==='closed') === !!r.closed); })
     .sort((a,b)=> (a.foundDate||'').localeCompare(b.foundDate||'') || a.id.localeCompare(b.id));
 }
 /* 公司表單格式（.xlsx）：類別｜日期｜不符合描述｜權責單位｜改善措施（負責人、改善措施、預計完成日期）｜改善確認（改善執行單位、確認事項、負責人、確認日期） */
 function exportPer(y, mo){ return y ? y+(mo?'年'+parseInt(mo,10)+'月':'年') : (mo?'歷年'+parseInt(mo,10)+'月':'全部'); }
-async function exportForm(y='', mo=''){
-  const rs = exportRows(y, mo);
+async function exportForm(y='', mo='', st=''){
+  const rs = exportRows(y, mo, st);
   if(!rs.length){ say('這個期間沒有案件可以匯出。'); return; }
   await preloadPhotos(rs);
   const cell = xlCell, blank = (c,r,st) => `<c r="${xlCol(c)}${r}" s="${st}"/>`;
@@ -1807,7 +1809,7 @@ async function exportForm(y='', mo=''){
   const sub = ['負責人','改善措施','預計完成日期','改善執行單位','確認事項','負責人','確認日期'];
   const phSub = (n) => Array.from({length:n},(_,i)=> n>1 ? '照片 '+(i+1) : '照片');
   let rows = `<row r="1" ht="26" customHeight="1">${cell(0,1,'衛生缺失改善追蹤表',3)}</row>`+
-    `<row r="2">${cell(0,2,`期間：${per.replace('全部','全部年份')}　共 ${rs.length} 件　製表日期：${fmtDate(today())}`,0)}</row>`+
+    `<row r="2">${cell(0,2,`期間：${per.replace('全部','全部年份')}　狀態：${EX_ST[st]||'全部'}　共 ${rs.length} 件　製表日期：${fmtDate(today())}`,0)}</row>`+
     `<row r="3" ht="20" customHeight="1">${top.map((h,i)=>cell(i,3,h,4)).join('')}${cell(4,3,'改善措施',4)}${blank(5,3,4)}${blank(6,3,4)}${cell(7,3,'改善確認',4)}${blank(8,3,4)}${blank(9,3,4)}${blank(10,3,4)}`+
       `${cell(P0,3,'改善前照片',4)}${Array.from({length:nB-1},(_,i)=>blank(P0+1+i,3,4)).join('')}${cell(P0+nB,3,'改善後照片',4)}${Array.from({length:nA-1},(_,i)=>blank(P0+nB+1+i,3,4)).join('')}</row>`+
     `<row r="4" ht="20" customHeight="1">${top.map((_,i)=>blank(i,4,4)).join('')}${sub.map((h,i)=>cell(i+4,4,h,4)).join('')}${[...phSub(nB),...phSub(nA)].map((h,i)=>cell(P0+i,4,h,4)).join('')}</row>`;
@@ -1825,12 +1827,12 @@ async function exportForm(y='', mo=''){
   const sheet = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><sheetViews><sheetView workbookViewId="0"><pane ySplit="4" topLeftCell="A5" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><cols>${widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join('')}</cols><sheetData>${rows}</sheetData><autoFilter ref="A4:${last}${rs.length+4}"/>`+
     `<mergeCells count="${8+(nB>1?1:0)+(nA>1?1:0)}"><mergeCell ref="A1:${last}1"/><mergeCell ref="A2:${last}2"/><mergeCell ref="A3:A4"/><mergeCell ref="B3:B4"/><mergeCell ref="C3:C4"/><mergeCell ref="D3:D4"/><mergeCell ref="E3:G3"/><mergeCell ref="H3:K3"/>${nB>1?`<mergeCell ref="${xlCol(P0)}3:${xlCol(P0+nB-1)}3"/>`:''}${nA>1?`<mergeCell ref="${xlCol(P0+nB)}3:${xlCol(N-1)}3"/>`:''}</mergeCells>`+
     `<pageMargins left="0.4" right="0.4" top="0.5" bottom="0.5" header="0.3" footer="0.3"/><pageSetup orientation="landscape" paperSize="9" fitToWidth="1" fitToHeight="0"/>${media.length?'<drawing r:id="rId1"/>':''}</worksheet>`;
-  await download(xlsxPack('改善追蹤表', sheet, '$3:$4', anchors, media), `Casevoras_衛生缺失改善追蹤表_${per}_${today()}.xlsx`, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  await download(xlsxPack('改善追蹤表', sheet, '$3:$4', anchors, media), `Casevoras_衛生缺失改善追蹤表_${per}${EX_ST[st]?'_'+EX_ST[st]:''}_${today()}.xlsx`, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
   flash('已匯出 '+rs.length+' 件');
 }
-function exportCSV(y='', mo=''){
-  /* 依選的年份／月份匯出（所有狀態），不受清單其他篩選影響；不含「最近刪除」 */
-  const rs = exportRows(y, mo);
+function exportCSV(y='', mo='', st=''){
+  /* 依選的年份／月份、結案狀態匯出，不受清單其他篩選影響；不含「最近刪除」 */
+  const rs = exportRows(y, mo, st);
   if(!rs.length){ say('這個期間沒有案件可以匯出。'); return; }
   const head = ['編號','狀態','是否逾期','發現日期','缺失區域','巡檢人員','缺失描述','缺失類別','缺失等級','連續兩天發生','通知後再次發生',
     '負責單位/人員','改善期限','已通知對象','缺失單編號','風險控制措施',
@@ -1847,7 +1849,7 @@ function exportCSV(y='', mo=''){
   });
   const csv = [head, ...rows].map(row => row.map(v => '"' + String(v??'').replace(/"/g,'""') + '"').join(',')).join('\r\n');
   const per = exportPer(y, mo);
-  download('﻿'+csv, `Casevoras_衛生缺失報表_${per}_${today()}.csv`, 'text/csv;charset=utf-8');
+  download('﻿'+csv, `Casevoras_衛生缺失報表_${per}${EX_ST[st]?'_'+EX_ST[st]:''}_${today()}.csv`, 'text/csv;charset=utf-8');
   flash('已匯出 '+rs.length+' 件');
 }
 async function download(content, name, type){
