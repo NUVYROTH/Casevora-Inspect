@@ -829,7 +829,7 @@ async function showList(){
             <li>按「儲存」。之後可從清單點選該筆紀錄，繼續填寫改善情形。</li>
             <li>改善完成後，新增「複查紀錄」。複查未通過或缺失再次發生時，狀態會變成「持續追蹤」，不能結案。</li>
             <li>結案條件全部符合後，由品管人員填寫姓名並確認結案。</li>
-            <li>清單頁可「匯出報表（Excel）」（可選年份／月份）、「改善前後報告」與「改善前後 Excel（含照片）」；統計分析頁可「下載 Word 報表」（claude.ai 版也能用）；單筆紀錄頁可「列印／存成 PDF」。</li>
+            <li>清單頁可「匯出報表（Excel）」（可選年份／月份）、「改善前後報告」與「改善通知單 Excel（含照片）」；統計分析頁可「下載 Word 報表」（claude.ai 版也能用）；單筆紀錄頁可「列印／存成 PDF」。</li>
           </ol>
         </div>
       </details>
@@ -960,7 +960,7 @@ function renderTable(){
       <label class="selall"><input type="checkbox" id="liAll" ${allOn?'checked':''} onchange="listAll(this.checked)">全選本頁</label>
       <button id="listDel" class="danger" onclick="listDelete()" ${nDel?'':'disabled'}>刪除${nDel?'（'+nDel+'）':''}</button>
       <button onclick="beforeAfterReport()">📸 改善前後報告${n?'（勾選 '+n+' 件）':'（清單 '+all.length+' 件）'}</button>
-      <button id="baXls" onclick="beforeAfterExcel()">📗 改善前後 Excel（含照片）</button></div>
+      <button id="baXls" onclick="beforeAfterExcel()">📗 改善通知單 Excel（含照片）</button></div>
     <div class="muted small">${n?'已勾選 '+n+' 筆'+(n>nDel?'；其中已結案 '+(n-nDel)+' 筆不能刪除，刪除時會略過':''):'勾選案件後可刪除或只做這幾件的報告；沒勾選時，報告包含清單上所有符合條件的案件'}</div>
     ${rs.map(caseHTML).join('')}
     <div class="row pager">
@@ -1691,8 +1691,9 @@ ${blocks}
   flash('已產生報告（共 '+rs.length+' 件）');
 }
 
-/* xlsx 共用：樣式 0 一般、1 表頭、2 內容（框線、換行、靠上）、3 大標題、4 表頭置中 */
-const XL_STYLES = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="3"><font><sz val="11"/><name val="Microsoft JhengHei"/></font><font><b/><sz val="11"/><name val="Microsoft JhengHei"/></font><font><b/><sz val="16"/><color rgb="FF16213A"/><name val="Microsoft JhengHei"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF3ECE0"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color rgb="FFC9BDA6"/></left><right style="thin"><color rgb="FFC9BDA6"/></right><top style="thin"><color rgb="FFC9BDA6"/></top><bottom style="thin"><color rgb="FFC9BDA6"/></bottom><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="5"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf><xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf><xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf><xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+/* xlsx 共用：樣式 0 一般、1 表頭、2 內容（框線、換行、靠上）、3 大標題、4 表頭置中；
+   通知單用（標楷體、黑框）：5 置中、6 靠左、7 大標題、8 小字註記、9 一般文字 */
+const XL_STYLES = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="6"><font><sz val="11"/><name val="Microsoft JhengHei"/></font><font><b/><sz val="11"/><name val="Microsoft JhengHei"/></font><font><b/><sz val="16"/><color rgb="FF16213A"/><name val="Microsoft JhengHei"/></font><font><sz val="12"/><name val="標楷體"/></font><font><sz val="16"/><name val="標楷體"/></font><font><sz val="10"/><name val="標楷體"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF3ECE0"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="3"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color rgb="FFC9BDA6"/></left><right style="thin"><color rgb="FFC9BDA6"/></right><top style="thin"><color rgb="FFC9BDA6"/></top><bottom style="thin"><color rgb="FFC9BDA6"/></bottom><diagonal/></border><border><left style="thin"><color rgb="FF000000"/></left><right style="thin"><color rgb="FF000000"/></right><top style="thin"><color rgb="FF000000"/></top><bottom style="thin"><color rgb="FF000000"/></bottom><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="10"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf><xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf><xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf><xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf><xf numFmtId="0" fontId="3" fillId="0" borderId="2" xfId="0" applyFont="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf><xf numFmtId="0" fontId="3" fillId="0" borderId="2" xfId="0" applyFont="1" applyBorder="1" applyAlignment="1"><alignment horizontal="left" vertical="center" wrapText="1"/></xf><xf numFmtId="0" fontId="4" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf><xf numFmtId="0" fontId="5" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment horizontal="left" vertical="center"/></xf><xf numFmtId="0" fontId="3" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment horizontal="left" vertical="center"/></xf></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
 function xlsxPack(sheetName, sheet, printTitles, anchors=[], media=[]){
   const X = 'http://schemas.openxmlformats.org/', REL = X+'package/2006/relationships', ODR = X+'officeDocument/2006/relationships';
   const files = [
@@ -1732,37 +1733,62 @@ function xlText(t){ return wx(String(t??'').replace(/[\u0000-\u0008\u000B\u000C\
 function dataUrlBytes(u){ const m = /^data:([^;,]+)?(;base64)?,(.*)$/s.exec(u||''); if(!m) return null;
   const bin = m[2] ? atob(m[3]) : decodeURIComponent(m[3]), a = new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) a[i]=bin.charCodeAt(i);
   return { bytes:a, ext: /png/.test(m[1]||'') ? 'png' : 'jpeg' }; }
+/* 民國日期：2026-10-20 → 115.10.20 */
+function rocDate(d){ if(!d) return ''; const [y,m,dd]=d.split('-'); return `${+y-1911}.${m}.${dd}`; }
+/* 衛生檢查改善通知單（.xlsx）：照公司表單排版，「備註」改放缺失前後照片 */
 async function beforeAfterExcel(){
   const picked = listSel.size ? records.filter(r=>listSel.has(r.id) && !r.deleted) : filteredRecords();
-  if(!picked.length){ say('目前沒有案件可以做報告。'); return; }
+  if(!picked.length){ say('目前沒有案件可以做通知單。'); return; }
   const btn = $('#baXls'), old = btn.textContent; btn.disabled = true; btn.textContent = '產生中…';
   try{
     const rs = picked.slice().sort((a,b)=> (a.foundDate||'').localeCompare(b.foundDate||'') || a.id.localeCompare(b.id));
-    const label = listSel.size ? '勾選的案件' : rangeLabel();
     await preloadPhotos(rs);
-    const MAXP = 10;  /* 每個照片區最多 10 張，全部放進去 */
-    const nB = Math.max(1, Math.min(MAXP, Math.max(...rs.map(r=>r.photos.length)))), nA = Math.max(1, Math.min(MAXP, Math.max(...rs.map(r=>r.improvePhotos.length))));
-    const head = ['編號','發現日期','缺失區域','缺失類別','缺失等級','狀態','缺失描述','如何改善','改善執行單位','最近一次複查',
-      ...Array.from({length:nB},(_,i)=>'改善前 '+(i+1)), ...Array.from({length:nA},(_,i)=>'改善後 '+(i+1))];
-    const widths = [17,11,12,18,16,12,36,36,16,26, ...Array(nB+nA).fill(24)];
-    const P0 = 10, ROWH = 98;  /* 照片欄從第 11 欄開始；列高 98pt */
-    const cell = (c,r,v,st) => `<c r="${xlCol(c)}${r}" t="inlineStr" s="${st}"><is><t xml:space="preserve">${xlText(v)}</t></is></c>`;
-    let rows = `<row r="1" ht="26" customHeight="1">${cell(0,1,'衛生缺失改善前後對照報告',3)}</row>`+
-      `<row r="2">${cell(0,2,`範圍：${label}　共 ${rs.length} 件　製表日期：${fmtDate(today())}`,0)}</row>`+
-      `<row r="3" ht="22" customHeight="1">${head.map((h,i)=>cell(i,3,h,1)).join('')}</row>`;
+    /* 第 2 行的年月：全部同一個月就寫「115年 10 月」，跨月寫起訖 */
+    const ym = d => d ? `${+d.slice(0,4)-1911}年 ${+d.slice(5,7)} 月` : '';
+    const ds = rs.map(r=>r.foundDate).filter(Boolean), a = ds[0]||'', z = ds[ds.length-1]||'';
+    const period = a.slice(0,7)===z.slice(0,7) ? ym(a) : ym(a)+' ～ '+ym(z);
+    const cell = xlCell, blank = (c,r,st) => `<c r="${xlCol(c)}${r}" s="${st}"/>`, L = 'L';
+    const IMGW = 120, IMGH = 90, GAP = 6;  /* 照片 120×90 px，一格一排放 2 張 */
+    let rows = `<row r="1" ht="24" customHeight="1">${cell(0,1,'衛生檢查改善通知單',7)}</row>`+
+      `<row r="2" ht="20" customHeight="1">${cell(0,2,'　　'+period,9)}</row>`+
+      `<row r="3" ht="18" customHeight="1">${['類別','日期','不符合描述','權責單位'].map((h,i)=>cell(i,3,h,5)).join('')}${cell(4,3,'改善措施',5)}${blank(5,3,5)}${blank(6,3,5)}${cell(7,3,'改善確認',5)}${blank(8,3,5)}${blank(9,3,5)}${cell(10,3,'缺失前後照片',5)}${blank(11,3,5)}</row>`+
+      `<row r="4" ht="18" customHeight="1">${[0,1,2,3].map(i=>blank(i,4,5)).join('')}${['負責人','改善措施','預計完成日期','負責人','確認事項','確認日期','改善前','改善後'].map((h,i)=>cell(i+4,4,h,5)).join('')}</row>`;
     const media = [], anchors = [];
+    const place = async (arr, col, rn, tag, rid) => {
+      let n = 0;
+      for(const p of arr){
+        const u = phSync(p), b = u && dataUrlBytes(u); if(!b) continue;
+        let w = IMGW, h = IMGH;
+        try{ const im = new Image(); im.src = u; await im.decode(); const s = Math.min(IMGW/im.naturalWidth, IMGH/im.naturalHeight); w = Math.round(im.naturalWidth*s); h = Math.round(im.naturalHeight*s); }catch(e){}
+        media.push(b); const id = media.length, x = 4 + (n%2)*(IMGW+GAP), y = 4 + Math.floor(n/2)*(IMGH+GAP);
+        anchors.push(`<xdr:oneCellAnchor><xdr:from><xdr:col>${col}</xdr:col><xdr:colOff>${x*9525}</xdr:colOff><xdr:row>${rn-1}</xdr:row><xdr:rowOff>${y*9525}</xdr:rowOff></xdr:from><xdr:ext cx="${w*9525}" cy="${h*9525}"/><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="${id+1}" name="${tag}${n+1}_${xlText(rid)}"/><xdr:cNvPicPr><a:picLocks noChangeAspect="1"/></xdr:cNvPicPr></xdr:nvPicPr><xdr:blipFill><a:blip r:embed="rImg${id}"/><a:stretch><a:fillRect/></a:stretch></xdr:blipFill><xdr:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${w*9525}" cy="${h*9525}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></xdr:spPr></xdr:pic><xdr:clientData/></xdr:oneCellAnchor>`);
+        n++;
+      }
+      return n;
+    };
     for(let k=0;k<rs.length;k++){
-      const r = rs[k], rn = k+4, lr = lastReview(r);
-      const vals = [r.id, fmtDate(r.foundDate), r.area, typeName(r.defType)||'未選類別', CAT[r.category]||'未判定', statusOf(r).t+(isOverdue(r)?'（逾期）':''),
-        r.rawDesc, r.improveContent||'（尚未填寫）', improveByText(r)||'—', lr?fmtDate(lr.date)+' '+REVIEW_RESULT[lr.result]+(lr.note?'\n'+lr.note:''):'尚未複查'];
-      const pcells = [];
-      for(const [arr,n,base,tag] of [[r.photos,nB,P0,'改善前'],[r.improvePhotos,nA,P0+nB,'改善後']]) pcells.push(...await xlPhotos(arr, n, base, rn, tag, r.id, media, anchors));
-      rows += `<row r="${rn}" ht="${ROWH}" customHeight="1">${vals.map((v,i)=>cell(i,rn,v,2)).join('')}${pcells.join('')}</row>`;
+      const r = rs[k], rn = k+5, lr = lastReview(r);
+      const unit = r.ownerDept==='其它' ? (r.ownerNote||'其它') : r.ownerDept;
+      const nb = await place(r.photos, 10, rn, '改善前', r.id), na = await place(r.improvePhotos, 11, rn, '改善後', r.id);
+      /* 列高：照片排數與描述行數取大的（描述欄一行約 16 字） */
+      const phH = Math.ceil(Math.max(nb,na,1)/2)*(IMGH+GAP)*0.75 + 8, txH = Math.ceil(((r.rawDesc||'').length+1)/16)*17 + 10;
+      const vals = [[(TYPES.find(t=>t[0]===r.defType)||[])[1]||'未選類別',5], [rocDate(r.foundDate),5], [r.rawDesc,6], [unit,5],
+        [r.ownerDept==='其它'?'':r.ownerNote,5], [r.improveContent,6], [rocDate(r.improveDate),5],
+        [lr?lr.by:'',5], [r.prevention,6], [lr?rocDate(lr.date):'',5],
+        [nb?'':'（無照片）',5], [na?'':'（無照片）',5]];
+      rows += `<row r="${rn}" ht="${Math.round(Math.max(60, phH, txH))}" customHeight="1">${vals.map(([v,st],i)=>cell(i,rn,v,st)).join('')}</row>`;
     }
-    const lastCol = xlCol(head.length-1);
-    const sheet = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><sheetViews><sheetView workbookViewId="0"><pane ySplit="3" xSplit="1" topLeftCell="B4" activePane="bottomRight" state="frozen"/></sheetView></sheetViews><cols>${widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join('')}</cols><sheetData>${rows}</sheetData><mergeCells count="2"><mergeCell ref="A1:${lastCol}1"/><mergeCell ref="A2:${lastCol}2"/></mergeCells><pageMargins left="0.4" right="0.4" top="0.5" bottom="0.5" header="0.3" footer="0.3"/><pageSetup orientation="landscape" paperSize="9" fitToWidth="1" fitToHeight="0"/>${media.length?'<drawing r:id="rId1"/>':''}</worksheet>`;
-    await download(xlsxPack('改善前後對照', sheet, '$3:$3', anchors, media), `Casevoras_改善前後對照_${today()}.xlsx`, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    flash('已產生 Excel（共 '+rs.length+' 件）');
+    const f0 = rs.length+5;
+    const notes = ['*類別：1為每月衛生管理查核之不符合事項、2為製程衛生檢查不符合事項。','*依每月衛生管理查核與製程衛生檢查日期，每月匯整為一個檔案。','每月結案(全數確認改善完成)審核：'];
+    notes.forEach((t,i)=>{ rows += `<row r="${f0+i}" ht="18" customHeight="1">${cell(0,f0+i,t,i<2?8:9)}</row>`; });
+    rows += `<row r="${f0+3}" ht="26" customHeight="1">${cell(0,f0+3,'品研主管：',9)}${cell(4,f0+3,'品研組長：',9)}${cell(7,f0+3,'衛生管理人員：',9)}</row>`;
+    rows += `<row r="${f0+4}" ht="16" customHeight="1">${cell(0,f0+4,'4S-02-03',8)}${cell(5,f0+4,'版次：1.2',8)}${cell(11,f0+4,'頁次：1/1',8)}</row>`;
+    const widths = [12,10,32,9,9,20,11,9,16,10,36,36];
+    const merges = ['A1:L1','A2:L2','A3:A4','B3:B4','C3:C4','D3:D4','E3:G3','H3:J3','K3:L3', `A${f0}:L${f0}`, `A${f0+1}:L${f0+1}`, `A${f0+2}:L${f0+2}`, `A${f0+3}:D${f0+3}`, `E${f0+3}:G${f0+3}`, `H${f0+3}:L${f0+3}`];
+    const sheet = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><sheetViews><sheetView workbookViewId="0"><pane ySplit="4" topLeftCell="A5" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><cols>${widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join('')}</cols><sheetData>${rows}</sheetData><autoFilter ref="A4:${L}${rs.length+4}"/><mergeCells count="${merges.length}">${merges.map(m=>`<mergeCell ref="${m}"/>`).join('')}</mergeCells><pageMargins left="0.3" right="0.3" top="0.4" bottom="0.4" header="0.2" footer="0.2"/><pageSetup orientation="landscape" paperSize="9" fitToWidth="1" fitToHeight="0"/>${media.length?'<drawing r:id="rId1"/>':''}</worksheet>`;
+    const fn = `衛生檢查改善通知單_${period.replace(/\s+/g,'').replace(/～/g,'-')}_${today()}.xlsx`;
+    await download(xlsxPack('衛生檢查改善通知單', sheet, '$3:$4', anchors, media), fn, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    flash('已產生通知單（共 '+rs.length+' 件）');
   }catch(e){ say('Excel 產生失敗，請重試。'); }
   btn.disabled = false; btn.textContent = old;
 }
