@@ -78,6 +78,8 @@ main{max-width:1440px;margin:0 auto;padding:20px 16px 100px}
 .mini{list-style:none;margin:0;padding:0}
 .mini li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line);font-size:13.5px}
 .mini li:last-child{border:0}
+.hb.click{cursor:pointer;border-radius:6px}.hb.click:hover{background:var(--brand-soft)}
+.modal .box.glist{max-width:720px}.gwrap{max-height:60vh;overflow:auto}.gwrap tr.click{cursor:pointer}.gwrap tr.click:hover td{background:var(--brand-soft)}
 /* 常用選項：下拉＋其它自己打字 */
 .combo .cmrow{display:flex;gap:6px;margin-top:6px}
 .combo .cmrow[hidden]{display:none}
@@ -624,9 +626,8 @@ function migrate(r){
   delete r.owner; delete r.improveBy; return r;
 }
 function deptSel(f,label,idAttr,r){
-  /* 單位清單來自「常用選項」；舊案件用的單位就算已從清單移除，也照樣顯示 */
-  const list = [...OPTS.dept]; if(r[f] && r[f]!=='其它' && !list.includes(r[f])) list.push(r[f]); list.push('其它');
-  return `<div><label class="f" ${idAttr?`id="${idAttr}"`:''}>${label}</label><select data-f="${f}"><option value="">— 請選擇 —</option>${list.map(d=>`<option value="${esc(d)}" ${r[f]===d?'selected':''}>${esc(d)}</option>`).join('')}</select></div>`; }
+  /* 單位：下拉選常用，選「其它（自己打字）」可輸入，也能「＋加入常用」；舊資料的「其它」照樣顯示 */
+  return `<div><label class="f" ${idAttr?`id="${idAttr}"`:''}>${label}</label>${combo('dept', r[f], `data-f="${f}"`, '例：品保課、支援組')}</div>`; }
 function cfld(kind, f, label, opt={}){ return `<div><label class="${opt.req?'f req':'f'}">${label}</label>${combo(kind, cur[f], `data-f="${f}"`, opt.ph)}</div>`; }
 function addDays(ymd,n){ const [y,m,d]=ymd.split('-').map(Number); const t=new Date(y,m-1,d+n); return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0'); }
 let showDlErr=false;
@@ -1098,7 +1099,7 @@ function renderDetail(){
           <label class="check"><input type="checkbox" data-f="recurred" ${r.recurred?'checked':''}> 已通知改善後，再次發生相同問題（改善完成後，於下一週再次發生相同問題）</label>
         </div>
         ${deptSel('ownerDept','負責單位','ownerLab',r)}
-        ${cfld('people','ownerNote','負責人或說明',{ph:'例：李組長；負責單位選「其它」請寫明單位'})}
+        ${cfld('people','ownerNote','負責人或說明',{ph:'例：李組長'})}
         <div><label class="f req" id="deadlineLab">改善期限</label><input type="date" data-f="deadline" class="dl-input" value="${esc(r.deadline||'')}"><div class="dl-hint" id="dlHint">${dlHint(r.category)}</div><div class="ferr" id="errDeadline"></div></div>
         ${cfld('people','notifyTarget','已通知對象',{ph:'例：生產課 李組長、廠長'})}
         <div class="full"><label class="f">缺失照片</label>${photoBox('photos')}</div>
@@ -1149,7 +1150,7 @@ function renderDetail(){
         ${fld('prevention','預防再發措施','textarea',{full:1,ph:'描述如何防止問題再次發生'})}
         <div><label class="f">預計改善完成日期</label><input type="date" data-f="improveDate" class="dl-input" value="${esc(r.improveDate||'')}"><div class="dl-hint">（預設一週改善，從發現日期起算）</div></div>
         ${deptSel('improveDept','改善執行單位',null,r)}
-        ${cfld('people','improveNote','執行人或說明',{ph:'例：王小明；執行單位選「其它」請寫明單位'})}
+        ${cfld('people','improveNote','執行人或說明',{ph:'例：王小明'})}
         <div class="full"><label class="f">改善後照片</label>${photoBox('improvePhotos')}</div>
       </div>
     </div>
@@ -1989,9 +1990,39 @@ function optCard(k){
     ${L.length ? `<ul class="optl">${L.map((x,i)=>`<li><span>${esc(x)}</span>
       <button onclick="optMove('${k}',${i},-1)" ${i?'':'disabled'} aria-label="上移">↑</button>
       <button onclick="optMove('${k}',${i},1)" ${i<L.length-1?'':'disabled'} aria-label="下移">↓</button>
+      <button onclick="optEdit('${k}',${i})">編輯</button>
       <button class="danger" onclick="optDel('${k}',${i})">刪除</button></li>`).join('')}</ul>` : '<div class="muted small" style="margin:10px 0">還沒有常用選項。</div>'}
-    ${k==='dept'?'<div class="muted small" style="margin-bottom:8px">下拉選單最後一定會有「其它」，不用另外加。</div>':''}
+    ${k==='dept'?'<div class="muted small" style="margin-bottom:8px">下拉選單最後一定會有「其它（自己打字）」，不在清單上的單位可以直接打字。</div>':''}
     <div class="oadd"><input type="text" id="oi_${k}" placeholder="${OPT_PH[k]}" onkeydown="if(event.key==='Enter')optAdd('${k}')"><button class="primary" onclick="optAdd('${k}')">新增</button></div></div>`;
+}
+/* 輸入框對話視窗（claude.ai 不能用 prompt） */
+function askText(title, value){
+  return new Promise(res => {
+    const m = document.createElement('div'); m.className = 'modal';
+    m.innerHTML = `<div class="box" role="dialog" aria-modal="true"><div class="msg"></div><input type="text" id="atIn" style="margin-bottom:12px"><div class="row"><button id="atNo">取消</button><button class="primary" id="atOk">確定</button></div></div>`;
+    m.querySelector('.msg').textContent = title; const inp = m.querySelector('#atIn'); inp.value = value;
+    const done = v => { m.remove(); res(v); };
+    m.querySelector('#atOk').onclick = () => done(inp.value.trim());
+    m.querySelector('#atNo').onclick = () => done(null);
+    inp.onkeydown = e => { if(e.key==='Enter') done(inp.value.trim()); if(e.key==='Escape') done(null); };
+    document.body.appendChild(m); inp.focus(); inp.select();
+  });
+}
+/* 改名：清單改掉；已存的案件裡「完全相同」的值，問過後一起改 */
+const OPT_FIELDS = { area:['area'], dept:['ownerDept','improveDept'], people:['finder','ownerNote','notifyTarget','improveNote','closedBy'] };
+async function optEdit(k,i){
+  const old = OPTS[k][i], v = await askText('修改「'+old+'」為：', old);
+  if(v===null || v===old) return;
+  if(!v){ say('名稱不能空白。'); return; }
+  if(v==='其它'){ say('「其它」不能加入常用。'); return; }
+  if(OPTS[k].includes(v)){ say('「'+v+'」已經在清單裡了。'); return; }
+  OPTS[k][i] = v; if(!saveOpts()){ OPTS[k][i] = old; return; }
+  const hit = records.filter(r => OPT_FIELDS[k].some(f=>r[f]===old) || (k==='people' && (r.reviews||[]).some(x=>x.by===old)));
+  if(hit.length && await ask(`已存的案件中有 ${hit.length} 件用到「${old}」，要一起改成「${v}」嗎？\n（選「取消」只改清單，舊案件維持原樣）`)){
+    hit.forEach(r => { OPT_FIELDS[k].forEach(f=>{ if(r[f]===old) r[f]=v; }); if(k==='people') (r.reviews||[]).forEach(x=>{ if(x.by===old) x.by=v; }); });
+    if(persistAll()) flash('已更新 '+hit.length+' 件案件');
+  }
+  renderOpts();
 }
 function optAdd(k){
   const inp = $('#oi_'+k), v = inp.value.trim();
@@ -2233,10 +2264,26 @@ function donutHTML(Y){
   return `<div class="donut"><svg viewBox="0 0 ${S} ${S}" width="${S}" height="${S}" role="img" aria-label="今年處理狀態分布">${arcs}<text x="50%" y="48%" text-anchor="middle" font-size="26" font-weight="800" fill="#16213a">${Math.round(v[4]/tot*100)}%</text><text x="50%" y="62%" text-anchor="middle" font-size="12" fill="#5d6779">結案率</text></svg></div>
     <div class="dleg">${L.map((k,i)=>`<span><i style="background:${ramp[i]}"></i>${k} ${v[i]}</span>`).join('')}</div>`;
 }
-function hbarHTML(rows){
+function hbarHTML(rows, kind){
   if(!rows.length) return '<div class="muted small">今年還沒有案件。</div>';
   const mx = Math.max(1,...rows.map(r=>r[1]));
-  return rows.map(([t,n])=>`<div class="hb"><span>${esc(t)}</span><span class="b"><i style="width:${n/mx*100}%"></i></span><span class="v">${n}</span></div>`).join('');
+  return rows.map(([t,n])=>`<div class="hb${kind?' click':''}" ${kind?`role="button" tabindex="0" title="點開看是哪些案件" onclick="showGroup('${kind}',this.dataset.k)" onkeydown="if(event.key==='Enter')this.click()" data-k="${esc(t)}"`:''}><span>${esc(t)}</span><span class="b"><i style="width:${n/mx*100}%"></i></span><span class="v">${n}</span></div>`).join('');
+}
+/* 點統計長條 → 列出今年屬於這一項的案件，點案件可直接打開 */
+const GROUP_KEY = { type: r => r.defType ? typeName(r.defType) : '未選類別', dept: r => r.ownerDept || '尚未指定' };
+function showGroup(kind, key){
+  const yr = today().slice(0,4);
+  const rs = live().filter(r=>(r.foundDate||'').startsWith(yr) && GROUP_KEY[kind](r)===key).sort((a,b)=>(b.foundDate||'').localeCompare(a.foundDate||''));
+  const m = document.createElement('div'); m.className = 'modal';
+  m.innerHTML = `<div class="box glist" role="dialog" aria-modal="true"><div class="msg"><b>${kind==='dept'?'負責單位':'缺失類別'}：${esc(key)}</b>　<span class="muted small">今年 ${rs.length} 件，點案件可打開</span></div>
+    <div class="gwrap"><table class="st-table"><thead><tr><th>編號</th><th>發現日期</th><th>缺失區域</th><th>負責</th><th>狀態</th></tr></thead><tbody>
+    ${rs.map(r=>`<tr class="click" data-id="${esc(r.id)}"><td>${esc(r.id)}</td><td>${fmtDate(r.foundDate)}</td><td>${esc(r.area)}</td><td>${esc(ownerText(r))||'—'}</td><td>${esc(statusOf(r).t)}</td></tr>`).join('')}</tbody></table></div>
+    <div class="row" style="margin-top:12px"><button class="primary" id="gClose">關閉</button></div></div>`;
+  document.body.appendChild(m);
+  m.querySelector('#gClose').onclick = () => m.remove();
+  m.onclick = e => { if(e.target===m) m.remove(); };
+  m.querySelectorAll('tr[data-id]').forEach(tr => tr.onclick = () => { m.remove(); openRecord(tr.dataset.id); });
+  m.querySelector('#gClose').focus();
 }
 function statSideHTML(){
   const yr = today().slice(0,4), Y = live().filter(r=>(r.foundDate||'').startsWith(yr));
@@ -2244,8 +2291,8 @@ function statSideHTML(){
   const oc = new Map(); Y.forEach(r=>{ const k = r.ownerDept || '尚未指定'; oc.set(k,(oc.get(k)||0)+1); });
   const sorted = m => [...m.entries()].sort((a,b)=>b[1]-a[1]);
   return `<div class="card"><div class="phd"><b>處理狀態</b><span class="muted small">今年</span></div>${donutHTML(Y)}</div>
-    <div class="card"><div class="phd"><b>缺失類別</b><span class="muted small">今年</span></div>${hbarHTML(sorted(tc))}</div>
-    <div class="card"><div class="phd"><b>負責單位件數</b><span class="muted small">今年</span></div>${hbarHTML(sorted(oc))}</div>`;
+    <div class="card"><div class="phd"><b>缺失類別</b><span class="muted small">今年</span></div>${hbarHTML(sorted(tc),'type')}</div>
+    <div class="card"><div class="phd"><b>負責單位件數</b><span class="muted small">今年</span></div>${hbarHTML(sorted(oc),'dept')}</div>`;
 }
 async function showStats(){
   if(dirty && !(await ask('有尚未儲存的修改，確定要離開嗎？'))) return;
