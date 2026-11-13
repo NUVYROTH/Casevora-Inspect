@@ -78,8 +78,8 @@ main{max-width:1440px;margin:0 auto;padding:20px 16px 100px}
 .mini{list-style:none;margin:0;padding:0}
 .mini li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line);font-size:13.5px}
 .mini li:last-child{border:0}
-.hb.click{cursor:pointer;border-radius:6px}.hb.click:hover{background:var(--brand-soft)}
-.modal .box.glist{max-width:720px}.gwrap{max-height:60vh;overflow:auto}.gwrap tr.click{cursor:pointer}.gwrap tr.click:hover td{background:var(--brand-soft)}
+.hb.click{cursor:pointer;border-radius:6px}.st-tile.click{cursor:pointer}.st-tile.click:hover{box-shadow:0 0 0 2px var(--gold)}.hb.click:hover{background:var(--brand-soft)}
+.modal .box.glist{max-width:720px}.gwrap{max-height:60vh;overflow:auto}.gwrap th,.gwrap td{white-space:nowrap}.gwrap tr.click{cursor:pointer}.gwrap tr.click:hover td{background:var(--brand-soft)}
 /* 常用選項：下拉＋其它自己打字 */
 .combo .cmrow{display:flex;gap:6px;margin-top:6px}
 .combo .cmrow[hidden]{display:none}
@@ -2156,7 +2156,7 @@ function statCompute(range){
     const rs = cases.filter(r=>(r.category||'')===k);
     return {name:n, n:rs.length, over:rs.filter(r=>overSet.has(r.id)).length};
   });
-  return {range, total:cases.length, done:g.done.length, open:g.open.length, over:g.over.length, cross, del, areaList, cats, types, asOf, L};
+  return {range, total:cases.length, done:g.done.length, open:g.open.length, over:g.over.length, cross, del, areaList, cats, types, asOf, L, lists:{total:cases, ...g}};
 }
 function statSeries(view,y,a){
   const N = view==='month'?12:view==='quarter'?4:5, out=[];
@@ -2200,10 +2200,10 @@ function statHTML(view,y,a){
   return `
     <div class="st-sum ${bad?'warn':'ok'}">${esc(sum)}</div>
     <div class="st-tiles">
-      <div class="st-tile"><div class="n">${c.total}</div><div class="l">新增</div><div class="d">發現日期在本期</div></div>
-      <div class="st-tile t-done"><div class="n">${c.done}</div><div class="l">結案</div><div class="d">期限內完成</div></div>
-      <div class="st-tile t-open"><div class="n">${c.open}</div><div class="l">尚未結案</div><div class="d">未完成、期限未到</div></div>
-      <div class="st-tile t-over"><div class="n">${c.over}</div><div class="l">逾期</div><div class="d">${esc(cmp)}</div></div>
+      <div class="st-tile click" role="button" tabindex="0" title="點開看是哪些案件" onclick="showTileList('total')" onkeydown="if(event.key==='Enter')this.click()"><div class="n">${c.total}</div><div class="l">新增</div><div class="d">發現日期在本期</div></div>
+      <div class="st-tile t-done click" role="button" tabindex="0" title="點開看是哪些案件" onclick="showTileList('done')" onkeydown="if(event.key==='Enter')this.click()"><div class="n">${c.done}</div><div class="l">結案</div><div class="d">期限內完成</div></div>
+      <div class="st-tile t-open click" role="button" tabindex="0" title="點開看是哪些案件" onclick="showTileList('open')" onkeydown="if(event.key==='Enter')this.click()"><div class="n">${c.open}</div><div class="l">尚未結案</div><div class="d">未完成、期限未到</div></div>
+      <div class="st-tile t-over click" role="button" tabindex="0" title="點開看是哪些案件" onclick="showTileList('over')" onkeydown="if(event.key==='Enter')this.click()"><div class="n">${c.over}</div><div class="l">逾期</div><div class="d">${esc(cmp)}</div></div>
     </div>
     <div class="st-note">新增 ＝ 結案 ＋ 尚未結案 ＋ 逾期（${c.done} ＋ ${c.open} ＋ ${c.over} ＝ ${c.done+c.open+c.over}）。「結案」指複查通過或已結案、且在改善期限內完成；超過期限才完成的算「逾期」。</div>
     <div class="st-extra">
@@ -2269,21 +2269,31 @@ function hbarHTML(rows, kind){
   const mx = Math.max(1,...rows.map(r=>r[1]));
   return rows.map(([t,n])=>`<div class="hb${kind?' click':''}" ${kind?`role="button" tabindex="0" title="點開看是哪些案件" onclick="showGroup('${kind}',this.dataset.k)" onkeydown="if(event.key==='Enter')this.click()" data-k="${esc(t)}"`:''}><span>${esc(t)}</span><span class="b"><i style="width:${n/mx*100}%"></i></span><span class="v">${n}</span></div>`).join('');
 }
-/* 點統計長條 → 列出今年屬於這一項的案件，點案件可直接打開 */
-const GROUP_KEY = { type: r => r.defType ? typeName(r.defType) : '未選類別', dept: r => r.ownerDept || '尚未指定' };
-function showGroup(kind, key){
-  const yr = today().slice(0,4);
-  const rs = live().filter(r=>(r.foundDate||'').startsWith(yr) && GROUP_KEY[kind](r)===key).sort((a,b)=>(b.foundDate||'').localeCompare(a.foundDate||''));
+/* 案件清單小視窗：點一列就打開那筆案件 */
+function caseListModal(title, scope, rs){
   const m = document.createElement('div'); m.className = 'modal';
-  m.innerHTML = `<div class="box glist" role="dialog" aria-modal="true"><div class="msg"><b>${kind==='dept'?'負責單位':'缺失類別'}：${esc(key)}</b>　<span class="muted small">今年 ${rs.length} 件，點案件可打開</span></div>
-    <div class="gwrap"><table class="st-table"><thead><tr><th>編號</th><th>發現日期</th><th>缺失區域</th><th>負責</th><th>狀態</th></tr></thead><tbody>
-    ${rs.map(r=>`<tr class="click" data-id="${esc(r.id)}"><td>${esc(r.id)}</td><td>${fmtDate(r.foundDate)}</td><td>${esc(r.area)}</td><td>${esc(ownerText(r))||'—'}</td><td>${esc(statusOf(r).t)}</td></tr>`).join('')}</tbody></table></div>
+  m.innerHTML = `<div class="box glist" role="dialog" aria-modal="true"><div class="msg"><b>${title}</b>　<span class="muted small">${esc(scope)} ${rs.length} 件，點案件可打開</span></div>
+    <div class="gwrap"><table class="st-table"><thead><tr><th>編號</th><th>發現日期</th><th>缺失區域</th><th>負責</th><th>改善期限</th><th>狀態</th></tr></thead><tbody>
+    ${rs.map(r=>`<tr class="click" data-id="${esc(r.id)}"><td>${esc(r.id)}</td><td>${fmtDate(r.foundDate)}</td><td>${esc(r.area)}</td><td>${esc(ownerText(r))||'—'}</td><td>${fmtDate(r.deadline)||'—'}</td><td>${esc(statusOf(r).t)}${isOverdue(r)?'（逾期）':''}</td></tr>`).join('')}</tbody></table></div>
     <div class="row" style="margin-top:12px"><button class="primary" id="gClose">關閉</button></div></div>`;
   document.body.appendChild(m);
   m.querySelector('#gClose').onclick = () => m.remove();
   m.onclick = e => { if(e.target===m) m.remove(); };
   m.querySelectorAll('tr[data-id]').forEach(tr => tr.onclick = () => { m.remove(); openRecord(tr.dataset.id); });
   m.querySelector('#gClose').focus();
+}
+/* 統計四格（新增／結案／尚未結案／逾期）點開看案件 */
+function showTileList(k){
+  const rg = periodRange(statView,statY,stA()), c = statCompute(rg);
+  const rs = c.lists[k].slice().sort((a,b)=>(a.deadline||'').localeCompare(b.deadline||'') || (a.foundDate||'').localeCompare(b.foundDate||''));
+  caseListModal({total:'新增',done:'結案',open:'尚未結案',over:'逾期'}[k], rg.label, rs);
+}
+/* 點統計長條 → 列出今年屬於這一項的案件，點案件可直接打開 */
+const GROUP_KEY = { type: r => r.defType ? typeName(r.defType) : '未選類別', dept: r => r.ownerDept || '尚未指定' };
+function showGroup(kind, key){
+  const yr = today().slice(0,4);
+  const rs = live().filter(r=>(r.foundDate||'').startsWith(yr) && GROUP_KEY[kind](r)===key).sort((a,b)=>(b.foundDate||'').localeCompare(a.foundDate||''));
+  caseListModal(`${kind==='dept'?'負責單位':'缺失類別'}：${esc(key)}`, '今年', rs);
 }
 function statSideHTML(){
   const yr = today().slice(0,4), Y = live().filter(r=>(r.foundDate||'').startsWith(yr));
