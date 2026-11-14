@@ -47,6 +47,14 @@ header.topbar.compact .bsub{font-size:13px;letter-spacing:.12em}
 .atag{flex:none;background:#8a1c12;color:#fff;font-weight:700;font-size:12.5px;border-radius:4px;padding:2px 8px;margin-top:2px;letter-spacing:.1em}
 .honest{font-weight:700;font-size:17px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:8px;padding:8px 12px;margin-bottom:16px}
 main{max-width:1440px;margin:0 auto;padding:20px 16px 100px}
+body.wide main{max-width:none}
+.mrecs{display:grid;gap:8px}
+.mrec{border:1px solid var(--line);border-left:4px solid var(--warn);border-radius:8px;padding:8px 10px;background:var(--card);cursor:pointer}
+.mrec:hover{background:var(--brand-soft)}.mrec.ov{border-left-color:var(--bad)}.mrec.done{border-left-color:var(--ok)}
+.mr-h{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-size:13px;color:var(--muted)}.mr-h b{color:var(--ink)}
+.mr-loc{background:#16213a;color:#fff;border-radius:9px;padding:0 7px;font-size:11.5px;font-weight:700}
+.mr-st{margin-left:auto;font-weight:700;color:var(--warn)}.mrec.ov .mr-st{color:var(--bad)}.mrec.done .mr-st{color:var(--ok)}
+.mr-d{font-size:14px;margin:4px 0 2px;line-height:1.55}.mr-f{font-size:12px;color:var(--muted)}
 /* 版型：左側選單＋內容（比照 Casevoras 客訴分析助手） */
 .appg{display:grid;grid-template-columns:184px minmax(0,1fr);gap:18px;align-items:start}
 .appg>*{min-width:0}
@@ -83,7 +91,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 16px 100px}
 .mapbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.mapbar select{width:auto}.mapbar .seg{margin:0}
 .mzoom{display:inline-flex;gap:4px;align-items:center;margin-left:auto}.mzoom span{min-width:46px;text-align:center;font-size:13px}
 .mtip{flex-basis:100%;font-size:13px;color:var(--muted)}
-.mapwrap{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:14px;margin-top:14px;align-items:start}.mapwrap>*{min-width:0}
+.mapwrap{display:grid;grid-template-columns:minmax(0,1fr) clamp(360px,28vw,480px);gap:14px;margin-top:14px;align-items:start}.mapwrap>*{min-width:0}
 .mcol{min-width:0}
 .mapview{position:relative;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:10px 10px 0 0;cursor:grab}
 .mgrip{height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted);background:var(--brand-soft);border:1px solid var(--line);border-top:0;border-radius:0 0 10px 10px;cursor:ns-resize;touch-action:none;user-select:none}
@@ -978,7 +986,7 @@ function flowHTML(){
   return `<div class="card"><div class="flowh"><div><b>標準處理流程</b><br><span>用一致流程管理每一筆缺失</span></div><button onclick="openGuide()">查看作業指南 →</button></div>
     <div class="fsteps">${S.map(([t,d],i)=>`<div class="fstep"><div class="fno">STEP ${String(i+1).padStart(2,'0')}</div><b>${t}</b><p>${d}</p></div>`).join('')}</div></div>`;
 }
-function setSide(v){ document.querySelectorAll('#side button[data-v]').forEach(b=>b.classList.toggle('on', b.dataset.v===v)); }
+function setSide(v){ document.querySelectorAll('#side button[data-v]').forEach(b=>b.classList.toggle('on', b.dataset.v===v)); document.body.classList.toggle('wide', v==='map'); }
 function tab(k, t, n){ return `<button class="${listFilter===k?'on':''}" onclick="listFilter='${k}';listPage=1;showList()">${t}（${n}）</button>`; }
 
 /* 年份、月份（依發現日期） */
@@ -2096,13 +2104,16 @@ function renderMap(){
       <div class="card mside" id="mSide">${mapSideHTML()}</div>
     </div>` : `<div class="card empty" style="padding:30px">還沒有廠區地圖。請按「＋ 新增地圖（上傳平面圖）」上傳工廠平面圖（JPG、PNG）。<br><span class="small muted">同事已經做好地圖的話，可以請他「匯出地圖設定」給你，再按「匯入地圖設定」。</span></div>`}
     ${mapGuideHTML()}`;
-  if(m){ phGet(m.img).then(u=>{ const im = $('#mapImg'); if(im) im.src = u || ''; if(!u) say('平面圖找不到，請在編輯模式按「換圖片」重新上傳。'); }); mapBind(); mapGripBind(); }
+  if(m){ phGet(m.img).then(u=>{ const im = $('#mapImg'); if(im){ if(mapHRaw()==='fit') im.onload = () => mapFitHeight(true); im.src = u || ''; } if(!u) say('平面圖找不到，請在編輯模式按「換圖片」重新上傳。'); }); mapBind(); mapGripBind(); }
 }
 /* 地圖框高度：使用者可以自己拉，記在這個瀏覽器 */
 const KEY_MH = 'qaHygieneTracker_v1_mapH';
-function mapH(){ let h = 0; try{ h = parseInt(localStorage.getItem(KEY_MH),10) || 0; }catch(e){} return h ? h+'px' : '72vh'; }
+function mapHRaw(){ try{ return localStorage.getItem(KEY_MH) || ''; }catch(e){ return ''; } }
+function mapH(){ const h = parseInt(mapHRaw(),10) || 0; return h ? h+'px' : '72vh'; }
 function mapSetH(px){ const v = $('#mapView'); if(!v) return; px = Math.max(240, Math.round(px)); v.style.height = px+'px'; try{ localStorage.setItem(KEY_MH, px); }catch(e){} }
-function mapFitHeight(){ const v = $('#mapView'), i = $('#mapInner'); if(!v || !i) return; mapSetH(i.getBoundingClientRect().height + 2); flash('已調成整張顯示'); }
+/* 整張顯示：記成「fit」，之後換視窗大小或縮放也會自動整張 */
+function mapFitHeight(quiet){ const v = $('#mapView'), i = $('#mapInner'); if(!v || !i || !i.getBoundingClientRect().height) return; v.style.height = Math.max(240, Math.round(i.getBoundingClientRect().height + 2))+'px'; try{ localStorage.setItem(KEY_MH, 'fit'); }catch(e){} if(!quiet) flash('已調成整張顯示'); }
+window.addEventListener('resize', () => { if(mapHRaw()==='fit' && $('#mapInner')) mapFitHeight(true); });
 function mapGripBind(){
   const g = $('#mGrip'), v = $('#mapView'); if(!g || !v) return;
   let st = null, last = 0;
@@ -2182,10 +2193,14 @@ function mapGuideHTML(){
 }
 /* 右邊資料面板 */
 function mapRecTable(rs){
+  /* 歷史缺失改成一筆一張小卡：描述整段顯示，不用左右捲動 */
   if(!rs.length) return '<div class="muted small">還沒有缺失紀錄。</div>';
   rs = rs.slice().sort((a,b)=>(b.foundDate||'').localeCompare(a.foundDate||''));
-  return `<div class="gwrap" style="max-height:none"><table class="st-table"><thead><tr><th>編號</th><th>發現日期</th><th>缺失描述</th><th>狀態</th></tr></thead><tbody>
-    ${rs.map(r=>`<tr class="click" onclick="openRecord('${esc(r.id)}')"><td>${esc(r.id)}</td><td>${fmtDate(r.foundDate)}</td><td class="mdesc">${esc((r.rawDesc||'').slice(0,40))}</td><td>${esc(statusOf(r).t)}${isOverdue(r)?'（逾期）':''}</td></tr>`).join('')}</tbody></table></div>`;
+  return `<div class="mrecs">${rs.map(r=>{ const ov = isOverdue(r), lc = locById(r.locId);
+    return `<div class="mrec ${ov?'ov':r.closed?'done':''}" role="button" tabindex="0" onclick="openRecord('${esc(r.id)}')" onkeydown="if(event.key==='Enter')this.click()">
+      <div class="mr-h"><b>${esc(r.id)}</b><span>${fmtDate(r.foundDate)}</span>${lc?`<span class="mr-loc">${esc(lc.code||lc.name)}</span>`:''}<span class="mr-st">${esc(statusOf(r).t)}${ov?'（逾期）':''}</span></div>
+      <div class="mr-d">${esc(r.rawDesc||'（沒有描述）')}</div>
+      <div class="mr-f">${esc(r.defType?typeName(r.defType):'未選類別')}${r.deadline?`・期限 ${fmtDate(r.deadline)}`:''}</div></div>`; }).join('')}</div>`;
 }
 function mapStatHTML(s){ return `<div class="mstat"><div><b>${s.total}</b>累計缺失</div><div class="o"><b>${s.open}</b>未結案</div><div class="v"><b>${s.over}</b>逾期</div></div>`; }
 function mapSideHTML(){
