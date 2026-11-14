@@ -106,6 +106,8 @@ main{max-width:1440px;margin:0 auto;padding:20px 16px 100px}
 .mpoly .mtmp{fill:rgba(184,149,90,.15);stroke:var(--gold);stroke-width:2;stroke-dasharray:6 4;vector-effect:non-scaling-stroke}
 .mplab{position:absolute;transform:translate(4px,3px)}
 .mvtx,.mdot{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;background:#fff;border:2px solid #16213a;border-radius:3px;cursor:grab;z-index:3}
+.mmid{position:absolute;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:var(--gold);color:#fff;font-size:13px;font-weight:800;line-height:15px;text-align:center;font-style:normal;cursor:copy;z-index:3;opacity:.9;border:1px solid #fff}
+.mmid:hover{opacity:1;transform:scale(1.2)}
 .mdot{border-radius:50%;background:var(--gold);border-color:#fff;pointer-events:none}.mdot.first{width:16px;height:16px;margin:-8px 0 0 -8px;background:#16213a}
 .mdraw{position:absolute;border:2px dashed var(--gold);background:rgba(184,149,90,.18);pointer-events:none}
 .mside{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto}
@@ -2071,7 +2073,7 @@ function renderMap(){
         <svg class="mpoly" viewBox="0 0 100 100" preserveAspectRatio="none">${mapAreas().filter(a=>a.pts).map(a=>`<polygon data-aid="${a.id}" class="${MV.sel&&MV.sel.t==='area'&&MV.sel.id===a.id?'sel':''}" style="--c:${esc(a.color||'#b8955a')}" points="${ptsAttr(a.pts)}"/>`).join('')}
           ${MV.tool==='poly'&&MV.poly&&MV.poly.pts.length?`<polyline class="mtmp" points="${ptsAttr(MV.poly.pts)}"/>`:''}</svg>
         ${mapAreas().filter(a=>a.pts).map(a=>{ const s = mapStats(recsForArea(a)); return `<span class="mlab mplab" data-lab="${a.id}" style="left:${a.pts[0][0]*100}%;top:${a.pts[0][1]*100}%">${esc(a.name)}${s.open?` <b class="mcnt">${s.open}</b>`:''}</span>`; }).join('')}
-        ${MV.mode==='edit'&&MV.sel&&MV.sel.t==='area'&&areaById(MV.sel.id)&&areaById(MV.sel.id).pts&&MV.tool!=='poly'?areaById(MV.sel.id).pts.map((q,i)=>`<i class="mvtx" data-aid="${MV.sel.id}" data-vtx="${i}" style="left:${q[0]*100}%;top:${q[1]*100}%"></i>`).join(''):''}
+        ${MV.mode==='edit'&&MV.sel&&MV.sel.t==='area'&&areaById(MV.sel.id)&&areaById(MV.sel.id).pts&&MV.tool!=='poly'?(P=>P.map((q,i)=>{ const r = P[(i+1)%P.length]; return `<i class="mmid" data-aid="${MV.sel.id}" data-mid="${i}" title="拖曳可加一個角" style="left:${(q[0]+r[0])*50}%;top:${(q[1]+r[1])*50}%">+</i>`; }).join('')+P.map((q,i)=>`<i class="mvtx" data-aid="${MV.sel.id}" data-vtx="${i}" title="拖曳調整；連點兩下刪除這個角" style="left:${q[0]*100}%;top:${q[1]*100}%"></i>`).join(''))(areaById(MV.sel.id).pts):''}
         ${MV.tool==='poly'&&MV.poly?MV.poly.pts.map((q,i)=>`<i class="mdot ${i===0?'first':''}" style="left:${q[0]*100}%;top:${q[1]*100}%"></i>`).join(''):''}
         ${mapAreas().filter(a=>!a.pts).map(a=>{ const s = mapStats(recsForArea(a)); return `<div class="marea ${MV.sel&&MV.sel.t==='area'&&MV.sel.id===a.id?'sel':''}" data-aid="${a.id}" style="left:${a.x*100}%;top:${a.y*100}%;width:${a.w*100}%;height:${a.h*100}%;--c:${esc(a.color||'#b8955a')}"><span class="mlab">${esc(a.name)}${s.open?` <b class="mcnt">${s.open}</b>`:''}</span>${MV.mode==='edit'?'<i class="mres" data-res="1"></i>':''}</div>`; }).join('')}
         ${MAPD.locs.filter(l=>areaById(l.areaId)&&areaById(l.areaId).mapId===MV.mapId).map(l=>{ const s = mapStats(recsForLoc(l)); return `<div class="mpin ${s.open?'hot':''} ${MV.sel&&MV.sel.t==='loc'&&MV.sel.id===l.id?'sel':''}" data-lid="${l.id}" style="left:${l.x*100}%;top:${l.y*100}%" title="${esc(l.code+' '+l.name)}">${esc(l.code||'•')}</div>`; }).join('')}
@@ -2104,8 +2106,8 @@ function mapSideHTML(){
         <label class="f">框線顏色</label><input type="color" id="maColor" value="${esc(a.color||'#b8955a')}">
         <div class="row"><button class="primary" onclick="mapAreaSave('${a.id}')">儲存區域</button><button class="danger" onclick="mapAreaDel('${a.id}')">刪除區域</button></div>
         <button onclick="mapPolyStart('${a.id}')">⬠ 重新畫範圍（多邊形，例如 L 型）</button>
-        ${a.pts?'<div class="small muted">拖曳白色小方塊可以調整每個角。</div>':''}</div>`
-      : `<div class="small muted">${a.unit?'負責單位：'+esc(a.unit)+'　':''}${esc(a.desc||'')}</div>`}
+        ${a.pts?'<div class="notice info small" style="margin:6px 0 0">✏️ <b>修改範圍</b>：拖白色方塊＝移動那個角；拖邊中間的「＋」＝多加一個角（例如延伸到隔壁）；在角上<b>連點兩下</b>＝刪除那個角。</div>':`<button onclick="mapRectToPoly('${a.id}')">✏️ 修改範圍（改成可以加角、拉成不規則形狀）</button>`}</div>`
+      : `<div class="small muted">${a.unit?'負責單位：'+esc(a.unit)+'　':''}${esc(a.desc||'')}</div><button class="lite" style="margin-top:6px" onclick="mapEditRange('${a.id}')">✏️ 修改範圍</button>`}
       ${mapStatHTML(mapStats(recsForArea(a)))}
       <button class="primary" style="width:100%;margin:6px 0 6px" onclick="mapNewDefect('${a.id}','')">＋ 在「${esc(a.name)}」新增缺失</button>
       <button id="maXls" style="width:100%;margin:0 0 10px" onclick="mapAreaExport('${a.id}','')">📗 匯出這個區域（Excel，含照片）</button>
@@ -2145,6 +2147,7 @@ function mapBind(){
     const p = frac(e), aEl = e.target.closest('[data-aid]'), lEl = e.target.closest('.mpin');
     if(MV.tool==='poly'){ drag = {k:'poly', s:p}; }
     else if(MV.tool==='area'){ drag = {k:'draw', s:p}; }
+    else if(!MV.tool && MV.mode==='edit' && e.target.dataset.mid!==undefined){ const a = areaById(e.target.dataset.aid), i = +e.target.dataset.mid + 1; a.pts.splice(i, 0, [p.x, p.y]); drag = {k:'vtx', a, i, el:e.target, s:p, added:true}; mapPolyDom(a, false); }
     else if(!MV.tool && MV.mode==='edit' && e.target.dataset.vtx!==undefined){ const a = areaById(e.target.dataset.aid); drag = {k:'vtx', a, i:+e.target.dataset.vtx, el:e.target, s:p}; }
     else if(!MV.tool && MV.mode==='edit' && aEl && areaById(aEl.dataset.aid) && areaById(aEl.dataset.aid).pts && !lEl){ const a = areaById(aEl.dataset.aid); drag = {k:'mvp', a, s:p, o:a.pts.map(q=>q.slice())}; }
     else if(MV.tool==='loc'){ drag = {k:'place', s:p}; }
@@ -2163,7 +2166,7 @@ function mapBind(){
     if(drag.k==='mva'){ const a = drag.a; a.x = clamp01(Math.min(1-a.w, drag.o.x+dx)); a.y = clamp01(Math.min(1-a.h, drag.o.y+dy)); Object.assign(drag.el.style,{left:a.x*100+'%',top:a.y*100+'%'}); }
     if(drag.k==='res'){ const a = drag.a; a.w = Math.max(0.02, Math.min(1-a.x, drag.o.w+dx)); a.h = Math.max(0.02, Math.min(1-a.y, drag.o.h+dy)); const el = inner.querySelector(`[data-aid="${a.id}"]`); Object.assign(el.style,{width:a.w*100+'%',height:a.h*100+'%'}); }
     if(drag.k==='mvl'){ const l = drag.l; l.x = clamp01(drag.o.x+dx); l.y = clamp01(drag.o.y+dy); Object.assign(drag.el.style,{left:l.x*100+'%',top:l.y*100+'%'}); }
-    if(drag.k==='vtx'){ drag.a.pts[drag.i] = [p.x, p.y]; drag.moved = true; Object.assign(drag.el.style,{left:p.x*100+'%',top:p.y*100+'%'}); mapPolyDom(drag.a); }
+    if(drag.k==='vtx'){ drag.a.pts[drag.i] = [p.x, p.y]; Object.assign(drag.el.style,{left:p.x*100+'%',top:p.y*100+'%'}); mapPolyDom(drag.a, false); }
     if(drag.k==='mvp'){ const xs = drag.o.map(q=>q[0]), ys = drag.o.map(q=>q[1]);
       const ddx = Math.max(-Math.min(...xs), Math.min(1-Math.max(...xs), dx)), ddy = Math.max(-Math.min(...ys), Math.min(1-Math.max(...ys), dy));
       drag.a.pts = drag.o.map(q=>[q[0]+ddx, q[1]+ddy]); mapPolyDom(drag.a); }
@@ -2177,6 +2180,15 @@ function mapBind(){
       const P = MV.poly, b = inner.getBoundingClientRect();
       if(P.pts.length>=3){ const f0 = P.pts[0]; if(Math.hypot((p.x-f0[0])*b.width, (p.y-f0[1])*b.height) < 14){ mapPolyFinish(); return; } }
       P.pts.push([p.x, p.y]); renderMap(); return;
+    }
+    if(d.k==='vtx' && !d.moved && !d.added){
+      const now = Date.now(), L = MV.lastVtx;
+      if(L && L.aid===d.a.id && L.i===d.i && now-L.t<500){
+        MV.lastVtx = null;
+        if(d.a.pts.length<=3){ say('至少要留 3 個角。'); return; }
+        d.a.pts.splice(d.i,1); polyBox(d.a); saveMap(); renderMap(); flash('已刪除一個角'); return;
+      }
+      MV.lastVtx = {aid:d.a.id, i:d.i, t:now}; return;
     }
     if(d.k==='vtx' || d.k==='mvp'){ if(d.moved || d.k==='vtx'){ polyBox(d.a); saveMap(); } MV.sel = {t:'area', id:d.a.id}; renderMap(); return; }
     if(d.k==='draw'){
@@ -2218,11 +2230,14 @@ function mapBind(){
     }
   };
 }
+/* 修改範圍：切到編輯模式並選取；矩形先轉成 4 個角的多邊形，才能加角 */
+function mapEditRange(aid){ const a = areaById(aid); if(!a) return; if(!a.pts) a.pts = [[a.x,a.y],[a.x+a.w,a.y],[a.x+a.w,a.y+a.h],[a.x,a.y+a.h]]; saveMap(); MV.mode = 'edit'; MV.tool = ''; MV.sel = {t:'area', id:aid}; renderMap(); }
+function mapRectToPoly(aid){ mapEditRange(aid); flash('已改成可加角的範圍，拖邊中間的「＋」可以多加角'); }
 /* 拖曳多邊形時只更新那一塊，不重畫整張圖 */
-function mapPolyDom(a){
+function mapPolyDom(a, handles=true){
   const pg = document.querySelector(`polygon[data-aid="${a.id}"]`); if(pg) pg.setAttribute('points', ptsAttr(a.pts));
   const lb = document.querySelector(`[data-lab="${a.id}"]`); if(lb) Object.assign(lb.style,{left:a.pts[0][0]*100+'%',top:a.pts[0][1]*100+'%'});
-  document.querySelectorAll(`.mvtx[data-aid="${a.id}"]`).forEach(v=>{ const q = a.pts[+v.dataset.vtx]; Object.assign(v.style,{left:q[0]*100+'%',top:q[1]*100+'%'}); });
+  if(handles) document.querySelectorAll(`.mvtx[data-aid="${a.id}"]`).forEach(v=>{ const q = a.pts[+v.dataset.vtx]; Object.assign(v.style,{left:q[0]*100+'%',top:q[1]*100+'%'}); });
 }
 function mapAreaLocs(aid){ return MAPD.locs.filter(l=>l.areaId===aid); }
 /* 區域形狀：矩形（x,y,w,h）或多邊形（pts；另外保留外框 x,y,w,h 方便排序） */
