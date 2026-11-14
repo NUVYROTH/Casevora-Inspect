@@ -109,6 +109,16 @@ main{max-width:1440px;margin:0 auto;padding:20px 16px 100px}
 .mmid{position:absolute;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:var(--gold);color:#fff;font-size:13px;font-weight:800;line-height:15px;text-align:center;font-style:normal;cursor:copy;z-index:3;opacity:.9;border:1px solid #fff}
 .mmid:hover{opacity:1;transform:scale(1.2)}
 .mdot{border-radius:50%;background:var(--gold);border-color:#fff;pointer-events:none}.mdot.first{width:16px;height:16px;margin:-8px 0 0 -8px;background:#16213a}
+.mguide{margin-top:14px}.mguide summary{cursor:pointer;display:flex;gap:10px;align-items:baseline;list-style:none;font-size:16px}
+.mguide summary::-webkit-details-marker{display:none}.mguide summary::before{content:'▸';color:var(--gold)}.mguide[open] summary::before{content:'▾'}
+.mg-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+.mg-step{display:grid;grid-template-columns:220px minmax(0,1fr);gap:12px;align-items:start;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--card)}
+.mg-pic svg{width:100%;height:auto;display:block}
+.mg-h{font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.mg-h .no{display:inline-flex;width:22px;height:22px;border-radius:50%;background:var(--brand);color:#fff;align-items:center;justify-content:center;font-size:12px}
+.mg-txt p{margin:0 0 6px;font-size:14px}.mg-txt ul{margin:0 0 6px;padding-left:18px;font-size:14px}
+@media (max-width:1199px){.mg-grid{grid-template-columns:1fr}}
+@media (max-width:599px){.mg-step{grid-template-columns:1fr}.mg-pic{max-width:320px}}
 .mdraw{position:absolute;border:2px dashed var(--gold);background:rgba(184,149,90,.18);pointer-events:none}
 .mside{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto}
 .mside .mini li.click{cursor:pointer}.mside .mini li.click:hover{background:var(--brand-soft)}
@@ -2080,11 +2090,79 @@ function renderMap(){
         <div class="mdraw" id="mDraw" hidden></div>
       </div></div>
       <div class="card mside" id="mSide">${mapSideHTML()}</div>
-    </div>` : `<div class="card empty" style="padding:30px">還沒有廠區地圖。請按「＋ 新增地圖（上傳平面圖）」上傳工廠平面圖（JPG、PNG）。<br><span class="small muted">同事已經做好地圖的話，可以請他「匯出地圖設定」給你，再按「匯入地圖設定」。</span></div>`}`;
+    </div>` : `<div class="card empty" style="padding:30px">還沒有廠區地圖。請按「＋ 新增地圖（上傳平面圖）」上傳工廠平面圖（JPG、PNG）。<br><span class="small muted">同事已經做好地圖的話，可以請他「匯出地圖設定」給你，再按「匯入地圖設定」。</span></div>`}
+    ${mapGuideHTML()}`;
   if(m){ phGet(m.img).then(u=>{ const im = $('#mapImg'); if(im) im.src = u || ''; if(!u) say('平面圖找不到，請在編輯模式按「換圖片」重新上傳。'); }); mapBind(); }
 }
 function mapZoom(d){ const z = [0.5,0.75,1,1.5,2,3,4], i = z.indexOf(MV.zoom); MV.zoom = z[Math.max(0,Math.min(z.length-1,(i<0?2:i)+d))]; renderMap(); }
 
+/* 廠區地圖使用說明（圖＋文），放在地圖下方；圖都是內嵌 SVG，不用外部檔案 */
+const MG_SVG = {
+  upload: `<svg viewBox="0 0 220 130" role="img" aria-label="上傳平面圖示意"><rect x="8" y="8" width="204" height="114" rx="10" fill="#fffdf8" stroke="#e3d9c6"/>
+    <rect x="20" y="20" width="96" height="30" rx="6" fill="#16213a"/><text x="68" y="40" font-size="11" fill="#fff" text-anchor="middle">＋ 新增地圖</text>
+    <rect x="128" y="20" width="72" height="90" rx="4" fill="#fff" stroke="#16213a" stroke-width="2"/><path d="M128 64 h72 M164 20 v90" stroke="#16213a" stroke-width="1.5"/>
+    <text x="146" y="44" font-size="9" fill="#5d6779" text-anchor="middle">原料</text><text x="182" y="44" font-size="9" fill="#5d6779" text-anchor="middle">打漿</text><text x="146" y="90" font-size="9" fill="#5d6779" text-anchor="middle">包裝</text><text x="182" y="90" font-size="9" fill="#5d6779" text-anchor="middle">冷藏</text>
+    <path d="M68 58 v34 h48" fill="none" stroke="#b8955a" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#mgA)"/>
+    <text x="22" y="112" font-size="10" fill="#5d6779">JPG／PNG 平面圖</text>
+    <defs><marker id="mgA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#b8955a"/></marker></defs></svg>`,
+  rect: `<svg viewBox="0 0 220 130" role="img" aria-label="拖曳畫矩形區域示意"><rect x="8" y="8" width="204" height="114" rx="10" fill="#fff" stroke="#e3d9c6"/>
+    <rect x="40" y="30" width="120" height="70" fill="rgba(184,149,90,.15)" stroke="#b8955a" stroke-width="2" stroke-dasharray="6 4"/>
+    <circle cx="40" cy="30" r="5" fill="#16213a"/><text x="30" y="22" font-size="10" fill="#16213a">按住</text>
+    <path d="M44 34 L152 92" stroke="#16213a" stroke-width="1.5" marker-end="url(#mgB)"/><text x="150" y="114" font-size="10" fill="#16213a">拖到對角放開</text>
+    <text x="100" y="70" font-size="12" font-weight="700" fill="#16213a" text-anchor="middle">打漿區</text>
+    <defs><marker id="mgB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16213a"/></marker></defs></svg>`,
+  poly: `<svg viewBox="0 0 220 130" role="img" aria-label="逐角點選畫 L 型區域示意"><rect x="8" y="8" width="204" height="114" rx="10" fill="#fff" stroke="#e3d9c6"/>
+    <polygon points="40,24 180,24 180,106 110,106 110,66 40,66" fill="rgba(29,79,145,.12)" stroke="#1d4f91" stroke-width="2"/>
+    ${[[40,24],[180,24],[180,106],[110,106],[110,66],[40,66]].map(([x,y],i)=>`<circle cx="${x}" cy="${y}" r="${i?7:9}" fill="${i?'#b8955a':'#16213a'}" stroke="#fff" stroke-width="1.5"/><text x="${x}" y="${y+3.5}" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">${i+1}</text>`).join('')}
+    <text x="136" y="58" font-size="12" font-weight="700" fill="#16213a" text-anchor="middle">L 型倉庫</text>
+    <text x="16" y="96" font-size="10" fill="#5d6779">每個角點一下，</text><text x="16" y="110" font-size="10" fill="#5d6779">點回 ① 完成</text></svg>`,
+  range: `<svg viewBox="0 0 220 130" role="img" aria-label="修改範圍：拖白方塊、拖金色加號示意"><rect x="8" y="8" width="204" height="114" rx="10" fill="#fff" stroke="#e3d9c6"/>
+    <polygon points="30,24 120,24 170,96 30,96" fill="rgba(29,79,145,.12)" stroke="#1d4f91" stroke-width="2"/>
+    <path d="M120 24 L120 96" stroke="#1d4f91" stroke-width="1.2" stroke-dasharray="4 3"/>
+    ${[[30,24],[120,24],[30,96]].map(([x,y])=>`<rect x="${x-5}" y="${y-5}" width="10" height="10" rx="2" fill="#fff" stroke="#16213a" stroke-width="2"/>`).join('')}
+    <rect x="165" y="91" width="10" height="10" rx="2" fill="#fff" stroke="#16213a" stroke-width="2"/>
+    ${[[75,24],[75,96]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="7" fill="#b8955a" stroke="#fff"/><text x="${x}" y="${y+4}" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">+</text>`).join('')}
+    <circle cx="120" cy="60" r="7" fill="#b8955a" stroke="#fff"/><text x="120" y="64" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">+</text>
+    <path d="M126 60 L160 88" stroke="#b8955a" stroke-width="2" marker-end="url(#mgC)"/>
+    <text x="134" y="40" font-size="9.5" fill="#7a3d06">拖＋＝多一個角</text><text x="16" y="114" font-size="9.5" fill="#5d6779">□ 拖曳移動角・連點兩下刪除</text>
+    <defs><marker id="mgC" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#b8955a"/></marker></defs></svg>`,
+  pin: `<svg viewBox="0 0 220 130" role="img" aria-label="在區域內放位置標記示意"><rect x="8" y="8" width="204" height="114" rx="10" fill="#fff" stroke="#e3d9c6"/>
+    <rect x="24" y="22" width="172" height="86" rx="3" fill="rgba(184,149,90,.12)" stroke="#b8955a" stroke-width="2"/>
+    <rect x="30" y="28" width="46" height="15" rx="3" fill="#fffdf8"/><text x="53" y="39" font-size="9.5" font-weight="700" fill="#16213a" text-anchor="middle">打漿區</text>
+    <rect x="58" y="54" width="40" height="28" fill="none" stroke="#5d6779"/><text x="78" y="94" font-size="8.5" fill="#5d6779" text-anchor="middle">打漿機</text>
+    <path d="M40 100 H180" stroke="#888" stroke-width="4"/><text x="150" y="94" font-size="8.5" fill="#5d6779">排水溝</text>
+    <rect x="66" y="58" width="26" height="16" rx="8" fill="#16213a" stroke="#fff" stroke-width="1.5"/><text x="79" y="69.5" font-size="8.5" font-weight="700" fill="#fff" text-anchor="middle">P01</text>
+    <rect x="110" y="92" width="26" height="16" rx="8" fill="#b42318" stroke="#fff" stroke-width="1.5"/><text x="123" y="103.5" font-size="8.5" font-weight="700" fill="#fff" text-anchor="middle">P03</text>
+    <text x="140" y="56" font-size="9.5" fill="#b42318">紅色＝有未結案</text></svg>`,
+  view: `<svg viewBox="0 0 220 130" role="img" aria-label="點區域看缺失並新增缺失示意"><rect x="8" y="8" width="204" height="114" rx="10" fill="#fffdf8" stroke="#e3d9c6"/>
+    <text x="20" y="28" font-size="11" font-weight="700" fill="#16213a">🏭 打漿區</text>
+    ${[['3','累計',20,'#16213a'],['2','未結案',82,'#b45309'],['1','逾期',144,'#b42318']].map(([n,t,x,c])=>`<rect x="${x}" y="36" width="56" height="34" rx="6" fill="#f3ece0"/><text x="${x+28}" y="54" font-size="14" font-weight="800" fill="${c}" text-anchor="middle">${n}</text><text x="${x+28}" y="65" font-size="8" fill="#5d6779" text-anchor="middle">${t}</text>`).join('')}
+    <rect x="20" y="78" width="180" height="18" rx="5" fill="#16213a"/><text x="110" y="91" font-size="9.5" fill="#fff" text-anchor="middle">＋ 在「打漿區」新增缺失</text>
+    <rect x="20" y="100" width="180" height="16" rx="5" fill="#fff" stroke="#c9bda6"/><text x="110" y="111.5" font-size="9" fill="#16213a" text-anchor="middle">📗 匯出這個區域（Excel，含照片）</text></svg>`,
+  share: `<svg viewBox="0 0 220 130" role="img" aria-label="匯出匯入地圖設定給同事示意"><rect x="8" y="8" width="204" height="114" rx="10" fill="#fff" stroke="#e3d9c6"/>
+    <rect x="18" y="34" width="62" height="44" rx="6" fill="#e8f0fb" stroke="#1d4f91"/><text x="49" y="54" font-size="10" fill="#1d4f91" text-anchor="middle">你的電腦</text><text x="49" y="68" font-size="8.5" fill="#1d4f91" text-anchor="middle">匯出地圖設定</text>
+    <rect x="140" y="34" width="62" height="44" rx="6" fill="#e6f5ec" stroke="#167a3e"/><text x="171" y="54" font-size="10" fill="#167a3e" text-anchor="middle">同事電腦</text><text x="171" y="68" font-size="8.5" fill="#167a3e" text-anchor="middle">匯入地圖設定</text>
+    <path d="M84 56 H134" stroke="#b8955a" stroke-width="2.5" marker-end="url(#mgD)"/><text x="109" y="48" font-size="9" fill="#7a3d06" text-anchor="middle">.json 檔</text>
+    <text x="110" y="100" font-size="9.5" fill="#5d6779" text-anchor="middle">只含平面圖・區域・位置</text><text x="110" y="113" font-size="9.5" fill="#5d6779" text-anchor="middle">不含案件，不會蓋掉同事的資料</text>
+    <defs><marker id="mgD" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#b8955a"/></marker></defs></svg>`
+};
+function mapGuideHTML(){
+  const step = (n, t, svg, body) => `<div class="mg-step"><div class="mg-pic">${svg}</div><div class="mg-txt"><div class="mg-h"><span class="no">${n}</span>${t}</div>${body}</div></div>`;
+  let open = true; try{ open = localStorage.getItem('qaHygieneTracker_v1_mapGuide')!=='0'; }catch(e){}
+  return `<details class="card mguide" ${open?'open':''} ontoggle="try{localStorage.setItem('qaHygieneTracker_v1_mapGuide',this.open?'1':'0')}catch(e){}">
+    <summary><b>📖 廠區地圖使用說明</b><span class="muted small">（點這裡收合／展開）</span></summary>
+    <div class="mg-grid">
+      ${step(1,'上傳平面圖', MG_SVG.upload, `<p>按上方<b>「＋ 新增地圖（上傳平面圖）」</b>，選工廠平面圖（JPG、PNG），輸入名稱例如「一樓」。</p><p class="muted small">可以有多張地圖（一樓、二樓、不同廠區），用左上角的下拉切換。</p>`)}
+      ${step(2,'畫區域（方形）', MG_SVG.rect, `<p>切到<b>「✏️ 編輯模式」</b>，按<b>「▭ 新增區域」</b>，在平面圖上<b>按住拖曳</b>框出範圍，放開後輸入名稱。</p><p class="muted small">區域名稱會自動加進「缺失區域」的下拉選單。</p>`)}
+      ${step(3,'畫區域（L 型、不規則）', MG_SVG.poly, `<p>按<b>「⬠ 新增多邊形區域」</b>，沿著牆<b>每個角點一下</b>（L 型點 6 下），點回第一個點或按<b>「✔ 完成」</b>。</p><p class="muted small">點錯了按「↶ 退一步」。</p>`)}
+      ${step(4,'修改範圍', MG_SVG.range, `<p>點區域 → 按<b>「✏️ 修改範圍」</b>：</p><ul><li>拖<b>白色方塊</b>＝移動那個角</li><li>拖邊中間的<b>金色＋</b>＝多加一個角（例如延伸到隔壁）</li><li>在角上<b>連點兩下</b>＝刪除那個角</li></ul><p class="muted small">放開就自動存好。</p>`)}
+      ${step(5,'放細部位置', MG_SVG.pin, `<p>按<b>「📍 新增位置」</b>，在區域框裡點一下，輸入例如「P03 地面及排水溝」。</p><p class="muted small">有未結案缺失的位置會變紅色；編輯模式可以拖曳移動。</p>`)}
+      ${step(6,'看缺失、新增缺失、匯出', MG_SVG.view, `<p>切回<b>「👀 檢視模式」</b>，點區域或位置，右邊會出現累計／未結案／逾期件數與歷史缺失。</p><ul><li><b>「＋ 新增缺失」</b>：自動帶入區域、位置、負責單位</li><li><b>「📗 匯出這個區域」</b>：依缺失類別由多到少，含改善前後照片</li></ul>`)}
+      ${step(7,'給同事用同一張地圖', MG_SVG.share, `<p>按<b>「匯出地圖設定」</b>存成檔案給同事，同事按<b>「匯入地圖設定」</b>就有同一張地圖。</p><p class="muted small">「下載備份」也會把地圖一起備份。</p>`)}
+    </div>
+    <div class="notice warn small" style="margin-top:12px"><b>注意：</b>地圖和平面圖只存在<b>此裝置此瀏覽器</b>，不會自動同步到其他電腦，請定期「下載備份」。平面圖屬公司內部資料，不會上傳也不會送給 AI；截圖給別人前請先確認可以外流。畫區域建議用電腦，手機適合查看。</div>
+  </details>`;
+}
 /* 右邊資料面板 */
 function mapRecTable(rs){
   if(!rs.length) return '<div class="muted small">還沒有缺失紀錄。</div>';
