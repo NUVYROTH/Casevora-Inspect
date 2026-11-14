@@ -911,20 +911,69 @@ async function showList(){
             <li>無法多人共用同一份資料。</li>
             ${inClaude()?'<li>分享本工具給品管時，請使用「<b>Can view（可以檢視）</b>」權限，對方即可完整使用。</li>':''}
           </ul>
-          <h4 class="gh">操作步驟</h4>
-          <ol>
-            <li>按「新增衛生缺失」，填寫發現日期、缺失區域、缺失描述，選擇缺失類別，並由品管／品保人員選擇缺失等級。</li>
-            <li>在「文字整理」區按「範本整理」或「複製 AI 提示詞」（claude.ai 版另有「產生分析」），產生草稿，<b>確認無誤後再套用</b>。</li>
-            <li>按「儲存」。之後可從清單點選該筆紀錄，繼續填寫改善情形。</li>
-            <li>改善完成後，新增「複查紀錄」。複查未通過或缺失再次發生時，狀態會變成「持續追蹤」，不能結案。</li>
-            <li>結案條件全部符合後，由品管人員填寫姓名並確認結案。</li>
-            <li>「廠區地圖」：上傳平面圖、畫區域、放位置（P01、P03…），點區域或位置看歷史缺失、直接新增缺失；可「匯出地圖設定」給同事匯入（不含案件）。</li>
-            <li>清單頁可「匯出報表（Excel）」（可選年份／月份）、「改善前後報告」與「改善通知單 Excel（含照片）」；統計分析頁可「下載 Word 報表」（claude.ai 版也能用）；單筆紀錄頁可「列印／存成 PDF」。</li>
-          </ol>
+          <h4 class="gh">操作步驟（圖文說明）</h4>
+          ${listGuideStepsHTML()}
         </div>
       </details>
     </div>`;
   renderTable(); storageText();
+}
+/* 清單頁「操作步驟」圖文說明（版面跟廠區地圖說明一樣；圖都是內嵌 SVG） */
+const LG_BOX = (inner, label) => `<svg viewBox="0 0 220 130" role="img" aria-label="${label}"><rect x="8" y="8" width="204" height="114" rx="10" fill="#fffdf8" stroke="#e3d9c6"/>${inner}</svg>`;
+const lgFld = (x, y, w, t, v, c) => `<text x="${x}" y="${y}" font-size="8.5" fill="#5d6779">${t}</text><rect x="${x}" y="${y+3}" width="${w}" height="15" rx="3" fill="${c||'#f5efe3'}" stroke="#e3d9c6"/>${v?`<text x="${x+5}" y="${y+14}" font-size="8.5" fill="#16213a">${v}</text>`:''}`;
+const lgBtn = (x, y, w, t, dark, fill) => `<rect x="${x}" y="${y}" width="${w}" height="17" rx="4" fill="${fill||(dark?'#16213a':'#fff')}" stroke="${dark||fill?'none':'#c9bda6'}"/><text x="${x+w/2}" y="${y+12}" font-size="8.5" fill="${dark||fill?'#fff':'#16213a'}" text-anchor="middle">${t}</text>`;
+const LG_SVG = {
+  add: LG_BOX(`${lgBtn(18,16,84,'＋ 新增衛生缺失',1)}${lgFld(18,46,86,'發現日期 *','2026/10/26')}${lgFld(114,46,86,'缺失區域 *','包裝區')}${lgFld(18,72,182,'缺失描述 *','包裝區地面積水…')}${lgFld(18,98,86,'缺失類別 *','10 廢棄物…','#fff')}${lgFld(114,98,86,'缺失等級 *','一般缺失','#fff')}`, '新增衛生缺失示意'),
+  photo: LG_BOX(`<text x="18" y="26" font-size="9.5" font-weight="700" fill="#16213a">缺失照片</text>
+    <rect x="18" y="32" width="44" height="34" rx="4" fill="#cfe3d6" stroke="#c9bda6"/><rect x="66" y="32" width="44" height="34" rx="4" fill="#d9e4f2" stroke="#c9bda6"/>
+    ${lgBtn(118,40,84,'＋ 加入照片')}
+    <rect x="18" y="76" width="184" height="36" rx="6" fill="#fff4e0" stroke="#b8955a" stroke-dasharray="5 3"/><text x="110" y="92" font-size="9" fill="#7a3d06" text-anchor="middle">📋 點這裡，再按 Ctrl+V 貼上</text><text x="110" y="105" font-size="8.5" fill="#7a3d06" text-anchor="middle">（也可以把照片拖進來）</text>`, '加照片示意'),
+  text: LG_BOX(`${[['📝','範本整理',18],['📋','複製提示詞',84],['✨','產生分析',150]].map(([i,t,x],k)=>`<rect x="${x}" y="16" width="56" height="58" rx="6" fill="#fff" stroke="${k===2?'#b8955a':'#e3d9c6'}"/><text x="${x+28}" y="38" font-size="15" text-anchor="middle">${i}</text><text x="${x+28}" y="56" font-size="8" font-weight="700" fill="#16213a" text-anchor="middle">${t}</text><text x="${x+28}" y="67" font-size="6.8" fill="#5d6779" text-anchor="middle">${k===2?'claude.ai 版':'兩版都能用'}</text>`).join('')}
+    <path d="M110 80 v10" stroke="#b8955a" stroke-width="2"/>${lgBtn(58,94,104,'確認後「套用」→ 缺失描述',0,'#167a3e')}`, '文字整理示意'),
+  assign: LG_BOX(`${lgFld(18,22,86,'負責單位','生產課','#fff')}${lgFld(114,22,86,'負責人或說明','作業員 A','#fff')}${lgFld(18,56,86,'改善期限 *','2026/11/02','#fff4e0')}
+    <text x="114" y="62" font-size="7.8" fill="#7a3d06">一般：預設 7 天</text><text x="114" y="74" font-size="7.8" fill="#7a3d06">限期改善：預設 20 天</text>
+    ${lgBtn(18,94,60,'儲存',1)}<text x="86" y="106" font-size="8.5" fill="#5d6779">← 一定要按儲存</text>`, '指派負責單位與期限示意'),
+  improve: LG_BOX(`<text x="18" y="23" font-size="9.5" font-weight="700" fill="#16213a">3 實際改善情形</text>${lgFld(18,38,182,'如何改善','以刮水器清除並修理排水口')}${lgFld(18,66,86,'預計完成日期','2026/11/02')}${lgFld(114,66,86,'改善執行單位','生產課','#fff')}
+    <text x="18" y="106" font-size="8.5" fill="#5d6779">改善後照片</text><rect x="70" y="93" width="34" height="24" rx="3" fill="#d9e4f2" stroke="#c9bda6"/><rect x="108" y="93" width="34" height="24" rx="3" fill="#cfe3d6" stroke="#c9bda6"/>`, '填寫改善情形示意'),
+  review: LG_BOX(`<text x="18" y="26" font-size="9.5" font-weight="700" fill="#16213a">4 複查紀錄</text>
+    <rect x="18" y="32" width="184" height="22" rx="4" fill="#e6f5ec"/><text x="26" y="47" font-size="8.5" fill="#167a3e">第 1 次　2026/11/03　✅ 複查通過</text>
+    <rect x="18" y="58" width="184" height="22" rx="4" fill="#fdecea"/><text x="26" y="73" font-size="8.5" fill="#b42318">❌ 未通過／再次發生 → 持續追蹤</text>
+    ${lgBtn(18,92,96,'＋ 新增複查紀錄',1)}<text x="122" y="104" font-size="7.8" fill="#5d6779">先填「如何改善」</text>`, '複查示意'),
+  close: LG_BOX(`<text x="18" y="23" font-size="9.5" font-weight="700" fill="#16213a">5 結案確認（品管）</text>${lgFld(18,38,120,'結案確認人員 *','品管人員','#fff')}
+    <rect x="18" y="66" width="10" height="10" rx="2" fill="#167a3e"/><text x="23" y="74.5" font-size="8" fill="#fff" text-anchor="middle">✓</text><text x="34" y="75" font-size="8.5" fill="#16213a">已確認改善完成、符合結案條件</text>
+    ${lgBtn(18,92,70,'確認結案',0,'#167a3e')}<text x="96" y="104" font-size="8.5" fill="#5d6779">結案後資料鎖定</text>`, '結案示意'),
+  find: LG_BOX(`${['未結案','逾期','已結案','全部'].map((t,i)=>`<rect x="${18+i*46}" y="16" width="42" height="16" rx="8" fill="${i?'#fff':'#16213a'}" stroke="#c9bda6"/><text x="${39+i*46}" y="27.5" font-size="8" fill="${i?'#16213a':'#fff'}" text-anchor="middle">${t}</text>`).join('')}
+    <rect x="18" y="40" width="184" height="18" rx="4" fill="#f5efe3" stroke="#e3d9c6"/><text x="26" y="52.5" font-size="8.5" fill="#16213a">🔍 10/26　／包裝區／作業員 A／編號</text>
+    ${['全部缺失類別','2026 年','10 月'].map((t,i)=>`<rect x="${18+i*62}" y="66" width="58" height="16" rx="3" fill="#fff" stroke="#c9bda6"/><text x="${47+i*62}" y="77.5" font-size="7.8" fill="#16213a" text-anchor="middle">${t} ▾</text>`).join('')}
+    <text x="18" y="104" font-size="8.5" fill="#5d6779">日期・區域・負責人員・編號都能搜</text>`, '搜尋篩選示意'),
+  report: LG_BOX(`${[['📗 匯出報表（Excel）','公司表單／完整資料，可選年月、狀態'],['📸 改善前後報告','網頁版，可列印或存 PDF'],['📗 改善通知單 Excel','照公司通知單格式，含照片'],['📄 統計頁：下載 Word 報表','月報／季報／年報']].map(([t,d],i)=>`<rect x="18" y="${16+i*25}" width="184" height="21" rx="4" fill="#fff" stroke="#e3d9c6"/><text x="24" y="${29.5+i*25}" font-size="8.5" font-weight="700" fill="#16213a">${t}</text><text x="196" y="${29.5+i*25}" font-size="6.8" fill="#5d6779" text-anchor="end">${d}</text>`).join('')}`, '報表與匯出示意'),
+  backup: LG_BOX(`<rect x="18" y="22" width="76" height="46" rx="6" fill="#e8f0fb" stroke="#1d4f91"/><text x="56" y="42" font-size="9" fill="#1d4f91" text-anchor="middle">這台電腦</text><text x="56" y="56" font-size="8" fill="#1d4f91" text-anchor="middle">這個瀏覽器</text>
+    <path d="M98 45 H126" stroke="#b8955a" stroke-width="2.5" marker-end="url(#lgA)"/><text x="112" y="38" font-size="7.5" fill="#7a3d06" text-anchor="middle">下載備份</text>
+    <rect x="130" y="22" width="72" height="46" rx="6" fill="#e6f5ec" stroke="#167a3e"/><text x="166" y="42" font-size="9" fill="#167a3e" text-anchor="middle">雲端硬碟</text><text x="166" y="56" font-size="8" fill="#167a3e" text-anchor="middle">.json 備份檔</text>
+    <text x="110" y="88" font-size="8.5" fill="#b42318" text-anchor="middle">⚠ 清除瀏覽資料、無痕視窗 → 資料會不見</text><text x="110" y="104" font-size="8.5" fill="#5d6779" text-anchor="middle">每 2 週～1 個月備份一次</text>
+    <defs><marker id="lgA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#b8955a"/></marker></defs>`, '備份示意'),
+  map: LG_BOX(`<rect x="18" y="16" width="120" height="96" rx="3" fill="#fff" stroke="#16213a" stroke-width="1.5"/>
+    <rect x="22" y="20" width="56" height="44" fill="#b4231833" stroke="#b42318" stroke-width="1.5"/><text x="50" y="45" font-size="8.5" font-weight="700" fill="#16213a" text-anchor="middle">打漿區</text>
+    <rect x="80" y="20" width="54" height="44" fill="#16713e22" stroke="#167a3e" stroke-width="1.5"/><text x="107" y="45" font-size="8.5" font-weight="700" fill="#16213a" text-anchor="middle">冷藏庫</text>
+    <rect x="22" y="66" width="112" height="42" fill="#d9770633" stroke="#d97706" stroke-width="1.5"/><text x="78" y="90" font-size="8.5" font-weight="700" fill="#16213a" text-anchor="middle">包裝區</text>
+    <rect x="38" y="52" width="22" height="12" rx="6" fill="#b42318"/><text x="49" y="61" font-size="7" font-weight="700" fill="#fff" text-anchor="middle">P03</text>
+    <text x="146" y="40" font-size="8.5" fill="#16213a">點區域</text><text x="146" y="54" font-size="8.5" fill="#16213a">→ 看缺失</text><text x="146" y="68" font-size="8.5" fill="#16213a">→ 新增缺失</text><text x="146" y="82" font-size="8.5" fill="#16213a">→ 現場稽核</text>`, '廠區地圖示意')
+};
+function listGuideStepsHTML(){
+  const step = (n, t, svg, body) => `<div class="mg-step"><div class="mg-pic">${svg}</div><div class="mg-txt"><div class="mg-h"><span class="no">${n}</span>${t}</div>${body}</div></div>`;
+  return `<div class="mg-grid">
+    ${step(1,'新增衛生缺失', LG_SVG.add, `<p>按<b>「＋ 新增衛生缺失」</b>，填<b>發現日期、缺失區域、缺失描述</b>，選<b>缺失類別</b>，再由品管／品保人員選<b>缺失等級</b>（打 * 的都要填才能儲存）。</p><p class="muted small">區域、人員可以從「常用選項」下拉選；不常用的選「其它（自己打字）」。</p>`)}
+    ${step(2,'加缺失照片', LG_SVG.photo, `<p>按<b>「＋ 加入照片」</b>選照片；電腦上也可以先點<b>虛線框</b>，再按 <b>Ctrl+V</b> 貼上截圖，或直接把照片拖進來。</p><p class="muted small">照片會自動壓縮，每區最多 10 張。</p>`)}
+    ${step(3,'整理缺失描述', LG_SVG.text, `<p>在「文字整理」選一種：<b>📝 範本整理</b>（不是 AI）、<b>📋 複製 AI 提示詞</b>、<b>✨ 產生分析</b>（claude.ai 版）。</p><p>草稿出來後<b>確認無誤再按「套用」</b>，不會自動存。</p><p class="muted small">描述不要寫人名、電話，改用「作業員 A」等代稱。</p>`)}
+    ${step(4,'指派負責單位與期限、儲存', LG_SVG.assign, `<p>填<b>負責單位</b>、<b>負責人</b>與<b>改善期限</b>（一般缺失預設 7 天、限期改善缺失預設 20 天），然後按<b>「儲存」</b>。</p><p class="muted small">之後從清單點這筆案件就能繼續填。</p>`)}
+    ${step(5,'填寫改善情形', LG_SVG.improve, `<p>改善單位完成後，填<b>如何改善、預計完成日期、改善執行單位</b>，加<b>改善後照片</b>，按「儲存」。</p><p class="muted small">再次發生的缺失要另外填「發生原因確認」。</p>`)}
+    ${step(6,'複查', LG_SVG.review, `<p>到現場確認後按<b>「＋ 新增複查紀錄」</b>，選複查結果。</p><p>複查<b>未通過</b>或<b>缺失再次發生</b>時，狀態會變「持續追蹤」，<b>不能結案</b>。</p>`)}
+    ${step(7,'結案確認', LG_SVG.close, `<p>結案條件都符合後，由<b>品管人員</b>填姓名、勾選確認，按<b>「確認結案」</b>。</p><p class="muted small">結案後資料會鎖定；需要修改可以「撤銷結案」。</p>`)}
+    ${step(8,'查找案件', LG_SVG.find, `<p>用分頁看<b>未結案、逾期、待結案確認、已結案</b>；搜尋欄可以打<b>日期（例：10/26）、缺失區域、負責人員、編號</b>；也能依類別、年份、月份篩選。</p>`)}
+    ${step(9,'報表與匯出', LG_SVG.report, `<ul><li><b>匯出報表（Excel）</b>：選年月、狀態，公司表單格式或完整資料</li><li><b>改善前後報告</b>：網頁版，可列印／存 PDF</li><li><b>改善通知單 Excel</b>：照公司通知單格式，含照片</li><li>統計分析頁：<b>下載 Word 報表</b></li></ul><p class="muted small">有勾選案件時，報告只做勾選的那幾件。</p>`)}
+    ${step(10,'備份資料', LG_SVG.backup, `<p>資料只存在<b>這台電腦的這個瀏覽器</b>。請<b>每兩週到一個月按一次「下載備份」</b>，存到雲端；換電腦時用「從備份還原」。</p><p class="muted small">備份會連照片、常用選項、廠區地圖、稽核紀錄一起存。</p>`)}
+    ${step(11,'廠區地圖', LG_SVG.map, `<p>左邊選單<b>「🗺️ 廠區地圖」</b>：上傳平面圖、畫區域、放位置，點區域看歷史缺失、直接新增缺失、現場稽核。</p><p><a href="#" onclick="showMap();return false">→ 打開廠區地圖（下方有完整圖文說明）</a></p>`)}
+  </div>`;
 }
 /* ---------- 清單頁的數字卡與右側面板 ---------- */
 function ym(d){ return (d||'').slice(0,7); }
