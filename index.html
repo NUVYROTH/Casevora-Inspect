@@ -140,6 +140,18 @@ body.wide main{max-width:none}
 .ar-btns button{padding:6px 12px}.ar-btns button.on.ok{background:var(--ok);color:#fff;border-color:var(--ok)}.ar-btns button.on.bad{background:var(--bad);color:#fff;border-color:var(--bad)}
 .ar-btns button.on.warn{background:var(--warn);color:#fff;border-color:var(--warn)}.ar-btns button.on.muted{background:#6b7280;color:#fff;border-color:#6b7280}
 .arow textarea{margin-top:4px}.ar-res{margin-top:6px}.ar-res .ok{color:var(--ok)}.ar-res .bad{color:var(--bad)}.ar-res .warn{color:var(--warn)}
+.mlegend{flex-basis:100%;display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--muted)}.mlegend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.marea.rk{background:color-mix(in srgb,var(--c) 22%,transparent)}.mpoly polygon.rk{fill:color-mix(in srgb,var(--c) 22%,transparent)}
+.mpin.rk-red{background:#b42318}.mpin.rk-yellow{background:#d97706}.mpin.rk-green{background:#167a3e}.mpin.rk-gray{background:#9aa3b2}
+.mrisk{font-size:12.5px;font-weight:700;color:var(--rc);margin:-4px 0 8px}
+.mr-rep{font-size:11.5px;font-weight:700;color:#7a3d06;background:#fff4e0;border-radius:9px;padding:0 7px}
+.mstats{margin-top:14px}.mstats summary{cursor:pointer;display:flex;gap:10px;align-items:baseline;list-style:none;font-size:16px}.mstats summary::-webkit-details-marker{display:none}
+.mstats summary::before{content:'▸';color:var(--gold)}.mstats[open] summary::before{content:'▾'}
+.mkpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px}.mkpi div{background:var(--brand-soft);border-radius:8px;padding:8px;text-align:center;font-size:12px;color:var(--muted)}
+.mkpi b{display:block;font-size:22px;color:var(--ink)}.mkpi .o b{color:var(--warn)}.mkpi .v b{color:var(--bad)}.mkpi .g b{color:var(--ok)}
+.mcharts{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:10px}.mcharts .hb{grid-template-columns:minmax(80px,150px) 1fr auto}.mcharts .hb.click{cursor:pointer}.mcharts .hb.click:hover{background:var(--brand-soft)}
+.mhot{margin:4px 0;padding-left:20px}.mhot li{padding:4px 0;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:2px 8px;cursor:pointer}.mhot li:hover{background:var(--brand-soft)}
+.small .bad,small.bad{color:var(--bad)}
 .mdraw{position:absolute;border:2px dashed var(--gold);background:rgba(184,149,90,.18);pointer-events:none}
 .mside{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto}
 .mside .mini li.click{cursor:pointer}.mside .mini li.click:hover{background:var(--brand-soft)}
@@ -604,7 +616,7 @@ async function phMoveOut(list){
 /* 刪掉沒有任何案件用到的照片（一天內新增的先不刪，可能是別的分頁還沒儲存的） */
 async function phCleanup(){
   try{
-    const used = new Set(records.flatMap(r => (r.photos||[]).concat(r.improvePhotos||[])).filter(isRef).concat(MAPD.maps.map(m=>m.img), AUDITS.flatMap(au=>au.results.flatMap(r=>r.photos||[]))));
+    const used = new Set(records.flatMap(r => (r.photos||[]).concat(r.improvePhotos||[])).filter(isRef).concat(mapImageIds(), AUDITS.flatMap(au=>au.results.flatMap(r=>r.photos||[]))));
     const keys = await phReq('readonly', st => st.getAllKeys());
     const dayAgo = Date.now() - 86400000;
     for(const k of keys){
@@ -2010,7 +2022,7 @@ async function backup(){
   const rs = live();
   await preloadPhotos(rs);
   const out = rs.map(r => Object.assign({}, r, { photos:r.photos.map(phSync).filter(Boolean), improvePhotos:r.improvePhotos.map(phSync).filter(Boolean) }));
-  const mapImages = {}; for(const m of MAPD.maps){ mapImages[m.img] = await phGet(m.img); }
+  const mapImages = {}; for(const id of mapImageIds()){ mapImages[id] = await phGet(id); }
   const audits = await auditsForBackup();
   download(JSON.stringify({app:'qaHygieneTracker', version:2, exportedAt:new Date().toISOString(), records:out, tombs, opts:OPTS, map:MAPD, mapImages, audits}, null, 1),
     `hygiene_backup_${today()}.json`, 'application/json');
@@ -2054,6 +2066,7 @@ let MAPD = loadMap();
 function saveMap(){ try{ localStorage.setItem(KEY_M, JSON.stringify(MAPD)); return true; }catch(e){ say('廠區地圖存不進去，瀏覽器的儲存空間可能已滿。'); return false; } }
 const mapUid = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
 const MV = { mapId:'', mode:'view', tool:'', zoom:1, sel:null };
+let REP = new Set();
 const clamp01 = v => Math.max(0, Math.min(1, v));
 function mapAreas(mid){ return MAPD.areas.filter(a=>a.mapId===(mid||MV.mapId)); }
 function areaById(id){ return MAPD.areas.find(a=>a.id===id); }
@@ -2075,6 +2088,7 @@ async function showMap(focus){
 }
 function renderMap(){
   const m = MAPD.maps.find(x=>x.id===MV.mapId);
+  REP = repeatSet();
   $('#app').innerHTML = `
     <div class="hcard">
       <div class="hc-top"><div class="ptitle big"><h1>廠區地圖</h1><span class="muted">平面圖上點區域、位置，查看歷史缺失並直接新增缺失</span></div><span class="lbadge">● 本機資料模式</span></div>
@@ -2099,25 +2113,29 @@ function renderMap(){
         <button onclick="mapRename()">地圖改名</button>
         <button onclick="this.nextElementSibling.click()">換圖片</button><input type="file" accept="image/jpeg,image/png" hidden onchange="mapUpload(this,MV.mapId)">
         <button class="danger" onclick="mapDelete()">刪除地圖</button>` : ''}
+      ${MV.mode==='view'?`<button class="${MV_RISK?'primary':''}" onclick="mapRiskToggle()" title="依缺失狀況自動上色">🎨 風險顏色${MV_RISK?'（開）':'（關）'}</button>`:''}
       <span class="mzoom"><button onclick="mapZoom(-1)" aria-label="縮小">－</button><span>${Math.round(MV.zoom*100)}%</span><button onclick="mapZoom(1)" aria-label="放大">＋</button><button onclick="MV.zoom=1;renderMap()">適應畫面</button><button onclick="mapFitHeight()" title="地圖框拉高到整張平面圖都看得到，不用上下捲動">⤢ 整張顯示</button></span>
       <div class="mtip">${MV.tool==='poly'?`沿著區域邊界「每個角點一下」（L 型倉庫點 6 個角），點回第一個點或按「完成」結束。已點 ${MV.poly?MV.poly.pts.length:0} 個角　<button class="primary" onclick="mapPolyFinish()">✔ 完成</button> <button onclick="if(MV.poly&&MV.poly.pts.length){MV.poly.pts.pop();renderMap()}">↶ 退一步</button> <button onclick="mapPolyCancel()">取消</button>`:MV.tool==='area'?'在平面圖上「按住拖曳」畫出區域範圍。':MV.tool==='loc'?'在區域框裡「點一下」放位置標記。':MV.mode==='edit'?'編輯模式：拖曳可移動區域與位置，拉區域右下角可改大小；點選後可在右邊修改或刪除。':'檢視模式：點區域或位置看缺失紀錄；在空白處按住拖曳可移動平面圖。'}</div>
+      ${riskLegendHTML()}
     </div>
     <div class="mapwrap">
       <div class="mcol"><div class="mapview ${MV.mode==='edit'?'editing':''} ${MV.tool?'tool':''}" id="mapView" style="height:${mapH()}"><div class="mapinner" id="mapInner" style="width:${MV.zoom*100}%">
         <img id="mapImg" alt="${esc(m.name)}" draggable="false">
-        <svg class="mpoly" viewBox="0 0 100 100" preserveAspectRatio="none">${mapAreas().filter(a=>a.pts).map(a=>`<polygon data-aid="${a.id}" class="${MV.sel&&MV.sel.t==='area'&&MV.sel.id===a.id?'sel':''}" style="--c:${esc(a.color||'#b8955a')}" points="${ptsAttr(a.pts)}"/>`).join('')}
+        <svg class="mpoly" viewBox="0 0 100 100" preserveAspectRatio="none">${mapAreas().filter(a=>a.pts).map(a=>`<polygon data-aid="${a.id}" class="${MV.sel&&MV.sel.t==='area'&&MV.sel.id===a.id?'sel':''} ${MV_RISK&&MV.mode==='view'?'rk':''}" style="--c:${esc(areaColor(a, REP))}" points="${ptsAttr(a.pts)}"/>`).join('')}
           ${MV.tool==='poly'&&MV.poly&&MV.poly.pts.length?`<polyline class="mtmp" points="${ptsAttr(MV.poly.pts)}"/>`:''}</svg>
         ${mapAreas().filter(a=>a.pts).map(a=>{ const s = mapStats(recsForArea(a)); return `<span class="mlab mplab" data-lab="${a.id}" style="left:${a.pts[0][0]*100}%;top:${a.pts[0][1]*100}%">${esc(a.name)}${s.open?` <b class="mcnt">${s.open}</b>`:''}</span>`; }).join('')}
         ${MV.mode==='edit'&&MV.sel&&MV.sel.t==='area'&&areaById(MV.sel.id)&&areaById(MV.sel.id).pts&&MV.tool!=='poly'?(P=>P.map((q,i)=>{ const r = P[(i+1)%P.length]; return `<i class="mmid" data-aid="${MV.sel.id}" data-mid="${i}" title="拖曳可加一個角" style="left:${(q[0]+r[0])*50}%;top:${(q[1]+r[1])*50}%">+</i>`; }).join('')+P.map((q,i)=>`<i class="mvtx" data-aid="${MV.sel.id}" data-vtx="${i}" title="拖曳調整；連點兩下刪除這個角" style="left:${q[0]*100}%;top:${q[1]*100}%"></i>`).join(''))(areaById(MV.sel.id).pts):''}
         ${MV.tool==='poly'&&MV.poly?MV.poly.pts.map((q,i)=>`<i class="mdot ${i===0?'first':''}" style="left:${q[0]*100}%;top:${q[1]*100}%"></i>`).join(''):''}
-        ${mapAreas().filter(a=>!a.pts).map(a=>{ const s = mapStats(recsForArea(a)); return `<div class="marea ${MV.sel&&MV.sel.t==='area'&&MV.sel.id===a.id?'sel':''}" data-aid="${a.id}" style="left:${a.x*100}%;top:${a.y*100}%;width:${a.w*100}%;height:${a.h*100}%;--c:${esc(a.color||'#b8955a')}"><span class="mlab">${esc(a.name)}${s.open?` <b class="mcnt">${s.open}</b>`:''}</span>${MV.mode==='edit'?'<i class="mres" data-res="1"></i>':''}</div>`; }).join('')}
-        ${MAPD.locs.filter(l=>areaById(l.areaId)&&areaById(l.areaId).mapId===MV.mapId).map(l=>{ const s = mapStats(recsForLoc(l)); return `<div class="mpin ${s.open?'hot':''} ${MV.sel&&MV.sel.t==='loc'&&MV.sel.id===l.id?'sel':''}" data-lid="${l.id}" style="left:${l.x*100}%;top:${l.y*100}%" title="${esc(l.code+' '+l.name)}">${esc(l.code||'•')}</div>`; }).join('')}
+        ${mapAreas().filter(a=>!a.pts).map(a=>{ const s = mapStats(recsForArea(a)); return `<div class="marea ${MV.sel&&MV.sel.t==='area'&&MV.sel.id===a.id?'sel':''} ${MV_RISK&&MV.mode==='view'?'rk':''}" data-aid="${a.id}" style="left:${a.x*100}%;top:${a.y*100}%;width:${a.w*100}%;height:${a.h*100}%;--c:${esc(areaColor(a, REP))}"><span class="mlab">${esc(a.name)}${s.open?` <b class="mcnt">${s.open}</b>`:''}</span>${MV.mode==='edit'?'<i class="mres" data-res="1"></i>':''}</div>`; }).join('')}
+        ${MAPD.locs.filter(l=>areaById(l.areaId)&&areaById(l.areaId).mapId===MV.mapId).map(l=>{ const s = mapStats(recsForLoc(l)); return `<div class="mpin ${locRiskCls(l, REP)} ${MV.sel&&MV.sel.t==='loc'&&MV.sel.id===l.id?'sel':''}" data-lid="${l.id}" style="left:${l.x*100}%;top:${l.y*100}%" title="${esc(l.code+' '+l.name)}">${esc(l.code||'•')}</div>`; }).join('')}
         <div class="mdraw" id="mDraw" hidden></div>
       </div></div>
       <div class="mgrip" id="mGrip" role="separator" aria-label="拖曳調整地圖高度" title="上下拖曳調整高度；連點兩下＝整張顯示">⇕ 拖這裡調整地圖高度（連點兩下＝整張顯示）</div></div>
       <div class="card mside" id="mSide">${mapSideHTML()}</div>
-    </div>` : `<div class="card empty" style="padding:30px">還沒有廠區地圖。請按「＋ 新增地圖（上傳平面圖）」上傳工廠平面圖（JPG、PNG）。<br><span class="small muted">同事已經做好地圖的話，可以請他「匯出地圖設定」給你，再按「匯入地圖設定」。</span></div>`}
+    </div>
+    ${mapStatsHTML()}` : `<div class="card empty" style="padding:30px">還沒有廠區地圖。請按「＋ 新增地圖（上傳平面圖）」上傳工廠平面圖（JPG、PNG）。<br><span class="small muted">同事已經做好地圖的話，可以請他「匯出地圖設定」給你，再按「匯入地圖設定」。</span></div>`}
     ${mapGuideHTML()}`;
+  hydrate($('#mSide'));
   if(m){ phGet(m.img).then(u=>{ const im = $('#mapImg'); if(im){ if(mapHRaw()==='fit') im.onload = () => mapFitHeight(true); im.src = u || ''; } if(!u) say('平面圖找不到，請在編輯模式按「換圖片」重新上傳。'); }); mapBind(); mapGripBind(); }
 }
 /* 地圖框高度：使用者可以自己拉，記在這個瀏覽器 */
@@ -2215,7 +2233,7 @@ function mapRecTable(rs){
   rs = rs.slice().sort((a,b)=>(b.foundDate||'').localeCompare(a.foundDate||''));
   return `<div class="mrecs">${rs.map(r=>{ const ov = isOverdue(r), lc = locById(r.locId);
     return `<div class="mrec ${ov?'ov':r.closed?'done':''}" role="button" tabindex="0" onclick="openRecord('${esc(r.id)}')" onkeydown="if(event.key==='Enter')this.click()">
-      <div class="mr-h"><b>${esc(r.id)}</b><span>${fmtDate(r.foundDate)}</span>${lc?`<span class="mr-loc">${esc(lc.code||lc.name)}</span>`:''}<span class="mr-st">${esc(statusOf(r).t)}${ov?'（逾期）':''}</span></div>
+      <div class="mr-h"><b>${esc(r.id)}</b><span>${fmtDate(r.foundDate)}</span>${lc?`<span class="mr-loc">${esc(lc.code||lc.name)}</span>`:''}${REP.has(r.id)?'<span class="mr-rep">🔁 重複發生</span>':''}<span class="mr-st">${esc(statusOf(r).t)}${ov?'（逾期）':''}</span></div>
       <div class="mr-d">${esc(r.rawDesc||'（沒有描述）')}</div>
       <div class="mr-f">${esc(r.defType?typeName(r.defType):'未選類別')}${r.deadline?`・期限 ${fmtDate(r.deadline)}`:''}</div></div>`; }).join('')}</div>`;
 }
@@ -2235,13 +2253,14 @@ function mapSideHTML(){
         <button onclick="mapPolyStart('${a.id}')">⬠ 重新畫範圍（多邊形，例如 L 型）</button>
         ${a.pts?'<div class="notice info small" style="margin:6px 0 0">✏️ <b>修改範圍</b>：拖白色方塊＝移動那個角；拖邊中間的「＋」＝多加一個角（例如延伸到隔壁）；在角上<b>連點兩下</b>＝刪除那個角。</div>':`<button onclick="mapRectToPoly('${a.id}')">✏️ 修改範圍（改成可以加角、拉成不規則形狀）</button>`}</div>`
       : `<div class="small muted">${a.unit?'負責單位：'+esc(a.unit)+'　':''}${esc(a.desc||'')}</div><button class="lite" style="margin-top:6px" onclick="mapEditRange('${a.id}')">✏️ 修改範圍</button>`}
-      ${mapStatHTML(mapStats(recsForArea(a)))}
+      ${mapStatHTML(mapStats(recsForArea(a)))}${riskBadgeHTML(recsForArea(a), a.id)}
       <button class="primary" style="width:100%;margin:6px 0 6px" onclick="mapNewDefect('${a.id}','')">＋ 在「${esc(a.name)}」新增缺失</button>
       <button id="maXls" style="width:100%;margin:0 0 10px" onclick="mapAreaExport('${a.id}','')">📗 匯出這個區域（Excel，含照片）</button>
       ${auditSideHTML(a)}
       <div class="st-sec">細部位置（${locs.length}）</div>
       ${locs.length ? `<ul class="mini">${locs.map(l=>{ const s = mapStats(recsForLoc(l)); return `<li class="click" onclick="MV.sel={t:'loc',id:'${l.id}'};renderMap()"><span><b>${esc(l.code)}</b> ${esc(l.name)}</span><span class="small ${s.open?'bad':'muted'}">${s.open?'未結案 '+s.open:'共 '+s.total+' 件'}</span></li>`; }).join('')}</ul>` : `<div class="muted small">還沒有位置。${ed?'按上方「📍 新增位置」，在區域框裡點一下。':'切到「編輯模式」可以新增位置。'}</div>`}
       ${auditItemsHTML(a, ed)}
+      ${refPhotosHTML('area', a, ed)}
       <div class="st-sec">歷史缺失</div>${mapRecTable(recsForArea(a))}`;
   }
   if(sel && sel.t==='loc'){
@@ -2254,9 +2273,10 @@ function mapSideHTML(){
         <label class="f">位置描述</label><textarea id="mlDesc" rows="2">${esc(l.desc||'')}</textarea>
         <div class="row"><button class="primary" onclick="mapLocSave('${l.id}')">儲存位置</button><button class="danger" onclick="mapLocDel('${l.id}')">刪除位置</button></div></div>`
       : (l.desc?`<div class="small">${esc(l.desc)}</div>`:'')}
-      ${mapStatHTML(mapStats(recsForLoc(l)))}
+      ${mapStatHTML(mapStats(recsForLoc(l)))}${riskBadgeHTML(recsForLoc(l), '')}
       <button class="primary" style="width:100%;margin:6px 0 6px" onclick="mapNewDefect('${l.areaId}','${l.id}')">＋ 在「${esc(l.code+' '+l.name)}」新增缺失</button>
       <button id="maXls" style="width:100%;margin:0 0 10px" onclick="mapAreaExport('${l.areaId}','${l.id}')">📗 匯出這個位置（Excel，含照片）</button>
+      ${refPhotosHTML('loc', l, ed)}
       <div class="st-sec">歷史缺失</div>${mapRecTable(recsForLoc(l))}`;
   }
   const as = mapAreas();
@@ -2264,7 +2284,7 @@ function mapSideHTML(){
     ${as.length ? `<ul class="mini">${as.map(a=>{ const s = mapStats(recsForArea(a)); return `<li class="click" onclick="MV.sel={t:'area',id:'${a.id}'};renderMap()"><span>${esc(a.name)}</span><span class="small ${s.over?'bad':s.open?'':'muted'}">${s.open?'未結案 '+s.open:'共 '+s.total+' 件'}${s.over?'・逾期 '+s.over:''}</span></li>`; }).join('')}</ul>`
       : `<div class="muted small">這張地圖還沒有區域。請切到「✏️ 編輯模式」，按「▭ 新增區域」，在平面圖上拖曳畫出範圍。</div>`}`;
 }
-function mapSide(){ const s = $('#mSide'); if(s){ s.innerHTML = mapSideHTML(); if(MV.sel && MV.mode==='view' && window.innerWidth<900) s.scrollIntoView({behavior:'smooth', block:'start'}); } document.querySelectorAll('.marea,.mpin').forEach(e=>e.classList.toggle('sel', !!MV.sel && ((MV.sel.t==='area'&&e.dataset.aid===MV.sel.id)||(MV.sel.t==='loc'&&e.dataset.lid===MV.sel.id)))); }
+function mapSide(){ const s = $('#mSide'); if(s){ REP = repeatSet(); s.innerHTML = mapSideHTML(); hydrate(s); if(MV.sel && MV.mode==='view' && window.innerWidth<900) s.scrollIntoView({behavior:'smooth', block:'start'}); } document.querySelectorAll('.marea,.mpin').forEach(e=>e.classList.toggle('sel', !!MV.sel && ((MV.sel.t==='area'&&e.dataset.aid===MV.sel.id)||(MV.sel.t==='loc'&&e.dataset.lid===MV.sel.id)))); }
 
 /* 平面圖上的拖曳：畫區域、放位置、移動、改大小、檢視模式拖曳平移 */
 function mapBind(){
@@ -2531,7 +2551,7 @@ function locSelRefresh(){ const b = $('#locBox'); if(!b || !cur) return; const a
 /* 匯出／匯入地圖設定（只有地圖、區域、位置與平面圖，不含案件） */
 async function mapExport(){
   if(!MAPD.maps.length){ say('目前還沒有地圖可以匯出。'); return; }
-  const imgs = {}; for(const m of MAPD.maps){ imgs[m.img] = await phGet(m.img); }
+  const imgs = {}; for(const id of mapImageIds()){ imgs[id] = await phGet(id); }
   download(JSON.stringify({app:'qaHygieneMap', version:1, exportedAt:new Date().toISOString(), map:MAPD, images:imgs}), `Casevoras_廠區地圖設定_${today()}.json`, 'application/json');
 }
 function mapImport(input){
@@ -2549,7 +2569,7 @@ function mapImport(input){
 /* 備份還原與匯入共用：平面圖放回照片資料庫，區域名稱加進「常用選項」的缺失區域 */
 async function mapApply(map, images){
   const next = { maps:(map.maps||[]).filter(m=>m && m.id && m.img), areas:(map.areas||[]).filter(a=>a && a.id && typeof a.x==='number'), locs:(map.locs||[]).filter(l=>l && l.id && typeof l.x==='number'), items:(map.items||[]).filter(t=>t && t.id && t.areaId && t.name) };
-  try{ for(const m of next.maps){ const u = images && images[m.img]; if(u && typeof u==='string' && u.startsWith('data:image/')) await phPut(m.img, u); } }
+  try{ const ids = [...next.maps.map(m=>m.img), ...next.areas.flatMap(a=>a.photos||[]), ...next.locs.flatMap(l=>l.photos||[])]; for(const id of ids){ const u = images && images[id]; if(u && typeof u==='string' && u.startsWith('data:image/')) await phPut(id, u); } }
   catch(e){ say('平面圖存不進去，瀏覽器的儲存空間可能已滿，地圖沒有變動。'); return false; }
   const old = MAPD; MAPD = next; if(!saveMap()){ MAPD = old; return false; }
   next.areas.forEach(a=>addAreaOpt(a.name));
@@ -2734,6 +2754,105 @@ async function auditsRestore(list){
   for(const au of next) for(const r of au.results){ r.photos = r.photos || []; for(let k=0;k<r.photos.length;k++){ const p = r.photos[k]; if(typeof p==='string' && p.startsWith('data:')){ const id = phNewId(); await phPut(id, p); r.photos[k] = id; } } }
   AUDITS = next; saveAudits();
 }
+
+/* ---------- 廠區地圖（第三期）：風險顏色、重複缺失、地圖統計、參考照片 ---------- */
+/* 重複缺失：同一位置（沒有位置就看同一區域）＋同一缺失類別，之前已經發生過，或勾了「已通知改善後再次發生」 */
+function areaIdOf(r){ return areaById(r.areaId) ? r.areaId : (areaByName(r.area)||{}).id || ''; }
+function repeatSet(){
+  const g = new Map(), out = new Set();
+  live().filter(r=>r.defType).sort((a,b)=>(a.foundDate||'').localeCompare(b.foundDate||'') || a.id.localeCompare(b.id)).forEach(r=>{
+    const k = (r.locId && locById(r.locId) ? 'L'+r.locId : 'A'+(areaIdOf(r) || (r.area||'').trim())) + '|' + r.defType;
+    if(g.has(k)) out.add(r.id); else g.set(k, r.id);
+  });
+  live().forEach(r=>{ if(r.recurred) out.add(r.id); });
+  return out;
+}
+/* 風險顏色：紅＝有重大、逾期或重複發生且未結案；黃＝有未結案或稽核不合格還沒建缺失；綠＝都已結案；灰＝還沒有紀錄 */
+const RISK = { red:{c:'#b42318', t:'紅：有重大、逾期或重複發生的缺失未結案'}, yellow:{c:'#d97706', t:'黃：有未結案缺失，或稽核不合格尚未建立缺失'}, green:{c:'#167a3e', t:'綠：缺失都已結案'}, gray:{c:'#9aa3b2', t:'灰：還沒有缺失或稽核紀錄'} };
+function riskOf(rs, aid, rep){
+  rep = rep || repeatSet();
+  const au = aid ? auditsOf(aid) : [];
+  if(!rs.length && !au.length) return 'gray';
+  if(rs.some(r=>!r.closed && (isOverdue(r) || r.category==='major' || rep.has(r.id)))) return 'red';
+  if(rs.some(r=>!r.closed)) return 'yellow';
+  if(au[0] && au[0].results.some(x=>x.result==='fail' && !(x.defectId && records.some(y=>y.id===x.defectId && !y.deleted)))) return 'yellow';
+  return 'green';
+}
+let MV_RISK = true; try{ MV_RISK = localStorage.getItem('qaHygieneTracker_v1_mapRisk')!=='0'; }catch(e){}
+function mapRiskToggle(){ MV_RISK = !MV_RISK; try{ localStorage.setItem('qaHygieneTracker_v1_mapRisk', MV_RISK?'1':'0'); }catch(e){} renderMap(); }
+function areaColor(a, rep){ return MV_RISK && MV.mode==='view' ? RISK[riskOf(recsForArea(a), a.id, rep)].c : (a.color||'#b8955a'); }
+function locRiskCls(l, rep){ return MV_RISK && MV.mode==='view' ? 'rk-'+riskOf(recsForLoc(l), '', rep) : (mapStats(recsForLoc(l)).open?'hot':''); }
+function riskLegendHTML(){ return MV_RISK && MV.mode==='view' ? `<div class="mlegend">${Object.entries(RISK).map(([k,v])=>`<span><i style="background:${v.c}"></i>${v.t}</span>`).join('')}</div>` : ''; }
+function riskBadgeHTML(rs, aid){ const k = riskOf(rs, aid); return `<div class="mrisk" style="--rc:${RISK[k].c}">● ${RISK[k].t.replace(/^.：/,'')}</div>`; }
+
+/* 地圖統計：目前這張地圖，依期間篩選 */
+const MST = { per:'all', from:'', to:'', open:true };
+try{ MST.open = localStorage.getItem('qaHygieneTracker_v1_mapStat')!=='0'; }catch(e){}
+function mstRange(){
+  const t = today();
+  if(MST.per==='m1') return [t.slice(0,8)+'01', t];
+  if(MST.per==='m3') return [addDays(t,-90), t];
+  if(MST.per==='m6') return [addDays(t,-182), t];
+  if(MST.per==='custom') return [MST.from||'0000-00-00', MST.to||'9999-12-31'];
+  return ['0000-00-00','9999-12-31'];
+}
+function mapStatsHTML(){
+  const as = mapAreas(); if(!as.length) return '';
+  const [f,t] = mstRange(), inP = r => (r.foundDate||'')>=f && (r.foundDate||'')<=t, rep = repeatSet();
+  const ids = new Set(as.map(a=>a.id)), locs = MAPD.locs.filter(l=>ids.has(l.areaId));
+  const all = [...new Map(as.flatMap(a=>recsForArea(a)).map(r=>[r.id,r])).values()].filter(inP);
+  const open = all.filter(r=>!r.closed).length, over = all.filter(isOverdue).length, rp = all.filter(r=>rep.has(r.id)).length;
+  const done = all.length ? Math.round(all.filter(r=>r.closed).length/all.length*100) : 0;
+  const lastFail = as.reduce((n,a)=>{ const au = auditsOf(a.id).filter(x=>x.date>=f && x.date<=t)[0]; return n + (au ? auditCount(au).fail : 0); }, 0);
+  const bars = (rows, mx, cls) => rows.length ? rows.map(([k,v,extra,on])=>`<div class="hb ${on?'click':''}" ${on?`onclick="${on}"`:''}><span>${esc(k)}</span><span class="b"><i style="width:${mx?v/mx*100:0}%" class="${cls||''}"></i></span><span class="v">${v}${extra||''}</span></div>`).join('') : '<div class="muted small">這段期間沒有資料。</div>';
+  const byArea = as.map(a=>{ const rs = recsForArea(a).filter(inP); return [a.name, rs.length, rs.filter(r=>!r.closed).length, a.id]; }).sort((x,y)=>y[1]-x[1]);
+  const mxA = Math.max(1,...byArea.map(x=>x[1]));
+  const tm = new Map(); all.forEach(r=>{ const k = r.defType ? typeName(r.defType) : '未選類別'; tm.set(k,(tm.get(k)||0)+1); });
+  const types = [...tm.entries()].sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const months = []; { const d = new Date(); for(let i=5;i>=0;i--){ const x = new Date(d.getFullYear(), d.getMonth()-i, 1); months.push(x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')); } }
+  const mAll = [...new Map(as.flatMap(a=>recsForArea(a)).map(r=>[r.id,r])).values()];
+  const trend = months.map(m=>[+m.slice(5)+' 月', mAll.filter(r=>(r.foundDate||'').startsWith(m)).length]);
+  const hot = locs.map(l=>{ const rs = recsForLoc(l).filter(inP), o = rs.filter(r=>!r.closed).length, v = rs.filter(isOverdue).length, p = rs.filter(r=>rep.has(r.id)).length;
+    return {l, a:areaById(l.areaId), score:o*2+v*3+p*2+rs.length, n:rs.length, o, v, p}; }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,5);
+  const per = [['all','全部期間'],['m1','本月'],['m3','最近三個月'],['m6','最近六個月'],['custom','自訂']];
+  return `<details class="card mstats" ${MST.open?'open':''} ontoggle="MST.open=this.open;try{localStorage.setItem('qaHygieneTracker_v1_mapStat',this.open?'1':'0')}catch(e){}">
+    <summary><b>📊 地圖統計</b><span class="muted small">（${esc(MAPD.maps.find(m=>m.id===MV.mapId)?.name||'')}）</span></summary>
+    <div class="row" style="margin:10px 0">${per.map(([k,t])=>`<button class="${MST.per===k?'primary':''}" onclick="MST.per='${k}';renderMap()">${t}</button>`).join('')}
+      ${MST.per==='custom'?`<input type="date" value="${esc(MST.from)}" onchange="MST.from=this.value;renderMap()" style="width:auto"> ～ <input type="date" value="${esc(MST.to)}" onchange="MST.to=this.value;renderMap()" style="width:auto">`:''}</div>
+    <div class="mkpi">${[['廠區（區域）',as.length,''],['已建立位置',locs.length,''],['缺失總數',all.length,''],['未結案',open,'o'],['逾期',over,'v'],['重複發生',rp,'v'],['最近稽核不合格',lastFail,'v'],['改善完成率',done+'%','g']].map(([t,n,c])=>`<div class="${c}"><b>${n}</b>${t}</div>`).join('')}</div>
+    <div class="mcharts">
+      <div><div class="st-sec">各區域缺失數（未結案）</div>${bars(byArea.map(([k,n,o,id])=>[k,n,o?`<small class="bad">（未結 ${o}）</small>`:'',`MV.sel={t:'area',id:'${id}'};renderMap();document.getElementById('mapView').scrollIntoView({behavior:'smooth'})`]), mxA)}</div>
+      <div><div class="st-sec">缺失類型分布</div>${bars(types, Math.max(1,...types.map(x=>x[1])))}</div>
+      <div><div class="st-sec">月份缺失趨勢（最近 6 個月）</div>${bars(trend, Math.max(1,...trend.map(x=>x[1])))}</div>
+      <div><div class="st-sec">高風險位置排行</div>${hot.length ? `<ol class="mhot">${hot.map(x=>`<li class="click" onclick="MV.sel={t:'loc',id:'${x.l.id}'};renderMap();document.getElementById('mapView').scrollIntoView({behavior:'smooth'})"><b>${esc((x.l.code+' '+x.l.name).trim())}</b><span class="muted small">${esc(x.a?x.a.name:'')}</span><span class="small">共 ${x.n}・未結 ${x.o}${x.v?'・<b class="bad">逾期 '+x.v+'</b>':''}${x.p?'・🔁 重複 '+x.p:''}</span></li>`).join('')}</ol>` : '<div class="muted small">目前沒有需要優先注意的位置。</div>'}
+        <div class="muted small" style="margin-top:4px">排序依：未結案、逾期、重複發生與件數加權。</div></div>
+    </div>
+  </details>`;
+}
+
+/* 參考照片：區域、位置的正常狀態照片（跟缺失照片分開） */
+function refPhotosHTML(kind, obj, ed){
+  const ps = obj.photos || [];
+  return `<div class="st-sec">📷 參考照片（正常狀態）</div>
+    ${ps.length ? `<div class="photos">${ps.map((p,i)=>`<div class="ph"><img src="${phSync(p)}" ${isRef(p)?`data-ph="${p}"`:''} alt="參考照片${i+1}" onclick="showImg(this.src)" style="cursor:zoom-in">${ed?`<button class="x" onclick="refPhotoDel('${kind}','${obj.id}',${i})">✕</button>`:''}</div>`).join('')}</div>` : `<div class="muted small">還沒有參考照片。${ed?'':'切到「編輯模式」可以上傳。'}</div>`}
+    ${ed?`<div class="row" style="margin:6px 0 10px"><button onclick="this.nextElementSibling.click()">＋ 加參考照片</button><input type="file" accept="image/*" multiple hidden onchange="refPhotoAdd('${kind}','${obj.id}',this)"><span class="small muted">放這裡正常、清潔時的樣子，方便對照</span></div>`:''}`;
+}
+function refObj(kind, id){ return kind==='area' ? areaById(id) : locById(id); }
+function refPhotoAdd(kind, id, input){
+  const o = refObj(kind, id), files = [...input.files].filter(f=>/^image\//.test(f.type)); input.value = '';
+  if(!o) return; o.photos = o.photos || [];
+  if(o.photos.length + files.length > 6){ say('參考照片最多 6 張。'); return; }
+  files.forEach(file => { const fr = new FileReader(); fr.onload = () => { const img = new Image(); img.onload = async () => {
+    const s = Math.min(1, 1200/Math.max(img.width,img.height)), c = document.createElement('canvas');
+    c.width = Math.round(img.width*s); c.height = Math.round(img.height*s); c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+    const pid = phNewId(); try{ await phPut(pid, c.toDataURL('image/jpeg',0.7)); }catch(e){ say('照片存不進去，瀏覽器的儲存空間可能已滿。'); return; }
+    o.photos.push(pid); saveMap(); mapSide(); hydrate($('#mSide'));
+  }; img.src = fr.result; }; fr.readAsDataURL(file); });
+}
+async function refPhotoDel(kind, id, i){ const o = refObj(kind, id); if(!o || !(await ask('刪除這張參考照片？'))) return; o.photos.splice(i,1); saveMap(); mapSide(); hydrate($('#mSide')); }
+function showImg(src){ const m = document.createElement('div'); m.className = 'modal'; m.innerHTML = `<img src="${src}" alt="" style="max-width:96vw;max-height:90vh;border-radius:8px;box-shadow:0 8px 30px rgba(0,0,0,.4)">`; m.onclick = () => m.remove(); document.body.appendChild(m); }
+/* 地圖設定／備份用：平面圖＋所有參考照片的編號 */
+function mapImageIds(){ return [...MAPD.maps.map(m=>m.img), ...MAPD.areas.flatMap(a=>a.photos||[]), ...MAPD.locs.flatMap(l=>l.photos||[])].filter(Boolean); }
 
 /* ---------- 常用選項頁 ---------- */
 const OPT_USE = { area:'缺失區域', people:'巡檢人員、負責人、已通知對象、執行人、複查人員、結案確認人員', dept:'負責單位、改善執行單位' };
