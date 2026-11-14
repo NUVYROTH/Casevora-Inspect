@@ -130,6 +130,16 @@ body.wide main{max-width:none}
 .mg-txt p{margin:0 0 6px;font-size:14px}.mg-txt ul{margin:0 0 6px;padding-left:18px;font-size:14px}
 @media (max-width:1199px){.mg-grid{grid-template-columns:1fr}}
 @media (max-width:599px){.mg-step{grid-template-columns:1fr}.mg-pic{max-width:320px}}
+.aitems{list-style:none;margin:6px 0;padding:0}.aitems li{display:flex;gap:8px;justify-content:space-between;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.aibtn{display:flex;gap:4px;flex:none}.aibtn button{padding:2px 8px;font-size:12px}
+.areq{display:inline-block;margin-left:6px;font-size:11px;background:#fdecea;color:var(--bad);border-radius:8px;padding:0 6px}
+.aitems .mr-loc,.arow .mr-loc{margin-left:6px}
+.arow{border:1px solid var(--line);border-left:4px solid var(--line);border-radius:8px;padding:10px 12px;margin-top:10px;background:var(--card)}
+.arow.r-pass{border-left-color:var(--ok)}.arow.r-fail{border-left-color:var(--bad)}.arow.r-obs{border-left-color:var(--warn)}.arow.r-na{border-left-color:#9aa3b2}
+.ar-h{font-size:15px;margin-bottom:2px}.ar-btns{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 6px}
+.ar-btns button{padding:6px 12px}.ar-btns button.on.ok{background:var(--ok);color:#fff;border-color:var(--ok)}.ar-btns button.on.bad{background:var(--bad);color:#fff;border-color:var(--bad)}
+.ar-btns button.on.warn{background:var(--warn);color:#fff;border-color:var(--warn)}.ar-btns button.on.muted{background:#6b7280;color:#fff;border-color:#6b7280}
+.arow textarea{margin-top:4px}.ar-res{margin-top:6px}.ar-res .ok{color:var(--ok)}.ar-res .bad{color:var(--bad)}.ar-res .warn{color:var(--warn)}
 .mdraw{position:absolute;border:2px dashed var(--gold);background:rgba(184,149,90,.18);pointer-events:none}
 .mside{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto}
 .mside .mini li.click{cursor:pointer}.mside .mini li.click:hover{background:var(--brand-soft)}
@@ -594,7 +604,7 @@ async function phMoveOut(list){
 /* 刪掉沒有任何案件用到的照片（一天內新增的先不刪，可能是別的分頁還沒儲存的） */
 async function phCleanup(){
   try{
-    const used = new Set(records.flatMap(r => (r.photos||[]).concat(r.improvePhotos||[])).filter(isRef).concat(MAPD.maps.map(m=>m.img)));
+    const used = new Set(records.flatMap(r => (r.photos||[]).concat(r.improvePhotos||[])).filter(isRef).concat(MAPD.maps.map(m=>m.img), AUDITS.flatMap(au=>au.results.flatMap(r=>r.photos||[]))));
     const keys = await phReq('readonly', st => st.getAllKeys());
     const dayAgo = Date.now() - 86400000;
     for(const k of keys){
@@ -1073,6 +1083,7 @@ async function listDelete(){
    單筆紀錄頁
    ========================================================= */
 function openRecord(id, preset){
+  AUDIT_LINK = null;
   const r = id ? records.find(x=>x.id===id) : blankRecord();
   cur = JSON.parse(JSON.stringify(r));
   cur = Object.assign(blankRecord(), migrate(cur), preset||{});
@@ -1674,6 +1685,7 @@ function saveRecord(silent){
   if(i>=0) records[i] = copy; else records.push(copy);
   if(!persist()){ records = backupList; if(isNew) r.id=''; return false; }
   dirty = false;
+  if(isNew) auditLinkSaved(r.id); else AUDIT_LINK = null;
   try{ const used = (localStorage.getItem(KEY)||'').length + (localStorage.getItem(KEY_T)||'').length;
     if(used > 4000000 && !window.__warned){ window.__warned = true; say('提醒：本機儲存空間已用約 80% 以上。請盡快按「下載備份」，並考慮減少照片。'); } }catch(e){}
   storageWarn();
@@ -1999,7 +2011,8 @@ async function backup(){
   await preloadPhotos(rs);
   const out = rs.map(r => Object.assign({}, r, { photos:r.photos.map(phSync).filter(Boolean), improvePhotos:r.improvePhotos.map(phSync).filter(Boolean) }));
   const mapImages = {}; for(const m of MAPD.maps){ mapImages[m.img] = await phGet(m.img); }
-  download(JSON.stringify({app:'qaHygieneTracker', version:2, exportedAt:new Date().toISOString(), records:out, tombs, opts:OPTS, map:MAPD, mapImages}, null, 1),
+  const audits = await auditsForBackup();
+  download(JSON.stringify({app:'qaHygieneTracker', version:2, exportedAt:new Date().toISOString(), records:out, tombs, opts:OPTS, map:MAPD, mapImages, audits}, null, 1),
     `hygiene_backup_${today()}.json`, 'application/json');
 }
 function restore(input){
@@ -2024,6 +2037,7 @@ function restore(input){
       if(data.opts){ Object.keys(OPT_KINDS).forEach(k=>{ OPTS[k] = optList([...OPTS[k], ...optList(data.opts[k])]); }); saveOpts(); }
       /* 備份裡有廠區地圖時，一起還原（取代目前的地圖） */
       if(data.map && Array.isArray(data.map.maps) && data.map.maps.length) await mapApply(data.map, data.mapImages);
+      if(Array.isArray(data.audits)) await auditsRestore(data.audits);
       flash('還原完成'); showList();
     }catch(e){ say('無法讀取：這不是本工具的備份檔。'); }
   };
@@ -2035,7 +2049,7 @@ function restore(input){
 /* 資料存在 localStorage（文字），平面圖存在照片資料庫 IndexedDB；座標一律用圖片寬高的比例（0～1） */
 const KEY_M = 'qaHygieneTracker_v1_map';
 function loadMap(){ let o = {}; try{ o = JSON.parse(localStorage.getItem(KEY_M)||'{}') || {}; }catch(e){}
-  return { maps:Array.isArray(o.maps)?o.maps:[], areas:Array.isArray(o.areas)?o.areas:[], locs:Array.isArray(o.locs)?o.locs:[] }; }
+  return { maps:Array.isArray(o.maps)?o.maps:[], areas:Array.isArray(o.areas)?o.areas:[], locs:Array.isArray(o.locs)?o.locs:[], items:Array.isArray(o.items)?o.items:[] }; }
 let MAPD = loadMap();
 function saveMap(){ try{ localStorage.setItem(KEY_M, JSON.stringify(MAPD)); return true; }catch(e){ say('廠區地圖存不進去，瀏覽器的儲存空間可能已滿。'); return false; } }
 const mapUid = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
@@ -2167,6 +2181,8 @@ const MG_SVG = {
     ${[['3','累計',20,'#16213a'],['2','未結案',82,'#b45309'],['1','逾期',144,'#b42318']].map(([n,t,x,c])=>`<rect x="${x}" y="36" width="56" height="34" rx="6" fill="#f3ece0"/><text x="${x+28}" y="54" font-size="14" font-weight="800" fill="${c}" text-anchor="middle">${n}</text><text x="${x+28}" y="65" font-size="8" fill="#5d6779" text-anchor="middle">${t}</text>`).join('')}
     <rect x="20" y="78" width="180" height="18" rx="5" fill="#16213a"/><text x="110" y="91" font-size="9.5" fill="#fff" text-anchor="middle">＋ 在「打漿區」新增缺失</text>
     <rect x="20" y="100" width="180" height="16" rx="5" fill="#fff" stroke="#c9bda6"/><text x="110" y="111.5" font-size="9" fill="#16213a" text-anchor="middle">📗 匯出這個區域（Excel，含照片）</text></svg>`,
+  audit: `<svg viewBox="0 0 220 130" role="img" aria-label="現場稽核勾選示意"><rect x="8" y="8" width="204" height="114" rx="10" fill="#fffdf8" stroke="#e3d9c6"/>
+    ${[['排水溝清潔暢通','✅ 合格','#167a3e',22],['設備底部無殘留物','❌ 不合格','#b42318',56],['器具分類存放','👁 觀察','#b45309',90]].map(([t,r,c,y])=>`<rect x="18" y="${y}" width="184" height="28" rx="6" fill="#fff" stroke="#e3d9c6"/><text x="26" y="${y+18}" font-size="10" fill="#16213a">${t}</text><rect x="132" y="${y+5}" width="62" height="18" rx="9" fill="${c}"/><text x="163" y="${y+17.5}" font-size="9.5" fill="#fff" text-anchor="middle">${r}</text>`).join('')}</svg>`,
   share: `<svg viewBox="0 0 220 130" role="img" aria-label="匯出匯入地圖設定給同事示意"><rect x="8" y="8" width="204" height="114" rx="10" fill="#fff" stroke="#e3d9c6"/>
     <rect x="18" y="34" width="62" height="44" rx="6" fill="#e8f0fb" stroke="#1d4f91"/><text x="49" y="54" font-size="10" fill="#1d4f91" text-anchor="middle">你的電腦</text><text x="49" y="68" font-size="8.5" fill="#1d4f91" text-anchor="middle">匯出地圖設定</text>
     <rect x="140" y="34" width="62" height="44" rx="6" fill="#e6f5ec" stroke="#167a3e"/><text x="171" y="54" font-size="10" fill="#167a3e" text-anchor="middle">同事電腦</text><text x="171" y="68" font-size="8.5" fill="#167a3e" text-anchor="middle">匯入地圖設定</text>
@@ -2186,7 +2202,8 @@ function mapGuideHTML(){
       ${step(4,'修改範圍', MG_SVG.range, `<p>點區域 → 按<b>「✏️ 修改範圍」</b>：</p><ul><li>拖<b>白色方塊</b>＝移動那個角</li><li>拖邊中間的<b>金色＋</b>＝多加一個角（例如延伸到隔壁）</li><li>在角上<b>連點兩下</b>＝刪除那個角</li></ul><p class="muted small">放開就自動存好。</p>`)}
       ${step(5,'放細部位置', MG_SVG.pin, `<p>按<b>「📍 新增位置」</b>，在區域框裡點一下，輸入例如「P03 地面及排水溝」。</p><p class="muted small">有未結案缺失的位置會變紅色；編輯模式可以拖曳移動。</p>`)}
       ${step(6,'看缺失、新增缺失、匯出', MG_SVG.view, `<p>切回<b>「👀 檢視模式」</b>，點區域或位置，右邊會出現累計／未結案／逾期件數與歷史缺失。</p><ul><li><b>「＋ 新增缺失」</b>：自動帶入區域、位置、負責單位</li><li><b>「📗 匯出這個區域」</b>：依缺失類別由多到少，含改善前後照片</li></ul>`)}
-      ${step(7,'給同事用同一張地圖', MG_SVG.share, `<p>按<b>「匯出地圖設定」</b>存成檔案給同事，同事按<b>「匯入地圖設定」</b>就有同一張地圖。</p><p class="muted small">「下載備份」也會把地圖一起備份。</p>`)}
+      ${step(7,'現場稽核', MG_SVG.audit, `<p>編輯模式在區域裡按<b>「＋ 新增稽核重點」</b>（或「載入範例」），寫清楚<b>查核標準</b>。到現場點區域 → <b>「📋 開始稽核」</b>，每項選：</p><ul><li>✅ 合格：完全符合標準</li><li>❌ 不合格：不符合、要改善 → <b>「＋ 建立缺失」</b></li><li>👁 觀察事項：輕微異常先記錄，不建缺失</li><li>⊘ 不適用：沒作業、設備停用</li></ul>`)}
+      ${step(8,'給同事用同一張地圖', MG_SVG.share, `<p>按<b>「匯出地圖設定」</b>存成檔案給同事，同事按<b>「匯入地圖設定」</b>就有同一張地圖。</p><p class="muted small">「下載備份」也會把地圖一起備份。</p>`)}
     </div>
     <div class="notice warn small" style="margin-top:12px"><b>注意：</b>地圖和平面圖只存在<b>此裝置此瀏覽器</b>，不會自動同步到其他電腦，請定期「下載備份」。平面圖屬公司內部資料，不會上傳也不會送給 AI；截圖給別人前請先確認可以外流。畫區域建議用電腦，手機適合查看。</div>
   </details>`;
@@ -2221,8 +2238,10 @@ function mapSideHTML(){
       ${mapStatHTML(mapStats(recsForArea(a)))}
       <button class="primary" style="width:100%;margin:6px 0 6px" onclick="mapNewDefect('${a.id}','')">＋ 在「${esc(a.name)}」新增缺失</button>
       <button id="maXls" style="width:100%;margin:0 0 10px" onclick="mapAreaExport('${a.id}','')">📗 匯出這個區域（Excel，含照片）</button>
+      ${auditSideHTML(a)}
       <div class="st-sec">細部位置（${locs.length}）</div>
       ${locs.length ? `<ul class="mini">${locs.map(l=>{ const s = mapStats(recsForLoc(l)); return `<li class="click" onclick="MV.sel={t:'loc',id:'${l.id}'};renderMap()"><span><b>${esc(l.code)}</b> ${esc(l.name)}</span><span class="small ${s.open?'bad':'muted'}">${s.open?'未結案 '+s.open:'共 '+s.total+' 件'}</span></li>`; }).join('')}</ul>` : `<div class="muted small">還沒有位置。${ed?'按上方「📍 新增位置」，在區域框裡點一下。':'切到「編輯模式」可以新增位置。'}</div>`}
+      ${auditItemsHTML(a, ed)}
       <div class="st-sec">歷史缺失</div>${mapRecTable(recsForArea(a))}`;
   }
   if(sel && sel.t==='loc'){
@@ -2407,7 +2426,7 @@ async function mapDelete(){
   const m = MAPD.maps.find(x=>x.id===MV.mapId), as = mapAreas();
   if(!(await ask(`確定刪除地圖「${m.name}」？\n上面的 ${as.length} 個區域和它們的位置會一起刪除。\n已存的缺失紀錄不會被刪除。`))) return;
   const ids = new Set(as.map(a=>a.id));
-  MAPD.locs = MAPD.locs.filter(l=>!ids.has(l.areaId)); MAPD.areas = MAPD.areas.filter(a=>a.mapId!==m.id); MAPD.maps = MAPD.maps.filter(x=>x.id!==m.id);
+  MAPD.locs = MAPD.locs.filter(l=>!ids.has(l.areaId)); MAPD.items = (MAPD.items||[]).filter(t=>!ids.has(t.areaId)); MAPD.areas = MAPD.areas.filter(a=>a.mapId!==m.id); MAPD.maps = MAPD.maps.filter(x=>x.id!==m.id);
   saveMap(); MV.mapId = ''; MV.sel = null; showMap();
 }
 async function mapAreaSave(id){
@@ -2428,7 +2447,7 @@ async function mapAreaSave(id){
 async function mapAreaDel(id){
   const a = areaById(id), n = recsForArea(a).length, nl = mapAreaLocs(id).length;
   if(!(await ask(`確定刪除區域「${a.name}」？${nl?`\n裡面的 ${nl} 個位置會一起刪除。`:''}${n?`\n有 ${n} 件缺失記在這個區域，缺失紀錄不會被刪除，只是不再顯示在地圖上。`:''}`))) return;
-  MAPD.locs = MAPD.locs.filter(l=>l.areaId!==id); MAPD.areas = MAPD.areas.filter(x=>x.id!==id);
+  MAPD.locs = MAPD.locs.filter(l=>l.areaId!==id); MAPD.items = (MAPD.items||[]).filter(t=>t.areaId!==id); MAPD.areas = MAPD.areas.filter(x=>x.id!==id);
   saveMap(); MV.sel = null; renderMap();
 }
 function mapLocSave(id){
@@ -2439,7 +2458,7 @@ function mapLocSave(id){
 async function mapLocDel(id){
   const l = locById(id), n = recsForLoc(l).length;
   if(!(await ask(`確定刪除位置「${l.code} ${l.name}」？${n?`\n有 ${n} 件缺失記在這個位置，缺失紀錄不會被刪除，只是不再連到這個位置。`:''}`))) return;
-  MAPD.locs = MAPD.locs.filter(x=>x.id!==id); saveMap(); MV.sel = null; renderMap();
+  MAPD.locs = MAPD.locs.filter(x=>x.id!==id); (MAPD.items||[]).forEach(t=>{ if(t.locId===id) t.locId=''; }); saveMap(); MV.sel = null; renderMap();
 }
 /* 匯出區域（或位置）重點缺失：上面是摘要與缺失類別排行，下面是明細（依類別件數由多到少；同類別內逾期、未結案在前），含改善前後照片 */
 async function mapAreaExport(aid, lid){
@@ -2529,12 +2548,191 @@ function mapImport(input){
 }
 /* 備份還原與匯入共用：平面圖放回照片資料庫，區域名稱加進「常用選項」的缺失區域 */
 async function mapApply(map, images){
-  const next = { maps:(map.maps||[]).filter(m=>m && m.id && m.img), areas:(map.areas||[]).filter(a=>a && a.id && typeof a.x==='number'), locs:(map.locs||[]).filter(l=>l && l.id && typeof l.x==='number') };
+  const next = { maps:(map.maps||[]).filter(m=>m && m.id && m.img), areas:(map.areas||[]).filter(a=>a && a.id && typeof a.x==='number'), locs:(map.locs||[]).filter(l=>l && l.id && typeof l.x==='number'), items:(map.items||[]).filter(t=>t && t.id && t.areaId && t.name) };
   try{ for(const m of next.maps){ const u = images && images[m.img]; if(u && typeof u==='string' && u.startsWith('data:image/')) await phPut(m.img, u); } }
   catch(e){ say('平面圖存不進去，瀏覽器的儲存空間可能已滿，地圖沒有變動。'); return false; }
   const old = MAPD; MAPD = next; if(!saveMap()){ MAPD = old; return false; }
   next.areas.forEach(a=>addAreaOpt(a.name));
   return true;
+}
+
+/* ---------- 廠區地圖（第二期）：稽核重點＋稽核模式 ---------- */
+/* 稽核重點存在 MAPD.items（跟著地圖設定匯出）；稽核紀錄存在 KEY_A（跟著整份備份），照片放照片資料庫 */
+const KEY_A = 'qaHygieneTracker_v1_audits';
+function loadAudits(){ try{ const a = JSON.parse(localStorage.getItem(KEY_A)||'[]'); return Array.isArray(a) ? a : []; }catch(e){ return []; } }
+let AUDITS = loadAudits();
+function saveAudits(){ try{ localStorage.setItem(KEY_A, JSON.stringify(AUDITS)); return true; }catch(e){ say('稽核紀錄存不進去，瀏覽器的儲存空間可能已滿。'); return false; } }
+const AR = { pass:{t:'合格', i:'✅', c:'ok'}, fail:{t:'不合格', i:'❌', c:'bad'}, obs:{t:'觀察事項', i:'👁', c:'warn'}, na:{t:'不適用', i:'⊘', c:'muted'} };
+const AR_RULE = `<b>怎麼判定：</b>對照每一項的「查核標準」——
+  ✅ <b>合格</b>：完全符合標準。
+  ❌ <b>不合格</b>：不符合標準、需要改善 → 可以一鍵建立缺失追蹤。
+  👁 <b>觀察事項</b>：目前還符合，但有輕微異常或潛在風險，先記錄提醒、不建缺失，下次稽核再確認。
+  ⊘ <b>不適用</b>：本次沒有作業、設備停用或不在範圍內。`;
+function itemsOf(aid){ return (MAPD.items||[]).filter(t=>t.areaId===aid); }
+function auditsOf(aid){ return AUDITS.filter(x=>x.areaId===aid).sort((a,b)=>(b.date+b.createdAt).localeCompare(a.date+a.createdAt)); }
+function auditCount(au){ const c = {pass:0, fail:0, obs:0, na:0}; au.results.forEach(r=>{ if(c[r.result]!==undefined) c[r.result]++; }); return c; }
+function auditSummary(au){ const c = auditCount(au); return `${fmtDate(au.date)}　${esc(au.auditor||'—')}　✅${c.pass} ❌${c.fail} 👁${c.obs}${c.na?' ⊘'+c.na:''}`; }
+/* 範例稽核重點（以打漿區為例），載入後可以自己改 */
+const AUDIT_SAMPLE = [
+  ['打漿機設備表面清潔','設備表面無肉屑、油污、殘渣及異物','目視、手電筒檢查','每次作業前','高',1],
+  ['設備底部無殘留物','設備底部及死角無肉屑、積水、殘留物','目視（含底部、死角）','每日','高',1],
+  ['排水溝清潔暢通','排水溝無殘渣堆積、無積水、無異味，蓋板完整','目視、嗅覺','每日','高',1],
+  ['器具分類存放','器具清洗後分類、離地存放於指定位置，未接觸地面','目視','每日','中',0],
+  ['作業台清潔','作業台面無殘渣、油污，作業前已清潔消毒','目視、確認清潔紀錄','每次作業前','高',1],
+  ['人員洗手消毒','進入作業區前依規定洗手、消毒，正確穿戴帽子、口罩、手套','現場觀察','每次作業','高',1],
+  ['生熟區隔／交叉污染','生熟食、器具、動線區隔清楚，無交叉接觸','目視、動線確認','每日','高',1],
+  ['設備周邊無積水異物','設備周邊地面無積水、異物及不必要物品','目視','每日','中',0]];
+function auditItemsHTML(a, ed){
+  const its = itemsOf(a.id), locName = id => { const l = locById(id); return l ? (l.code+' '+l.name).trim() : ''; };
+  return `<div class="st-sec">稽核重點（${its.length}）</div>
+    ${its.length ? `<ul class="aitems">${its.map(t=>`<li><div><b>${esc(t.name)}</b>${t.req?'<span class="areq">必查</span>':''}${t.locId?`<span class="mr-loc">${esc(locById(t.locId)?.code||'')}</span>`:''}
+      <div class="small muted">標準：${esc(t.std||'—')}${t.freq?'｜'+esc(t.freq):''}${t.imp?'｜重要度 '+esc(t.imp):''}${t.locId?'｜'+esc(locName(t.locId)):''}</div></div>
+      ${ed?`<span class="aibtn"><button onclick="auditItemEdit('${a.id}','${t.id}')">編輯</button><button class="danger" onclick="auditItemDel('${t.id}')">刪除</button></span>`:''}</li>`).join('')}</ul>`
+      : `<div class="muted small">還沒有稽核重點。${ed?'':'切到「編輯模式」可以新增。'}</div>`}
+    ${ed?`<div class="row" style="margin:6px 0 10px"><button onclick="auditItemEdit('${a.id}','')">＋ 新增稽核重點</button>${its.length?'':`<button onclick="auditSample('${a.id}')">載入範例（8 項）</button>`}</div>`:''}`;
+}
+function auditSideHTML(a){
+  const au = auditsOf(a.id);
+  return `${itemsOf(a.id).length?`<button class="primary" style="width:100%;margin:0 0 10px;background:#167a3e;border-color:#167a3e" onclick="auditStart('${a.id}')">📋 開始稽核</button>`:''}
+    <div class="st-sec">稽核紀錄（${au.length}）</div>
+    ${au.length ? `<ul class="mini">${au.slice(0,8).map(x=>`<li class="click" onclick="auditView('${x.id}')"><span>${auditSummary(x)}</span><span class="small muted">看</span></li>`).join('')}</ul>` : '<div class="muted small">還沒有稽核紀錄。</div>'}`;
+}
+async function auditSample(aid){
+  if(!(await ask('載入 8 項範例稽核重點（以打漿區為例）？載入後可以自己修改或刪除。'))) return;
+  MAPD.items = MAPD.items || [];
+  AUDIT_SAMPLE.forEach(([name,std,method,freq,imp,req])=>MAPD.items.push({id:mapUid('it'), areaId:aid, locId:'', name, std, method, freq, imp, req:!!req}));
+  saveMap(); renderMap(); flash('已載入範例');
+}
+function auditItemEdit(aid, id){
+  const t = id ? (MAPD.items||[]).find(x=>x.id===id) : {name:'', std:'', method:'', freq:'每日', imp:'中', req:false, locId:''};
+  const ls = mapAreaLocs(aid);
+  const m = document.createElement('div'); m.className = 'modal';
+  m.innerHTML = `<div class="box" role="dialog" aria-modal="true" style="max-width:520px"><div class="msg"><b>${id?'編輯':'新增'}稽核重點</b></div>
+    <div class="grid1">
+      <label class="f req">稽核項目</label><input type="text" id="aiN" placeholder="例：排水溝清潔暢通">
+      <label class="f">查核標準（怎樣算合格）</label><textarea id="aiS" rows="2" placeholder="例：排水溝無殘渣堆積、無積水、無異味"></textarea>
+      <label class="f">查核方式</label><input type="text" id="aiM" placeholder="例：目視、嗅覺">
+      <div class="grid" style="grid-template-columns:1fr 1fr;gap:8px"><div><label class="f">查核頻率</label><input type="text" id="aiF" placeholder="例：每日"></div>
+        <div><label class="f">重要程度</label><select id="aiI"><option>高</option><option>中</option><option>低</option></select></div></div>
+      <label class="f">對應位置</label><select id="aiL"><option value="">整個區域</option>${ls.map(l=>`<option value="${l.id}">${esc((l.code+' '+l.name).trim())}</option>`).join('')}</select>
+      <label class="check"><input type="checkbox" id="aiR"> 必查項目（稽核時一定要填）</label>
+    </div>
+    <div class="row" style="margin-top:12px"><button id="aiNo">取消</button><button class="primary" id="aiOk">儲存</button></div></div>`;
+  document.body.appendChild(m);
+  $('#aiN').value = t.name; $('#aiS').value = t.std||''; $('#aiM').value = t.method||''; $('#aiF').value = t.freq||''; $('#aiI').value = t.imp||'中'; $('#aiL').value = t.locId||''; $('#aiR').checked = !!t.req;
+  $('#aiNo').onclick = () => m.remove();
+  $('#aiOk').onclick = () => {
+    const name = $('#aiN').value.trim(); if(!name){ say('請填稽核項目。'); return; }
+    Object.assign(t, {name, std:$('#aiS').value.trim(), method:$('#aiM').value.trim(), freq:$('#aiF').value.trim(), imp:$('#aiI').value, locId:$('#aiL').value, req:$('#aiR').checked});
+    if(!id){ t.id = mapUid('it'); t.areaId = aid; MAPD.items = MAPD.items || []; MAPD.items.push(t); }
+    saveMap(); m.remove(); renderMap(); flash('已儲存稽核重點');
+  };
+  $('#aiN').focus();
+}
+async function auditItemDel(id){
+  const t = (MAPD.items||[]).find(x=>x.id===id); if(!t) return;
+  if(!(await ask(`確定刪除稽核重點「${t.name}」？（已完成的稽核紀錄不會被刪除）`))) return;
+  MAPD.items = MAPD.items.filter(x=>x.id!==id); saveMap(); renderMap();
+}
+
+/* 稽核模式：逐項勾選結果、寫說明、拍照，儲存成一筆稽核紀錄 */
+let AUD = null;
+function auditStart(aid){
+  const a = areaById(aid); if(!a) return;
+  const its = itemsOf(aid).slice().sort((x,y)=>(locById(x.locId)?.code||'').localeCompare(locById(y.locId)?.code||'',undefined,{numeric:true}));
+  AUD = {id:'', areaId:aid, date:today(), auditor:'', createdAt:'', results:its.map(t=>({itemId:t.id, name:t.name, std:t.std, locId:t.locId||'', req:!!t.req, result:'', note:'', photos:[], defectId:''}))};
+  cur = null; dirty = false; renderAudit(false);
+}
+function auditView(id){ const au = AUDITS.find(x=>x.id===id); if(!au) return; AUD = JSON.parse(JSON.stringify(au)); cur = null; dirty = false; renderAudit(true); }
+function renderAudit(done){
+  const a = areaById(AUD.areaId), name = a ? a.name : '（區域已刪除）';
+  setSide('map');
+  $('#app').innerHTML = `
+    <div class="hcard"><div class="hc-top"><div class="ptitle big"><h1>${done?'稽核紀錄':'現場稽核'}｜${esc(name)}</h1><span class="muted">${done?'點不合格項目的「建立缺失」可以接到缺失追蹤':'依每一項的查核標準判定，不合格可以一鍵建立缺失'}</span></div><span class="lbadge">● 本機資料模式</span></div>
+      <div class="hc-bot" style="margin-top:0"><div class="hcrumb">Casevoras / 廠區地圖 / <b>${done?'稽核紀錄':'現場稽核'}</b></div>
+        <div class="ptools"><button class="lite" onclick="auditBack()">← 回廠區地圖</button>${done?`<button class="lite danger" onclick="auditDelete('${AUD.id}')">刪除這筆稽核紀錄</button>`:''}</div></div></div>
+    <div class="card">
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">
+        <div><label class="f req">稽核日期</label><input type="date" id="auDate" value="${esc(AUD.date)}" max="${today()}" ${done?'disabled':''}></div>
+        <div><label class="f">稽核人員</label>${done?`<div style="padding:8px 0">${esc(AUD.auditor||'—')}</div>`:combo('people', AUD.auditor, 'id="auBy"', '例：品管人員')}</div>
+      </div>
+      <div class="notice info small" style="white-space:pre-line;margin-top:10px">${AR_RULE}</div>
+      <div id="auList">${AUD.results.map((r,i)=>auditRowHTML(r,i,done)).join('')}</div>
+      ${done?'':`<div class="row" style="margin-top:14px"><button class="primary" onclick="auditSave()">💾 儲存稽核紀錄</button><button onclick="auditBack()">取消</button><span class="muted small" id="auCount"></span></div>`}
+    </div>`;
+  if(!done){
+    $('#auDate').onchange = e => { AUD.date = e.target.value; dirty = true; };
+    const by = $('#auBy'); if(by) by.addEventListener('input', () => { AUD.auditor = by.value; dirty = true; });
+    auditCountUpd();
+  }
+  hydrate($('#auList')); window.scrollTo(0,0);
+}
+function auditRowHTML(r, i, done){
+  const l = locById(r.locId);
+  return `<div class="arow ${r.result?'r-'+r.result:''}" id="ar${i}">
+    <div class="ar-h"><b>${i+1}. ${esc(r.name)}</b>${r.req?'<span class="areq">必查</span>':''}${l?`<span class="mr-loc">${esc(l.code||l.name)}</span>`:''}</div>
+    <div class="small muted">標準：${esc(r.std||'—')}</div>
+    ${done ? `<div class="ar-res"><b class="${AR[r.result]?.c||'muted'}">${AR[r.result]?AR[r.result].i+' '+AR[r.result].t:'（未填）'}</b>${r.note?`　${esc(r.note)}`:''}</div>`
+      : `<div class="ar-btns">${Object.entries(AR).map(([k,v])=>`<button class="${r.result===k?'on '+v.c:''}" onclick="auditSet(${i},'${k}')">${v.i} ${v.t}</button>`).join('')}</div>`}
+    ${(!done && (r.result==='fail'||r.result==='obs')) ? `<textarea rows="2" placeholder="${r.result==='fail'?'不合格說明：看到什麼、在哪裡、多少（勿寫人名）':'觀察說明'}" oninput="AUD.results[${i}].note=this.value;dirty=true">${esc(r.note)}</textarea>
+      <div class="row" style="margin-top:4px"><button onclick="this.nextElementSibling.click()">📷 加照片</button><input type="file" accept="image/*" multiple hidden onchange="auditPhotos(${i},this)"><span class="small muted">${r.photos.length?r.photos.length+' 張':''}</span></div>` : ''}
+    ${r.photos.length ? `<div class="photos">${r.photos.map(p=>`<div class="ph"><img src="${phSync(p)}" ${isRef(p)?`data-ph="${p}"`:''} alt=""></div>`).join('')}</div>` : ''}
+    ${done && r.result==='fail' ? (r.defectId && records.some(x=>x.id===r.defectId&&!x.deleted) ? `<div class="small" style="margin-top:4px">已建立缺失：<a href="#" onclick="openRecord('${esc(r.defectId)}');return false">${esc(r.defectId)}</a></div>` : `<button class="primary" style="margin-top:6px" onclick="auditDefect(${i})">＋ 建立缺失</button>`) : ''}
+  </div>`;
+}
+function auditSet(i, k){ AUD.results[i].result = AUD.results[i].result===k ? '' : k; dirty = true; $('#ar'+i).outerHTML = auditRowHTML(AUD.results[i], i, false); hydrate($('#ar'+i)); auditCountUpd(); }
+function auditCountUpd(){ const c = auditCount(AUD), n = AUD.results.filter(r=>!r.result).length, e = $('#auCount'); if(e) e.textContent = `✅${c.pass} ❌${c.fail} 👁${c.obs} ⊘${c.na}${n?`　尚未填 ${n} 項`:''}`; }
+/* 照片：壓縮後放照片資料庫 */
+function auditPhotos(i, input){
+  const files = [...input.files].filter(f=>/^image\//.test(f.type)); input.value = '';
+  files.forEach(file => { const fr = new FileReader(); fr.onload = () => { const img = new Image(); img.onload = async () => {
+    const s = Math.min(1, 900/Math.max(img.width,img.height)), c = document.createElement('canvas');
+    c.width = Math.round(img.width*s); c.height = Math.round(img.height*s); c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+    const id = phNewId(); try{ await phPut(id, c.toDataURL('image/jpeg',0.6)); }catch(e){ say('照片存不進去，瀏覽器的儲存空間可能已滿。'); return; }
+    AUD.results[i].photos.push(id); dirty = true; $('#ar'+i).outerHTML = auditRowHTML(AUD.results[i], i, false); hydrate($('#ar'+i));
+  }; img.src = fr.result; }; fr.readAsDataURL(file); });
+}
+async function auditSave(){
+  AUD.date = $('#auDate').value; const by = $('#auBy'); AUD.auditor = by ? by.value.trim() : AUD.auditor;
+  if(!AUD.date){ say('請填稽核日期。'); return; }
+  const missReq = AUD.results.filter(r=>r.req && !r.result).map(r=>r.name);
+  if(missReq.length){ say('必查項目還沒填：\n'+missReq.join('、')); return; }
+  const empty = AUD.results.filter(r=>!r.result).length;
+  if(empty && !(await ask(`還有 ${empty} 項沒有填結果，沒填的會記成空白。確定儲存嗎？`))) return;
+  if(!AUD.results.some(r=>r.result)){ say('至少要填一項結果。'); return; }
+  AUD.id = mapUid('au'); AUD.createdAt = new Date().toLocaleString('zh-TW');
+  AUDITS.push(JSON.parse(JSON.stringify(AUD))); if(!saveAudits()){ AUDITS.pop(); return; }
+  dirty = false; const c = auditCount(AUD);
+  flash('已儲存稽核紀錄');
+  auditView(AUD.id);
+  if(c.fail) say(`這次有 ${c.fail} 項不合格。請按每一項下方的「＋ 建立缺失」，接到缺失追蹤。`);
+}
+async function auditBack(){ if(dirty && !(await ask('稽核還沒儲存，確定要離開嗎？'))) return; dirty = false; const aid = AUD && AUD.areaId; AUD = null; MV.sel = aid ? {t:'area', id:aid} : null; showMap(aid?{areaId:aid}:null); }
+async function auditDelete(id){
+  if(!(await ask('確定刪除這筆稽核紀錄？（已建立的缺失不會被刪除）'))) return;
+  const aid = AUD.areaId; AUDITS = AUDITS.filter(x=>x.id!==id); saveAudits(); AUD = null; showMap({areaId:aid});
+}
+/* 不合格 → 建立缺失：帶入日期、區域、位置、稽核人員、說明與照片；儲存後回填到稽核紀錄 */
+let AUDIT_LINK = null;
+function auditDefect(i){
+  const r = AUD.results[i], a = areaById(AUD.areaId);
+  const link = {auditId:AUD.id, idx:i};
+  openRecord(null, {foundDate:AUD.date, area:a?a.name:'', areaId:a?a.id:'', locId:r.locId||'', finder:AUD.auditor||'', ownerDept:a&&a.unit||'',
+    rawDesc:`稽核項目「${r.name}」不合格：${r.note||''}`.trim(), photos:r.photos.slice()});
+  AUDIT_LINK = link; dirty = true; refresh();
+}
+function auditLinkSaved(id){
+  if(!AUDIT_LINK) return;
+  const au = AUDITS.find(x=>x.id===AUDIT_LINK.auditId); if(au && au.results[AUDIT_LINK.idx]){ au.results[AUDIT_LINK.idx].defectId = id; saveAudits(); }
+  AUDIT_LINK = null;
+}
+/* 備份用：稽核紀錄的照片換成照片本身 */
+async function auditsForBackup(){ const out = JSON.parse(JSON.stringify(AUDITS)); for(const au of out) for(const r of au.results) r.photos = (await Promise.all(r.photos.map(phGet))).filter(Boolean); return out; }
+async function auditsRestore(list){
+  if(!Array.isArray(list)) return;
+  const next = JSON.parse(JSON.stringify(list.filter(x=>x && x.id && Array.isArray(x.results))));
+  for(const au of next) for(const r of au.results){ r.photos = r.photos || []; for(let k=0;k<r.photos.length;k++){ const p = r.photos[k]; if(typeof p==='string' && p.startsWith('data:')){ const id = phNewId(); await phPut(id, p); r.photos[k] = id; } } }
+  AUDITS = next; saveAudits();
 }
 
 /* ---------- 常用選項頁 ---------- */
