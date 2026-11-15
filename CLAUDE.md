@@ -16,7 +16,7 @@
 
 ## 修改流程
 
-1. 先開 `preview-xxx` 分支修改並推上去（GitHub Pages 只發布 `main`，所以不影響網站）。
+1. 一律用**固定的 `preview` 分支**修改並推上去，不要再開新的 `preview-xxx`（擋不掉也刪不掉會越積越多）。每次開始前先 `git checkout -B preview main`，推送用 `git push --force-with-lease origin preview`。GitHub Pages 只發布 `main`，所以不影響網站。
 2. 用假資料測試（例：王小明、作業員 A、包裝區積水），電腦與手機尺寸都測。
 3. 擁有者確認「可以上線」後才合併到 `main`，並同步更新 claude.ai 版。
 
