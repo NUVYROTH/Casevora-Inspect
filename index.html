@@ -1004,7 +1004,7 @@ const GUIDES = {
     gStep(7,'風險顏色、連續發生警示、地圖統計', gC(gR(`${gB('🎨 風險顏色（開）',{dk:1,hl:1,n:1})}`)+gR(`<span class="gx-sw" style="background:#b42318"></span><span class="gx-s">重大／逾期／重複</span><span class="gx-sw" style="background:#d97706"></span><span class="gx-s">未結案</span><span class="gx-sw" style="background:#167a3e"></span><span class="gx-s">都結案</span>`)) + gC(gR(`${gN(2)}${gTag('本月','dk')}${gTag('最近三個月')}${gTag('自訂')}`),'📊 地圖統計'),
       `<p>檢視模式依缺失狀況自動上色${gN(1)}：紅＝重大、逾期或<b>重複發生</b>；黃＝有未結案；綠＝都結案；灰＝沒紀錄。</p><p><b>⚠ 連續發生警示</b>：同一位置同一類缺失<b>連續 3 個月</b>都發生，位置標記會閃動並加 ⚠，右邊面板會提醒檢討根本原因。</p><p>地圖下方「📊 地圖統計」${gN(2)}選期間；<b>點某個區域時，統計會變成那一區各位置的分布</b>，按「看全部區域」回到全廠。</p>`),
     gStep(8,'給同事用同一張地圖', gC(gR(`${gB('匯出地圖設定',{hl:1,n:1})}${gB('匯入地圖設定',{hl:1,n:2})}`)) + `<div class="gx-s" style="text-align:center">只含平面圖・區域・位置・稽核重點・參考照片<br>不含案件，不會蓋掉同事的資料</div>`,
-      `<p>按「匯出地圖設定」${gN(1)}存成檔案給同事，同事按「匯入地圖設定」${gN(2)}就有同一張地圖。</p><p class="muted small">「下載備份」會連稽核紀錄一起存。平面圖屬公司內部資料，不會上傳也不會送給 AI。</p>`)
+      `<p>按「匯出地圖設定」${gN(1)}存成檔案給同事，同事按「匯入地圖設定」${gN(2)}就有同一張地圖。</p><p>要放進報告或貼公告時，按上方<b>「🖼 匯出平面圖（圖片）」</b>，會把區域、位置、顏色一起存成清晰的 PNG（依目前風險顏色開／關）。</p><p class="muted small">「下載備份」會連稽核紀錄一起存。平面圖屬公司內部資料，不會上傳也不會送給 AI；匯出的圖片傳給別人前請先確認可以外流。</p>`)
   ]},
   trash: { t:'最近刪除使用說明', steps:() => [
     gStep(1,'刪除的案件會先放這裡', gC(gR(`<span class="gx-s" style="flex:1">QA-20261026-001 包裝區</span>${gB('編輯')}${gB('刪除',{rd:1,hl:1,n:1})}`),'缺失清單'),
@@ -2209,6 +2209,7 @@ function renderMap(){
         <div class="ptools">
           <button class="primary pnew" onclick="this.nextElementSibling.click()">＋ 新增地圖（上傳平面圖）</button>
           <input type="file" accept="image/jpeg,image/png" hidden onchange="mapUpload(this,'')">
+          ${m?`<button class="lite" onclick="mapExportImage()" title="把畫好的平面圖（區域、位置、顏色）存成清晰的 PNG 圖片">🖼 匯出平面圖（圖片）</button>`:''}
           <button class="lite" onclick="mapExport()">匯出地圖設定</button>
           <button class="lite" onclick="this.nextElementSibling.click()">匯入地圖設定</button>
           <input type="file" accept="application/json,.json" hidden onchange="mapImport(this)">
@@ -2869,6 +2870,76 @@ function riskOf(rs, aid, rep){
 let MV_RISK = true; try{ MV_RISK = localStorage.getItem('qaHygieneTracker_v1_mapRisk')!=='0'; }catch(e){}
 function mapRiskToggle(){ MV_RISK = !MV_RISK; try{ localStorage.setItem('qaHygieneTracker_v1_mapRisk', MV_RISK?'1':'0'); }catch(e){} renderMap(); }
 function areaColor(a, rep){ return MV_RISK && MV.mode==='view' ? RISK[riskOf(recsForArea(a), a.id, rep)].c : (a.color||'#b8955a'); }
+/* 匯出畫好的平面圖（PNG）：平面圖＋區域＋位置標記，依目前的顯示方式（風險顏色開／關），放大繪製讓文字清晰 */
+async function mapExportImage(){
+  const m = MAPD.maps.find(x=>x.id===MV.mapId); if(!m) return;
+  const u = await phGet(m.img); if(!u){ say('平面圖找不到，請重新上傳。'); return; }
+  const img = new Image(); img.src = u; try{ await img.decode(); }catch(e){ say('平面圖讀取失敗。'); return; }
+  const k = Math.min(3, Math.max(1, 3200/img.naturalWidth));     /* 放大到約 3200px 寬，線條、文字比較銳利 */
+  const W = Math.round(img.naturalWidth*k), H = Math.round(img.naturalHeight*k), u1 = W/1600;  /* u1：字與線條的基本單位 */
+  const risk = MV_RISK && MV.mode==='view', rep = repeatSet(), streak = streakAlerts();
+  const HEAD = Math.round(70*u1), FOOT = risk ? Math.round(56*u1) : Math.round(36*u1);
+  const c = document.createElement('canvas'); c.width = W; c.height = H + HEAD + FOOT;
+  const g = c.getContext('2d'), F = '"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif';
+  g.fillStyle = '#fff'; g.fillRect(0,0,c.width,c.height);
+  /* 標題列 */
+  g.fillStyle = '#16213a'; g.fillRect(0,0,W,HEAD);
+  g.fillStyle = '#fffdf8'; g.font = `700 ${Math.round(30*u1)}px ${F}`; g.textBaseline = 'middle';
+  g.fillText(`Casevoras 廠區地圖｜${m.name}`, Math.round(24*u1), HEAD/2);
+  g.font = `${Math.round(18*u1)}px ${F}`; g.fillStyle = '#d6c08f'; g.textAlign = 'right';
+  g.fillText(`匯出日期：${fmtDate(today())}${risk?'　風險顏色':''}`, W - Math.round(24*u1), HEAD/2); g.textAlign = 'left';
+  /* 平面圖 */
+  g.save(); g.translate(0, HEAD);
+  if(risk) g.filter = 'grayscale(1) contrast(.7) brightness(1.22)';
+  g.imageSmoothingQuality = 'high'; g.drawImage(img, 0, 0, W, H); g.filter = 'none';
+  const X = x => x*W, Y = y => y*H;
+  const rr = (x,y,w,h,r) => { g.beginPath(); g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r); g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath(); };
+  const hexA = (hex, a) => { const h = hex.replace('#',''); const n = parseInt(h.length===3 ? h.split('').map(x=>x+x).join('') : h.slice(0,6), 16); return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`; };
+  /* 區域 */
+  const as = mapAreas();
+  as.forEach(a => {
+    const col = risk ? RISK[riskOf(recsForArea(a), a.id, rep)].c : (a.color||'#b8955a');
+    g.beginPath();
+    if(a.pts){ a.pts.forEach(([x,y],i)=> i ? g.lineTo(X(x),Y(y)) : g.moveTo(X(x),Y(y))); g.closePath(); }
+    else g.rect(X(a.x), Y(a.y), X(a.w), Y(a.h));
+    g.fillStyle = hexA(col, risk ? 0.30 : 0.10); g.fill();
+    g.lineWidth = Math.max(2, 3*u1); g.strokeStyle = col; g.stroke();
+  });
+  /* 區域名稱 */
+  as.forEach(a => {
+    const s = mapStats(recsForArea(a)), warn = streak.some(x=>x.aid===a.id);
+    const lx = X(a.pts ? a.pts[0][0] : a.x) + 6*u1, ly = Y(a.pts ? a.pts[0][1] : a.y) + 6*u1;
+    const fs = Math.round(15*u1); g.font = `700 ${fs}px ${F}`;
+    const txt = a.name + (warn ? ' ⚠' : ''), tw = g.measureText(txt).width, cw = s.open ? fs*1.3 : 0, pad = 7*u1, h = fs*1.55;
+    rr(lx, ly, tw + pad*2 + cw, h, 5*u1); g.fillStyle = 'rgba(255,253,248,.95)'; g.fill();
+    if(risk){ g.fillStyle = RISK[riskOf(recsForArea(a), a.id, rep)].c; g.fillRect(lx, ly, 5*u1, h); }
+    g.fillStyle = '#16213a'; g.textBaseline = 'middle'; g.fillText(txt, lx+pad, ly+h/2);
+    if(s.open){ const cx = lx+pad+tw+cw/2+3*u1; g.beginPath(); g.arc(cx, ly+h/2, fs*0.58, 0, Math.PI*2); g.fillStyle = '#b42318'; g.fill();
+      g.fillStyle = '#fff'; g.font = `700 ${Math.round(fs*0.8)}px ${F}`; g.textAlign = 'center'; g.fillText(String(s.open), cx, ly+h/2+0.5); g.textAlign = 'left'; }
+  });
+  /* 位置標記 */
+  const ids = new Set(as.map(a=>a.id));
+  MAPD.locs.filter(l=>ids.has(l.areaId)).forEach(l => {
+    const rk = risk ? riskOf(recsForLoc(l), '', rep) : (mapStats(recsForLoc(l)).open ? 'red' : '');
+    const bg = rk ? ({red:'#b42318', yellow:'#d97706', green:'#167a3e', gray:'#9aa3b2'})[rk] : '#16213a';
+    const fs = Math.round(13*u1); g.font = `700 ${fs}px ${F}`;
+    const t = l.code || l.name || '•', tw = g.measureText(t).width, h = fs*1.9, w = Math.max(h, tw + fs*1.2), x = X(l.x) - w/2, y = Y(l.y) - h/2;
+    rr(x, y, w, h, h/2); g.fillStyle = bg; g.fill(); g.lineWidth = 2.5*u1; g.strokeStyle = '#fff'; g.stroke();
+    g.fillStyle = '#fff'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(t, X(l.x), Y(l.y)+0.5); g.textAlign = 'left';
+    if(streak.some(x=>x.lid===l.id)){ const bx = x+w, by = y; g.beginPath(); g.arc(bx, by, fs*0.75, 0, Math.PI*2); g.fillStyle = '#fff4e0'; g.fill(); g.strokeStyle = '#f0c27b'; g.lineWidth = 1.5*u1; g.stroke();
+      g.fillStyle = '#b45309'; g.font = `700 ${Math.round(fs*0.95)}px ${F}`; g.textAlign = 'center'; g.fillText('⚠', bx, by+0.5); g.textAlign = 'left'; }
+  });
+  g.restore();
+  /* 下方圖例 */
+  g.fillStyle = '#f3ece0'; g.fillRect(0, H+HEAD, W, FOOT); g.textBaseline = 'middle';
+  g.font = `${Math.round(15*u1)}px ${F}`; let fx = Math.round(24*u1); const fy = H + HEAD + FOOT/2;
+  if(risk){ Object.values(RISK).forEach(v => { g.fillStyle = v.c; g.fillRect(fx, fy-7*u1, 14*u1, 14*u1); fx += 20*u1; g.fillStyle = '#16213a'; const t = v.t; g.fillText(t, fx, fy); fx += g.measureText(t).width + 26*u1; }); }
+  else { g.fillStyle = '#5d6779'; g.fillText('區域旁紅色數字＝未結案件數；紅色位置標記＝有未結案缺失；⚠＝連續 3 個月發生', fx, fy); }
+  const blob = await new Promise(r => c.toBlob(r, 'image/png'));
+  if(!blob){ say('圖片產生失敗，請重試。'); return; }
+  await download(blob, `Casevoras_廠區地圖_${m.name}_${today()}.png`.replace(/[\\/:*?"<>|\s]+/g,'_'), 'image/png');
+  flash('已匯出平面圖');
+}
 function locRiskCls(l, rep){ return MV_RISK && MV.mode==='view' ? 'rk-'+riskOf(recsForLoc(l), '', rep) : (mapStats(recsForLoc(l)).open?'hot':''); }
 function riskLegendHTML(){ return MV_RISK && MV.mode==='view' ? `<div class="mlegend">${Object.entries(RISK).map(([k,v])=>`<span><i style="background:${v.c}"></i>${v.t}</span>`).join('')}</div>` : ''; }
 function riskBadgeHTML(rs, aid){ const k = riskOf(rs, aid); return `<div class="mrisk" style="--rc:${RISK[k].c}">● ${RISK[k].t.replace(/^.：/,'')}</div>`; }
