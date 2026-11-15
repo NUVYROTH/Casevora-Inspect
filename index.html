@@ -191,6 +191,7 @@ body.wide main{max-width:none}
 .lysvg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
 .lysvg .lz{pointer-events:visiblePainted;fill:var(--c);fill-opacity:var(--za,.55);stroke:var(--c);stroke-width:2;stroke-opacity:1;cursor:pointer;filter:saturate(1.15)}
 .lysvg .lz:hover{fill-opacity:calc(var(--za,.55) + .12)}.lysvg .lz.bg{pointer-events:none;fill-opacity:calc(var(--za,.55) * .7);stroke-opacity:.55}
+.lysvg.lyzs.mul{mix-blend-mode:multiply}
 .lyalpha{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);background:#fffdf8;border:1px solid var(--line);border-radius:999px;padding:4px 12px;white-space:nowrap}
 .lyalpha input[type=range]{width:120px;accent-color:var(--brand);padding:0;margin:0;border:0;background:transparent!important;box-shadow:none!important;height:18px;min-height:0}.lyalpha b{min-width:36px;color:var(--ink,#16213a);text-align:right}
 .lysvg .lz.sel{stroke:#16213a;stroke-width:3.5}
@@ -1054,7 +1055,7 @@ const GUIDES = {
     gStep(11,'切換圖層（缺失以外的圖）', gC(gR(`${gN(1)}<span class="gx-seg" style="flex-wrap:wrap"><i class="on">🔍 缺失</i><i>🧼 清潔分區</i><i>🔶 易碎品</i><i>➡️ 動線與設施</i><i>🐭 病媒防治</i></span>`)+gR(`${gB('🧼 疊清潔分區（開）',{dk:1,hl:1,n:2})}${gB('🖼 匯出平面圖（圖片）',{hl:1,n:3})}`)),
       `<p>地圖上方有一排圖層${gN(1)}，每一層<b>分開畫、分開看</b>，不會跟缺失混在一起；平面圖只要上傳一次，五層共用。</p><p>易碎品、動線、病媒這三層可以按「🧼 疊清潔分區」${gN(2)}，把分區淡淡地墊在底下對照。</p><p>在哪一層按「🖼 匯出平面圖（圖片）」${gN(3)}，就匯出<b>那一層</b>的清晰 PNG，下方附圖例。</p>`),
     gStep(12,'🧼 清潔分區', gC(gR(`${gIn('準清潔區 ▾',1)}${gN(1)}${gB('▭ 畫分區（拖曳）',{hl:1,n:2})}${gB('⬠ 多邊形分區',{hl:1})}`)+gR(`<span class="gx-sw" style="background:#c4bb7c"></span><span class="gx-s">一般作業區</span><span class="gx-sw" style="background:#b9cde5"></span><span class="gx-s">準清潔區</span><span class="gx-sw" style="background:#e6b9b8"></span><span class="gx-s">清潔區</span>`)) + gC(gR(`${gIn('包裝區 ▾')}${gIn('準清潔區 ▾')}`)+gR(gB('複製成清潔分區',{hl:1,n:3})),'📋 從缺失區域複製範圍'),
-      `<p>切到「✏️ 編輯模式」，先選<b>分區種類</b>${gN(1)}，再按「▭ 畫分區」${gN(2)}在平面圖上拖曳；L 型等不規則形狀用「⬠ 多邊形分區」，每個角點一下；<b>🧲 磁鐵</b>會幫你貼齊色塊邊界和旁邊分區的角（見第 4 步）。</p><p>分區跟缺失區域一樣大時，右邊「從缺失區域複製範圍」${gN(3)}，不用重畫。</p><p>點分區可以改種類、取名稱（例：包裝室）、寫說明；拖白色方塊改角、拖「＋」加角。畫好後可以「🔒 鎖定分區」避免拖到。</p><p><b>🎨 分區顏色 淡／濃</b>：地圖上方的滑桿可以調分區的透明程度，往「淡」拉底稿的字比較清楚、往「濃」拉顏色比較明顯；<b>顏色本身不變</b>，匯出圖片也照這個濃淡。</p><p class="muted small">顏色預設：一般作業區卡其、準清潔區淺藍、清潔區淺粉；編輯模式右邊「🎨 圖例顏色」可以改。</p>`),
+      `<p>切到「✏️ 編輯模式」，先選<b>分區種類</b>${gN(1)}，再按「▭ 畫分區」${gN(2)}在平面圖上拖曳；L 型等不規則形狀用「⬠ 多邊形分區」，每個角點一下；<b>🧲 磁鐵</b>會幫你貼齊色塊邊界和旁邊分區的角（見第 4 步）。</p><p>分區跟缺失區域一樣大時，右邊「從缺失區域複製範圍」${gN(3)}，不用重畫。</p><p>點分區可以改種類、取名稱（例：包裝室）、寫說明；拖白色方塊改角、拖「＋」加角。畫好後可以「🔒 鎖定分區」避免拖到。</p><p><b>🔤 文字在顏色上</b>（預設開）：分區顏色像螢光筆一樣<b>墊在底稿文字下面</b>，黑字照樣清楚，白底平面圖效果最好；如果底稿本身有顏色、疊起來顏色怪怪的，按一下關掉，改成半透明蓋在上面。</p><p><b>🎨 分區顏色 淡／濃</b>：地圖上方的滑桿可以調分區的透明程度，往「淡」拉底稿的字比較清楚、往「濃」拉顏色比較明顯；<b>顏色本身不變</b>，匯出圖片也照這個濃淡。</p><p class="muted small">顏色預設：一般作業區卡其、準清潔區淺藍、清潔區淺粉；編輯模式右邊「🎨 圖例顏色」可以改。</p>`),
     gStep(13,'🔶 易碎品：標示', gC(gR(`${gB('🔶 新增易碎品',{hl:1,n:1})}`)+gR(`<span class="gx-tag" style="background:#f59e0b;color:#3b2500;border-color:#fff">◆ G01</span><span class="gx-s">燈罩（玻璃）× 2</span>`)) + gC(gR(`${gIn('材質：玻璃')}${gIn('數量：2')}`)+gR(`${gIn('每 1 個月 ▾',1)}${gN(2)}`),'🔶 G01 燈罩'),
       `<p>編輯模式按「🔶 新增易碎品」${gN(1)}，在所在位置點一下，輸入名稱（例：燈罩、觀察窗玻璃、玻璃溫度計），編號自動編 <b>G01、G02…</b></p><p>點標記可以填材質、數量、位置說明、加參考照片（可 Ctrl+V 貼上）。</p><p><b>檢查頻率</b>${gN(2)}：預設<b>每個月一次</b>，右邊面板可改成每 2、3、4、6、12 個月；個別項目也可以單獨設定。</p><p>「📗 匯出易碎品清單（Excel）」含最近檢查日、下次檢查日與檢查紀錄。</p>`),
     gStep(14,'🔶 易碎品：定期檢查', gC(gR(gB('📝 開始易碎品檢查',{dk:1,hl:1,n:1}))+gR(`<span class="gx-s" style="flex:1">G01 燈罩</span>${gN(2)}${gB('✅ 完整',{ok:1})}${gB('❌ 破損',{rd:1,hl:1})}${gB('❓ 遺失')}`)+gR(gB('＋ 建立缺失',{dk:1,hl:1,n:3}))) + gC(gR(`<span class="gx-tag" style="background:#f59e0b;color:#3b2500;border-color:#fff">◆ G01</span><span class="gx-s">正常</span><span class="gx-tag" style="background:#f59e0b;color:#3b2500;box-shadow:0 0 0 2px #b42318">◆ G02 !</span><span class="gx-s">到期未檢查</span><span class="gx-tag" style="background:#b42318;color:#fff">◆ G03</span><span class="gx-s">破損</span>`),'地圖上的顏色'),
@@ -2230,7 +2231,7 @@ function restore(input){
 const KEY_M = 'qaHygieneTracker_v1_map';
 function loadMap(){ let o = {}; try{ o = JSON.parse(localStorage.getItem(KEY_M)||'{}') || {}; }catch(e){}
   const A = k => Array.isArray(o[k]) ? o[k] : [];
-  return { maps:A('maps'), areas:A('areas'), locs:A('locs'), items:A('items'), zones:A('zones'), flows:A('flows'), marks:A('marks'), frags:A('frags'), pests:A('pests'), fragCfg:o.fragCfg||{}, colors:o.colors||{}, zoneAlpha:o.zoneAlpha }; }
+  return { maps:A('maps'), areas:A('areas'), locs:A('locs'), items:A('items'), zones:A('zones'), flows:A('flows'), marks:A('marks'), frags:A('frags'), pests:A('pests'), fragCfg:o.fragCfg||{}, colors:o.colors||{}, zoneAlpha:o.zoneAlpha, zoneMul:o.zoneMul }; }
 let MAPD = loadMap();
 function saveMap(){ try{ localStorage.setItem(KEY_M, JSON.stringify(MAPD)); return true; }catch(e){ say('廠區地圖存不進去，瀏覽器的儲存空間可能已滿。'); return false; } }
 const mapUid = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
@@ -2289,6 +2290,7 @@ function renderMap(){
         <button onclick="this.nextElementSibling.click()">換圖片</button><input type="file" accept="image/jpeg,image/png" hidden onchange="mapUpload(this,MV.mapId)">
         <button class="danger" onclick="mapDelete()">刪除地圖</button>` : ''}
       ${MV.mode==='view'&&MV.layer==='defect'?`<button class="${MV_RISK?'primary':''}" onclick="mapRiskToggle()" title="依缺失狀況自動上色">🎨 風險顏色${MV_RISK?'（開）':'（關）'}</button>`:''}
+      ${MV.layer==='zone' && lyList('zone').length ? `<button class="${lyZoneMul()?'primary':''}" onclick="lyZoneMulToggle()" title="開：分區顏色墊在底稿文字下面（白底平面圖最適合）；關：顏色半透明蓋在上面">🔤 文字在顏色上${lyZoneMul()?'（開）':'（關）'}</button>` : ''}
       ${(MV.layer==='zone' || (MV_ZBG && ['frag','flow','pest'].includes(MV.layer))) && lyList('zone').length ? `<label class="lyalpha" title="只改分區顏色的透明程度，顏色本身不變；匯出圖片也一樣">🎨 分區顏色　淡<input type="range" min="10" max="95" step="5" value="${Math.round(lyZoneAlpha()*100)}" aria-label="分區顏色濃淡" oninput="lyAlpha(this.value,false)" onchange="lyAlpha(this.value,true)">濃<b id="lyAlphaV">${Math.round(lyZoneAlpha()*100)}%</b></label>` : ''}
       ${MV.layer==='frag'||MV.layer==='flow'||MV.layer==='pest'?`<button class="${MV_ZBG?'primary':''}" onclick="lyZbgToggle()" title="把清潔分區淡淡地墊在底下對照">🧼 疊清潔分區${MV_ZBG?'（開）':'（關）'}</button>`:''}
       ${MV.layer==='frag'&&lyList('frag').length?`<button class="primary" onclick="fragCheckStart()">📝 開始易碎品檢查</button>`:''}
@@ -2708,7 +2710,7 @@ function mapImport(input){
 async function mapApply(map, images){
   const okPts = o => o && o.id && o.mapId && Array.isArray(o.pts) && o.pts.length>=2;
   const next = { maps:(map.maps||[]).filter(m=>m && m.id && m.img), areas:(map.areas||[]).filter(a=>a && a.id && typeof a.x==='number'), locs:(map.locs||[]).filter(l=>l && l.id && typeof l.x==='number'), items:(map.items||[]).filter(t=>t && t.id && t.areaId && t.name),
-    zones:(map.zones||[]).filter(okPts), flows:(map.flows||[]).filter(okPts), marks:(map.marks||[]).filter(okPts), frags:(map.frags||[]).filter(f=>f && f.id && f.mapId && typeof f.x==='number'), pests:(map.pests||[]).filter(f=>f && f.id && f.mapId && typeof f.x==='number'), fragCfg:map.fragCfg||{}, colors:map.colors||{}, zoneAlpha:map.zoneAlpha };
+    zones:(map.zones||[]).filter(okPts), flows:(map.flows||[]).filter(okPts), marks:(map.marks||[]).filter(okPts), frags:(map.frags||[]).filter(f=>f && f.id && f.mapId && typeof f.x==='number'), pests:(map.pests||[]).filter(f=>f && f.id && f.mapId && typeof f.x==='number'), fragCfg:map.fragCfg||{}, colors:map.colors||{}, zoneAlpha:map.zoneAlpha, zoneMul:map.zoneMul };
   try{ const ids = [...next.maps.map(m=>m.img), ...next.areas.flatMap(a=>a.photos||[]), ...next.locs.flatMap(l=>l.photos||[]), ...next.frags.flatMap(f=>f.photos||[])]; for(const id of ids){ const u = images && images[id]; if(u && typeof u==='string' && u.startsWith('data:image/')) await phPut(id, u); } }
   catch(e){ say('平面圖存不進去，瀏覽器的儲存空間可能已滿，地圖沒有變動。'); return false; }
   const old = MAPD; MAPD = next; if(!saveMap()){ MAPD = old; return false; }
@@ -3125,6 +3127,9 @@ function mapLayer(k){ if(k===MV.layer) return; MV.layer = k; lyLS('mapLayer', k)
 function lyZoneAlpha(){ const v = +MAPD.zoneAlpha; return v>=0.1 && v<=0.95 ? v : 0.55; }
 function lyAlpha(v, save){ const a = Math.max(0.1, Math.min(0.95, (+v||55)/100)); const i = $('#mapInner'); if(i) i.style.setProperty('--za', a); const t = $('#lyAlphaV'); if(t) t.textContent = Math.round(a*100)+'%';
   if(save){ MAPD.zoneAlpha = a; saveMap(); } }
+/* 文字在顏色上（相乘疊色）：存在地圖設定，預設開 */
+function lyZoneMul(){ return MAPD.zoneMul !== false; }
+function lyZoneMulToggle(){ MAPD.zoneMul = !lyZoneMul(); saveMap(); renderMap(); flash(lyZoneMul() ? '🔤 分區顏色墊在文字下面' : '分區顏色改成半透明蓋在上面'); }
 function lyZbgToggle(){ MV_ZBG = !MV_ZBG; lyLS('mapZbg', MV_ZBG?'1':'0'); renderMap(); }
 function lyToggle(k){ MV_HIDE.has(k) ? MV_HIDE.delete(k) : MV_HIDE.add(k); lyLS('mapHide', JSON.stringify([...MV_HIDE])); renderMap(); }
 const LY_ARR = { zone:'zones', flow:'flows', mark:'marks', frag:'frags', pest:'pests' };
@@ -3206,9 +3211,9 @@ function lyLegendHTML(){
 function lyPts(pts, VH){ return pts.map(q=>(q[0]*1000).toFixed(1)+','+(q[1]*VH).toFixed(1)).join(' '); }
 function lyOverlay(m){
   const VH = lyVH(m), L = MV.layer, sel = MV.sel, ed = MV.mode==='edit', isSel = (t,id) => sel && sel.t===t && sel.id===id;
-  let defs = '', body = '', html = '';
+  let defs = '', body = '', html = '', zbody = '';
   if(L==='zone' || (MV_ZBG && L!=='defect')){
-    lyList('zone').forEach(z => { body += `<polygon data-lo="zone:${z.id}" class="lz ${L!=='zone'?'bg':''} ${isSel('zone',z.id)?'sel':''}" points="${lyPts(z.pts, VH)}" style="--c:${lyColor(z.kind)}"/>`; });
+    lyList('zone').forEach(z => { zbody += `<polygon data-lo="zone:${z.id}" class="lz ${L!=='zone'?'bg':''} ${isSel('zone',z.id)?'sel':''}" points="${lyPts(z.pts, VH)}" style="--c:${lyColor(z.kind)}"/>`; });
     if(L==='zone') lyList('zone').forEach(z => { const b = lyLabPt(z.pts); html += `<span class="mplab lzlab" style="left:${b.x*100}%;top:${b.y*100}%;--c:${lyColor(z.kind)}">${esc(ZK[z.kind]?ZK[z.kind].t:'')}${z.name?'｜'+esc(z.name):''}</span>`; });
   }
   if(L==='flow'){
@@ -3230,7 +3235,8 @@ function lyOverlay(m){
     if(sel.t!=='mark') P.forEach((q,i) => { if(!closed && i===P.length-1) return; const r = P[(i+1)%P.length]; html += `<i class="mmid" data-lmid="${i}" title="拖曳可多加一個${closed?'角':'轉彎點'}" style="left:${(q[0]+r[0])*50}%;top:${(q[1]+r[1])*50}%">+</i>`; });
     P.forEach((q,i) => { html += `<i class="mvtx" data-lvtx="${i}" title="拖曳調整；連點兩下刪除" style="left:${q[0]*100}%;top:${q[1]*100}%"></i>`; });
   }
-  return `<svg class="lysvg" viewBox="0 0 1000 ${VH.toFixed(1)}" preserveAspectRatio="none"><defs>${defs}</defs>${body}</svg>${html}`;
+  /* 分區自己一層；「文字在顏色上」開著時用相乘疊色：白底變分區顏色，底稿的黑字、線條留在上面（底稿本身不加工，字不會糊） */
+  return `${zbody?`<svg class="lysvg lyzs ${lyZoneMul()?'mul':''}" viewBox="0 0 1000 ${VH.toFixed(1)}" preserveAspectRatio="none">${zbody}</svg>`:''}<svg class="lysvg" viewBox="0 0 1000 ${VH.toFixed(1)}" preserveAspectRatio="none"><defs>${defs}</defs>${body}</svg>${html}`;
 }
 function lyRedraw(){ const ov = $('#lyOv'), m = lyMap(); if(ov && m) ov.innerHTML = lyOverlay(m); const c = $('#lyCnt'); if(c) c.textContent = MV.poly ? MV.poly.pts.length : 0; }
 function lySide(){ const s = $('#mSide'); if(s){ s.innerHTML = layerSideHTML(); hydrate(s); if(MV.sel && MV.mode==='view' && window.innerWidth<900) s.scrollIntoView({behavior:'smooth', block:'start'}); } lyRedraw(); }
@@ -3636,7 +3642,9 @@ async function layerExportImage(){
   const dashOf = (d, w) => d==='dash' ? [14*s, 8*s] : d==='dot' ? [0.1, w*2] : [];
   /* 分區 */
   if(L==='zone' || (MV_ZBG && L!=='defect')){
+    if(lyZoneMul()) g.globalCompositeOperation = 'multiply';
     lyList('zone').forEach(z => { const col = lyColor(z.kind); path(z.pts); g.closePath(); g.fillStyle = hexA(col, L==='zone' ? lyZoneAlpha() : lyZoneAlpha()*0.7); g.fill(); g.lineWidth = Math.max(1.5, 1.5*s); g.strokeStyle = hexA(col, 1); g.stroke(); });
+    g.globalCompositeOperation = 'source-over';
     if(L==='zone') lyList('zone').forEach(z => { const b = lyLabPt(z.pts), fs = Math.round(15*u1), t = (ZK[z.kind]?ZK[z.kind].t:'')+(z.name?'｜'+z.name:''); g.font = `700 ${fs}px ${F}`;
       const tw = g.measureText(t).width, pad = 7*u1, h = fs*1.55, x = X(b.x)+6*u1, y = Y(b.y)+6*u1;
       rr(x, y, tw+pad*2+5*u1, h, 5*u1); g.fillStyle = 'rgba(255,253,248,.95)'; g.fill(); g.fillStyle = lyColor(z.kind); g.fillRect(x, y, 5*u1, h);
