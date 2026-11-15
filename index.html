@@ -209,6 +209,13 @@ body.wide main{max-width:none}
 .mfrag.fs-due{border-color:#b42318;box-shadow:0 0 0 2px #b42318,0 2px 6px rgba(0,0,0,.35)}
 .mfrag.fs-due::after{content:'!';position:absolute;top:-9px;right:-9px;width:16px;height:16px;border-radius:50%;background:#b42318;color:#fff;font-size:11px;line-height:16px;text-align:center}
 .mfrag.fs-bad{background:#b42318;color:#fff}
+.mfrag.fi{background:none!important;border:0!important;box-shadow:none!important;padding:0;height:auto;gap:0}
+.mfrag.fi img{width:calc(34px*var(--ms));height:calc(34px*var(--ms));filter:drop-shadow(0 2px 3px rgba(0,0,0,.4));pointer-events:none}
+.mfrag.fi b{margin-left:calc(-4px*var(--ms));height:calc(20px*var(--ms));display:flex;align-items:center;padding:0 calc(6px*var(--ms));border-radius:5px;background:#f59e0b;color:#3b2500;border:2px solid #fff;font-size:calc(11px*var(--ms));pointer-events:none}
+.mfrag.fi.fs-soon b{box-shadow:0 0 0 2px #d97706}.mfrag.fi.fs-due b{box-shadow:0 0 0 2px #b42318}.mfrag.fi.fs-bad b{background:#b42318;color:#fff}
+.mfrag.fi.fs-due::after{top:-8px;right:-8px}
+.mfrag.fi.sel{outline:0}.mfrag.fi.sel img{outline:3px solid var(--gold);border-radius:50%}
+.lyico-o{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:4px;background:#f59e0b;color:#3b2500;font-size:11px;font-weight:800;vertical-align:-4px}
 .mfrag.sel{outline:3px solid var(--gold);outline-offset:1px}
 .msnap{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;border:2px solid #16213a;background:rgba(255,255,255,.75);pointer-events:none;z-index:5}
 .msnap.on{border-color:#d9480f;background:#ffd8a8;box-shadow:0 0 0 4px rgba(217,72,15,.22)}
@@ -1056,10 +1063,10 @@ const GUIDES = {
       `<p>地圖上方有一排圖層${gN(1)}，每一層<b>分開畫、分開看</b>，不會跟缺失混在一起；平面圖只要上傳一次，五層共用。</p><p>易碎品、動線、病媒這三層可以按「🧼 疊清潔分區」${gN(2)}，把分區淡淡地墊在底下對照。</p><p>在哪一層按「🖼 匯出平面圖（圖片）」${gN(3)}，就匯出<b>那一層</b>的清晰 PNG，下方附圖例。</p>`),
     gStep(12,'🧼 清潔分區', gC(gR(`${gIn('準清潔區 ▾',1)}${gN(1)}${gB('▭ 畫分區（拖曳）',{hl:1,n:2})}${gB('⬠ 多邊形分區',{hl:1})}`)+gR(`<span class="gx-sw" style="background:#c4bb7c"></span><span class="gx-s">一般作業區</span><span class="gx-sw" style="background:#b9cde5"></span><span class="gx-s">準清潔區</span><span class="gx-sw" style="background:#e6b9b8"></span><span class="gx-s">清潔區</span>`)) + gC(gR(`${gIn('包裝區 ▾')}${gIn('準清潔區 ▾')}`)+gR(gB('複製成清潔分區',{hl:1,n:3})),'📋 從缺失區域複製範圍'),
       `<p>切到「✏️ 編輯模式」，先選<b>分區種類</b>${gN(1)}，再按「▭ 畫分區」${gN(2)}在平面圖上拖曳；L 型等不規則形狀用「⬠ 多邊形分區」，每個角點一下；<b>🧲 磁鐵</b>會幫你貼齊色塊邊界和旁邊分區的角（見第 4 步）。</p><p>分區跟缺失區域一樣大時，右邊「從缺失區域複製範圍」${gN(3)}，不用重畫。</p><p>點分區可以改種類、取名稱（例：包裝室）、寫說明；拖白色方塊改角、拖「＋」加角。畫好後可以「🔒 鎖定分區」避免拖到。</p><p><b>🔤 文字在顏色上</b>（預設開）：分區顏色像螢光筆一樣<b>墊在底稿文字下面</b>，黑字照樣清楚，白底平面圖效果最好；如果底稿本身有顏色、疊起來顏色怪怪的，按一下關掉，改成半透明蓋在上面。</p><p><b>🎨 分區顏色 淡／濃</b>：地圖上方的滑桿可以調分區的透明程度，往「淡」拉底稿的字比較清楚、往「濃」拉顏色比較明顯；<b>顏色本身不變</b>，匯出圖片也照這個濃淡。</p><p class="muted small">顏色預設：一般作業區卡其、準清潔區淺藍、清潔區淺粉；編輯模式右邊「🎨 圖例顏色」可以改。</p>`),
-    gStep(13,'🔶 易碎品：標示', gC(gR(`${gB('🔶 新增易碎品',{hl:1,n:1})}`)+gR(`<span class="gx-tag" style="background:#f59e0b;color:#3b2500;border-color:#fff">◆ G01</span><span class="gx-s">燈罩（玻璃）× 2</span>`)) + gC(gR(`${gIn('材質：玻璃')}${gIn('數量：2')}`)+gR(`${gIn('每 1 個月 ▾',1)}${gN(2)}`),'🔶 G01 燈罩'),
-      `<p>編輯模式按「🔶 新增易碎品」${gN(1)}，在所在位置點一下，輸入名稱（例：燈罩、觀察窗玻璃、玻璃溫度計），編號自動編 <b>G01、G02…</b></p><p>點標記可以填材質、數量、位置說明、加參考照片（可 Ctrl+V 貼上）。</p><p><b>檢查頻率</b>${gN(2)}：預設<b>每個月一次</b>，右邊面板可改成每 2、3、4、6、12 個月；個別項目也可以單獨設定。</p><p>「📗 匯出易碎品清單（Excel）」含最近檢查日、下次檢查日與檢查紀錄。</p>`),
-    gStep(14,'🔶 易碎品：定期檢查', gC(gR(gB('📝 開始易碎品檢查',{dk:1,hl:1,n:1}))+gR(`<span class="gx-s" style="flex:1">G01 燈罩</span>${gN(2)}${gB('✅ 完整',{ok:1})}${gB('❌ 破損',{rd:1,hl:1})}${gB('❓ 遺失')}`)+gR(gB('＋ 建立缺失',{dk:1,hl:1,n:3}))) + gC(gR(`<span class="gx-tag" style="background:#f59e0b;color:#3b2500;border-color:#fff">◆ G01</span><span class="gx-s">正常</span><span class="gx-tag" style="background:#f59e0b;color:#3b2500;box-shadow:0 0 0 2px #b42318">◆ G02 !</span><span class="gx-s">到期未檢查</span><span class="gx-tag" style="background:#b42318;color:#fff">◆ G03</span><span class="gx-s">破損</span>`),'地圖上的顏色'),
-      `<p>按「📝 開始易碎品檢查」${gN(1)}，逐項選${gN(2)}：✅ 完整、❌ 破損、❓ 遺失、⊘ 不適用；沒問題的可以按「其餘全部 ✅ 完整」。</p><p>儲存後，破損或遺失的項目按「＋ 建立缺失」${gN(3)}，自動帶入區域與描述，接到缺失追蹤；破損要確認碎片有沒有污染產品。</p><p>地圖標記會提醒你：<b>橘框</b>＝7 天內要檢查、<b>紅框＋!</b>＝到期沒檢查、<b>整顆紅</b>＝上次檢查破損或遺失。</p>`),
+    gStep(13,'🔶 易碎品：標示', gC(gR(`${gIn('攝影機 ▾',1)}${gN(1)}${gB('放置',{hl:1,n:2})}`)+gR(`<img src="${fragIcon('clock')}" alt="" style="width:22px;height:22px"><span class="gx-s">時鐘</span><img src="${fragIcon('camera')}" alt="" style="width:22px;height:22px"><span class="gx-s">攝影機</span><img src="${fragIcon('glass')}" alt="" style="width:22px;height:22px"><span class="gx-s">玻璃</span><img src="${fragIcon('plastic')}" alt="" style="width:22px;height:22px"><span class="gx-s">塑膠</span>`)+gR(`<span class="gx-tag" style="background:#f59e0b;color:#3b2500;border-color:#fff">◆ G05</span><span class="gx-s">其它（自己打字，不用圖）</span>`)) + gC(gR(`${gIn('材質：玻璃')}${gIn('數量：2')}`)+gR(`${gIn('每 1 個月 ▾',1)}${gN(2)}`),'🔶 G01 燈罩'),
+      `<p>編輯模式先選<b>種類</b>${gN(1)}：<b>時鐘、攝影機、玻璃、塑膠</b>有圖示；不在這四種的選「其它（自己打字）」，標記用 ◆ 編號、不用圖。</p><p>按「放置」${gN(2)}後在所在位置點一下，確認或輸入名稱（例：觀察窗玻璃、塑膠籃），編號自動編 <b>G01、G02…</b>；可以連續放，放完按「■ 停止放置」。點標記也可以改種類。</p><p>點標記可以填材質、數量、位置說明、加參考照片（可 Ctrl+V 貼上）。</p><p><b>檢查頻率</b>${gN(2)}：預設<b>每個月一次</b>，右邊面板可改成每 2、3、4、6、12 個月；個別項目也可以單獨設定。</p><p>「📗 匯出易碎品清單（Excel）」含最近檢查日、下次檢查日與檢查紀錄。</p>`),
+    gStep(14,'🔶 易碎品：定期檢查', gC(gR(gB('📝 開始易碎品檢查',{dk:1,hl:1,n:1}))+gR(`<span class="gx-s" style="flex:1">G01 燈罩</span>${gN(2)}${gB('✅ 完整',{ok:1})}${gB('❌ 破損',{rd:1,hl:1})}${gB('❓ 遺失')}`)+gR(gB('＋ 建立缺失',{dk:1,hl:1,n:3}))) + gC(gR(`<img src="${fragIcon('clock')}" alt="" style="width:22px;height:22px"><span class="gx-tag" style="background:#f59e0b;color:#3b2500;border-color:#fff">G01</span><span class="gx-s">正常</span><img src="${fragIcon('camera')}" alt="" style="width:22px;height:22px"><span class="gx-tag" style="background:#f59e0b;color:#3b2500;box-shadow:0 0 0 2px #b42318">G02 !</span><span class="gx-s">到期未檢查</span>`)+gR(`<img src="${fragIcon('glass')}" alt="" style="width:22px;height:22px"><span class="gx-tag" style="background:#b42318;color:#fff">G03</span><span class="gx-s">破損</span>`),'編號標籤的顏色'),
+      `<p>按「📝 開始易碎品檢查」${gN(1)}，逐項選${gN(2)}：✅ 完整、❌ 破損、❓ 遺失、⊘ 不適用；沒問題的可以按「其餘全部 ✅ 完整」。</p><p>儲存後，破損或遺失的項目按「＋ 建立缺失」${gN(3)}，自動帶入區域與描述，接到缺失追蹤；破損要確認碎片有沒有污染產品。</p><p>圖示旁的<b>編號標籤</b>會提醒你：<b>橘框</b>＝7 天內要檢查、<b>紅框＋!</b>＝到期沒檢查、<b>整顆紅</b>＝上次檢查破損或遺失。</p>`),
     gStep(15,'➡️ 動線與設施', gC(gR(`${gIn('物流（原料） ▾',1)}${gN(1)}${gB('✏️ 畫箭頭',{hl:1,n:2})}`)+gR(`<span class="gx-s" style="color:#e46c0a;font-weight:800">──➜ 人流</span><span class="gx-s" style="color:#ff0000;font-weight:800">──➜ 原料</span><span class="gx-s" style="color:#c00000;font-weight:800">╌╌➜ 成品</span><span class="gx-s" style="color:#7f0000;font-weight:800">┄┄➜ 廢棄物</span>`)+gR(`<span class="gx-s" style="color:#0070c0;font-weight:800">──➜ 氣流</span><span class="gx-s" style="color:#a6a6a6;font-weight:800">──➜ 水流</span>`)) + gC(gR(`<span class="gx-sw" style="background:#0d0d0d"></span><span class="gx-s">門</span><span class="gx-sw" style="background:#00b050"></span><span class="gx-s">冷氣</span><span class="gx-sw" style="background:#7030a0"></span><span class="gx-s">抽風口</span><span class="gx-sw" style="background:#ff77ff"></span><span class="gx-s">水源</span><span class="gx-sw" style="background:#984807"></span><span class="gx-s">水溝</span>`)+gR(`${gN(3)}<span class="gx-s">點圖例＝隱藏／顯示</span>`),'設施標記（粗線）'),
       `<p>編輯模式先選<b>種類</b>${gN(1)}，按「✏️ 畫箭頭」${gN(2)}：從起點開始，一個轉彎點點一下，最後一點會變成箭頭；在最後一點<b>再點一下</b>或按「完成這條」結束，可以接著畫下一條。</p><p>物流分三種：<b>原料實線、成品虛線、廢棄物點線</b>，起點標「原／成／廢」。畫反了，點箭頭按「⇄ 反轉方向」。</p><p>門、冷氣、抽風口、水源供應處、水溝／排水孔選好後按「✏️ 畫標記」，在平面圖上<b>拖曳</b>畫一段粗線：<b>直的門上下拖、橫的門左右拖</b>，接近水平或垂直會自動拉直。已經畫好的，點一下按「↻ 轉 90°」（或鍵盤 <b>R</b>）就能橫的變直的。</p><p>檢視模式點上方圖例${gN(3)}可以只看某幾種（例如只看人流），匯出圖片也只會有顯示中的。</p>`),
     gStep(16,'🐭 病媒防治', gC(gR(`${gIn('鼠板站（黏鼠板） ▾',1)}${gN(1)}${gB('放置',{hl:1,n:2})}`)+gR(`<img src="${pestIcon('light')}" alt="" style="width:22px;height:22px"><span class="gx-s">捕蟲燈 L01</span><img src="${pestIcon('board')}" alt="" style="width:22px;height:22px"><span class="gx-s">鼠板站 B01</span><img src="${pestIcon('bait')}" alt="" style="width:22px;height:22px"><span class="gx-s">鼠餌站 R01</span>`)) + gC(gR(gB('📗 匯出病媒防治設施清單（Excel）',{hl:1,n:3}))+gR(gB('＋ 在這裡建立缺失（病媒防治）',{dk:1,hl:1,n:4}))),
@@ -3114,6 +3121,17 @@ const ZK = { general:{t:'一般作業區', c:'#c4bb7c'}, semi:{t:'準清潔區',
 const FK = { people:{t:'人流', c:'#e46c0a'}, raw:{t:'物流（原料）', c:'#ff0000', tag:'原'}, prod:{t:'物流（成品）', c:'#c00000', dash:'dash', tag:'成'}, waste:{t:'物流（廢棄物）', c:'#7f0000', dash:'dot', tag:'廢'}, air:{t:'氣流', c:'#0070c0'}, water:{t:'水流', c:'#a6a6a6'} };
 const MK = { door:{t:'門', c:'#0d0d0d'}, ac:{t:'冷氣', c:'#00b050'}, exhaust:{t:'抽風口', c:'#7030a0'}, watersrc:{t:'水源供應處', c:'#ff77ff'}, drain:{t:'水溝／排水孔', c:'#984807'} };
 const FST = { ok:{t:'正常', c:'#f59e0b'}, soon:{t:'7 天內要檢查', c:'#f59e0b', ring:'#d97706'}, due:{t:'到期未檢查', c:'#f59e0b', ring:'#b42318'}, bad:{t:'破損／遺失', c:'#b42318'} };
+/* 易碎品種類：有圖示的四種；其它（自己打字）沿用 ◆ 編號標記 */
+const FT = {
+  clock:{t:'時鐘', name:'時鐘', mat:'', svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#0f766e" stroke="#fff" stroke-width="1"/><circle cx="12" cy="12" r="7.4" fill="#fff"/><g stroke="#0f766e" stroke-width="1" stroke-linecap="round"><path d="M12 5.6v1.3M12 17.1v1.3M5.6 12h1.3M17.1 12h1.3"/></g><path d="M12 8.2V12l2.8 1.8" fill="none" stroke="#0f766e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r=".9" fill="#0f766e"/></svg>'},
+  camera:{t:'攝影機', name:'監視攝影機', mat:'', svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#1e3a8a" stroke="#fff" stroke-width="1"/><rect x="4.2" y="8" width="10.8" height="7.6" rx="1.6" fill="#fff"/><path d="M15 10.9l4.6-2.6v7l-4.6-2.6z" fill="#fff"/><circle cx="8.2" cy="11.8" r="1.9" fill="#1e3a8a"/><circle cx="8.2" cy="11.8" r=".8" fill="#93c5fd"/><circle cx="13.2" cy="9.6" r=".6" fill="#ef4444"/></svg>'},
+  glass:{t:'玻璃', name:'', mat:'玻璃', svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#0284c7" stroke="#fff" stroke-width="1"/><path d="M7.6 5.6h8.8l-1.3 12.6a1 1 0 0 1-1 .9H9.9a1 1 0 0 1-1-.9z" fill="#e0f2fe" stroke="#fff" stroke-width="1.1"/><path d="M8.3 10.2h7.4" stroke="#7dd3fc" stroke-width="1.2"/><path d="M10 7.4l-.5 3.4" stroke="#fff" stroke-width="1.1" stroke-linecap="round"/><path d="M13.2 12.6l1.1 1.6-1 1.3 .9 1.6" fill="none" stroke="#0284c7" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round"/></svg>'},
+  plastic:{t:'塑膠', name:'', mat:'硬質塑膠', svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#a21caf" stroke="#fff" stroke-width="1"/><rect x="10.4" y="4.2" width="3.2" height="2.2" rx=".5" fill="#fff"/><path d="M10.4 6.6h3.2l1.7 2.4v9.3a1.1 1.1 0 0 1-1.1 1.1H9.8a1.1 1.1 0 0 1-1.1-1.1V9z" fill="#fff"/><path d="M8.7 12.2h6.6M8.7 15.2h6.6" stroke="#a21caf" stroke-width="1"/></svg>'}
+};
+const fragType = f => f.ft !== undefined ? f.ft : (/鐘/.test(f.name||'') ? 'clock' : /攝影|監視/.test(f.name||'') ? 'camera' : /玻璃/.test((f.mat||'')+(f.name||'')) ? 'glass' : /塑膠|壓克力/.test((f.mat||'')+(f.name||'')) ? 'plastic' : 'other');
+const fragIcon = k => FT[k] ? 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(FT[k].svg) : '';
+const fragIco = (f, cls) => { const u = fragIcon(fragType(f)); return u ? `<img class="${cls||'lyico'}" src="${u}" alt="${esc(FT[fragType(f)].t)}">` : `<span class="lyico lyico-o">◆</span>`; };
+MV.ftk = 'clock';
 const FRAG_MAT = ['玻璃','硬質塑膠','壓克力','陶瓷','鏡面','燈管／燈泡','溫度計（玻璃）'];
 const FR = { ok:{t:'完整', i:'✅', c:'ok'}, broken:{t:'破損', i:'❌', c:'bad'}, missing:{t:'遺失', i:'❓', c:'bad'}, na:{t:'不適用', i:'⊘', c:'muted'} };
 const lyKinds = () => Object.assign({}, ZK, FK, MK);
@@ -3176,7 +3194,8 @@ function lyToolsHTML(){
   if(L==='flow'){ const line = !!FK[MV.fk], on = MV.tool==='fline'||MV.tool==='mark';
     return `<select aria-label="要畫的種類" onchange="MV.fk=this.value;if(MV.tool){MV.tool=FK[this.value]?'fline':'mark';MV.poly=MV.tool==='fline'?{pts:[]}:null;}renderMap()"><optgroup label="動線（箭頭）">${Object.entries(FK).map(([k,v])=>`<option value="${k}" ${MV.fk===k?'selected':''}>${v.t}</option>`).join('')}</optgroup><optgroup label="設施標記（粗線）">${Object.entries(MK).map(([k,v])=>`<option value="${k}" ${MV.fk===k?'selected':''}>${v.t}</option>`).join('')}</optgroup></select>
     <button class="${on?'primary':''}" onclick="lyDrawToggle()">${on?'■ 停止畫':(line?'✏️ 畫箭頭':'✏️ 畫標記')}</button>`; }
-  if(L==='frag') return `<button class="${MV.tool==='frag'?'primary':''}" onclick="MV.tool=MV.tool==='frag'?'':'frag';renderMap()">🔶 新增易碎品</button>`;
+  if(L==='frag') return `<select aria-label="易碎品種類" onchange="MV.ftk=this.value;renderMap()">${Object.entries(FT).map(([k,v])=>`<option value="${k}" ${MV.ftk===k?'selected':''}>${v.t}</option>`).join('')}<option value="other" ${MV.ftk==='other'?'selected':''}>其它（自己打字）</option></select>
+    <button class="${MV.tool==='frag'?'primary':''}" onclick="MV.tool=MV.tool==='frag'?'':'frag';MV.sel=null;renderMap()">${MV.tool==='frag'?'■ 停止放置':(FT[MV.ftk]?`<img class="lyico" src="${fragIcon(MV.ftk)}" alt=""> 放置${FT[MV.ftk].t}`:'🔶 放置易碎品')}</button>`;
   if(L==='pest') return `<select aria-label="設施種類" onchange="MV.pk=this.value;renderMap()">${Object.entries(PK).map(([k,v])=>`<option value="${k}" ${MV.pk===k?'selected':''}>${v.t}</option>`).join('')}</select>
     <button class="${MV.tool==='pest'?'primary':''}" onclick="MV.tool=MV.tool==='pest'?'':'pest';MV.sel=null;renderMap()">${MV.tool==='pest'?'■ 停止放置':`<img class="lyico" src="${pestIcon(MV.pk)}" alt=""> 放置${PK[MV.pk].t.replace(/（.*）/,'')}`}</button>`;
   return '';
@@ -3190,7 +3209,7 @@ function lyTipHTML(){
   if(T==='fline') return `畫「<b>${FK[MV.fk].t}</b>」：從起點開始「一個轉彎點一下」，最後一點會變成箭頭；在最後一點<b>再點一下</b>或按「完成」結束。已點 <span id="lyCnt">${n}</span> 點　<button class="primary" onclick="lyPolyFinish()">✔ 完成這條</button> <button onclick="lyUndo()">↶ 退一步</button> <button onclick="lyDrawToggle()">■ 停止畫</button>`;
   if(T==='mark') return `畫「<b>${MK[MV.fk].t}</b>」：在平面圖上「按住拖曳」畫一段粗線（例如門口那一段牆）：<b>直的門就上下拖、橫的門就左右拖</b>，接近水平或垂直會自動拉直（按住 Alt 不拉直）；只點一下會放一小段橫的，點選後按「↻ 轉 90°」或 R 變直的。可以連續畫，畫完按「■ 停止畫」。`;
   if(T==='pest') return `在平面圖上「點一下」放「<b>${PK[MV.pk].t}</b>」，編號自動編 ${PK[MV.pk].p}01、${PK[MV.pk].p}02…；可以連續放，放完按「■ 停止放置」。換種類請改上方的下拉選單。`;
-  if(T==='frag') return '在易碎品所在的位置「點一下」，輸入名稱（例：燈罩、觀察窗玻璃）；編號會自動編 G01、G02…';
+  if(T==='frag') return `在「<b>${FT[MV.ftk]?FT[MV.ftk].t:'其它'}</b>」所在的位置「點一下」，${FT[MV.ftk]&&FT[MV.ftk].name?'確認名稱':'輸入名稱（例：'+(MV.ftk==='glass'?'觀察窗玻璃、燈罩':MV.ftk==='plastic'?'塑膠籃、壓克力蓋':'陶瓷碗、鏡子')+'）'}；編號自動編 G01、G02…，可以連續放，放完按「■ 停止放置」。換種類請改上方的下拉選單。`;
   if(MV.mode==='edit') return (MV.layer==='zone' ? (MV_LOCK?'🔒 分區已鎖定：分區不會被拖動。':'編輯模式：拖曳可移動分區；點選後拖白色方塊改角、拖「＋」加角，右邊可改種類或刪除。')
     : MV.layer==='pest' ? '編輯模式：拖曳可移動捕蟲燈、鼠板站、鼠餌站；點選後在右邊改編號、位置說明或刪除。'
     : MV.layer==='flow' ? '編輯模式：拖曳可移動箭頭或標記；點選後拖白色方塊改轉彎點、拖「＋」多加轉彎點，右邊可改種類、反轉方向或刪除。'
@@ -3201,7 +3220,7 @@ function lyTipHTML(){
 function lyLegendHTML(){
   const L = MV.layer, zs = `${Object.entries(ZK).map(([k,v])=>`<span><i style="background:${lyColor(k)}"></i>${v.t}</span>`).join('')}`;
   if(L==='zone') return `<div class="mlegend">${zs}</div>`;
-  if(L==='frag') return `<div class="mlegend"><span><i class="lyfr" style="background:#f59e0b"></i>正常</span><span><i class="lyfr" style="background:#f59e0b;box-shadow:0 0 0 2px #d97706"></i>7 天內要檢查</span><span><i class="lyfr" style="background:#f59e0b;box-shadow:0 0 0 2px #b42318"></i>到期未檢查</span><span><i class="lyfr" style="background:#b42318"></i>破損／遺失</span>${MV_ZBG?zs:''}</div>`;
+  if(L==='frag') return `<div class="mlegend">${Object.entries(FT).map(([k,v])=>`<span><img class="lyico" src="${fragIcon(k)}" alt="">${v.t}</span>`).join('')}<span><span class="lyico lyico-o">◆</span>其它</span></div><div class="mlegend"><span class="small">編號標籤顏色：</span><span><i class="lyfr" style="background:#f59e0b"></i>正常</span><span><i class="lyfr" style="background:#f59e0b;box-shadow:0 0 0 2px #d97706"></i>7 天內要檢查</span><span><i class="lyfr" style="background:#f59e0b;box-shadow:0 0 0 2px #b42318"></i>到期未檢查</span><span><i class="lyfr" style="background:#b42318"></i>破損／遺失</span>${MV_ZBG?zs:''}</div>`;
   if(L==='pest') return `<div class="mlegend">${Object.entries(PK).map(([k,v])=>`<span><img class="lyico" src="${pestIcon(k)}" alt="">${v.t}</span>`).join('')}${MV_ZBG?zs:''}</div>`;
   if(L==='flow') return `<div class="mlegend lyleg">${Object.entries(FK).map(([k,v])=>`<button class="${MV_HIDE.has(k)?'off':''}" onclick="lyToggle('${k}')" title="點一下隱藏／顯示"><b style="color:${lyColor(k)}">${v.dash==='dot'?'┄┄➜':v.dash?'╌╌➜':'──➜'}</b>${v.t}</button>`).join('')}${Object.entries(MK).map(([k,v])=>`<button class="${MV_HIDE.has(k)?'off':''}" onclick="lyToggle('${k}')" title="點一下隱藏／顯示"><i class="lybar" style="background:${lyColor(k)}"></i>${v.t}</button>`).join('')}${MV_ZBG?zs:''}</div>`;
   return '';
@@ -3227,7 +3246,9 @@ function lyOverlay(m){
   if(MV.poly && MV.poly.pts.length && (MV.tool==='zpoly'||MV.tool==='fline')){ body += `<polyline class="lytmp" points="${lyPts(MV.poly.pts, VH)}"/>`; html += MV.poly.pts.map((q,i)=>`<i class="mdot ${i===0?'first':''}" style="left:${q[0]*100}%;top:${q[1]*100}%"></i>`).join(''); }
   if(MV.tmp) body += `<polyline class="lm-tmp" points="${lyPts(MV.tmp, VH)}" style="stroke:${lyColor(MV.fk)}"/>`;
   if(L==='pest') lyList('pest').forEach(o => { html += `<div class="mpest ${isSel('pest',o.id)?'sel':''}" data-lo="pest:${o.id}" style="left:${o.x*100}%;top:${o.y*100}%" title="${esc(pestLabel(o))}${o.note?'｜'+esc(o.note):''}"><img src="${pestIcon(o.kind)}" alt="${esc((PK[o.kind]||{}).t||'')}" draggable="false"><b>${esc(o.code||'')}</b></div>`; });
-  if(L==='frag') lyList('frag').forEach(f => { const st = fragState(f); html += `<div class="mfrag fs-${st.k} ${isSel('frag',f.id)?'sel':''}" data-lo="frag:${f.id}" style="left:${f.x*100}%;top:${f.y*100}%" title="${esc(fragLabel(f))}｜${esc(st.t)}">◆ ${esc(f.code||'')}</div>`; });
+  if(L==='frag') lyList('frag').forEach(f => { const st = fragState(f), u = fragIcon(fragType(f));
+    html += u ? `<div class="mfrag fi fs-${st.k} ${isSel('frag',f.id)?'sel':''}" data-lo="frag:${f.id}" style="left:${f.x*100}%;top:${f.y*100}%" title="${esc(fragLabel(f))}｜${esc(st.t)}"><img src="${u}" alt="" draggable="false"><b>${esc(f.code||'')}</b></div>`
+      : `<div class="mfrag fs-${st.k} ${isSel('frag',f.id)?'sel':''}" data-lo="frag:${f.id}" style="left:${f.x*100}%;top:${f.y*100}%" title="${esc(fragLabel(f))}｜${esc(st.t)}">◆ ${esc(f.code||'')}</div>`; });
   /* 選取中的分區／動線：拖角、加角 */
   const o = lyCur();
   if(ed && o && o.pts && !MV.tool && !(sel.t==='zone' && MV_LOCK)){
@@ -3307,9 +3328,10 @@ function layerBind(){
     }
     if(d.k==='pest'){ if(d.moved) return; lyAdd('pest', {kind:MV.pk, code:pestNextCode(MV.pk), note:'', x:p.x, y:p.y}, false); return; }
     if(d.k==='place'){
-      const name = await askText('易碎品名稱（例：燈罩、觀察窗玻璃、玻璃溫度計）：', ''); if(!name) return;
-      const f = {kind:'frag', code:fragNextCode(), name:name.trim(), mat:/玻璃/.test(name)?'玻璃':'', qty:1, where:'', months:'', photos:[], x:p.x, y:p.y};
-      MV.tool = ''; lyAdd('frag', f, true); return;
+      const k = MV.ftk, T0 = FT[k];
+      const name = await askText(T0 ? `${T0.t}的名稱${T0.name?'':'（例：'+(k==='glass'?'觀察窗玻璃、燈罩、玻璃溫度計':'塑膠籃、壓克力蓋、塑膠刮板')+'）'}：` : '易碎品名稱（自己打字，例：陶瓷碗、鏡子）：', T0 ? T0.name : ''); if(!name) return;
+      const f = {kind:'frag', ft:k, code:fragNextCode(), name:name.trim(), mat:T0 ? T0.mat : (/玻璃/.test(name)?'玻璃':''), qty:1, where:'', months:'', photos:[], x:p.x, y:p.y};
+      lyAdd('frag', f, false); return;
     }
     if(d.k==='vtx'){
       if(!d.moved && !d.added){
@@ -3351,7 +3373,7 @@ function lyAdd(t, o, stop){
   if(stop){ MV.tool = ''; MV.poly = null; }
   MV.sel = {t, id:o.id};
   if(stop) renderMap(); else { lySide(); }
-  flash(t==='zone'?'已新增'+(ZK[o.kind]||{}).t : t==='frag'?'已新增易碎品 '+o.code : t==='pest'?'已放置'+PK[o.kind].t+' '+o.code+'，可以繼續放' : t==='flow'?'已新增'+FK[o.kind].t+'，可以繼續畫下一條' : '已新增'+MK[o.kind].t+'，可以繼續畫');
+  flash(t==='zone'?'已新增'+(ZK[o.kind]||{}).t : t==='frag'?'已放置'+(FT[o.ft]?FT[o.ft].t:'易碎品')+' '+o.code+'，可以繼續放' : t==='pest'?'已放置'+PK[o.kind].t+' '+o.code+'，可以繼續放' : t==='flow'?'已新增'+FK[o.kind].t+'，可以繼續畫下一條' : '已新增'+MK[o.kind].t+'，可以繼續畫');
 }
 function lyPolyFinish(){
   const P = MV.poly; if(!P) return;
@@ -3447,10 +3469,11 @@ function lyCopyArea(){
 /* ---- 易碎品面板 ---- */
 function fragSideHTML(f, ed, close){
   const st = fragState(f), hist = fragHistory(f), z = zoneAt(f), a = areaAtMap(f);
-  return `<div class="phd"><b>🔶 ${esc(fragLabel(f))}</b>${close}</div>
+  return `<div class="phd"><b>${fragIco(f)} ${esc(fragLabel(f))}</b>${close}</div>
     <div class="mrisk" style="--rc:${st.k==='ok'?'#167a3e':st.k==='soon'?'#d97706':'#b42318'}">● ${esc(st.t)}${st.next?`　下次檢查：${fmtDate(st.next)}`:''}</div>
     <div class="small muted" style="margin:4px 0 8px">${a?'缺失區域：'+esc(a.name)+'　':''}${z?'清潔分區：'+esc(ZK[z.kind].t)+(z.name?'（'+esc(z.name)+'）':''):''}</div>
     ${ed ? `<div class="grid1">
+      <label class="f">種類</label><select id="fgFt">${Object.entries(FT).map(([k,v])=>`<option value="${k}" ${fragType(f)===k?'selected':''}>${v.t}</option>`).join('')}<option value="other" ${fragType(f)==='other'?'selected':''}>其它（自己打字，不用圖）</option></select>
       <label class="f">編號</label><input type="text" id="fgCode" value="${esc(f.code||'')}">
       <label class="f">名稱</label><input type="text" id="fgName" value="${esc(f.name||'')}" placeholder="例：燈罩">
       <label class="f">材質</label><input type="text" id="fgMat" list="fgMats" value="${esc(f.mat||'')}" placeholder="例：玻璃"><datalist id="fgMats">${FRAG_MAT.map(x=>`<option value="${x}">`).join('')}</datalist>
@@ -3474,8 +3497,8 @@ function fragPanelHTML(ed){
     <button class="primary" style="width:100%;margin:0 0 6px" onclick="fragCheckStart()" ${fs.length?'':'disabled'}>📝 開始易碎品檢查</button>
     <button id="fgXls" style="width:100%;margin:0 0 10px" onclick="fragExport()" ${fs.length?'':'disabled'}>📗 匯出易碎品清單（Excel）</button>
     <div class="st-sec">易碎品一覽</div>
-    ${fs.length ? `<ul class="mini">${sts.map(([f,s])=>`<li class="click" onclick="MV.sel={t:'frag',id:'${f.id}'};lySide()"><span><b>${esc(f.code)}</b> ${esc(f.name||'')}</span><span class="small ${s.k==='ok'?'muted':s.k==='soon'?'':'bad'}">${esc(s.t)}${s.next?'・'+fmtDate(s.next):''}</span></li>`).join('')}</ul>`
-      : `<div class="muted small">還沒有易碎品。${ed?'按上方「🔶 新增易碎品」，在平面圖上點一下。':'切到「✏️ 編輯模式」就可以新增。'}</div>`}
+    ${fs.length ? `<ul class="mini">${sts.map(([f,s])=>`<li class="click" onclick="MV.sel={t:'frag',id:'${f.id}'};lySide()"><span>${fragIco(f)} <b>${esc(f.code)}</b> ${esc(f.name||'')}</span><span class="small ${s.k==='ok'?'muted':s.k==='soon'?'':'bad'}">${esc(s.t)}${s.next?'・'+fmtDate(s.next):''}</span></li>`).join('')}</ul>`
+      : `<div class="muted small">還沒有易碎品。${ed?'在上方選種類（時鐘、攝影機、玻璃、塑膠、其它），按「放置」後在平面圖上點一下。':'切到「✏️ 編輯模式」就可以新增。'}</div>`}
     <div class="st-sec">最近檢查紀錄</div>
     ${chks.length ? `<ul class="mini">${chks.map(c=>{ const bad = c.results.filter(r=>r.res==='broken'||r.res==='missing').length, n = c.results.filter(r=>r.res).length; return `<li class="click" onclick="fragCheckView('${c.id}')"><span>${fmtDate(c.date)}　${esc(c.inspector||'—')}</span><span class="small ${bad?'bad':'muted'}">檢查 ${n} 項${bad?'・異常 '+bad:''}</span></li>`; }).join('')}</ul>` : '<div class="muted small">還沒有檢查紀錄。</div>'}`;
 }
@@ -3485,7 +3508,7 @@ function fragSave(id){
   if(!code){ say('編號不能空白。'); return; }
   if((MAPD.frags||[]).some(x=>x.id!==id && x.code===code)){ say('已經有編號「'+code+'」的易碎品了。'); return; }
   if(!name){ say('請填易碎品名稱。'); return; }
-  Object.assign(f, {code, name, mat:$('#fgMat').value.trim(), qty:Math.max(1, parseInt($('#fgQty').value,10)||1), where:$('#fgWhere').value.trim(), months:$('#fgMon').value});
+  Object.assign(f, {ft:$('#fgFt').value, code, name, mat:$('#fgMat').value.trim(), qty:Math.max(1, parseInt($('#fgQty').value,10)||1), where:$('#fgWhere').value.trim(), months:$('#fgMon').value});
   saveMap(); renderMap(); flash('已儲存易碎品');
 }
 function fragDefect(fid, res){
@@ -3526,7 +3549,7 @@ function renderFragCheck(done){
 function fragRowHTML(r, i, done){
   const f = lyGet('frag', r.fid), st = f && !done ? fragState(f) : null;
   const rc = {ok:'pass', broken:'fail', missing:'fail', na:'na'}[r.res]||'';
-  return `<div class="arow ${rc?'r-'+rc:''}" id="fc${i}"><div class="ar-h"><b>${esc(r.code)}</b> ${esc(r.name||'')}${r.mat?`<span class="small muted">（${esc(r.mat)}）</span>`:''}${st && (st.k==='due'||st.k==='bad')?`<span class="small bad">　${esc(st.t)}</span>`:''}${!f?'<span class="small muted">（已從地圖刪除）</span>':''}</div>
+  return `<div class="arow ${rc?'r-'+rc:''}" id="fc${i}"><div class="ar-h">${f?fragIco(f):''} <b>${esc(r.code)}</b> ${esc(r.name||'')}${r.mat?`<span class="small muted">（${esc(r.mat)}）</span>`:''}${st && (st.k==='due'||st.k==='bad')?`<span class="small bad">　${esc(st.t)}</span>`:''}${!f?'<span class="small muted">（已從地圖刪除）</span>':''}</div>
     ${done ? `<div class="ar-res"><b class="${r.res?FR[r.res].c:'muted'}">${r.res?FR[r.res].i+' '+FR[r.res].t:'（未填）'}</b>${r.note?'　'+esc(r.note):''}</div>${(r.res==='broken'||r.res==='missing')&&f?`<button class="primary" style="margin-top:6px" onclick="fragDefect('${r.fid}','${r.res}')">＋ 建立缺失</button>`:''}`
     : `<div class="ar-btns">${Object.entries(FR).map(([k,v])=>`<button class="${r.res===k?'on '+v.c:''}" onclick="fragSet(${i},'${k}')">${v.i} ${v.t}</button>`).join('')}</div>
       <input type="text" style="margin-top:6px" placeholder="備註（選填，例：右上角有裂痕）" value="${esc(r.note||'')}" oninput="FCK.results[${i}].note=this.value;dirty=true">`}</div>`;
@@ -3578,15 +3601,15 @@ async function pestExport(){
 async function fragExport(){
   const m = lyMap(), fs = lyList('frag').sort((x,y)=>(x.code||'').localeCompare(y.code||'',undefined,{numeric:true}));
   if(!fs.length){ say('這張地圖還沒有易碎品。'); return; }
-  const cell = xlCell, N = 13, last = xlCol(N-1); let rows = '', rn = 1; const merges = [];
+  const cell = xlCell, N = 14, last = xlCol(N-1); let rows = '', rn = 1; const merges = [];
   const line = (txt, sty, h) => { rows += `<row r="${rn}"${h?` ht="${h}" customHeight="1"`:''}>${cell(0,rn,txt,sty)}</row>`; merges.push(`A${rn}:${last}${rn}`); rn++; };
   line(`易碎品管制清單｜${m.name}`, 3, 26);
   line(`匯出日期：${fmtDate(today())}　共 ${fs.length} 項　預設檢查頻率：每 ${fragDefMonths()} 個月`, 0, 20);
   rn++;
-  const head = ['編號','名稱','材質','數量','缺失區域','清潔分區','位置說明','檢查頻率','最近檢查日','最近結果','檢查人員','下次檢查日','狀態'];
+  const head = ['編號','種類','名稱','材質','數量','缺失區域','清潔分區','位置說明','檢查頻率','最近檢查日','最近結果','檢查人員','下次檢查日','狀態'];
   const hr = rn; rows += `<row r="${rn}" ht="22" customHeight="1">${head.map((h,i)=>cell(i,rn,h,4)).join('')}</row>`; rn++;
   fs.forEach(f => { const st = fragState(f), a = areaAtMap(f), z = zoneAt(f), L = fragHistory(f)[0];
-    const v = [f.code, f.name, f.mat, f.qty||1, a?a.name:'', z?ZK[z.kind].t+(z.name?'（'+z.name+'）':''):'', f.where, '每 '+fragMonths(f)+' 個月', L?fmtDate(L.date):'', L?FR[L.res].t:'', L?L.by:'', st.next?fmtDate(st.next):'', st.t];
+    const v = [f.code, FT[fragType(f)] ? FT[fragType(f)].t : '其它', f.name, f.mat, f.qty||1, a?a.name:'', z?ZK[z.kind].t+(z.name?'（'+z.name+'）':''):'', f.where, '每 '+fragMonths(f)+' 個月', L?fmtDate(L.date):'', L?FR[L.res].t:'', L?L.by:'', st.next?fmtDate(st.next):'', st.t];
     rows += `<row r="${rn}">${v.map((x,i)=>cell(i,rn,x,2)).join('')}</row>`; rn++; });
   const chk = fragChecksSorted().filter(c=>c.mapId===MV.mapId);
   if(chk.length){
@@ -3594,7 +3617,7 @@ async function fragExport(){
     rows += `<row r="${rn}" ht="22" customHeight="1">${['檢查日期','檢查人員','編號','名稱','結果','備註'].map((h,i)=>cell(i,rn,h,4)).join('')}</row>`; rn++;
     chk.forEach(c => c.results.filter(r=>r.res).forEach(r => { rows += `<row r="${rn}">${[fmtDate(c.date), c.inspector, r.code, r.name, FR[r.res].t, r.note].map((x,i)=>cell(i,rn,x,2)).join('')}</row>`; rn++; }));
   }
-  const widths = [11,18,12,7,14,16,22,11,12,10,12,12,14];
+  const widths = [11,9,18,12,7,14,16,22,11,12,10,12,12,14];
   const sheet = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><sheetViews><sheetView workbookViewId="0"/></sheetViews><cols>${widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join('')}</cols><sheetData>${rows}</sheetData><mergeCells count="${merges.length}">${merges.map(x=>`<mergeCell ref="${x}"/>`).join('')}</mergeCells><pageMargins left="0.3" right="0.3" top="0.4" bottom="0.4" header="0.2" footer="0.2"/><pageSetup orientation="landscape" paperSize="9" fitToWidth="1" fitToHeight="0"/></worksheet>`;
   try{ await download(xlsxPack('易碎品清單', sheet, `$${hr}:$${hr}`), `Casevoras_易碎品清單_${m.name}_${today()}.xlsx`.replace(/[\\/:*?"<>|\s]+/g,'_'), 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); flash('已匯出易碎品清單'); }
   catch(e){ say('Excel 產生失敗，請重試。'); }
@@ -3603,7 +3626,8 @@ async function fragExport(){
 /* ---- 匯出這一層的平面圖（PNG） ---- */
 function lyLegendItems(){
   const L = MV.layer, out = [], zs = lyList('zone');
-  if(L==='frag') Object.entries(FST).forEach(([k,v]) => out.push({type:'frag', t:v.t, c:v.c, ring:v.ring}));
+  if(L==='frag'){ const fs = lyList('frag'); Object.entries(FT).forEach(([k,v]) => { if(fs.some(f=>fragType(f)===k)) out.push({type:'icon', t:v.t, k:'ft_'+k}); });
+    Object.entries(FST).forEach(([k,v]) => out.push({type:'frag', t:'標籤：'+v.t, c:v.c, ring:v.ring})); }
   if(L==='pest'){ const ps = lyList('pest'); Object.entries(PK).forEach(([k,v]) => { if(!ps.length || ps.some(o=>o.kind===k)) out.push({type:'icon', t:v.t, k}); }); }
   if(L==='flow'){ const fs = lyList('flow'), ms = lyList('mark');
     Object.entries(FK).forEach(([k,v]) => { if(!MV_HIDE.has(k) && fs.some(o=>o.kind===k)) out.push({type:'line', t:v.t, c:lyColor(k), dash:v.dash}); });
@@ -3619,7 +3643,7 @@ async function layerExportImage(){
   const W = Math.round(img.naturalWidth*k), H = Math.round(img.naturalHeight*k), u1 = W/1600, s = W/1000, L = MV.layer;
   const F = '"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif';
   const X = x => x*W, Y = y => y*H;
-  const ICON = {}; for(const k of Object.keys(PK)){ const im = new Image(); im.src = pestIcon(k); try{ await im.decode(); ICON[k] = im; }catch(e){} }
+  const ICON = {}; for(const [k, u] of [...Object.keys(PK).map(k=>[k, pestIcon(k)]), ...Object.keys(FT).map(k=>['ft_'+k, fragIcon(k)])]){ const im = new Image(); im.src = u; try{ await im.decode(); ICON[k] = im; }catch(e){} }
   /* 圖例先排版，算出下方要留多高 */
   const items = lyLegendItems(), mc = document.createElement('canvas').getContext('2d'); mc.font = `${Math.round(16*u1)}px ${F}`;
   const SW = 40*u1, GAP = 28*u1, LH = 34*u1, lines = [[]]; let lx = 24*u1;
@@ -3669,7 +3693,11 @@ async function layerExportImage(){
     g.font = `800 ${fs}px ${F}`; const t = o.code||'', tw = g.measureText(t).width, h = fs*1.5, x = cx+sz/2-2*u1, y = cy-h/2;
     rr(x, y, tw+fs*0.8, h, 4*u1); g.fillStyle = 'rgba(255,253,248,.95)'; g.fill(); g.lineWidth = 1*u1; g.strokeStyle = '#16213a'; g.stroke();
     g.fillStyle = '#16213a'; g.textBaseline = 'middle'; g.fillText(t, x+fs*0.4, y+h/2+0.5); });
-  if(L==='frag') lyList('frag').forEach(f => fragPill(X(f.x), Y(f.y), '◆ '+(f.code||''), fragState(f).k, Math.round(13*u1)));
+  if(L==='frag') lyList('frag').forEach(f => { const st = fragState(f).k, im = ICON['ft_'+fragType(f)];
+    if(!im){ fragPill(X(f.x), Y(f.y), '◆ '+(f.code||''), st, Math.round(13*u1)); return; }
+    const sz = 44*u1, cx = X(f.x), cy = Y(f.y), fs = Math.round(13*u1); g.drawImage(im, cx-sz/2, cy-sz/2, sz, sz);
+    g.font = `800 ${fs}px ${F}`; const t = f.code||'', w = g.measureText(t).width + fs*1.0, x = cx + sz/2 - 3*u1;
+    fragPill(x + w/2, cy, t, st, fs); });
   g.restore();
   /* 下方圖例 */
   g.fillStyle = '#f3ece0'; g.fillRect(0, H+HEAD, W, FOOT); g.textBaseline = 'middle';
