@@ -175,9 +175,10 @@ body.wide main{max-width:none}
 .ar-btns button.on.warn{background:var(--warn);color:#fff;border-color:var(--warn)}.ar-btns button.on.muted{background:#6b7280;color:#fff;border-color:#6b7280}
 .arow textarea{margin-top:4px}.ar-res{margin-top:6px}.ar-res .ok{color:var(--ok)}.ar-res .bad{color:var(--bad)}.ar-res .warn{color:var(--warn)}
 .mlegend{flex-basis:100%;display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--muted)}.mlegend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
-/* 風險顏色：只畫框線、不填色，避免跟平面圖本身的顏色疊在一起 */
-.marea.rk{background:transparent;border-width:3px}.marea.rk:hover{background:color-mix(in srgb,var(--c) 10%,transparent)}
-.mpoly polygon.rk{fill:rgba(255,255,255,0);stroke-width:3.5}.mpoly polygon.rk:hover{fill:color-mix(in srgb,var(--c) 10%,transparent)}
+/* 風險顏色開啟時：平面圖改成黑白，區域用風險顏色填色，不會跟平面圖原本的顏色疊在一起 */
+.mapview.riskon .mapinner img{filter:grayscale(1) contrast(.7) brightness(1.22)}
+.marea.rk{background:color-mix(in srgb,var(--c) 30%,transparent);border-width:2.5px}.marea.rk:hover{background:color-mix(in srgb,var(--c) 42%,transparent)}
+.mpoly polygon.rk{fill:color-mix(in srgb,var(--c) 30%,transparent);stroke-width:2.5}.mpoly polygon.rk:hover{fill:color-mix(in srgb,var(--c) 42%,transparent)}
 .marea.rk .mlab,.mplab.rk{border-left:5px solid var(--c);box-shadow:0 1px 3px rgba(0,0,0,.25)}
 .mpin.rk-red{background:#b42318}.mpin.rk-yellow{background:#d97706}.mpin.rk-green{background:#167a3e}.mpin.rk-gray{background:#9aa3b2}
 .mrisk{font-size:12.5px;font-weight:700;color:var(--rc);margin:-4px 0 8px}
@@ -2221,7 +2222,7 @@ function renderMap(){
       ${riskLegendHTML()}
     </div>
     <div class="mapwrap">
-      <div class="mcol"><div class="mapview ${MV.mode==='edit'?'editing':''} ${MV.tool?'tool':''}" id="mapView" style="height:${mapH()}"><div class="mapinner" id="mapInner" style="width:${MV.zoom*100}%">
+      <div class="mcol"><div class="mapview ${MV.mode==='edit'?'editing':''} ${MV.tool?'tool':''} ${MV_RISK&&MV.mode==='view'?'riskon':''}" id="mapView" style="height:${mapH()}"><div class="mapinner" id="mapInner" style="width:${MV.zoom*100}%">
         <img id="mapImg" alt="${esc(m.name)}" draggable="false">
         <svg class="mpoly" viewBox="0 0 100 100" preserveAspectRatio="none">${mapAreas().filter(a=>a.pts).map(a=>`<polygon data-aid="${a.id}" class="${MV.sel&&MV.sel.t==='area'&&MV.sel.id===a.id?'sel':''} ${MV_RISK&&MV.mode==='view'?'rk':''}" style="--c:${esc(areaColor(a, REP))}" points="${ptsAttr(a.pts)}"/>`).join('')}
           ${MV.tool==='poly'&&MV.poly&&MV.poly.pts.length?`<polyline class="mtmp" points="${ptsAttr(MV.poly.pts)}"/>`:''}</svg>
