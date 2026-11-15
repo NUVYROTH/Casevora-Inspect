@@ -240,6 +240,7 @@ body.wide main{max-width:none}
 .mstats{margin-top:14px}.mstats summary{cursor:pointer;display:flex;gap:10px;align-items:baseline;list-style:none;font-size:16px}.mstats summary::-webkit-details-marker{display:none}
 .mstats summary::before{content:'▸';color:var(--gold)}.mstats[open] summary::before{content:'▾'}
 .mkpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px}.mkpi div{background:var(--brand-soft);border-radius:8px;padding:8px;text-align:center;font-size:12px;color:var(--muted)}
+.mkpi .click{cursor:pointer}.mkpi .click:hover{box-shadow:0 0 0 2px var(--gold)}
 .mkpi b{display:block;font-size:22px;color:var(--ink)}.mkpi .o b{color:var(--warn)}.mkpi .v b{color:var(--bad)}.mkpi .g b{color:var(--ok)}
 .mcharts{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:10px}.mcharts .hb{grid-template-columns:minmax(80px,150px) 1fr auto}.mcharts .hb.click{cursor:pointer}.mcharts .hb.click:hover{background:var(--brand-soft)}
 .mhot{margin:4px 0;padding-left:20px}.mhot li{padding:4px 0;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:2px 8px;cursor:pointer}.mhot li:hover{background:var(--brand-soft)}
@@ -1056,7 +1057,7 @@ const GUIDES = {
     gStep(8,'現場稽核', gC(gR(`${gB('＋ 新增稽核重點',{n:1})}${gB('載入範例')}`)+gR(gB('📋 開始稽核',{ok:1,hl:1,n:2}))) + gC(gR(`<span class="gx-s" style="flex:1">排水溝清潔暢通</span>${gN(3)}${gB('✅ 合格',{ok:1})}${gB('❌ 不合格',{rd:1,hl:1})}`)),
       `<p>編輯模式「＋ 新增稽核重點」${gN(1)}寫清楚<b>查核標準</b>（或載入範例 8 項）。</p><p>到現場按「📋 開始稽核」${gN(2)}，每項選${gN(3)}：✅ 合格、❌ 不合格（可「＋ 建立缺失」）、👁 觀察事項、⊘ 不適用。</p>`),
     gStep(9,'風險顏色、連續發生警示、地圖統計', gC(gR(`${gB('🎨 風險顏色（開）',{dk:1,hl:1,n:1})}`)+gR(`<span class="gx-sw" style="background:#b42318"></span><span class="gx-s">重大／逾期／重複</span><span class="gx-sw" style="background:#d97706"></span><span class="gx-s">未結案</span><span class="gx-sw" style="background:#167a3e"></span><span class="gx-s">都結案</span>`)) + gC(gR(`${gN(2)}${gTag('本月','dk')}${gTag('最近三個月')}${gTag('自訂')}`),'📊 地圖統計'),
-      `<p>檢視模式依缺失狀況自動上色${gN(1)}：紅＝重大、逾期或<b>重複發生</b>；黃＝有未結案；綠＝都結案；灰＝沒紀錄。</p><p><b>⚠ 連續發生警示</b>：同一位置同一類缺失<b>連續 3 個月</b>都發生，位置標記會閃動並加 ⚠，右邊面板會提醒檢討根本原因。</p><p>地圖下方「📊 地圖統計」${gN(2)}選期間；<b>點某個區域時，統計會變成那一區各位置的分布</b>，按「看全部區域」回到全廠。</p>`),
+      `<p>檢視模式依缺失狀況自動上色${gN(1)}：紅＝重大、逾期或<b>重複發生</b>；黃＝有未結案；綠＝都結案；灰＝沒紀錄。</p><p><b>⚠ 連續發生警示</b>：同一位置同一類缺失<b>連續 3 個月</b>都發生，位置標記會閃動並加 ⚠，右邊面板會提醒檢討根本原因。</p><p>地圖下方「📊 地圖統計」${gN(2)}選期間；<b>點某個區域時，統計會變成那一區各位置的分布</b>，按「看全部區域」回到全廠。</p><p><b>數字卡和長條都可以點</b>（未結案、逾期、重複發生、各區域、缺失類型、月份…），會跳出那幾件案件的清單，點案件可以直接打開。</p>`),
     gStep(10,'給同事用同一張地圖', gC(gR(`${gB('匯出地圖設定',{hl:1,n:1})}${gB('匯入地圖設定',{hl:1,n:2})}`)) + `<div class="gx-s" style="text-align:center">只含平面圖・區域・位置・稽核重點・參考照片<br>不含案件，不會蓋掉同事的資料</div>`,
       `<p>按「匯出地圖設定」${gN(1)}存成檔案給同事，同事按「匯入地圖設定」${gN(2)}就有同一張地圖。</p><p>要放進報告或貼公告時，按上方<b>「🖼 匯出平面圖（圖片）」</b>，會把區域、位置、顏色一起存成清晰的 PNG（依目前風險顏色開／關）。</p><p class="muted small">「下載備份」會連稽核紀錄一起存。平面圖屬公司內部資料，不會上傳也不會送給 AI；匯出的圖片傳給別人前請先確認可以外流。</p>`),
     gStep(11,'切換圖層（缺失以外的圖）', gC(gR(`${gN(1)}<span class="gx-seg" style="flex-wrap:wrap"><i class="on">🔍 缺失</i><i>🧼 清潔分區</i><i>🔶 易碎品</i><i>➡️ 動線與設施</i><i>🐭 病媒防治</i></span>`)+gR(`${gB('🧼 疊清潔分區（開）',{dk:1,hl:1,n:2})}${gB('🖼 匯出平面圖（圖片）',{hl:1,n:3})}`)),
@@ -3036,7 +3037,15 @@ function mstRange(){
   if(MST.per==='custom') return [MST.from||'0000-00-00', MST.to||'9999-12-31'];
   return ['0000-00-00','9999-12-31'];
 }
+/* 地圖統計：數字卡、長條點一下 → 跳出案件清單（跟統計分析頁一樣），點案件可打開 */
+let MST_L = {};
+function mstReg(title, rs){ const k = 'k'+Object.keys(MST_L).length; MST_L[k] = {title, rs}; return `mstShow('${k}')`; }
+function mstShow(k){ const o = MST_L[k]; if(!o) return; if(!o.rs.length){ flash('這一項沒有案件'); return; }
+  const rs = o.rs.slice().sort((a,b)=>(a.closed?1:0)-(b.closed?1:0) || (b.foundDate||'').localeCompare(a.foundDate||''));
+  caseListModal(esc(o.title), MST_SCOPE, rs); }
+let MST_SCOPE = '';
 function mapStatsHTML(){
+  MST_L = {};
   if(!mapAreas().length) return '';
   const selA = MV.sel ? (MV.sel.t==='area' ? areaById(MV.sel.id) : areaById((locById(MV.sel.id)||{}).areaId)) : null;
   const as = selA ? [selA] : mapAreas();
@@ -3046,20 +3055,24 @@ function mapStatsHTML(){
   const open = all.filter(r=>!r.closed).length, over = all.filter(isOverdue).length, rp = all.filter(r=>rep.has(r.id)).length;
   const done = all.length ? Math.round(all.filter(r=>r.closed).length/all.length*100) : 0;
   const lastFail = as.reduce((n,a)=>{ const au = auditsOf(a.id).filter(x=>x.date>=f && x.date<=t)[0]; return n + (au ? auditCount(au).fail : 0); }, 0);
-  const st3 = STREAK.filter(x=>ids.has(x.aid)).length;
+  const st3s = STREAK.filter(x=>ids.has(x.aid)), st3 = st3s.length;
+  const perName = {all:'全部期間', m1:'本月', m3:'最近三個月', m6:'最近六個月', custom:`${fmtDate(f)}～${fmtDate(t)}`}[MST.per] || '';
+  MST_SCOPE = `${selA ? selA.name : ((MAPD.maps.find(m=>m.id===MV.mapId)||{}).name||'')+'・全部區域'}・${perName}`;
+  /* 連續 3 個月警示：列出構成警示的那幾件（同位置或區域、同類別、警示的月份內） */
+  const st3rs = [...new Map(st3s.flatMap(x => (x.lid ? recsForLoc(locById(x.lid)) : recsForArea(areaById(x.aid))).filter(r => r.defType===x.type && monthIdx(r.foundDate||'')>=x.from && monthIdx(r.foundDate||'')<=x.to)).map(r=>[r.id,r])).values()];
   const bars = (rows, mx, cls) => rows.length ? rows.map(([k,v,extra,on])=>`<div class="hb ${on?'click':''}" ${on?`onclick="${on}"`:''}><span>${esc(k)}</span><span class="b"><i style="width:${mx?v/mx*100:0}%" class="${cls||''}"></i></span><span class="v">${v}${extra||''}</span></div>`).join('') : '<div class="muted small">這段期間沒有資料。</div>';
   /* 全部區域時比較各區域；選了某一區時改成比較這一區的各個位置 */
   const go = (k,id) => `MV.sel={t:'${k}',id:'${id}'};renderMap();document.getElementById('mapView').scrollIntoView({behavior:'smooth'})`;
   const byArea = selA
-    ? [...locs.map(l=>{ const rs = recsForLoc(l).filter(inP); return [(l.code+' '+l.name).trim(), rs.length, rs.filter(r=>!r.closed).length, go('loc', l.id)]; }),
-       ...(()=>{ const rs = all.filter(r=>!(r.locId && locs.some(l=>l.id===r.locId))); return rs.length ? [['（未指定位置）', rs.length, rs.filter(r=>!r.closed).length, '']] : []; })()].sort((x,y)=>y[1]-x[1])
-    : as.map(a=>{ const rs = recsForArea(a).filter(inP); return [a.name, rs.length, rs.filter(r=>!r.closed).length, go('area', a.id)]; }).sort((x,y)=>y[1]-x[1]);
+    ? [...locs.map(l=>{ const rs = recsForLoc(l).filter(inP), nm = (l.code+' '+l.name).trim(); return [nm, rs.length, rs.filter(r=>!r.closed).length, mstReg(nm, rs)]; }),
+       ...(()=>{ const rs = all.filter(r=>!(r.locId && locs.some(l=>l.id===r.locId))); return rs.length ? [['（未指定位置）', rs.length, rs.filter(r=>!r.closed).length, mstReg('未指定位置', rs)]] : []; })()].sort((x,y)=>y[1]-x[1])
+    : as.map(a=>{ const rs = recsForArea(a).filter(inP); return [a.name, rs.length, rs.filter(r=>!r.closed).length, mstReg(a.name, rs)]; }).sort((x,y)=>y[1]-x[1]);
   const mxA = Math.max(1,...byArea.map(x=>x[1]));
-  const tm = new Map(); all.forEach(r=>{ const k = r.defType ? typeName(r.defType) : '未選類別'; tm.set(k,(tm.get(k)||0)+1); });
-  const types = [...tm.entries()].sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const tm = new Map(); all.forEach(r=>{ const k = r.defType ? typeName(r.defType) : '未選類別'; if(!tm.has(k)) tm.set(k, []); tm.get(k).push(r); });
+  const types = [...tm.entries()].sort((a,b)=>b[1].length-a[1].length).slice(0,8).map(([k,rs])=>[k, rs.length, '', mstReg(k, rs)]);
   const months = []; { const d = new Date(); for(let i=5;i>=0;i--){ const x = new Date(d.getFullYear(), d.getMonth()-i, 1); months.push(x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')); } }
   const mAll = [...new Map(as.flatMap(a=>recsForArea(a)).map(r=>[r.id,r])).values()];
-  const trend = months.map(m=>[+m.slice(5)+' 月', mAll.filter(r=>(r.foundDate||'').startsWith(m)).length]);
+  const trend = months.map(m=>{ const rs = mAll.filter(r=>(r.foundDate||'').startsWith(m)), nm = m.slice(0,4)+' 年 '+(+m.slice(5))+' 月'; return [+m.slice(5)+' 月', rs.length, '', mstReg(nm+'（發現日期）', rs)]; });
   const hot = locs.map(l=>{ const rs = recsForLoc(l).filter(inP), o = rs.filter(r=>!r.closed).length, v = rs.filter(isOverdue).length, p = rs.filter(r=>rep.has(r.id)).length;
     return {l, a:areaById(l.areaId), score:o*2+v*3+p*2+rs.length, n:rs.length, o, v, p}; }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,5);
   const per = [['all','全部期間'],['m1','本月'],['m3','最近三個月'],['m6','最近六個月'],['custom','自訂']];
@@ -3067,13 +3080,15 @@ function mapStatsHTML(){
     <summary><b>📊 地圖統計</b><span class="muted small">（${selA?`<b style="color:var(--ink)">${esc(selA.name)}</b>`:esc((MAPD.maps.find(m=>m.id===MV.mapId)||{}).name||'')+'・全部區域'}）</span>${selA?`<button class="lite" style="margin-left:auto" onclick="event.preventDefault();MV.sel=null;renderMap()">看全部區域</button>`:''}</summary>
     <div class="row" style="margin:10px 0">${per.map(([k,t])=>`<button class="${MST.per===k?'primary':''}" onclick="MST.per='${k}';renderMap()">${t}</button>`).join('')}
       ${MST.per==='custom'?`<input type="date" value="${esc(MST.from)}" onchange="MST.from=this.value;renderMap()" style="width:auto"> ～ <input type="date" value="${esc(MST.to)}" onchange="MST.to=this.value;renderMap()" style="width:auto">`:''}</div>
-    <div class="mkpi">${[...(selA?[]:[['廠區（區域）',as.length,'']]),['已建立位置',locs.length,''],['連續 3 個月警示',st3,'v'],['缺失總數',all.length,''],['未結案',open,'o'],['逾期',over,'v'],['重複發生',rp,'v'],['最近稽核不合格',lastFail,'v'],['改善完成率',done+'%','g']].map(([t,n,c])=>`<div class="${c}"><b>${n}</b>${t}</div>`).join('')}</div>
+    <div class="mkpi">${[...(selA?[]:[['廠區（區域）',as.length,'']]),['已建立位置',locs.length,''],['連續 3 個月警示',st3,'v',mstReg('連續 3 個月警示', st3rs)],['缺失總數',all.length,'',mstReg('缺失總數', all)],['未結案',open,'o',mstReg('未結案', all.filter(r=>!r.closed))],['逾期',over,'v',mstReg('逾期', all.filter(isOverdue))],['重複發生',rp,'v',mstReg('重複發生', all.filter(r=>rep.has(r.id)))],['最近稽核不合格',lastFail,'v'],['改善完成率',done+'%','g',mstReg('已結案（改善完成）', all.filter(r=>r.closed))]].map(([t,n,c,on])=>`<div class="${c} ${on?'click':''}" ${on?`onclick="${on}" role="button" tabindex="0" onkeydown="if(event.key==='Enter')this.click()" title="點一下看案件"`:''}><b>${n}</b>${t}</div>`).join('')}</div>
     <div class="mcharts">
       <div><div class="st-sec">${selA?'各位置缺失數（未結案）':'各區域缺失數（未結案）'}</div>${bars(byArea.map(([k,n,o,on])=>[k,n,o?`<small class="bad">（未結 ${o}）</small>`:'',on]), mxA)}</div>
       <div><div class="st-sec">缺失類型分布</div>${bars(types, Math.max(1,...types.map(x=>x[1])))}</div>
       <div><div class="st-sec">月份缺失趨勢（最近 6 個月）</div>${bars(trend, Math.max(1,...trend.map(x=>x[1])))}</div>
       <div><div class="st-sec">高風險位置排行</div>${hot.length ? `<ol class="mhot">${hot.map(x=>`<li class="click" onclick="MV.sel={t:'loc',id:'${x.l.id}'};renderMap();document.getElementById('mapView').scrollIntoView({behavior:'smooth'})"><b>${esc((x.l.code+' '+x.l.name).trim())}</b><span class="muted small">${esc(x.a?x.a.name:'')}</span><span class="small">共 ${x.n}・未結 ${x.o}${x.v?'・<b class="bad">逾期 '+x.v+'</b>':''}${x.p?'・🔁 重複 '+x.p:''}</span></li>`).join('')}</ol>` : '<div class="muted small">目前沒有需要優先注意的位置。</div>'}
         <div class="muted small" style="margin-top:4px">排序依：未結案、逾期、重複發生與件數加權。</div></div>
+    </div>
+    <div class="muted small" style="margin-top:8px">💡 數字卡和長條都可以點，會列出那幾件案件；點案件可以直接打開。
     </div>
   </details>`;
 }
