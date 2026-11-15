@@ -207,6 +207,10 @@ body.wide main{max-width:none}
 .mfrag.fs-due::after{content:'!';position:absolute;top:-9px;right:-9px;width:16px;height:16px;border-radius:50%;background:#b42318;color:#fff;font-size:11px;line-height:16px;text-align:center}
 .mfrag.fs-bad{background:#b42318;color:#fff}
 .mfrag.sel{outline:3px solid var(--gold);outline-offset:1px}
+.msnap{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;border:2px solid #16213a;background:rgba(255,255,255,.75);pointer-events:none;z-index:5}
+.msnap.on{border-color:#d9480f;background:#ffd8a8;box-shadow:0 0 0 4px rgba(217,72,15,.22)}
+.msnapx,.msnapy{position:absolute;pointer-events:none;z-index:4;font-style:normal}
+.msnapx{top:0;bottom:0;width:0;border-left:1px dashed #d9480f}.msnapy{left:0;right:0;height:0;border-top:1px dashed #d9480f}
 .mpest{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;cursor:pointer}
 .mpest img{width:calc(36px*var(--ms));height:calc(36px*var(--ms));filter:drop-shadow(0 2px 3px rgba(0,0,0,.4));pointer-events:none}
 .mpest b{margin-left:calc(-3px*var(--ms));font-size:calc(11px*var(--ms));background:rgba(255,253,248,.95);border:1px solid #16213a;border-radius:4px;padding:0 calc(4px*var(--ms));color:#16213a;pointer-events:none}
@@ -1028,7 +1032,7 @@ const GUIDES = {
     gStep(1,'上傳平面圖', gC(gR(`<b style="flex:1">廠區地圖</b>${gB('＋ 新增地圖（上傳平面圖）',{dk:1,hl:1,n:1})}`)) + gC(gR(`${gIn('一樓 ▾')}<span style="flex:1"></span>${gB('適應畫面',{hl:1})}${gB('⤢ 整張顯示',{hl:1,n:2})}`)),
       `<p>按「＋ 新增地圖」${gN(1)}，上傳 JPG／PNG 平面圖並取名（例：一樓）；可以有多張地圖。</p><p>按「適應畫面」會<b>依比例縮小</b>，整張放進螢幕；「⤢ 整張顯示」${gN(2)}保持寬度、把框拉高；也可以用 ＋／－ 或 Ctrl＋滾輪縮放。</p>`),
     gStep(2,'畫區域、鎖定區域', gC(gR(`${gN(1)}<span class="gx-seg"><i>👀 檢視</i><i class="on">✏️ 編輯</i></span>`)+gR(`${gB('▭ 新增區域',{hl:1,n:2})}${gB('⬠ 多邊形區域',{hl:1,n:3})}`)+gR(`${gB('🔒 區域已鎖定',{dk:1,hl:1,n:4})}`)) + `<div class="gx-map"><span class="gx-poly"></span></div>`,
-      `<p>切到「✏️ 編輯模式」${gN(1)}。</p><p>方形區域按「▭ 新增區域」${gN(2)}，在平面圖上按住拖曳；L 型等不規則區域按「⬠ 多邊形」${gN(3)}，每個角點一下，點回第一點完成。</p><p>區域畫好後按<b>「🔓 鎖定區域」</b>${gN(4)}，之後新增、移動位置時區域就不會被拖到；要改範圍時按「✏️ 修改範圍」會自動解鎖。</p>`),
+      `<p>切到「✏️ 編輯模式」${gN(1)}。</p><p>方形區域按「▭ 新增區域」${gN(2)}，在平面圖上按住拖曳；L 型等不規則區域按「⬠ 多邊形」${gN(3)}，每個角點一下，點回第一點完成。</p><p><b>🧲 磁鐵</b>（編輯模式上方，預設開）：點角或拖角時，會輕輕吸到附近的角、跟其他角對齊，也會吸到平面圖上的線條和色塊邊界，邊角比較整齊；吸到時游標點會變橘色並出現對齊虛線。想放在線旁邊不要被吸，按住 <b>Alt</b> 再點。</p><p>區域畫好後按<b>「🔓 鎖定區域」</b>${gN(4)}，之後新增、移動位置時區域就不會被拖到；要改範圍時按「✏️ 修改範圍」會自動解鎖。</p>`),
     gStep(3,'修改範圍', gC(gR(`${gTag('🏭 打漿區')}<span style="flex:1"></span>${gB('✏️ 修改範圍',{hl:1,n:1})}`)) + `<div class="gx-map"><span class="gx-rng"><i class="v" style="left:-5px;top:-5px"></i><i class="v" style="right:-5px;top:-5px"></i><i class="v" style="left:-5px;bottom:-5px"></i><i class="v" style="right:-5px;bottom:-5px"></i><i class="p" style="left:calc(50% - 7px);top:-7px">+</i><i class="p" style="right:-7px;top:calc(50% - 7px)">+</i></span>${gN(2)}</div>`,
       `<p>點區域 → 「✏️ 修改範圍」${gN(1)}。</p><p>拖<b>白色方塊</b>移動角；拖邊中間<b>金色＋</b>${gN(2)}多加一個角（延伸到隔壁）；在角上<b>連點兩下</b>刪除那個角。放開就自動存好。</p>`),
     gStep(4,'放位置、參考照片', gC(gR(`${gB('📍 新增位置',{hl:1,n:1})}`)+gR(`${gTag('P01','dk')}${gTag('P03','rd')}<span class="gx-s">打漿機／地面及排水溝</span>`)) + gC(gR(`<span class="gx-ph"></span><span class="gx-ph b"></span>${gB('＋ 加參考照片',{hl:1,n:2})}`)+`<div class="gx-dash">📋 點這裡，再按 Ctrl+V 貼上</div>`,'📷 參考照片（正常狀態）'),
@@ -1044,7 +1048,7 @@ const GUIDES = {
     gStep(9,'切換圖層（缺失以外的圖）', gC(gR(`${gN(1)}<span class="gx-seg" style="flex-wrap:wrap"><i class="on">🔍 缺失</i><i>🧼 清潔分區</i><i>🔶 易碎品</i><i>➡️ 動線與設施</i><i>🐭 病媒防治</i></span>`)+gR(`${gB('🧼 疊清潔分區（開）',{dk:1,hl:1,n:2})}${gB('🖼 匯出平面圖（圖片）',{hl:1,n:3})}`)),
       `<p>地圖上方有一排圖層${gN(1)}，每一層<b>分開畫、分開看</b>，不會跟缺失混在一起；平面圖只要上傳一次，五層共用。</p><p>易碎品、動線、病媒這三層可以按「🧼 疊清潔分區」${gN(2)}，把分區淡淡地墊在底下對照。</p><p>在哪一層按「🖼 匯出平面圖（圖片）」${gN(3)}，就匯出<b>那一層</b>的清晰 PNG，下方附圖例。</p>`),
     gStep(10,'🧼 清潔分區', gC(gR(`${gIn('準清潔區 ▾',1)}${gN(1)}${gB('▭ 畫分區（拖曳）',{hl:1,n:2})}${gB('⬠ 多邊形分區',{hl:1})}`)+gR(`<span class="gx-sw" style="background:#c4bb7c"></span><span class="gx-s">一般作業區</span><span class="gx-sw" style="background:#b9cde5"></span><span class="gx-s">準清潔區</span><span class="gx-sw" style="background:#e6b9b8"></span><span class="gx-s">清潔區</span>`)) + gC(gR(`${gIn('包裝區 ▾')}${gIn('準清潔區 ▾')}`)+gR(gB('複製成清潔分區',{hl:1,n:3})),'📋 從缺失區域複製範圍'),
-      `<p>切到「✏️ 編輯模式」，先選<b>分區種類</b>${gN(1)}，再按「▭ 畫分區」${gN(2)}在平面圖上拖曳；L 型等不規則形狀用「⬠ 多邊形分區」，每個角點一下。</p><p>分區跟缺失區域一樣大時，右邊「從缺失區域複製範圍」${gN(3)}，不用重畫。</p><p>點分區可以改種類、取名稱（例：包裝室）、寫說明；拖白色方塊改角、拖「＋」加角。畫好後可以「🔒 鎖定分區」避免拖到。</p><p class="muted small">顏色預設：一般作業區卡其、準清潔區淺藍、清潔區淺粉；編輯模式右邊「🎨 圖例顏色」可以改。</p>`),
+      `<p>切到「✏️ 編輯模式」，先選<b>分區種類</b>${gN(1)}，再按「▭ 畫分區」${gN(2)}在平面圖上拖曳；L 型等不規則形狀用「⬠ 多邊形分區」，每個角點一下；<b>🧲 磁鐵</b>會幫你吸到平面圖的線條、色塊邊界和旁邊分區的角，相鄰分區不會留縫（按住 Alt 暫時不吸）。</p><p>分區跟缺失區域一樣大時，右邊「從缺失區域複製範圍」${gN(3)}，不用重畫。</p><p>點分區可以改種類、取名稱（例：包裝室）、寫說明；拖白色方塊改角、拖「＋」加角。畫好後可以「🔒 鎖定分區」避免拖到。</p><p class="muted small">顏色預設：一般作業區卡其、準清潔區淺藍、清潔區淺粉；編輯模式右邊「🎨 圖例顏色」可以改。</p>`),
     gStep(11,'🔶 易碎品：標示', gC(gR(`${gB('🔶 新增易碎品',{hl:1,n:1})}`)+gR(`<span class="gx-tag" style="background:#f59e0b;color:#3b2500;border-color:#fff">◆ G01</span><span class="gx-s">燈罩（玻璃）× 2</span>`)) + gC(gR(`${gIn('材質：玻璃')}${gIn('數量：2')}`)+gR(`${gIn('每 1 個月 ▾',1)}${gN(2)}`),'🔶 G01 燈罩'),
       `<p>編輯模式按「🔶 新增易碎品」${gN(1)}，在所在位置點一下，輸入名稱（例：燈罩、觀察窗玻璃、玻璃溫度計），編號自動編 <b>G01、G02…</b></p><p>點標記可以填材質、數量、位置說明、加參考照片（可 Ctrl+V 貼上）。</p><p><b>檢查頻率</b>${gN(2)}：預設<b>每個月一次</b>，右邊面板可改成每 2、3、4、6、12 個月；個別項目也可以單獨設定。</p><p>「📗 匯出易碎品清單（Excel）」含最近檢查日、下次檢查日與檢查紀錄。</p>`),
     gStep(12,'🔶 易碎品：定期檢查', gC(gR(gB('📝 開始易碎品檢查',{dk:1,hl:1,n:1}))+gR(`<span class="gx-s" style="flex:1">G01 燈罩</span>${gN(2)}${gB('✅ 完整',{ok:1})}${gB('❌ 破損',{rd:1,hl:1})}${gB('❓ 遺失')}`)+gR(gB('＋ 建立缺失',{dk:1,hl:1,n:3}))) + gC(gR(`<span class="gx-tag" style="background:#f59e0b;color:#3b2500;border-color:#fff">◆ G01</span><span class="gx-s">正常</span><span class="gx-tag" style="background:#f59e0b;color:#3b2500;box-shadow:0 0 0 2px #b42318">◆ G02 !</span><span class="gx-s">到期未檢查</span><span class="gx-tag" style="background:#b42318;color:#fff">◆ G03</span><span class="gx-s">破損</span>`),'地圖上的顏色'),
@@ -2274,6 +2278,7 @@ function renderMap(){
         <button class="${MV_LOCK?'primary':''}" onclick="mapLockToggle()" title="鎖定後區域不會被拖動或改大小，方便新增位置">${MV_LOCK?'🔒 區域已鎖定':'🔓 鎖定區域'}</button>
         <button class="${MV.tool==='poly'&&!(MV.poly&&MV.poly.areaId)?'primary':''}" onclick="MV.tool==='poly'?mapPolyCancel():mapPolyStart('')">⬠ 新增多邊形區域</button>
         <button class="${MV.tool==='loc'?'primary':''}" onclick="MV.tool=MV.tool==='loc'?'':'loc';renderMap()">📍 新增位置</button>`}
+        ${['defect','zone','flow'].includes(MV.layer)?`<button class="${MV_SNAP?'primary':''}" onclick="mapSnapToggle()" title="畫多邊形、拖角時，會輕輕吸到附近的角、對齊其他角和平面圖上的線條；按住 Alt 可以暫時不吸">🧲 磁鐵${MV_SNAP?'（開）':'（關）'}</button>`:''}
         <button onclick="mapRename()">地圖改名</button>
         <button onclick="this.nextElementSibling.click()">換圖片</button><input type="file" accept="image/jpeg,image/png" hidden onchange="mapUpload(this,MV.mapId)">
         <button class="danger" onclick="mapDelete()">刪除地圖</button>` : ''}
@@ -2281,7 +2286,7 @@ function renderMap(){
       ${MV.layer==='frag'||MV.layer==='flow'||MV.layer==='pest'?`<button class="${MV_ZBG?'primary':''}" onclick="lyZbgToggle()" title="把清潔分區淡淡地墊在底下對照">🧼 疊清潔分區${MV_ZBG?'（開）':'（關）'}</button>`:''}
       ${MV.layer==='frag'&&lyList('frag').length?`<button class="primary" onclick="fragCheckStart()">📝 開始易碎品檢查</button>`:''}
       <span class="mzoom"><button onclick="mapZoom(-1)" aria-label="縮小">－</button><span id="mzPct">${Math.round(MV.zoom*100)}%</span><button onclick="mapZoom(1)" aria-label="放大">＋</button><button onclick="mapFitScreen()" title="依比例縮小，整張平面圖放進螢幕">適應畫面</button><button onclick="mapFitHeight()" title="地圖框拉高到整張平面圖都看得到，不用上下捲動">⤢ 整張顯示</button></span>
-      <div class="mtip">${MV.layer!=='defect'?lyTipHTML():MV.tool==='poly'?`沿著區域邊界「每個角點一下」（L 型倉庫點 6 個角），點回第一個點或按「完成」結束。已點 ${MV.poly?MV.poly.pts.length:0} 個角　<button class="primary" onclick="mapPolyFinish()">✔ 完成</button> <button onclick="if(MV.poly&&MV.poly.pts.length){MV.poly.pts.pop();renderMap()}">↶ 退一步</button> <button onclick="mapPolyCancel()">取消</button>`:MV.tool==='area'?'在平面圖上「按住拖曳」畫出區域範圍。':MV.tool==='loc'?'在區域框裡「點一下」放位置標記。':MV.mode==='edit'?(MV_LOCK?'🔒 區域已鎖定：區域不會被拖動，可以放心新增、移動位置；點選後可在右邊修改。':'編輯模式：拖曳可移動區域與位置，拉區域右下角可改大小；點選後可在右邊修改或刪除。新增位置前可以先「🔓 鎖定區域」。'):'檢視模式：點區域或位置看缺失紀錄；在空白處按住拖曳可移動平面圖。'}</div>
+      <div class="mtip">${MV.layer!=='defect'?lyTipHTML():MV.tool==='poly'?`沿著區域邊界「每個角點一下」（L 型倉庫點 6 個角），點回第一個點或按「完成」結束。${MV_SNAP?'🧲 磁鐵會吸到附近的角和線（按住 Alt 不吸）。':''}已點 ${MV.poly?MV.poly.pts.length:0} 個角　<button class="primary" onclick="mapPolyFinish()">✔ 完成</button> <button onclick="if(MV.poly&&MV.poly.pts.length){MV.poly.pts.pop();renderMap()}">↶ 退一步</button> <button onclick="mapPolyCancel()">取消</button>`:MV.tool==='area'?'在平面圖上「按住拖曳」畫出區域範圍。':MV.tool==='loc'?'在區域框裡「點一下」放位置標記。':MV.mode==='edit'?(MV_LOCK?'🔒 區域已鎖定：區域不會被拖動，可以放心新增、移動位置；點選後可在右邊修改。':'編輯模式：拖曳可移動區域與位置，拉區域右下角可改大小；點選後可在右邊修改或刪除。新增位置前可以先「🔓 鎖定區域」。'):'檢視模式：點區域或位置看缺失紀錄；在空白處按住拖曳可移動平面圖。'}</div>
       ${MV.layer==='defect'?riskLegendHTML():lyLegendHTML()}
     </div>
     <div class="mapwrap">
@@ -2294,7 +2299,7 @@ function renderMap(){
         ${MV.tool==='poly'&&MV.poly?MV.poly.pts.map((q,i)=>`<i class="mdot ${i===0?'first':''}" style="left:${q[0]*100}%;top:${q[1]*100}%"></i>`).join(''):''}
         ${mapAreas().filter(a=>!a.pts).map(a=>{ const s = mapStats(recsForArea(a)); return `<div class="marea ${MV.sel&&MV.sel.t==='area'&&MV.sel.id===a.id?'sel':''} ${MV_RISK&&MV.mode==='view'?'rk':''}" data-aid="${a.id}" style="left:${a.x*100}%;top:${a.y*100}%;width:${a.w*100}%;height:${a.h*100}%;--c:${esc(areaColor(a, REP))}"><span class="mlab">${esc(a.name)}${s.open?` <b class="mcnt">${s.open}</b>`:''}${STREAK.some(x=>x.aid===a.id)?' <b class="mwarn" title="連續發生警示">⚠</b>':''}</span>${MV.mode==='edit'&&!MV_LOCK?'<i class="mres" data-res="1"></i>':''}</div>`; }).join('')}
         ${MAPD.locs.filter(l=>areaById(l.areaId)&&areaById(l.areaId).mapId===MV.mapId).map(l=>{ const s = mapStats(recsForLoc(l)); return `<div class="mpin ${locRiskCls(l, REP)} ${STREAK.some(x=>x.lid===l.id)?'warn3':''} ${MV.sel&&MV.sel.t==='loc'&&MV.sel.id===l.id?'sel':''}" data-lid="${l.id}" style="left:${l.x*100}%;top:${l.y*100}%" title="${esc((l.code+' '+l.name).trim())}">${esc(l.code||'•')}</div>`; }).join('')}`}
-        <div class="mdraw" id="mDraw" hidden></div>
+        <div class="mdraw" id="mDraw" hidden></div><i class="msnapx" id="mSnapX" hidden></i><i class="msnapy" id="mSnapY" hidden></i><i class="msnap" id="mSnap" hidden></i>
       </div></div>
       <div class="mgrip" id="mGrip" role="separator" aria-label="拖曳調整地圖高度" title="上下拖曳調整高度；連點兩下＝整張顯示">⇕ 拖這裡調整地圖高度（連點兩下＝整張顯示）</div></div>
       <div class="card mside" id="mSide">${MV.layer==='defect'?mapSideHTML():layerSideHTML()}</div>
@@ -2418,7 +2423,7 @@ function mapBind(){
     if(e.button!==0) return;
     const p = frac(e), aEl = e.target.closest('[data-aid]'), lEl = e.target.closest('.mpin');
     if(MV.tool==='poly'){ drag = {k:'poly', s:p}; }
-    else if(MV.tool==='area'){ drag = {k:'draw', s:p}; }
+    else if(MV.tool==='area'){ const q = mapSnap(p, e); drag = {k:'draw', s:{x:q.x, y:q.y}}; }
     else if(!MV.tool && !MV_LOCK && MV.mode==='edit' && e.target.dataset.mid!==undefined){ const a = areaById(e.target.dataset.aid), i = +e.target.dataset.mid + 1; a.pts.splice(i, 0, [p.x, p.y]); drag = {k:'vtx', a, i, el:e.target, s:p, added:true}; mapPolyDom(a, false); }
     else if(!MV.tool && !MV_LOCK && MV.mode==='edit' && e.target.dataset.vtx!==undefined){ const a = areaById(e.target.dataset.aid); drag = {k:'vtx', a, i:+e.target.dataset.vtx, el:e.target, s:p}; }
     else if(!MV.tool && !MV_LOCK && MV.mode==='edit' && aEl && areaById(aEl.dataset.aid) && areaById(aEl.dataset.aid).pts && !lEl){ const a = areaById(aEl.dataset.aid); drag = {k:'mvp', a, s:p, o:a.pts.map(q=>q.slice())}; }
@@ -2429,9 +2434,11 @@ function mapBind(){
     else drag = {k:'pan', cx:e.clientX, cy:e.clientY, sl:view.scrollLeft, st:view.scrollTop, aEl, lEl};
     drag.moved = false; inner.setPointerCapture(e.pointerId); e.preventDefault();
   };
+  inner.onpointerleave = () => snapShow(null);
   inner.onpointermove = e => {
-    if(!drag) return;
-    const p = frac(e);
+    if(!drag){ if(SNAP_TOOLS.includes(MV.tool)) snapShow(mapSnap(frac(e), e)); return; }
+    let p = frac(e);
+    if(drag.k==='draw' || drag.k==='vtx'){ p = mapSnap(p, e, drag.k==='vtx' ? {o:drag.a, i:drag.i} : null); snapShow(p); }
     if(drag.k==='pan'){ const dx = e.clientX-drag.cx, dy = e.clientY-drag.cy; if(Math.abs(dx)+Math.abs(dy)>4) drag.moved = true; view.scrollLeft = drag.sl-dx; view.scrollTop = drag.st-dy; return; }
     const dx = p.x-drag.s.x, dy = p.y-drag.s.y; if(Math.abs(dx)+Math.abs(dy)>0.005) drag.moved = true;
     if(drag.k==='draw'){ const d = $('#mDraw'), x = Math.min(p.x,drag.s.x), y = Math.min(p.y,drag.s.y); d.hidden = false; Object.assign(d.style,{left:x*100+'%',top:y*100+'%',width:Math.abs(dx)*100+'%',height:Math.abs(dy)*100+'%'}); }
@@ -2446,7 +2453,8 @@ function mapBind(){
   inner.onpointercancel = () => { drag = null; const d = $('#mDraw'); if(d) d.hidden = true; };
   inner.onpointerup = async e => {
     const d = drag; drag = null; if(!d) return;
-    const p = frac(e);
+    let p = frac(e); snapShow(null);
+    if(d.k==='poly' || d.k==='draw') p = mapSnap(p, e);
     if(d.k==='poly'){
       if(d.moved) return;
       const P = MV.poly, b = inner.getBoundingClientRect();
@@ -3115,6 +3123,8 @@ function lyCur(){ return MV.sel && LY_ARR[MV.sel.t] ? lyGet(MV.sel.t, MV.sel.id)
 function lyMap(){ return MAPD.maps.find(x=>x.id===MV.mapId); }
 const lyVH = m => 1000*((m&&m.h)||1)/((m&&m.w)||1);
 const lyBox = pts => { const xs = pts.map(q=>q[0]), ys = pts.map(q=>q[1]); return {x:Math.min(...xs), y:Math.min(...ys), w:Math.max(...xs)-Math.min(...xs), h:Math.max(...ys)-Math.min(...ys)}; };
+/* 分區名稱放在最上面、最左邊的角（L 型也不會跑到形狀外面） */
+const lyLabPt = pts => { const q = pts.slice().sort((a,b)=>(a[1]-b[1]) || (a[0]-b[0]))[0]; return {x:q[0], y:q[1]}; };
 const fragLabel = f => (f.code+' '+(f.name||'')).trim();
 
 /* ---- 易碎品：檢查頻率與狀態 ---- */
@@ -3159,7 +3169,7 @@ function lyDrawToggle(){ if(MV.tool==='fline'||MV.tool==='mark'){ MV.tool = ''; 
 function lyPolyStart(t){ if(MV.tool===t){ MV.tool = ''; MV.poly = null; } else { MV.tool = t; MV.poly = {pts:[]}; } renderMap(); }
 function lyTipHTML(){
   const n = MV.poly ? MV.poly.pts.length : 0, T = MV.tool;
-  if(T==='zpoly') return `選好上方「分區種類」，沿著分區邊界「每個角點一下」，點回第一個點或按「完成」。已點 <span id="lyCnt">${n}</span> 個角　<button class="primary" onclick="lyPolyFinish()">✔ 完成</button> <button onclick="lyUndo()">↶ 退一步</button> <button onclick="lyPolyStart('zpoly')">取消</button>`;
+  if(T==='zpoly') return `選好上方「分區種類」，沿著分區邊界「每個角點一下」，點回第一個點或按「完成」。${MV_SNAP?'🧲 磁鐵會吸到附近的角和線（按住 Alt 不吸）。':''}已點 <span id="lyCnt">${n}</span> 個角　<button class="primary" onclick="lyPolyFinish()">✔ 完成</button> <button onclick="lyUndo()">↶ 退一步</button> <button onclick="lyPolyStart('zpoly')">取消</button>`;
   if(T==='zrect') return `選好上方「分區種類」（目前：<b>${ZK[MV.zk].t}</b>），在平面圖上「按住拖曳」畫出範圍。`;
   if(T==='fline') return `畫「<b>${FK[MV.fk].t}</b>」：從起點開始「一個轉彎點一下」，最後一點會變成箭頭；在最後一點<b>再點一下</b>或按「完成」結束。已點 <span id="lyCnt">${n}</span> 點　<button class="primary" onclick="lyPolyFinish()">✔ 完成這條</button> <button onclick="lyUndo()">↶ 退一步</button> <button onclick="lyDrawToggle()">■ 停止畫</button>`;
   if(T==='mark') return `畫「<b>${MK[MV.fk].t}</b>」：在平面圖上「按住拖曳」畫一段粗線（例如門口那一段牆）；只點一下會放一小段。可以連續畫，畫完按「■ 停止畫」。`;
@@ -3188,7 +3198,7 @@ function lyOverlay(m){
   let defs = '', body = '', html = '';
   if(L==='zone' || (MV_ZBG && L!=='defect')){
     lyList('zone').forEach(z => { body += `<polygon data-lo="zone:${z.id}" class="lz ${L!=='zone'?'bg':''} ${isSel('zone',z.id)?'sel':''}" points="${lyPts(z.pts, VH)}" style="--c:${lyColor(z.kind)}"/>`; });
-    if(L==='zone') lyList('zone').forEach(z => { const b = lyBox(z.pts); html += `<span class="mplab lzlab" style="left:${b.x*100}%;top:${b.y*100}%;--c:${lyColor(z.kind)}">${esc(ZK[z.kind]?ZK[z.kind].t:'')}${z.name?'｜'+esc(z.name):''}</span>`; });
+    if(L==='zone') lyList('zone').forEach(z => { const b = lyLabPt(z.pts); html += `<span class="mplab lzlab" style="left:${b.x*100}%;top:${b.y*100}%;--c:${lyColor(z.kind)}">${esc(ZK[z.kind]?ZK[z.kind].t:'')}${z.name?'｜'+esc(z.name):''}</span>`; });
   }
   if(L==='flow'){
     lyList('mark').filter(o=>!MV_HIDE.has(o.kind)).forEach(o => { body += `<g data-lo="mark:${o.id}" class="lm ${isSel('mark',o.id)?'sel':''}"><polyline class="hit" points="${lyPts(o.pts, VH)}"/><polyline class="ln" points="${lyPts(o.pts, VH)}" style="stroke:${lyColor(o.kind)}"/></g>`; });
@@ -3232,12 +3242,16 @@ function layerBind(){
     else if(ed && o && e.target.dataset.lvtx!==undefined) drag = {k:'vtx', o, i:+e.target.dataset.lvtx};
     else if(ed && hit && !(hit.t==='zone' && MV_LOCK)) drag = {k:'mv', h:hit, o: hit.t==='frag'||hit.t==='pest' ? {x:hit.o.x, y:hit.o.y} : hit.o.pts.map(q=>q.slice())};
     else drag = {k:'pan', cx:e.clientX, cy:e.clientY, sl:view.scrollLeft, st:view.scrollTop, hit};
-    drag.s = p; drag.moved = false; inner.setPointerCapture(e.pointerId); e.preventDefault();
+    if(T==='zrect' || T==='mark'){ const q = mapSnap(p, e); drag.s = {x:q.x, y:q.y}; } else drag.s = p;
+    drag.moved = false; inner.setPointerCapture(e.pointerId); e.preventDefault();
   };
+  inner.onpointerleave = () => snapShow(null);
   inner.onpointermove = e => {
-    if(!drag) return;
+    if(!drag){ if(SNAP_TOOLS.includes(MV.tool)) snapShow(mapSnap(frac(e), e)); return; }
     if(drag.k==='pan'){ const dx = e.clientX-drag.cx, dy = e.clientY-drag.cy; if(Math.abs(dx)+Math.abs(dy)>4) drag.moved = true; view.scrollLeft = drag.sl-dx; view.scrollTop = drag.st-dy; return; }
-    const p = frac(e), dx = p.x-drag.s.x, dy = p.y-drag.s.y; if(Math.abs(dx)+Math.abs(dy)>0.005) drag.moved = true;
+    let p = frac(e);
+    if(drag.k==='draw' || drag.k==='mark' || drag.k==='vtx'){ p = mapSnap(p, e, drag.k==='vtx' ? {o:drag.o, i:drag.i} : null); snapShow(p); }
+    const dx = p.x-drag.s.x, dy = p.y-drag.s.y; if(Math.abs(dx)+Math.abs(dy)>0.005) drag.moved = true;
     if(!drag.moved) return;
     if(drag.k==='draw'){ const d = $('#mDraw'); d.hidden = false; Object.assign(d.style,{left:Math.min(p.x,drag.s.x)*100+'%',top:Math.min(p.y,drag.s.y)*100+'%',width:Math.abs(dx)*100+'%',height:Math.abs(dy)*100+'%'}); }
     if(drag.k==='mark'){ MV.tmp = [[drag.s.x,drag.s.y],[p.x,p.y]]; lyRedraw(); }
@@ -3252,7 +3266,8 @@ function layerBind(){
   inner.onpointercancel = () => { drag = null; MV.tmp = null; const d = $('#mDraw'); if(d) d.hidden = true; lyRedraw(); };
   inner.onpointerup = async e => {
     const d = drag; drag = null; if(!d) return;
-    const p = frac(e);
+    let p = frac(e); snapShow(null);
+    if(d.k==='click' || d.k==='draw' || d.k==='mark') p = mapSnap(p, e);
     if(d.k==='click'){
       if(d.moved) return;
       const P = MV.poly, b = inner.getBoundingClientRect(), near = q => Math.hypot((p.x-q[0])*b.width, (p.y-q[1])*b.height) < 14;
@@ -3592,7 +3607,7 @@ async function layerExportImage(){
   /* 分區 */
   if(L==='zone' || (MV_ZBG && L!=='defect')){
     lyList('zone').forEach(z => { const col = lyColor(z.kind); path(z.pts); g.closePath(); g.fillStyle = hexA(col, L==='zone'?0.55:0.38); g.fill(); g.lineWidth = Math.max(1.5, 1.5*s); g.strokeStyle = hexA(col, 1); g.stroke(); });
-    if(L==='zone') lyList('zone').forEach(z => { const b = lyBox(z.pts), fs = Math.round(15*u1), t = (ZK[z.kind]?ZK[z.kind].t:'')+(z.name?'｜'+z.name:''); g.font = `700 ${fs}px ${F}`;
+    if(L==='zone') lyList('zone').forEach(z => { const b = lyLabPt(z.pts), fs = Math.round(15*u1), t = (ZK[z.kind]?ZK[z.kind].t:'')+(z.name?'｜'+z.name:''); g.font = `700 ${fs}px ${F}`;
       const tw = g.measureText(t).width, pad = 7*u1, h = fs*1.55, x = X(b.x)+6*u1, y = Y(b.y)+6*u1;
       rr(x, y, tw+pad*2+5*u1, h, 5*u1); g.fillStyle = 'rgba(255,253,248,.95)'; g.fill(); g.fillStyle = lyColor(z.kind); g.fillRect(x, y, 5*u1, h);
       g.fillStyle = '#16213a'; g.textBaseline = 'middle'; g.fillText(t, x+pad+5*u1, y+h/2); });
@@ -3636,6 +3651,74 @@ async function layerExportImage(){
   flash('已匯出'+LAYER_NAME[L]);
 }
 
+
+
+/* ---------- 🧲 磁鐵：畫多邊形、拖角時，輕輕吸到附近的角、對齊其他角、平面圖上的線條與色塊邊界 ---------- */
+let MV_SNAP = lyLS('mapSnap')!=='0';
+function mapSnapToggle(){ MV_SNAP = !MV_SNAP; lyLS('mapSnap', MV_SNAP?'1':'0'); renderMap(); flash(MV_SNAP?'🧲 磁鐵已開啟':'磁鐵已關閉'); }
+const SNAP = { key:'', w:0, h:0, gx:null, gy:null };
+/* 平面圖的「線條強度」：左右（gx）、上下（gy）顏色差多少；第一次用到時算一次 */
+function snapEdges(){
+  const im = $('#mapImg'); if(!im || !im.complete || !im.naturalWidth) return null;
+  const key = MV.mapId+'|'+im.naturalWidth+'x'+im.naturalHeight+'|'+(im.src||'').length;
+  if(SNAP.key===key) return SNAP;
+  const w = im.naturalWidth, h = im.naturalHeight, c = document.createElement('canvas'); c.width = w; c.height = h;
+  const g = c.getContext('2d', {willReadFrequently:true}); g.drawImage(im, 0, 0);
+  let d; try{ d = g.getImageData(0, 0, w, h).data; }catch(e){ return null; }
+  const gx = new Uint8Array(w*h), gy = new Uint8Array(w*h), W4 = w*4;
+  for(let y=1; y<h-1; y++) for(let x=1; x<w-1; x++){
+    const i = (y*w+x)*4, l = i-4, r = i+4, u = i-W4, dn = i+W4;
+    gx[y*w+x] = Math.max(Math.abs(d[l]-d[r]), Math.abs(d[l+1]-d[r+1]), Math.abs(d[l+2]-d[r+2]));
+    gy[y*w+x] = Math.max(Math.abs(d[u]-d[dn]), Math.abs(d[u+1]-d[dn+1]), Math.abs(d[u+2]-d[dn+2]));
+  }
+  Object.assign(SNAP, {key, w, h, gx, gy}); return SNAP;
+}
+/* 地圖上所有的角（缺失區域、清潔分區、正在畫的點），skip：拖曳中的那個角不算 */
+function snapPts(skip){
+  const out = [], add = (o, pts) => pts.forEach((q,i) => { if(!(skip && skip.o===o && skip.i===i)) out.push(q); });
+  mapAreas().forEach(a => add(a, a.pts || [[a.x,a.y],[a.x+a.w,a.y],[a.x+a.w,a.y+a.h],[a.x,a.y+a.h]]));
+  lyList('zone').forEach(z => add(z, z.pts));
+  if(MV.poly && MV.poly.pts) add(MV.poly, MV.poly.pts);
+  return out;
+}
+const SNAP_R = 10;   /* 弱磁鐵：螢幕上 10px 以內才會吸 */
+function mapSnap(p, e, skip){
+  const inner = $('#mapInner');
+  if(!MV_SNAP || (e && e.altKey) || !inner) return {x:p.x, y:p.y};
+  const b = inner.getBoundingClientRect(); if(!b.width) return {x:p.x, y:p.y};
+  const V = snapPts(skip);
+  /* 1. 靠近別的角：直接吸到那個角 */
+  let best = null, bd = 1e9;
+  V.forEach(q => { const dd = Math.hypot((q[0]-p.x)*b.width, (q[1]-p.y)*b.height); if(dd < bd){ bd = dd; best = q; } });
+  if(best && bd <= SNAP_R) return {x:best[0], y:best[1], sx:1, sy:1, v:1};
+  /* 2. 左右、上下各自找最近的：對齊別的角，或平面圖上的線條 */
+  let x = p.x, y = p.y, dx = SNAP_R/b.width, dy = SNAP_R/b.height, sx = 0, sy = 0;
+  V.forEach(q => { const ax = Math.abs(q[0]-p.x), ay = Math.abs(q[1]-p.y); if(ax < dx){ dx = ax; x = q[0]; sx = 1; } if(ay < dy){ dy = ay; y = q[1]; sy = 1; } });
+  const E = snapEdges();
+  if(E){
+    const ix = Math.round(p.x*E.w), iy = Math.round(p.y*E.h), rx = Math.max(2, Math.round(SNAP_R*E.w/b.width)), ry = Math.max(2, Math.round(SNAP_R*E.h/b.height));
+    const spy = Math.max(3, Math.round(6*E.h/b.height)), spx = Math.max(3, Math.round(6*E.w/b.width));
+    let bs = 0, bx = -1;
+    for(let cx = ix-rx; cx <= ix+rx; cx++){ if(cx<1 || cx>=E.w-1) continue; let t = 0, n = 0;
+      for(let yy = iy-spy; yy <= iy+spy; yy++){ if(yy<1 || yy>=E.h-1) continue; t += E.gx[yy*E.w+cx]; n++; }
+      t = n ? t/n : 0; if(t > bs + 0.5 || (Math.abs(t-bs) <= 0.5 && Math.abs(cx-ix) < Math.abs(bx-ix))){ bs = t; bx = cx; } }
+    if(!sx && bx >= 0 && bs >= 40){ const f = bx/E.w; if(Math.abs(f-p.x) <= SNAP_R/b.width){ x = f; sx = 1; } }   /* 已經對齊到別的角就以角為準，線才會筆直 */
+    let bt = 0, by = -1;
+    for(let cy = iy-ry; cy <= iy+ry; cy++){ if(cy<1 || cy>=E.h-1) continue; let t = 0, n = 0;
+      for(let xx = ix-spx; xx <= ix+spx; xx++){ if(xx<1 || xx>=E.w-1) continue; t += E.gy[cy*E.w+xx]; n++; }
+      t = n ? t/n : 0; if(t > bt + 0.5 || (Math.abs(t-bt) <= 0.5 && Math.abs(cy-iy) < Math.abs(by-iy))){ bt = t; by = cy; } }
+    if(!sy && by >= 0 && bt >= 40){ const f = by/E.h; if(Math.abs(f-p.y) <= SNAP_R/b.height){ y = f; sy = 1; } }
+  }
+  return {x:clamp01(x), y:clamp01(y), sx, sy};
+}
+/* 游標旁的小圓點：吸到時變橘色，並畫出對齊虛線 */
+function snapShow(q){
+  const m = $('#mSnap'), gx = $('#mSnapX'), gy = $('#mSnapY'); if(!m) return;
+  if(!q || !MV_SNAP){ m.hidden = true; if(gx) gx.hidden = true; if(gy) gy.hidden = true; return; }
+  m.hidden = false; m.className = 'msnap'+(q.sx||q.sy?' on':''); Object.assign(m.style, {left:q.x*100+'%', top:q.y*100+'%'});
+  if(gx){ gx.hidden = !q.sx; gx.style.left = q.x*100+'%'; } if(gy){ gy.hidden = !q.sy; gy.style.top = q.y*100+'%'; }
+}
+const SNAP_TOOLS = ['poly','area','zpoly','fline','zrect','mark'];
 
 /* ---------- 常用選項頁 ---------- */
 const OPT_USE = { area:'缺失區域', people:'巡檢人員、負責人、已通知對象、執行人、複查人員、結案確認人員', dept:'負責單位、改善執行單位' };
