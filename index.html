@@ -185,6 +185,42 @@ body.wide main{max-width:none}
 .mpoly polygon.rk{fill:color-mix(in srgb,var(--c) 30%,transparent);stroke-width:2.5}.mpoly polygon.rk:hover{fill:color-mix(in srgb,var(--c) 42%,transparent)}
 .marea.rk .mlab,.mplab.rk{border-left:5px solid var(--c);box-shadow:0 1px 3px rgba(0,0,0,.25)}
 .mpin.rk-red{background:#b42318}.mpin.rk-yellow{background:#d97706}.mpin.rk-green{background:#167a3e}.mpin.rk-gray{background:#9aa3b2}
+/* 圖層：清潔分區、易碎品、動線與設施 */
+.mapbar .mlayers{order:-1;flex-basis:100%;display:flex;flex-wrap:wrap;border-radius:12px;background:#efe6d6}
+.mapbar .mlayers button{flex:1 1 auto;border-radius:9px;padding:8px 12px}
+.lysvg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.lysvg .lz{pointer-events:visiblePainted;fill:var(--c);fill-opacity:.55;stroke:var(--c);stroke-width:2;stroke-opacity:1;cursor:pointer;filter:saturate(1.15)}
+.lysvg .lz:hover{fill-opacity:.68}.lysvg .lz.bg{pointer-events:none;fill-opacity:.38;stroke-opacity:.55}
+.lysvg .lz.sel{stroke:#16213a;stroke-width:3.5}
+.lysvg .ln{fill:none;stroke-linejoin:round}.lysvg .lf .ln{stroke-width:4.5}.lysvg .lf .ln.dash{stroke-dasharray:14 8}.lysvg .lf .ln.dot{stroke-dasharray:.1 9;stroke-linecap:round}
+.lysvg .lm .ln{stroke-width:11}
+.lysvg .hit{fill:none;stroke:transparent;stroke-width:22;pointer-events:stroke;cursor:pointer}
+.lysvg .sel .ln{filter:drop-shadow(0 0 2.5px #16213a) drop-shadow(0 0 2.5px #fff)}
+.lysvg .ltag{font-size:17px;font-weight:800;stroke:#fff;stroke-width:3.5;paint-order:stroke;pointer-events:none}
+.lysvg .lytmp{fill:none;stroke:var(--gold);stroke-width:3;stroke-dasharray:8 5}
+.lysvg .lm-tmp{fill:none;stroke-width:11;opacity:.7}
+.editing .lysvg .lz:not(.bg),.editing .lysvg .hit,.editing .mfrag{cursor:move}
+.lzlab{border-left:5px solid var(--c);box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.mfrag{position:absolute;transform:translate(-50%,-50%);height:calc(24px*var(--ms));padding:0 calc(7px*var(--ms));border-radius:6px;background:#f59e0b;color:#3b2500;font-size:calc(11.5px*var(--ms));font-weight:800;display:flex;align-items:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap}
+.mfrag.fs-soon{border-color:#d97706;box-shadow:0 0 0 2px #d97706,0 2px 6px rgba(0,0,0,.35)}
+.mfrag.fs-due{border-color:#b42318;box-shadow:0 0 0 2px #b42318,0 2px 6px rgba(0,0,0,.35)}
+.mfrag.fs-due::after{content:'!';position:absolute;top:-9px;right:-9px;width:16px;height:16px;border-radius:50%;background:#b42318;color:#fff;font-size:11px;line-height:16px;text-align:center}
+.mfrag.fs-bad{background:#b42318;color:#fff}
+.mfrag.sel{outline:3px solid var(--gold);outline-offset:1px}
+.mpest{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;cursor:pointer}
+.mpest img{width:calc(36px*var(--ms));height:calc(36px*var(--ms));filter:drop-shadow(0 2px 3px rgba(0,0,0,.4));pointer-events:none}
+.mpest b{margin-left:calc(-3px*var(--ms));font-size:calc(11px*var(--ms));background:rgba(255,253,248,.95);border:1px solid #16213a;border-radius:4px;padding:0 calc(4px*var(--ms));color:#16213a;pointer-events:none}
+.mpest.sel img{outline:3px solid var(--gold);border-radius:50%}.editing .mpest{cursor:move}
+.lyico{width:18px;height:18px;vertical-align:-4px;margin-right:3px}.lycnt .lyico{display:block;margin:0 auto 2px;width:24px;height:24px}
+.mlegend .lyfr{width:16px;height:11px;border-radius:3px}
+.mlegend .lybar,.lybar{display:inline-block;width:18px;height:6px;border-radius:1px;margin-right:4px;vertical-align:2px}
+.lysw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;border:1px solid rgba(0,0,0,.15)}
+.lyleg button{border:1px solid transparent;background:none;padding:2px 6px;border-radius:6px;font-size:12px;color:var(--muted);cursor:pointer}
+.lyleg button:hover{border-color:var(--line);background:#fffdf8}.lyleg button b{font-size:12px;margin-right:4px;letter-spacing:-1px}
+.lyleg button.off{opacity:.4;text-decoration:line-through}
+.lycnt{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0}.lycnt div{background:var(--brand-soft);border-radius:8px;padding:6px;text-align:center;font-size:12px;color:var(--muted)}.lycnt b{display:block;font-size:18px;color:var(--ink,#16213a)}
+.lycol{margin-top:12px;border:1px solid var(--line);border-radius:8px;padding:6px 10px}.lycol summary{cursor:pointer;font-weight:700;font-size:13px}
+.lycg{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;margin:8px 0;font-size:12.5px}.lycg label{display:flex;align-items:center;gap:6px}.lycg input[type=color]{width:34px;height:24px;padding:0;border:1px solid var(--line)}
 .mrisk{font-size:12.5px;font-weight:700;color:var(--rc);margin:-4px 0 8px}
 .mr-rep{font-size:11.5px;font-weight:700;color:#7a3d06;background:#fff4e0;border-radius:9px;padding:0 7px}
 .mstats{margin-top:14px}.mstats summary{cursor:pointer;display:flex;gap:10px;align-items:baseline;list-style:none;font-size:16px}.mstats summary::-webkit-details-marker{display:none}
@@ -1004,7 +1040,9 @@ const GUIDES = {
     gStep(7,'風險顏色、連續發生警示、地圖統計', gC(gR(`${gB('🎨 風險顏色（開）',{dk:1,hl:1,n:1})}`)+gR(`<span class="gx-sw" style="background:#b42318"></span><span class="gx-s">重大／逾期／重複</span><span class="gx-sw" style="background:#d97706"></span><span class="gx-s">未結案</span><span class="gx-sw" style="background:#167a3e"></span><span class="gx-s">都結案</span>`)) + gC(gR(`${gN(2)}${gTag('本月','dk')}${gTag('最近三個月')}${gTag('自訂')}`),'📊 地圖統計'),
       `<p>檢視模式依缺失狀況自動上色${gN(1)}：紅＝重大、逾期或<b>重複發生</b>；黃＝有未結案；綠＝都結案；灰＝沒紀錄。</p><p><b>⚠ 連續發生警示</b>：同一位置同一類缺失<b>連續 3 個月</b>都發生，位置標記會閃動並加 ⚠，右邊面板會提醒檢討根本原因。</p><p>地圖下方「📊 地圖統計」${gN(2)}選期間；<b>點某個區域時，統計會變成那一區各位置的分布</b>，按「看全部區域」回到全廠。</p>`),
     gStep(8,'給同事用同一張地圖', gC(gR(`${gB('匯出地圖設定',{hl:1,n:1})}${gB('匯入地圖設定',{hl:1,n:2})}`)) + `<div class="gx-s" style="text-align:center">只含平面圖・區域・位置・稽核重點・參考照片<br>不含案件，不會蓋掉同事的資料</div>`,
-      `<p>按「匯出地圖設定」${gN(1)}存成檔案給同事，同事按「匯入地圖設定」${gN(2)}就有同一張地圖。</p><p>要放進報告或貼公告時，按上方<b>「🖼 匯出平面圖（圖片）」</b>，會把區域、位置、顏色一起存成清晰的 PNG（依目前風險顏色開／關）。</p><p class="muted small">「下載備份」會連稽核紀錄一起存。平面圖屬公司內部資料，不會上傳也不會送給 AI；匯出的圖片傳給別人前請先確認可以外流。</p>`)
+      `<p>按「匯出地圖設定」${gN(1)}存成檔案給同事，同事按「匯入地圖設定」${gN(2)}就有同一張地圖。</p><p>要放進報告或貼公告時，按上方<b>「🖼 匯出平面圖（圖片）」</b>，會把區域、位置、顏色一起存成清晰的 PNG（依目前風險顏色開／關）。</p><p class="muted small">「下載備份」會連稽核紀錄一起存。平面圖屬公司內部資料，不會上傳也不會送給 AI；匯出的圖片傳給別人前請先確認可以外流。</p>`),
+    gStep(9,'清潔分區、易碎品、動線、病媒防治（分開的圖層）', gC(gR(`${gN(1)}<span class="gx-seg"><i class="on">🔍 缺失</i><i>🧼 清潔分區</i><i>🔶 易碎品</i><i>➡️ 動線</i><i>🐭 病媒</i></span>`)+gR(`<span class="gx-sw" style="background:#c4bb7c"></span><span class="gx-s">一般作業區</span><span class="gx-sw" style="background:#b9cde5"></span><span class="gx-s">準清潔區</span><span class="gx-sw" style="background:#e6b9b8"></span><span class="gx-s">清潔區</span>`)) + gC(gR(`${gTag('◆ G01')}<span class="gx-s" style="flex:1">燈罩（玻璃）每 1 個月</span>${gB('📝 開始易碎品檢查',{dk:1,hl:1,n:2})}`)+gR(`<span class="gx-s" style="color:#e46c0a;font-weight:800">──➜ 人流</span><span class="gx-s" style="color:#ff0000;font-weight:800">──➜ 物流</span><span class="gx-s" style="color:#0070c0;font-weight:800">──➜ 氣流</span>${gN(3)}`)),
+      `<p>地圖上方切換圖層${gN(1)}，每一層分開畫、分開匯出，<b>不會跟缺失混在一起</b>；平面圖只要上傳一次。</p><p><b>🧼 清潔分區</b>：編輯模式選「分區種類」再拖曳或點多邊形；跟缺失區域一樣大時，右邊可以「從缺失區域複製範圍」。</p><p><b>🔶 易碎品</b>：點一下放標記（自動編 G01…），填材質、數量；預設<b>每個月檢查一次</b>（可改成每 2、3、6、12 個月，也可以單項設定）。按「📝 開始易碎品檢查」${gN(2)}逐項打勾 ✅完整／❌破損／❓遺失，破損可一鍵建立缺失；到期沒檢查的標記會變紅框＋「!」。</p><p><b>➡️ 動線與設施</b>${gN(3)}：選種類後一個轉彎點點一下，最後一點變箭頭；門、冷氣、抽風口、水源、水溝用拖曳畫粗線。點圖例可以只看人流或物流，匯出圖片也只會有顯示中的。</p><p><b>🐭 病媒防治</b>：放捕蟲燈（蟲）、鼠板站（黏鼠板）、鼠餌站（老鼠）圖示，編號自動編 L01／B01／R01，可以匯出設施清單。</p><p class="muted small">每一層都可以按上方「🖼 匯出平面圖（圖片）」存成清晰 PNG。</p>`)
   ]},
   trash: { t:'最近刪除使用說明', steps:() => [
     gStep(1,'刪除的案件會先放這裡', gC(gR(`<span class="gx-s" style="flex:1">QA-20261026-001 包裝區</span>${gB('編輯')}${gB('刪除',{rd:1,hl:1,n:1})}`),'缺失清單'),
@@ -2133,7 +2171,7 @@ async function backup(){
   const out = rs.map(r => Object.assign({}, r, { photos:r.photos.map(phSync).filter(Boolean), improvePhotos:r.improvePhotos.map(phSync).filter(Boolean) }));
   const mapImages = {}; for(const id of mapImageIds()){ mapImages[id] = await phGet(id); }
   const audits = await auditsForBackup();
-  download(JSON.stringify({app:'qaHygieneTracker', version:2, exportedAt:new Date().toISOString(), records:out, tombs, opts:OPTS, map:MAPD, mapImages, audits}, null, 1),
+  download(JSON.stringify({app:'qaHygieneTracker', version:2, exportedAt:new Date().toISOString(), records:out, tombs, opts:OPTS, map:MAPD, mapImages, audits, fragChecks:FRAGCHK}, null, 1),
     `hygiene_backup_${today()}.json`, 'application/json');
 }
 function restore(input){
@@ -2159,6 +2197,7 @@ function restore(input){
       /* 備份裡有廠區地圖時，一起還原（取代目前的地圖） */
       if(data.map && Array.isArray(data.map.maps) && data.map.maps.length) await mapApply(data.map, data.mapImages);
       if(Array.isArray(data.audits)) await auditsRestore(data.audits);
+      if(Array.isArray(data.fragChecks)){ FRAGCHK = data.fragChecks.filter(c=>c && c.id && Array.isArray(c.results)); saveFragChk(); }
       flash('還原完成'); showList();
     }catch(e){ say('無法讀取：這不是本工具的備份檔。'); }
   };
@@ -2170,7 +2209,8 @@ function restore(input){
 /* 資料存在 localStorage（文字），平面圖存在照片資料庫 IndexedDB；座標一律用圖片寬高的比例（0～1） */
 const KEY_M = 'qaHygieneTracker_v1_map';
 function loadMap(){ let o = {}; try{ o = JSON.parse(localStorage.getItem(KEY_M)||'{}') || {}; }catch(e){}
-  return { maps:Array.isArray(o.maps)?o.maps:[], areas:Array.isArray(o.areas)?o.areas:[], locs:Array.isArray(o.locs)?o.locs:[], items:Array.isArray(o.items)?o.items:[] }; }
+  const A = k => Array.isArray(o[k]) ? o[k] : [];
+  return { maps:A('maps'), areas:A('areas'), locs:A('locs'), items:A('items'), zones:A('zones'), flows:A('flows'), marks:A('marks'), frags:A('frags'), pests:A('pests'), fragCfg:o.fragCfg||{}, colors:o.colors||{} }; }
 let MAPD = loadMap();
 function saveMap(){ try{ localStorage.setItem(KEY_M, JSON.stringify(MAPD)); return true; }catch(e){ say('廠區地圖存不進去，瀏覽器的儲存空間可能已滿。'); return false; } }
 const mapUid = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
@@ -2193,8 +2233,8 @@ async function showMap(focus){
   if(dirty && !(await ask('有尚未儲存的修改，確定要離開嗎？'))) return;
   cur = null; dirty = false; setSide('map');
   if(!MAPD.maps.find(m=>m.id===MV.mapId)) MV.mapId = MAPD.maps[0] ? MAPD.maps[0].id : '';
-  MV.tool = ''; MV.sel = null;
-  if(focus){ const a = areaById(focus.areaId); if(a){ MV.mapId = a.mapId; MV.sel = focus.locId && locById(focus.locId) ? {t:'loc', id:focus.locId} : {t:'area', id:a.id}; } }
+  MV.tool = ''; MV.sel = null; MV.poly = null;
+  if(focus){ MV.layer = 'defect'; lyLS('mapLayer','defect'); const a = areaById(focus.areaId); if(a){ MV.mapId = a.mapId; MV.sel = focus.locId && locById(focus.locId) ? {t:'loc', id:focus.locId} : {t:'area', id:a.id}; } }
   renderMap(); window.scrollTo(0,0);
 }
 function renderMap(){
@@ -2209,7 +2249,7 @@ function renderMap(){
         <div class="ptools">
           <button class="primary pnew" onclick="this.nextElementSibling.click()">＋ 新增地圖（上傳平面圖）</button>
           <input type="file" accept="image/jpeg,image/png" hidden onchange="mapUpload(this,'')">
-          ${m?`<button class="lite" onclick="mapExportImage()" title="把畫好的平面圖（區域、位置、顏色）存成清晰的 PNG 圖片">🖼 匯出平面圖（圖片）</button>`:''}
+          ${m?`<button class="lite" onclick="mapExportImage()" title="把目前這一層（缺失／清潔分區／易碎品／動線）存成清晰的 PNG 圖片">🖼 匯出平面圖（圖片）</button>`:''}
           <button class="lite" onclick="mapExport()">匯出地圖設定</button>
           <button class="lite" onclick="this.nextElementSibling.click()">匯入地圖設定</button>
           <input type="file" accept="application/json,.json" hidden onchange="mapImport(this)">
@@ -2217,39 +2257,42 @@ function renderMap(){
       </div>
     </div>
     ${m ? `<div class="card mapbar">
-      <select aria-label="選擇地圖" onchange="MV.mapId=this.value;MV.sel=null;MV.tool='';renderMap()">${MAPD.maps.map(x=>`<option value="${x.id}" ${x.id===MV.mapId?'selected':''}>${esc(x.name)}</option>`).join('')}</select>
+      <select aria-label="選擇地圖" onchange="MV.mapId=this.value;MV.sel=null;MV.tool='';MV.poly=null;renderMap()">${MAPD.maps.map(x=>`<option value="${x.id}" ${x.id===MV.mapId?'selected':''}>${esc(x.name)}</option>`).join('')}</select>
+      ${lyTabsHTML()}
       <div class="seg">${['view','edit'].map(k=>`<button class="${MV.mode===k?'on':''}" onclick="MV.mode='${k}';MV.tool='';renderMap()">${k==='view'?'👀 檢視模式':'✏️ 編輯模式'}</button>`).join('')}</div>
-      ${MV.mode==='edit' ? `<button class="${MV.tool==='area'?'primary':''}" onclick="MV.tool=MV.tool==='area'?'':'area';renderMap()">▭ 新增區域</button>
+      ${MV.mode==='edit' ? `${MV.layer!=='defect' ? lyToolsHTML() : `<button class="${MV.tool==='area'?'primary':''}" onclick="MV.tool=MV.tool==='area'?'':'area';renderMap()">▭ 新增區域</button>
         <button class="${MV_LOCK?'primary':''}" onclick="mapLockToggle()" title="鎖定後區域不會被拖動或改大小，方便新增位置">${MV_LOCK?'🔒 區域已鎖定':'🔓 鎖定區域'}</button>
         <button class="${MV.tool==='poly'&&!(MV.poly&&MV.poly.areaId)?'primary':''}" onclick="MV.tool==='poly'?mapPolyCancel():mapPolyStart('')">⬠ 新增多邊形區域</button>
-        <button class="${MV.tool==='loc'?'primary':''}" onclick="MV.tool=MV.tool==='loc'?'':'loc';renderMap()">📍 新增位置</button>
+        <button class="${MV.tool==='loc'?'primary':''}" onclick="MV.tool=MV.tool==='loc'?'':'loc';renderMap()">📍 新增位置</button>`}
         <button onclick="mapRename()">地圖改名</button>
         <button onclick="this.nextElementSibling.click()">換圖片</button><input type="file" accept="image/jpeg,image/png" hidden onchange="mapUpload(this,MV.mapId)">
         <button class="danger" onclick="mapDelete()">刪除地圖</button>` : ''}
-      ${MV.mode==='view'?`<button class="${MV_RISK?'primary':''}" onclick="mapRiskToggle()" title="依缺失狀況自動上色">🎨 風險顏色${MV_RISK?'（開）':'（關）'}</button>`:''}
+      ${MV.mode==='view'&&MV.layer==='defect'?`<button class="${MV_RISK?'primary':''}" onclick="mapRiskToggle()" title="依缺失狀況自動上色">🎨 風險顏色${MV_RISK?'（開）':'（關）'}</button>`:''}
+      ${MV.layer==='frag'||MV.layer==='flow'||MV.layer==='pest'?`<button class="${MV_ZBG?'primary':''}" onclick="lyZbgToggle()" title="把清潔分區淡淡地墊在底下對照">🧼 疊清潔分區${MV_ZBG?'（開）':'（關）'}</button>`:''}
+      ${MV.layer==='frag'&&lyList('frag').length?`<button class="primary" onclick="fragCheckStart()">📝 開始易碎品檢查</button>`:''}
       <span class="mzoom"><button onclick="mapZoom(-1)" aria-label="縮小">－</button><span id="mzPct">${Math.round(MV.zoom*100)}%</span><button onclick="mapZoom(1)" aria-label="放大">＋</button><button onclick="mapFitScreen()" title="依比例縮小，整張平面圖放進螢幕">適應畫面</button><button onclick="mapFitHeight()" title="地圖框拉高到整張平面圖都看得到，不用上下捲動">⤢ 整張顯示</button></span>
-      <div class="mtip">${MV.tool==='poly'?`沿著區域邊界「每個角點一下」（L 型倉庫點 6 個角），點回第一個點或按「完成」結束。已點 ${MV.poly?MV.poly.pts.length:0} 個角　<button class="primary" onclick="mapPolyFinish()">✔ 完成</button> <button onclick="if(MV.poly&&MV.poly.pts.length){MV.poly.pts.pop();renderMap()}">↶ 退一步</button> <button onclick="mapPolyCancel()">取消</button>`:MV.tool==='area'?'在平面圖上「按住拖曳」畫出區域範圍。':MV.tool==='loc'?'在區域框裡「點一下」放位置標記。':MV.mode==='edit'?(MV_LOCK?'🔒 區域已鎖定：區域不會被拖動，可以放心新增、移動位置；點選後可在右邊修改。':'編輯模式：拖曳可移動區域與位置，拉區域右下角可改大小；點選後可在右邊修改或刪除。新增位置前可以先「🔓 鎖定區域」。'):'檢視模式：點區域或位置看缺失紀錄；在空白處按住拖曳可移動平面圖。'}</div>
-      ${riskLegendHTML()}
+      <div class="mtip">${MV.layer!=='defect'?lyTipHTML():MV.tool==='poly'?`沿著區域邊界「每個角點一下」（L 型倉庫點 6 個角），點回第一個點或按「完成」結束。已點 ${MV.poly?MV.poly.pts.length:0} 個角　<button class="primary" onclick="mapPolyFinish()">✔ 完成</button> <button onclick="if(MV.poly&&MV.poly.pts.length){MV.poly.pts.pop();renderMap()}">↶ 退一步</button> <button onclick="mapPolyCancel()">取消</button>`:MV.tool==='area'?'在平面圖上「按住拖曳」畫出區域範圍。':MV.tool==='loc'?'在區域框裡「點一下」放位置標記。':MV.mode==='edit'?(MV_LOCK?'🔒 區域已鎖定：區域不會被拖動，可以放心新增、移動位置；點選後可在右邊修改。':'編輯模式：拖曳可移動區域與位置，拉區域右下角可改大小；點選後可在右邊修改或刪除。新增位置前可以先「🔓 鎖定區域」。'):'檢視模式：點區域或位置看缺失紀錄；在空白處按住拖曳可移動平面圖。'}</div>
+      ${MV.layer==='defect'?riskLegendHTML():lyLegendHTML()}
     </div>
     <div class="mapwrap">
-      <div class="mcol"><div class="mapview ${MV.mode==='edit'?'editing':''} ${MV.tool?'tool':''} ${MV_RISK&&MV.mode==='view'?'riskon':''}" id="mapView" style="height:${mapH()}"><div class="mapinner" id="mapInner" style="width:${MV.zoom*100}%">
+      <div class="mcol"><div class="mapview ${MV.mode==='edit'?'editing':''} ${MV.tool?'tool':''} ${MV_RISK&&MV.mode==='view'&&MV.layer==='defect'?'riskon':''} ly-${MV.layer}" id="mapView" style="height:${mapH()}"><div class="mapinner" id="mapInner" style="width:${MV.zoom*100}%">
         <img id="mapImg" alt="${esc(m.name)}" draggable="false">
-        <svg class="mpoly" viewBox="0 0 100 100" preserveAspectRatio="none">${mapAreas().filter(a=>a.pts).map(a=>`<polygon data-aid="${a.id}" class="${MV.sel&&MV.sel.t==='area'&&MV.sel.id===a.id?'sel':''} ${MV_RISK&&MV.mode==='view'?'rk':''}" style="--c:${esc(areaColor(a, REP))}" points="${ptsAttr(a.pts)}"/>`).join('')}
+        ${MV.layer!=='defect' ? `<div id="lyOv">${lyOverlay(m)}</div>` : `<svg class="mpoly" viewBox="0 0 100 100" preserveAspectRatio="none">${mapAreas().filter(a=>a.pts).map(a=>`<polygon data-aid="${a.id}" class="${MV.sel&&MV.sel.t==='area'&&MV.sel.id===a.id?'sel':''} ${MV_RISK&&MV.mode==='view'?'rk':''}" style="--c:${esc(areaColor(a, REP))}" points="${ptsAttr(a.pts)}"/>`).join('')}
           ${MV.tool==='poly'&&MV.poly&&MV.poly.pts.length?`<polyline class="mtmp" points="${ptsAttr(MV.poly.pts)}"/>`:''}</svg>
         ${mapAreas().filter(a=>a.pts).map(a=>{ const s = mapStats(recsForArea(a)); return `<span class="mlab mplab ${MV_RISK&&MV.mode==='view'?'rk':''}" data-lab="${a.id}" style="left:${a.pts[0][0]*100}%;top:${a.pts[0][1]*100}%;--c:${esc(areaColor(a, REP))}">${esc(a.name)}${s.open?` <b class="mcnt">${s.open}</b>`:''}${STREAK.some(x=>x.aid===a.id)?' <b class="mwarn" title="連續發生警示">⚠</b>':''}</span>`; }).join('')}
         ${MV.mode==='edit'&&!MV_LOCK&&MV.sel&&MV.sel.t==='area'&&areaById(MV.sel.id)&&areaById(MV.sel.id).pts&&MV.tool!=='poly'?(P=>P.map((q,i)=>{ const r = P[(i+1)%P.length]; return `<i class="mmid" data-aid="${MV.sel.id}" data-mid="${i}" title="拖曳可加一個角" style="left:${(q[0]+r[0])*50}%;top:${(q[1]+r[1])*50}%">+</i>`; }).join('')+P.map((q,i)=>`<i class="mvtx" data-aid="${MV.sel.id}" data-vtx="${i}" title="拖曳調整；連點兩下刪除這個角" style="left:${q[0]*100}%;top:${q[1]*100}%"></i>`).join(''))(areaById(MV.sel.id).pts):''}
         ${MV.tool==='poly'&&MV.poly?MV.poly.pts.map((q,i)=>`<i class="mdot ${i===0?'first':''}" style="left:${q[0]*100}%;top:${q[1]*100}%"></i>`).join(''):''}
         ${mapAreas().filter(a=>!a.pts).map(a=>{ const s = mapStats(recsForArea(a)); return `<div class="marea ${MV.sel&&MV.sel.t==='area'&&MV.sel.id===a.id?'sel':''} ${MV_RISK&&MV.mode==='view'?'rk':''}" data-aid="${a.id}" style="left:${a.x*100}%;top:${a.y*100}%;width:${a.w*100}%;height:${a.h*100}%;--c:${esc(areaColor(a, REP))}"><span class="mlab">${esc(a.name)}${s.open?` <b class="mcnt">${s.open}</b>`:''}${STREAK.some(x=>x.aid===a.id)?' <b class="mwarn" title="連續發生警示">⚠</b>':''}</span>${MV.mode==='edit'&&!MV_LOCK?'<i class="mres" data-res="1"></i>':''}</div>`; }).join('')}
-        ${MAPD.locs.filter(l=>areaById(l.areaId)&&areaById(l.areaId).mapId===MV.mapId).map(l=>{ const s = mapStats(recsForLoc(l)); return `<div class="mpin ${locRiskCls(l, REP)} ${STREAK.some(x=>x.lid===l.id)?'warn3':''} ${MV.sel&&MV.sel.t==='loc'&&MV.sel.id===l.id?'sel':''}" data-lid="${l.id}" style="left:${l.x*100}%;top:${l.y*100}%" title="${esc((l.code+' '+l.name).trim())}">${esc(l.code||'•')}</div>`; }).join('')}
+        ${MAPD.locs.filter(l=>areaById(l.areaId)&&areaById(l.areaId).mapId===MV.mapId).map(l=>{ const s = mapStats(recsForLoc(l)); return `<div class="mpin ${locRiskCls(l, REP)} ${STREAK.some(x=>x.lid===l.id)?'warn3':''} ${MV.sel&&MV.sel.t==='loc'&&MV.sel.id===l.id?'sel':''}" data-lid="${l.id}" style="left:${l.x*100}%;top:${l.y*100}%" title="${esc((l.code+' '+l.name).trim())}">${esc(l.code||'•')}</div>`; }).join('')}`}
         <div class="mdraw" id="mDraw" hidden></div>
       </div></div>
       <div class="mgrip" id="mGrip" role="separator" aria-label="拖曳調整地圖高度" title="上下拖曳調整高度；連點兩下＝整張顯示">⇕ 拖這裡調整地圖高度（連點兩下＝整張顯示）</div></div>
-      <div class="card mside" id="mSide">${mapSideHTML()}</div>
+      <div class="card mside" id="mSide">${MV.layer==='defect'?mapSideHTML():layerSideHTML()}</div>
     </div>
-    <div id="mStatsBox">${mapStatsHTML()}</div>` : `<div class="card empty" style="padding:30px">還沒有廠區地圖。請按「＋ 新增地圖（上傳平面圖）」上傳工廠平面圖（JPG、PNG）。<br><span class="small muted">同事已經做好地圖的話，可以請他「匯出地圖設定」給你，再按「匯入地圖設定」。</span></div>`}
+    ${MV.layer==='defect'?`<div id="mStatsBox">${mapStatsHTML()}</div>`:''}` : `<div class="card empty" style="padding:30px">還沒有廠區地圖。請按「＋ 新增地圖（上傳平面圖）」上傳工廠平面圖（JPG、PNG）。<br><span class="small muted">同事已經做好地圖的話，可以請他「匯出地圖設定」給你，再按「匯入地圖設定」。</span></div>`}
     ${mapGuideHTML()}`;
   hydrate($('#mSide'));
-  if(m){ phGet(m.img).then(u=>{ const im = $('#mapImg'); if(im){ if(mapHRaw()==='fit') im.onload = () => mapFitHeight(true); im.src = u || ''; } if(!u) say('平面圖找不到，請在編輯模式按「換圖片」重新上傳。'); }); mapBind(); mapGripBind(); mapScaleUpd();
+  if(m){ phGet(m.img).then(u=>{ const im = $('#mapImg'); if(im){ if(mapHRaw()==='fit') im.onload = () => mapFitHeight(true); im.src = u || ''; } if(!u) say('平面圖找不到，請在編輯模式按「換圖片」重新上傳。'); }); (MV.layer==='defect'?mapBind:layerBind)(); mapGripBind(); mapScaleUpd();
     const im2 = $('#mapImg'); if(im2) im2.addEventListener('load', () => { mapScaleUpd(); if(mapZoomMode()==='screen') mapFitScreen(true); });
     if(mapZoomMode()==='screen') requestAnimationFrame(() => mapFitScreen(true));
     const vw = $('#mapView'); if(vw) vw.addEventListener('wheel', e => { if(!e.ctrlKey) return; e.preventDefault(); mapZoom(e.deltaY<0?1:-1); }, {passive:false}); }
@@ -2354,7 +2397,7 @@ function mapSideHTML(){
     ${as.length ? `<ul class="mini">${as.map(a=>{ const s = mapStats(recsForArea(a)); return `<li class="click" onclick="MV.sel={t:'area',id:'${a.id}'};renderMap()"><span>${esc(a.name)}</span><span class="small ${s.over?'bad':s.open?'':'muted'}">${s.open?'未結案 '+s.open:'共 '+s.total+' 件'}${s.over?'・逾期 '+s.over:''}</span></li>`; }).join('')}</ul>`
       : `<div class="muted small">這張地圖還沒有區域。請切到「✏️ 編輯模式」，按「▭ 新增區域」，在平面圖上拖曳畫出範圍。</div>`}`;
 }
-function mapSide(){ const s = $('#mSide'); const sb = $('#mStatsBox'); if(sb) sb.innerHTML = mapStatsHTML(); if(s){ REP = repeatSet(); STREAK = streakAlerts(); s.innerHTML = mapSideHTML(); hydrate(s); if(MV.sel && MV.mode==='view' && window.innerWidth<900) s.scrollIntoView({behavior:'smooth', block:'start'}); } document.querySelectorAll('.marea,.mpin').forEach(e=>e.classList.toggle('sel', !!MV.sel && ((MV.sel.t==='area'&&e.dataset.aid===MV.sel.id)||(MV.sel.t==='loc'&&e.dataset.lid===MV.sel.id)))); }
+function mapSide(){ if(MV.layer!=='defect'){ lySide(); return; } const s = $('#mSide'); const sb = $('#mStatsBox'); if(sb) sb.innerHTML = mapStatsHTML(); if(s){ REP = repeatSet(); STREAK = streakAlerts(); s.innerHTML = mapSideHTML(); hydrate(s); if(MV.sel && MV.mode==='view' && window.innerWidth<900) s.scrollIntoView({behavior:'smooth', block:'start'}); } document.querySelectorAll('.marea,.mpin').forEach(e=>e.classList.toggle('sel', !!MV.sel && ((MV.sel.t==='area'&&e.dataset.aid===MV.sel.id)||(MV.sel.t==='loc'&&e.dataset.lid===MV.sel.id)))); }
 
 /* 平面圖上的拖曳：畫區域、放位置、移動、改大小、檢視模式拖曳平移 */
 function mapBind(){
@@ -2513,9 +2556,10 @@ function mapUpload(input, mid){
 async function mapRename(){ const m = MAPD.maps.find(x=>x.id===MV.mapId); const v = await askText('地圖名稱：', m.name); if(v){ m.name = v; saveMap(); renderMap(); } }
 async function mapDelete(){
   const m = MAPD.maps.find(x=>x.id===MV.mapId), as = mapAreas();
-  if(!(await ask(`確定刪除地圖「${m.name}」？\n上面的 ${as.length} 個區域和它們的位置會一起刪除。\n已存的缺失紀錄不會被刪除。`))) return;
+  if(!(await ask(`確定刪除地圖「${m.name}」？\n上面的 ${as.length} 個區域和它們的位置，以及清潔分區、易碎品、動線、病媒防治設施也會一起刪除。\n已存的缺失紀錄不會被刪除。`))) return;
   const ids = new Set(as.map(a=>a.id));
   MAPD.locs = MAPD.locs.filter(l=>!ids.has(l.areaId)); MAPD.items = (MAPD.items||[]).filter(t=>!ids.has(t.areaId)); MAPD.areas = MAPD.areas.filter(a=>a.mapId!==m.id); MAPD.maps = MAPD.maps.filter(x=>x.id!==m.id);
+  ['zones','flows','marks','frags','pests'].forEach(k=>{ MAPD[k] = (MAPD[k]||[]).filter(o=>o.mapId!==m.id); });
   saveMap(); MV.mapId = ''; MV.sel = null; showMap();
 }
 async function mapAreaSave(id){
@@ -2637,8 +2681,10 @@ function mapImport(input){
 }
 /* 備份還原與匯入共用：平面圖放回照片資料庫，區域名稱加進「常用選項」的缺失區域 */
 async function mapApply(map, images){
-  const next = { maps:(map.maps||[]).filter(m=>m && m.id && m.img), areas:(map.areas||[]).filter(a=>a && a.id && typeof a.x==='number'), locs:(map.locs||[]).filter(l=>l && l.id && typeof l.x==='number'), items:(map.items||[]).filter(t=>t && t.id && t.areaId && t.name) };
-  try{ const ids = [...next.maps.map(m=>m.img), ...next.areas.flatMap(a=>a.photos||[]), ...next.locs.flatMap(l=>l.photos||[])]; for(const id of ids){ const u = images && images[id]; if(u && typeof u==='string' && u.startsWith('data:image/')) await phPut(id, u); } }
+  const okPts = o => o && o.id && o.mapId && Array.isArray(o.pts) && o.pts.length>=2;
+  const next = { maps:(map.maps||[]).filter(m=>m && m.id && m.img), areas:(map.areas||[]).filter(a=>a && a.id && typeof a.x==='number'), locs:(map.locs||[]).filter(l=>l && l.id && typeof l.x==='number'), items:(map.items||[]).filter(t=>t && t.id && t.areaId && t.name),
+    zones:(map.zones||[]).filter(okPts), flows:(map.flows||[]).filter(okPts), marks:(map.marks||[]).filter(okPts), frags:(map.frags||[]).filter(f=>f && f.id && f.mapId && typeof f.x==='number'), pests:(map.pests||[]).filter(f=>f && f.id && f.mapId && typeof f.x==='number'), fragCfg:map.fragCfg||{}, colors:map.colors||{} };
+  try{ const ids = [...next.maps.map(m=>m.img), ...next.areas.flatMap(a=>a.photos||[]), ...next.locs.flatMap(l=>l.photos||[]), ...next.frags.flatMap(f=>f.photos||[])]; for(const id of ids){ const u = images && images[id]; if(u && typeof u==='string' && u.startsWith('data:image/')) await phPut(id, u); } }
   catch(e){ say('平面圖存不進去，瀏覽器的儲存空間可能已滿，地圖沒有變動。'); return false; }
   const old = MAPD; MAPD = next; if(!saveMap()){ MAPD = old; return false; }
   next.areas.forEach(a=>addAreaOpt(a.name));
@@ -2872,6 +2918,7 @@ function mapRiskToggle(){ MV_RISK = !MV_RISK; try{ localStorage.setItem('qaHygie
 function areaColor(a, rep){ return MV_RISK && MV.mode==='view' ? RISK[riskOf(recsForArea(a), a.id, rep)].c : (a.color||'#b8955a'); }
 /* 匯出畫好的平面圖（PNG）：平面圖＋區域＋位置標記，依目前的顯示方式（風險顏色開／關），放大繪製讓文字清晰 */
 async function mapExportImage(){
+  if(MV.layer && MV.layer!=='defect') return layerExportImage();
   const m = MAPD.maps.find(x=>x.id===MV.mapId); if(!m) return;
   const u = await phGet(m.img); if(!u){ say('平面圖找不到，請重新上傳。'); return; }
   const img = new Image(); img.src = u; try{ await img.decode(); }catch(e){ say('平面圖讀取失敗。'); return; }
@@ -3005,7 +3052,7 @@ function refPhotosHTML(kind, obj, ed){
     ${ed?`<div class="row" style="margin:6px 0 4px"><button onclick="this.nextElementSibling.click()">＋ 加參考照片</button><input type="file" accept="image/*" multiple hidden onchange="refPhotoAdd('${kind}','${obj.id}',this)"><span class="small muted">放這裡正常、清潔時的樣子，方便對照</span></div>
       <div class="pzone" tabindex="0" data-ref="${kind}:${obj.id}" role="button" aria-label="貼上或拖曳參考照片" style="margin-bottom:10px">📋 點這裡，再按 <b>Ctrl+V</b> 貼上參考照片（也可以拖進來）</div>`:''}`;
 }
-function refObj(kind, id){ return kind==='area' ? areaById(id) : locById(id); }
+function refObj(kind, id){ return kind==='area' ? areaById(id) : kind==='frag' ? lyGet('frag', id) : locById(id); }
 function refPhotoAdd(kind, id, input){ const files = [...input.files]; input.value = ''; refPhotoFiles(kind, id, files); }
 function refPhotoFiles(kind, id, files){
   const o = refObj(kind, id); files = files.filter(f=>/^image\//.test(f.type));
@@ -3021,7 +3068,564 @@ function refPhotoFiles(kind, id, files){
 async function refPhotoDel(kind, id, i){ const o = refObj(kind, id); if(!o || !(await ask('刪除這張參考照片？'))) return; o.photos.splice(i,1); saveMap(); mapSide(); hydrate($('#mSide')); }
 function showImg(src){ const m = document.createElement('div'); m.className = 'modal'; m.innerHTML = `<img src="${src}" alt="" style="max-width:96vw;max-height:90vh;border-radius:8px;box-shadow:0 8px 30px rgba(0,0,0,.4)">`; m.onclick = () => m.remove(); document.body.appendChild(m); }
 /* 地圖設定／備份用：平面圖＋所有參考照片的編號 */
-function mapImageIds(){ return [...MAPD.maps.map(m=>m.img), ...MAPD.areas.flatMap(a=>a.photos||[]), ...MAPD.locs.flatMap(l=>l.photos||[])].filter(Boolean); }
+function mapImageIds(){ return [...MAPD.maps.map(m=>m.img), ...MAPD.areas.flatMap(a=>a.photos||[]), ...MAPD.locs.flatMap(l=>l.photos||[]), ...(MAPD.frags||[]).flatMap(f=>f.photos||[])].filter(Boolean); }
+
+/* ---------- 廠區地圖圖層：清潔分區、易碎品、動線與設施（跟缺失分開畫，共用同一張平面圖） ---------- */
+/* 資料都放在 MAPD（跟著地圖設定與備份）；易碎品檢查紀錄放 KEY_FC（跟著備份）；座標一樣用 0～1 的比例 */
+const LAYERS = { defect:'🔍 缺失', zone:'🧼 清潔分區', frag:'🔶 易碎品', flow:'➡️ 動線與設施', pest:'🐭 病媒防治' };
+const LAYER_NAME = { defect:'廠區地圖', zone:'清潔分區圖', frag:'易碎品位置圖', flow:'動線與設施圖', pest:'病媒防治設施圖' };
+/* 病媒防治設施：圖示用 SVG 畫（蟲、黏鼠板、老鼠），畫面和匯出圖片共用 */
+const PK = {
+  light:{t:'捕蟲燈', p:'L', svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#7c3aed" stroke="#fff" stroke-width="1"/><g stroke="#fff" stroke-width="1.4" stroke-linecap="round" fill="none"><path d="M8.6 11L5.4 9.4M8.3 14H4.8M8.6 17l-3 1.7M15.4 11l3.2-1.6M15.7 14h3.5M15.4 17l3 1.7M10.9 5.8L9.5 3.9M13.1 5.8l1.4-1.9"/></g><ellipse cx="12" cy="13.6" rx="3.7" ry="5.1" fill="#fff"/><circle cx="12" cy="7.4" r="2.2" fill="#fff"/><path d="M12 9.6v9" stroke="#7c3aed" stroke-width="1"/></svg>'},
+  board:{t:'鼠板站（黏鼠板）', p:'B', svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#a16207" stroke="#fff" stroke-width="1"/><rect x="4.6" y="7" width="14.8" height="10" rx="1.6" fill="#fde68a" stroke="#fff" stroke-width="1.2"/><g fill="#a16207"><circle cx="8.3" cy="10" r="1.05"/><circle cx="12" cy="10" r="1.05"/><circle cx="15.7" cy="10" r="1.05"/><circle cx="8.3" cy="14" r="1.05"/><circle cx="12" cy="14" r="1.05"/><circle cx="15.7" cy="14" r="1.05"/></g></svg>'},
+  bait:{t:'鼠餌站', p:'R', svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#334155" stroke="#fff" stroke-width="1"/><ellipse cx="13.6" cy="13.6" rx="5.2" ry="3.7" fill="#fff"/><path d="M9.8 11.1L4.4 14.3l5.4 1.7z" fill="#fff"/><circle cx="10.7" cy="10.3" r="2.1" fill="#fff"/><circle cx="10.7" cy="10.3" r="1" fill="#f9a8d4"/><circle cx="7.5" cy="13.5" r=".75" fill="#334155"/><path d="M18.6 14.2c2.2.3 2.6 2.2 1 3.3" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/></svg>'}
+};
+const pestIcon = k => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent((PK[k]||PK.light).svg);
+const pestLabel = o => (o.code+' '+((PK[o.kind]||{}).t||'')).trim();
+function pestNextCode(k){ const P = PK[k].p, n = Math.max(0, ...(MAPD.pests||[]).filter(o=>o.kind===k).map(o=>parseInt(String(o.code||'').replace(/\D/g,''),10)||0)) + 1; return P+String(n).padStart(2,'0'); }
+const ZK = { general:{t:'一般作業區', c:'#c4bb7c'}, semi:{t:'準清潔區', c:'#b9cde5'}, clean:{t:'清潔區', c:'#e6b9b8'} };
+const FK = { people:{t:'人流', c:'#e46c0a'}, raw:{t:'物流（原料）', c:'#ff0000', tag:'原'}, prod:{t:'物流（成品）', c:'#c00000', dash:'dash', tag:'成'}, waste:{t:'物流（廢棄物）', c:'#7f0000', dash:'dot', tag:'廢'}, air:{t:'氣流', c:'#0070c0'}, water:{t:'水流', c:'#a6a6a6'} };
+const MK = { door:{t:'門', c:'#0d0d0d'}, ac:{t:'冷氣', c:'#00b050'}, exhaust:{t:'抽風口', c:'#7030a0'}, watersrc:{t:'水源供應處', c:'#ff77ff'}, drain:{t:'水溝／排水孔', c:'#984807'} };
+const FST = { ok:{t:'正常', c:'#f59e0b'}, soon:{t:'7 天內要檢查', c:'#f59e0b', ring:'#d97706'}, due:{t:'到期未檢查', c:'#f59e0b', ring:'#b42318'}, bad:{t:'破損／遺失', c:'#b42318'} };
+const FRAG_MAT = ['玻璃','硬質塑膠','壓克力','陶瓷','鏡面','燈管／燈泡','溫度計（玻璃）'];
+const FR = { ok:{t:'完整', i:'✅', c:'ok'}, broken:{t:'破損', i:'❌', c:'bad'}, missing:{t:'遺失', i:'❓', c:'bad'}, na:{t:'不適用', i:'⊘', c:'muted'} };
+const lyKinds = () => Object.assign({}, ZK, FK, MK);
+function lyColor(k){ const c = (MAPD.colors||{})[k]; return /^#[0-9a-f]{6}$/i.test(c||'') ? c : ((lyKinds()[k]||{}).c || '#888888'); }
+function lyLS(k, v){ try{ if(v===undefined) return localStorage.getItem('qaHygieneTracker_v1_'+k); localStorage.setItem('qaHygieneTracker_v1_'+k, v); }catch(e){ return null; } }
+MV.layer = LAYERS[lyLS('mapLayer')] ? lyLS('mapLayer') : 'defect'; MV.zk = 'general'; MV.fk = 'people'; MV.pk = 'light';
+let MV_ZBG = lyLS('mapZbg')!=='0';
+let MV_HIDE = new Set(); try{ MV_HIDE = new Set(JSON.parse(lyLS('mapHide')||'[]')); }catch(e){}
+function mapLayer(k){ if(k===MV.layer) return; MV.layer = k; lyLS('mapLayer', k); MV.sel = null; MV.tool = ''; MV.poly = null; renderMap(); }
+function lyZbgToggle(){ MV_ZBG = !MV_ZBG; lyLS('mapZbg', MV_ZBG?'1':'0'); renderMap(); }
+function lyToggle(k){ MV_HIDE.has(k) ? MV_HIDE.delete(k) : MV_HIDE.add(k); lyLS('mapHide', JSON.stringify([...MV_HIDE])); renderMap(); }
+const LY_ARR = { zone:'zones', flow:'flows', mark:'marks', frag:'frags', pest:'pests' };
+function lyList(t, mid){ return (MAPD[LY_ARR[t]]||[]).filter(o=>o.mapId===(mid||MV.mapId)); }
+function lyGet(t, id){ return (MAPD[LY_ARR[t]]||[]).find(o=>o.id===id); }
+function lyCur(){ return MV.sel && LY_ARR[MV.sel.t] ? lyGet(MV.sel.t, MV.sel.id) : null; }
+function lyMap(){ return MAPD.maps.find(x=>x.id===MV.mapId); }
+const lyVH = m => 1000*((m&&m.h)||1)/((m&&m.w)||1);
+const lyBox = pts => { const xs = pts.map(q=>q[0]), ys = pts.map(q=>q[1]); return {x:Math.min(...xs), y:Math.min(...ys), w:Math.max(...xs)-Math.min(...xs), h:Math.max(...ys)-Math.min(...ys)}; };
+const fragLabel = f => (f.code+' '+(f.name||'')).trim();
+
+/* ---- 易碎品：檢查頻率與狀態 ---- */
+const KEY_FC = 'qaHygieneTracker_v1_fragChecks';
+let FRAGCHK = []; try{ const a = JSON.parse(localStorage.getItem(KEY_FC)||'[]'); if(Array.isArray(a)) FRAGCHK = a; }catch(e){}
+function saveFragChk(){ try{ localStorage.setItem(KEY_FC, JSON.stringify(FRAGCHK)); return true; }catch(e){ say('易碎品檢查紀錄存不進去，瀏覽器的儲存空間可能已滿。'); return false; } }
+function fragDefMonths(){ const n = +((MAPD.fragCfg||{}).months); return n>=1 && n<=24 ? n : 1; }
+function fragMonths(f){ const n = +f.months; return n>=1 && n<=24 ? n : fragDefMonths(); }
+function addMonths(ymd, n){ const [y,m,d] = ymd.split('-').map(Number); const last = new Date(y, m-1+n+1, 0).getDate(), t = new Date(y, m-1+n, Math.min(d,last)); return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0'); }
+function fragChecksSorted(){ return FRAGCHK.slice().sort((a,b)=>(b.date+b.createdAt).localeCompare(a.date+a.createdAt)); }
+function fragHistory(f){ const out = []; fragChecksSorted().forEach(c => { const r = c.results.find(x=>x.fid===f.id && x.res); if(r) out.push({date:c.date, by:c.inspector, res:r.res, note:r.note, cid:c.id}); }); return out; }
+function fragState(f){
+  const L = fragHistory(f).find(h=>h.res!=='na') || null, t = today();
+  if(!L) return {k:'due', t:'尚未檢查', last:null, next:''};
+  const next = addMonths(L.date, fragMonths(f));
+  if(L.res==='broken' || L.res==='missing') return {k:'bad', t:'上次檢查：'+FR[L.res].t, last:L, next};
+  if(t>next) return {k:'due', t:'逾期未檢查', last:L, next};
+  if(daysBetween(t, next)<=7) return {k:'soon', t:'即將到期', last:L, next};
+  return {k:'ok', t:'正常', last:L, next};
+}
+function fragNextCode(){ const n = Math.max(0, ...(MAPD.frags||[]).map(f=>parseInt(String(f.code||'').replace(/\D/g,''),10)||0)) + 1; return 'G'+String(n).padStart(2,'0'); }
+function zoneAt(p, mid){ return lyList('zone', mid).filter(z=>inArea(z,p)).sort((a,b)=>{ const x = lyBox(a.pts), y = lyBox(b.pts); return x.w*x.h-y.w*y.h; })[0]; }
+function areaAtMap(p, mid){ return mapAreas(mid).filter(a=>inArea(a,p)).sort((x,y)=>x.w*x.h-y.w*y.h)[0]; }
+
+/* ---- 上方工具列、提示、圖例 ---- */
+function lyTabsHTML(){ return `<div class="seg mlayers" role="tablist" aria-label="圖層">${Object.entries(LAYERS).map(([k,t])=>`<button role="tab" aria-selected="${MV.layer===k}" class="${MV.layer===k?'on':''}" onclick="mapLayer('${k}')">${t}</button>`).join('')}</div>`; }
+function lyToolsHTML(){
+  const L = MV.layer;
+  if(L==='zone') return `<select aria-label="分區種類" onchange="MV.zk=this.value">${Object.entries(ZK).map(([k,v])=>`<option value="${k}" ${MV.zk===k?'selected':''}>${v.t}</option>`).join('')}</select>
+    <button class="${MV.tool==='zrect'?'primary':''}" onclick="MV.tool=MV.tool==='zrect'?'':'zrect';MV.poly=null;renderMap()">▭ 畫分區（拖曳）</button>
+    <button class="${MV.tool==='zpoly'?'primary':''}" onclick="lyPolyStart('zpoly')">⬠ 多邊形分區</button>
+    <button class="${MV_LOCK?'primary':''}" onclick="mapLockToggle()" title="鎖定後分區不會被拖動">${MV_LOCK?'🔒 分區已鎖定':'🔓 鎖定分區'}</button>`;
+  if(L==='flow'){ const line = !!FK[MV.fk], on = MV.tool==='fline'||MV.tool==='mark';
+    return `<select aria-label="要畫的種類" onchange="MV.fk=this.value;if(MV.tool){MV.tool=FK[this.value]?'fline':'mark';MV.poly=MV.tool==='fline'?{pts:[]}:null;}renderMap()"><optgroup label="動線（箭頭）">${Object.entries(FK).map(([k,v])=>`<option value="${k}" ${MV.fk===k?'selected':''}>${v.t}</option>`).join('')}</optgroup><optgroup label="設施標記（粗線）">${Object.entries(MK).map(([k,v])=>`<option value="${k}" ${MV.fk===k?'selected':''}>${v.t}</option>`).join('')}</optgroup></select>
+    <button class="${on?'primary':''}" onclick="lyDrawToggle()">${on?'■ 停止畫':(line?'✏️ 畫箭頭':'✏️ 畫標記')}</button>`; }
+  if(L==='frag') return `<button class="${MV.tool==='frag'?'primary':''}" onclick="MV.tool=MV.tool==='frag'?'':'frag';renderMap()">🔶 新增易碎品</button>`;
+  if(L==='pest') return `<select aria-label="設施種類" onchange="MV.pk=this.value;renderMap()">${Object.entries(PK).map(([k,v])=>`<option value="${k}" ${MV.pk===k?'selected':''}>${v.t}</option>`).join('')}</select>
+    <button class="${MV.tool==='pest'?'primary':''}" onclick="MV.tool=MV.tool==='pest'?'':'pest';MV.sel=null;renderMap()">${MV.tool==='pest'?'■ 停止放置':`<img class="lyico" src="${pestIcon(MV.pk)}" alt=""> 放置${PK[MV.pk].t.replace(/（.*）/,'')}`}</button>`;
+  return '';
+}
+function lyDrawToggle(){ if(MV.tool==='fline'||MV.tool==='mark'){ MV.tool = ''; MV.poly = null; } else { MV.tool = FK[MV.fk] ? 'fline' : 'mark'; MV.poly = MV.tool==='fline' ? {pts:[]} : null; MV.sel = null; } renderMap(); }
+function lyPolyStart(t){ if(MV.tool===t){ MV.tool = ''; MV.poly = null; } else { MV.tool = t; MV.poly = {pts:[]}; } renderMap(); }
+function lyTipHTML(){
+  const n = MV.poly ? MV.poly.pts.length : 0, T = MV.tool;
+  if(T==='zpoly') return `選好上方「分區種類」，沿著分區邊界「每個角點一下」，點回第一個點或按「完成」。已點 <span id="lyCnt">${n}</span> 個角　<button class="primary" onclick="lyPolyFinish()">✔ 完成</button> <button onclick="lyUndo()">↶ 退一步</button> <button onclick="lyPolyStart('zpoly')">取消</button>`;
+  if(T==='zrect') return `選好上方「分區種類」（目前：<b>${ZK[MV.zk].t}</b>），在平面圖上「按住拖曳」畫出範圍。`;
+  if(T==='fline') return `畫「<b>${FK[MV.fk].t}</b>」：從起點開始「一個轉彎點一下」，最後一點會變成箭頭；在最後一點<b>再點一下</b>或按「完成」結束。已點 <span id="lyCnt">${n}</span> 點　<button class="primary" onclick="lyPolyFinish()">✔ 完成這條</button> <button onclick="lyUndo()">↶ 退一步</button> <button onclick="lyDrawToggle()">■ 停止畫</button>`;
+  if(T==='mark') return `畫「<b>${MK[MV.fk].t}</b>」：在平面圖上「按住拖曳」畫一段粗線（例如門口那一段牆）；只點一下會放一小段。可以連續畫，畫完按「■ 停止畫」。`;
+  if(T==='pest') return `在平面圖上「點一下」放「<b>${PK[MV.pk].t}</b>」，編號自動編 ${PK[MV.pk].p}01、${PK[MV.pk].p}02…；可以連續放，放完按「■ 停止放置」。換種類請改上方的下拉選單。`;
+  if(T==='frag') return '在易碎品所在的位置「點一下」，輸入名稱（例：燈罩、觀察窗玻璃）；編號會自動編 G01、G02…';
+  if(MV.mode==='edit') return MV.layer==='zone' ? (MV_LOCK?'🔒 分區已鎖定：分區不會被拖動。':'編輯模式：拖曳可移動分區；點選後拖白色方塊改角、拖「＋」加角，右邊可改種類或刪除。')
+    : MV.layer==='pest' ? '編輯模式：拖曳可移動捕蟲燈、鼠板站、鼠餌站；點選後在右邊改編號、位置說明或刪除。'
+    : MV.layer==='flow' ? '編輯模式：拖曳可移動箭頭或標記；點選後拖白色方塊改轉彎點、拖「＋」多加轉彎點，右邊可改種類、反轉方向或刪除。'
+    : '編輯模式：拖曳可移動易碎品標記；點選後在右邊修改名稱、材質、數量與檢查頻率。';
+  if(MV.layer==='pest') return '檢視模式：點圖示看說明；發現蟲鼠問題可以在右邊直接「＋ 建立缺失」。';
+  return MV.layer==='zone' ? '檢視模式：點分區看說明；在空白處按住拖曳可移動平面圖。' : MV.layer==='flow' ? '檢視模式：點下方圖例可以隱藏／顯示某一種（匯出圖片也只會有顯示中的）。' : '檢視模式：點易碎品看檢查紀錄；按「📝 開始易碎品檢查」逐項打勾，到期沒檢查的會出現紅框和「!」。';
+}
+function lyLegendHTML(){
+  const L = MV.layer, zs = `${Object.entries(ZK).map(([k,v])=>`<span><i style="background:${lyColor(k)}"></i>${v.t}</span>`).join('')}`;
+  if(L==='zone') return `<div class="mlegend">${zs}</div>`;
+  if(L==='frag') return `<div class="mlegend"><span><i class="lyfr" style="background:#f59e0b"></i>正常</span><span><i class="lyfr" style="background:#f59e0b;box-shadow:0 0 0 2px #d97706"></i>7 天內要檢查</span><span><i class="lyfr" style="background:#f59e0b;box-shadow:0 0 0 2px #b42318"></i>到期未檢查</span><span><i class="lyfr" style="background:#b42318"></i>破損／遺失</span>${MV_ZBG?zs:''}</div>`;
+  if(L==='pest') return `<div class="mlegend">${Object.entries(PK).map(([k,v])=>`<span><img class="lyico" src="${pestIcon(k)}" alt="">${v.t}</span>`).join('')}${MV_ZBG?zs:''}</div>`;
+  if(L==='flow') return `<div class="mlegend lyleg">${Object.entries(FK).map(([k,v])=>`<button class="${MV_HIDE.has(k)?'off':''}" onclick="lyToggle('${k}')" title="點一下隱藏／顯示"><b style="color:${lyColor(k)}">${v.dash==='dot'?'┄┄➜':v.dash?'╌╌➜':'──➜'}</b>${v.t}</button>`).join('')}${Object.entries(MK).map(([k,v])=>`<button class="${MV_HIDE.has(k)?'off':''}" onclick="lyToggle('${k}')" title="點一下隱藏／顯示"><i class="lybar" style="background:${lyColor(k)}"></i>${v.t}</button>`).join('')}${MV_ZBG?zs:''}</div>`;
+  return '';
+}
+
+/* ---- 平面圖上的圖層（SVG：座標寬 1000，高依平面圖比例） ---- */
+function lyPts(pts, VH){ return pts.map(q=>(q[0]*1000).toFixed(1)+','+(q[1]*VH).toFixed(1)).join(' '); }
+function lyOverlay(m){
+  const VH = lyVH(m), L = MV.layer, sel = MV.sel, ed = MV.mode==='edit', isSel = (t,id) => sel && sel.t===t && sel.id===id;
+  let defs = '', body = '', html = '';
+  if(L==='zone' || (MV_ZBG && L!=='defect')){
+    lyList('zone').forEach(z => { body += `<polygon data-lo="zone:${z.id}" class="lz ${L!=='zone'?'bg':''} ${isSel('zone',z.id)?'sel':''}" points="${lyPts(z.pts, VH)}" style="--c:${lyColor(z.kind)}"/>`; });
+    if(L==='zone') lyList('zone').forEach(z => { const b = lyBox(z.pts); html += `<span class="mplab lzlab" style="left:${b.x*100}%;top:${b.y*100}%;--c:${lyColor(z.kind)}">${esc(ZK[z.kind]?ZK[z.kind].t:'')}${z.name?'｜'+esc(z.name):''}</span>`; });
+  }
+  if(L==='flow'){
+    lyList('mark').filter(o=>!MV_HIDE.has(o.kind)).forEach(o => { body += `<g data-lo="mark:${o.id}" class="lm ${isSel('mark',o.id)?'sel':''}"><polyline class="hit" points="${lyPts(o.pts, VH)}"/><polyline class="ln" points="${lyPts(o.pts, VH)}" style="stroke:${lyColor(o.kind)}"/></g>`; });
+    const used = new Set();
+    lyList('flow').filter(o=>!MV_HIDE.has(o.kind) && FK[o.kind]).forEach(o => { const k = o.kind, v = FK[k], c = lyColor(k); used.add(k);
+      const p0 = o.pts[0];
+      body += `<g data-lo="flow:${o.id}" class="lf ${isSel('flow',o.id)?'sel':''}"><polyline class="hit" points="${lyPts(o.pts, VH)}"/><polyline class="ln ${v.dash||''}" points="${lyPts(o.pts, VH)}" style="stroke:${c}" marker-end="url(#lyah-${k})"/>${v.tag?`<text class="ltag" x="${(p0[0]*1000+7).toFixed(1)}" y="${(p0[1]*VH-7).toFixed(1)}" style="fill:${c}">${v.tag}</text>`:''}</g>`; });
+    used.forEach(k => { defs += `<marker id="lyah-${k}" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.4" markerHeight="3.4" orient="auto"><path d="M0,0L10,5L0,10z" fill="${lyColor(k)}"/></marker>`; });
+  }
+  if(MV.poly && MV.poly.pts.length && (MV.tool==='zpoly'||MV.tool==='fline')){ body += `<polyline class="lytmp" points="${lyPts(MV.poly.pts, VH)}"/>`; html += MV.poly.pts.map((q,i)=>`<i class="mdot ${i===0?'first':''}" style="left:${q[0]*100}%;top:${q[1]*100}%"></i>`).join(''); }
+  if(MV.tmp) body += `<polyline class="lm-tmp" points="${lyPts(MV.tmp, VH)}" style="stroke:${lyColor(MV.fk)}"/>`;
+  if(L==='pest') lyList('pest').forEach(o => { html += `<div class="mpest ${isSel('pest',o.id)?'sel':''}" data-lo="pest:${o.id}" style="left:${o.x*100}%;top:${o.y*100}%" title="${esc(pestLabel(o))}${o.note?'｜'+esc(o.note):''}"><img src="${pestIcon(o.kind)}" alt="${esc((PK[o.kind]||{}).t||'')}" draggable="false"><b>${esc(o.code||'')}</b></div>`; });
+  if(L==='frag') lyList('frag').forEach(f => { const st = fragState(f); html += `<div class="mfrag fs-${st.k} ${isSel('frag',f.id)?'sel':''}" data-lo="frag:${f.id}" style="left:${f.x*100}%;top:${f.y*100}%" title="${esc(fragLabel(f))}｜${esc(st.t)}">◆ ${esc(f.code||'')}</div>`; });
+  /* 選取中的分區／動線：拖角、加角 */
+  const o = lyCur();
+  if(ed && o && o.pts && !MV.tool && !(sel.t==='zone' && MV_LOCK)){
+    const P = o.pts, closed = sel.t==='zone';
+    if(sel.t!=='mark') P.forEach((q,i) => { if(!closed && i===P.length-1) return; const r = P[(i+1)%P.length]; html += `<i class="mmid" data-lmid="${i}" title="拖曳可多加一個${closed?'角':'轉彎點'}" style="left:${(q[0]+r[0])*50}%;top:${(q[1]+r[1])*50}%">+</i>`; });
+    P.forEach((q,i) => { html += `<i class="mvtx" data-lvtx="${i}" title="拖曳調整；連點兩下刪除" style="left:${q[0]*100}%;top:${q[1]*100}%"></i>`; });
+  }
+  return `<svg class="lysvg" viewBox="0 0 1000 ${VH.toFixed(1)}" preserveAspectRatio="none"><defs>${defs}</defs>${body}</svg>${html}`;
+}
+function lyRedraw(){ const ov = $('#lyOv'), m = lyMap(); if(ov && m) ov.innerHTML = lyOverlay(m); const c = $('#lyCnt'); if(c) c.textContent = MV.poly ? MV.poly.pts.length : 0; }
+function lySide(){ const s = $('#mSide'); if(s){ s.innerHTML = layerSideHTML(); hydrate(s); if(MV.sel && MV.mode==='view' && window.innerWidth<900) s.scrollIntoView({behavior:'smooth', block:'start'}); } lyRedraw(); }
+
+/* ---- 平面圖上的操作：畫分區、畫箭頭、畫標記、放易碎品、拖曳移動、改角 ---- */
+function layerBind(){
+  const inner = $('#mapInner'), view = $('#mapView'); if(!inner) return;
+  const frac = e => { const b = inner.getBoundingClientRect(); return { x:clamp01((e.clientX-b.left)/b.width), y:clamp01((e.clientY-b.top)/b.height) }; };
+  const objOf = el => { const s = el && el.closest && el.closest('[data-lo]'); if(!s) return null; const [t,id] = s.dataset.lo.split(':'); const o = lyGet(t,id); return o ? {t, o} : null; };
+  let drag = null;
+  inner.onpointerdown = e => {
+    if(e.button!==0) return;
+    const p = frac(e), hit = objOf(e.target), ed = MV.mode==='edit', o = lyCur(), T = MV.tool;
+    if(T==='zpoly' || T==='fline') drag = {k:'click'};
+    else if(T==='zrect') drag = {k:'draw'};
+    else if(T==='mark') drag = {k:'mark'};
+    else if(T==='frag') drag = {k:'place'};
+    else if(T==='pest') drag = {k:'pest'};
+    else if(ed && o && e.target.dataset.lmid!==undefined){ const i = +e.target.dataset.lmid + 1; o.pts.splice(i, 0, [p.x, p.y]); drag = {k:'vtx', o, i, added:true}; lyRedraw(); }
+    else if(ed && o && e.target.dataset.lvtx!==undefined) drag = {k:'vtx', o, i:+e.target.dataset.lvtx};
+    else if(ed && hit && !(hit.t==='zone' && MV_LOCK)) drag = {k:'mv', h:hit, o: hit.t==='frag'||hit.t==='pest' ? {x:hit.o.x, y:hit.o.y} : hit.o.pts.map(q=>q.slice())};
+    else drag = {k:'pan', cx:e.clientX, cy:e.clientY, sl:view.scrollLeft, st:view.scrollTop, hit};
+    drag.s = p; drag.moved = false; inner.setPointerCapture(e.pointerId); e.preventDefault();
+  };
+  inner.onpointermove = e => {
+    if(!drag) return;
+    if(drag.k==='pan'){ const dx = e.clientX-drag.cx, dy = e.clientY-drag.cy; if(Math.abs(dx)+Math.abs(dy)>4) drag.moved = true; view.scrollLeft = drag.sl-dx; view.scrollTop = drag.st-dy; return; }
+    const p = frac(e), dx = p.x-drag.s.x, dy = p.y-drag.s.y; if(Math.abs(dx)+Math.abs(dy)>0.005) drag.moved = true;
+    if(!drag.moved) return;
+    if(drag.k==='draw'){ const d = $('#mDraw'); d.hidden = false; Object.assign(d.style,{left:Math.min(p.x,drag.s.x)*100+'%',top:Math.min(p.y,drag.s.y)*100+'%',width:Math.abs(dx)*100+'%',height:Math.abs(dy)*100+'%'}); }
+    if(drag.k==='mark'){ MV.tmp = [[drag.s.x,drag.s.y],[p.x,p.y]]; lyRedraw(); }
+    if(drag.k==='vtx'){ drag.o.pts[drag.i] = [p.x, p.y]; lyRedraw(); }
+    if(drag.k==='mv'){ const h = drag.h;
+      if(h.t==='frag'||h.t==='pest'){ h.o.x = clamp01(drag.o.x+dx); h.o.y = clamp01(drag.o.y+dy); }
+      else { const xs = drag.o.map(q=>q[0]), ys = drag.o.map(q=>q[1]);
+        const ddx = Math.max(-Math.min(...xs), Math.min(1-Math.max(...xs), dx)), ddy = Math.max(-Math.min(...ys), Math.min(1-Math.max(...ys), dy));
+        h.o.pts = drag.o.map(q=>[q[0]+ddx, q[1]+ddy]); }
+      lyRedraw(); }
+  };
+  inner.onpointercancel = () => { drag = null; MV.tmp = null; const d = $('#mDraw'); if(d) d.hidden = true; lyRedraw(); };
+  inner.onpointerup = async e => {
+    const d = drag; drag = null; if(!d) return;
+    const p = frac(e);
+    if(d.k==='click'){
+      if(d.moved) return;
+      const P = MV.poly, b = inner.getBoundingClientRect(), near = q => Math.hypot((p.x-q[0])*b.width, (p.y-q[1])*b.height) < 14;
+      if(MV.tool==='zpoly' && P.pts.length>=3 && near(P.pts[0])){ lyPolyFinish(); return; }
+      if(MV.tool==='fline' && P.pts.length>=2 && near(P.pts[P.pts.length-1])){ lyPolyFinish(); return; }
+      P.pts.push([p.x, p.y]); lyRedraw(); return;
+    }
+    if(d.k==='draw'){
+      $('#mDraw').hidden = true;
+      const x = Math.min(p.x,d.s.x), y = Math.min(p.y,d.s.y), w = Math.abs(p.x-d.s.x), h = Math.abs(p.y-d.s.y);
+      if(w<0.02 || h<0.02){ say('範圍太小了，請在平面圖上「按住拖曳」畫出分區。'); return; }
+      lyAdd('zone', {kind:MV.zk, name:'', desc:'', pts:[[x,y],[x+w,y],[x+w,y+h],[x,y+h]]}, true); return;
+    }
+    if(d.k==='mark'){
+      MV.tmp = null;
+      const len = Math.hypot(p.x-d.s.x, p.y-d.s.y), pts = len<0.01 ? [[clamp01(p.x-0.015),p.y],[clamp01(p.x+0.015),p.y]] : [[d.s.x,d.s.y],[p.x,p.y]];
+      lyAdd('mark', {kind:MV.fk, note:'', pts}, false); return;
+    }
+    if(d.k==='pest'){ if(d.moved) return; lyAdd('pest', {kind:MV.pk, code:pestNextCode(MV.pk), note:'', x:p.x, y:p.y}, false); return; }
+    if(d.k==='place'){
+      const name = await askText('易碎品名稱（例：燈罩、觀察窗玻璃、玻璃溫度計）：', ''); if(!name) return;
+      const f = {kind:'frag', code:fragNextCode(), name:name.trim(), mat:/玻璃/.test(name)?'玻璃':'', qty:1, where:'', months:'', photos:[], x:p.x, y:p.y};
+      MV.tool = ''; lyAdd('frag', f, true); return;
+    }
+    if(d.k==='vtx'){
+      if(!d.moved && !d.added){
+        const now = Date.now(), L = MV.lastVtx;
+        if(L && L.id===d.o.id && L.i===d.i && now-L.t<500){
+          MV.lastVtx = null; const min = MV.sel.t==='zone' ? 3 : 2;
+          if(d.o.pts.length<=min){ say(MV.sel.t==='zone'?'至少要留 3 個角。':'至少要留起點和終點。'); return; }
+          d.o.pts.splice(d.i,1); saveMap(); lyRedraw(); flash('已刪除一個點'); return;
+        }
+        MV.lastVtx = {id:d.o.id, i:d.i, t:now}; return;
+      }
+      saveMap(); lyRedraw(); return;
+    }
+    if(d.k==='mv'){ if(d.moved) saveMap(); MV.sel = {t:d.h.t, id:d.h.o.id}; lySide(); return; }
+    if(d.k==='pan' && !d.moved){ MV.sel = d.hit ? {t:d.hit.t, id:d.hit.o.id} : null; lySide(); }
+  };
+}
+function lyUndo(){ if(MV.poly && MV.poly.pts.length){ MV.poly.pts.pop(); lyRedraw(); } }
+function lyAdd(t, o, stop){
+  o.id = mapUid(t.slice(0,2)); o.mapId = MV.mapId; MAPD[LY_ARR[t]] = MAPD[LY_ARR[t]] || []; MAPD[LY_ARR[t]].push(o);
+  if(!saveMap()){ MAPD[LY_ARR[t]].pop(); return; }
+  if(stop){ MV.tool = ''; MV.poly = null; }
+  MV.sel = {t, id:o.id};
+  if(stop) renderMap(); else { lySide(); }
+  flash(t==='zone'?'已新增'+(ZK[o.kind]||{}).t : t==='frag'?'已新增易碎品 '+o.code : t==='pest'?'已放置'+PK[o.kind].t+' '+o.code+'，可以繼續放' : t==='flow'?'已新增'+FK[o.kind].t+'，可以繼續畫下一條' : '已新增'+MK[o.kind].t+'，可以繼續畫');
+}
+function lyPolyFinish(){
+  const P = MV.poly; if(!P) return;
+  if(MV.tool==='zpoly'){
+    if(P.pts.length<3){ say('多邊形至少要點 3 個角。'); return; }
+    const b = lyBox(P.pts); if(b.w<0.01 || b.h<0.01){ say('範圍太小了，請再畫一次。'); return; }
+    lyAdd('zone', {kind:MV.zk, name:'', desc:'', pts:P.pts.map(q=>q.slice())}, true); return;
+  }
+  if(MV.tool==='fline'){
+    if(P.pts.length<2){ say('箭頭至少要點起點和終點兩個點。'); return; }
+    const pts = P.pts.map(q=>q.slice()); MV.poly = {pts:[]};
+    lyAdd('flow', {kind:MV.fk, note:'', pts}, false); return;
+  }
+}
+
+/* ---- 右邊面板 ---- */
+function lyColorsHTML(keys){ return `<details class="lycol"><summary>🎨 圖例顏色（可自己改）</summary><div class="lycg">${keys.map(k=>`<label><input type="color" value="${lyColor(k)}" onchange="lySetColor('${k}',this.value)"> ${esc(lyKinds()[k].t)}</label>`).join('')}</div><button class="lite" onclick="lyResetColors('${keys.join(',')}')">恢復預設顏色</button></details>`; }
+function lySetColor(k, v){ MAPD.colors = MAPD.colors || {}; MAPD.colors[k] = v; saveMap(); renderMap(); }
+function lyResetColors(keys){ MAPD.colors = MAPD.colors || {}; keys.split(',').forEach(k=>delete MAPD.colors[k]); saveMap(); renderMap(); flash('已恢復預設顏色'); }
+const lySw = (k, bar) => `<i class="${bar?'lybar':'lysw'}" style="background:${lyColor(k)}"></i>`;
+function layerSideHTML(){
+  const L = MV.layer, ed = MV.mode==='edit', sel = MV.sel, o = lyCur();
+  const close = `<button class="lite" onclick="MV.sel=null;lySide()">✕</button>`;
+  if(o && sel.t==='zone') return `<div class="phd"><b>${lySw(o.kind)} ${esc(ZK[o.kind]?ZK[o.kind].t:'')}${o.name?'｜'+esc(o.name):''}</b>${close}</div>
+    ${ed ? `<div class="grid1">
+      <label class="f">分區種類</label><select id="lzKind">${Object.entries(ZK).map(([k,v])=>`<option value="${k}" ${o.kind===k?'selected':''}>${v.t}</option>`).join('')}</select>
+      <label class="f">名稱（選填）</label><input type="text" id="lzName" value="${esc(o.name||'')}" placeholder="例：包裝室、內包裝區">
+      <label class="f">說明（選填）</label><textarea id="lzDesc" rows="2" placeholder="例：進入前需洗手、換鞋">${esc(o.desc||'')}</textarea>
+      <div class="row"><button class="primary" onclick="lyZoneSave('${o.id}')">儲存</button><button class="danger" onclick="lyDel('zone','${o.id}')">刪除分區</button></div>
+      <div class="notice info small" style="margin:6px 0 0">✏️ 拖白色方塊＝移動那個角；拖邊中間的「＋」＝多加一個角；在角上<b>連點兩下</b>＝刪除那個角。</div></div>`
+    : `<div class="small muted">${esc(o.desc||'')}</div><button class="lite" style="margin-top:6px" onclick="MV.mode='edit';renderMap()">✏️ 修改</button>`}`;
+  if(o && (sel.t==='flow' || sel.t==='mark')){ const K = sel.t==='flow' ? FK : MK;
+    return `<div class="phd"><b>${lySw(o.kind, sel.t==='mark')} ${esc(K[o.kind]?K[o.kind].t:'')}</b>${close}</div>
+    ${ed ? `<div class="grid1">
+      <label class="f">種類</label><select id="lfKind">${Object.entries(K).map(([k,v])=>`<option value="${k}" ${o.kind===k?'selected':''}>${v.t}</option>`).join('')}</select>
+      <label class="f">說明（選填）</label><input type="text" id="lfNote" value="${esc(o.note||'')}" placeholder="${sel.t==='flow'?'例：原料由後門進入，經解凍區到前處理':'例：後門（捲門）'}">
+      <div class="row"><button class="primary" onclick="lyFlowSave('${sel.t}','${o.id}')">儲存</button>${sel.t==='flow'?`<button onclick="lyReverse('${o.id}')">⇄ 反轉方向</button>`:''}<button class="danger" onclick="lyDel('${sel.t}','${o.id}')">刪除</button></div>
+      <div class="notice info small" style="margin:6px 0 0">✏️ 拖白色方塊＝移動${sel.t==='flow'?'起點、轉彎點、終點；拖「＋」＝多加一個轉彎點；在點上<b>連點兩下</b>＝刪除那個點':'兩端'}。</div></div>`
+    : `<div class="small">${esc(o.note||'')}</div>`}`; }
+  if(o && sel.t==='frag') return fragSideHTML(o, ed, close);
+  if(o && sel.t==='pest'){ const a = areaAtMap(o), z = zoneAt(o);
+    return `<div class="phd"><b><img class="lyico" src="${pestIcon(o.kind)}" alt=""> ${esc(pestLabel(o))}</b>${close}</div>
+    <div class="small muted" style="margin:0 0 8px">${a?'缺失區域：'+esc(a.name)+'　':''}${z?'清潔分區：'+esc(ZK[z.kind].t)+(z.name?'（'+esc(z.name)+'）':''):''}</div>
+    ${ed ? `<div class="grid1">
+      <label class="f">種類</label><select id="lpKind">${Object.entries(PK).map(([k,v])=>`<option value="${k}" ${o.kind===k?'selected':''}>${v.t}</option>`).join('')}</select>
+      <label class="f">編號</label><input type="text" id="lpCode" value="${esc(o.code||'')}">
+      <label class="f">位置說明（選填）</label><input type="text" id="lpNote" value="${esc(o.note||'')}" placeholder="例：包裝區入口右側牆面">
+      <div class="row"><button class="primary" onclick="pestSave('${o.id}')">儲存</button><button class="danger" onclick="lyDel('pest','${o.id}')">刪除</button></div></div>`
+    : `<div class="small">${esc(o.note||'')}</div>`}
+    <button class="primary" style="width:100%;margin:10px 0 6px" onclick="pestDefect('${o.id}')">＋ 在這裡建立缺失（病媒防治）</button>`; }
+  if(L==='zone'){
+    const zs = lyList('zone'), as = mapAreas();
+    return `<div class="phd"><b>🧼 清潔分區</b><span class="muted small">點分區看說明</span></div>
+      <div class="lycnt">${Object.entries(ZK).map(([k,v])=>`<div>${lySw(k)}<b>${zs.filter(z=>z.kind===k).length}</b>${v.t}</div>`).join('')}</div>
+      ${zs.length ? `<ul class="mini">${zs.map(z=>`<li class="click" onclick="MV.sel={t:'zone',id:'${z.id}'};lySide()"><span>${lySw(z.kind)} ${esc(ZK[z.kind]?ZK[z.kind].t:'')}</span><span class="small muted">${esc(z.name||'')}</span></li>`).join('')}</ul>`
+        : `<div class="muted small">還沒有畫清潔分區。${ed?'先在上方選「分區種類」，再按「▭ 畫分區」或「⬠ 多邊形分區」。':'切到「✏️ 編輯模式」就可以開始畫。'}</div>`}
+      ${ed && as.length ? `<div class="st-sec">📋 從缺失區域複製範圍</div><div class="small muted" style="margin-bottom:6px">分區跟缺失區域一樣大時，不用重畫。</div>
+        <div class="grid1"><select id="lzFrom">${as.map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join('')}</select><select id="lzFromK">${Object.entries(ZK).map(([k,v])=>`<option value="${k}" ${MV.zk===k?'selected':''}>${v.t}</option>`).join('')}</select><button onclick="lyCopyArea()">複製成清潔分區</button></div>` : ''}
+      ${ed ? lyColorsHTML(Object.keys(ZK)) : ''}`;
+  }
+  if(L==='flow'){
+    const fs = lyList('flow'), ms = lyList('mark'), row = (t,x,K) => `<li class="click" onclick="MV.sel={t:'${t}',id:'${x.id}'};lySide()"><span>${lySw(x.kind, t==='mark')} ${esc(K[x.kind]?K[x.kind].t:'')}</span><span class="small muted">${esc(x.note||'')}</span></li>`;
+    return `<div class="phd"><b>➡️ 動線與設施</b><span class="muted small">點箭頭或標記看說明</span></div>
+      <div class="notice info small" style="margin:0 0 8px">點上方圖例可以<b>隱藏／顯示</b>某一種，例如只看人流；匯出圖片也只會有顯示中的。${MV_ZBG?'':'按「🧼 疊清潔分區」可以把分區墊在底下對照。'}</div>
+      <div class="st-sec">動線（${fs.length}）</div>${fs.length?`<ul class="mini">${fs.map(x=>row('flow',x,FK)).join('')}</ul>`:`<div class="muted small">${ed?'在上方選種類（人流、物流…），按「✏️ 畫箭頭」。':'切到「✏️ 編輯模式」就可以開始畫。'}</div>`}
+      <div class="st-sec">設施標記（${ms.length}）</div>${ms.length?`<ul class="mini">${ms.map(x=>row('mark',x,MK)).join('')}</ul>`:`<div class="muted small">門、冷氣、抽風口、水源供應處、水溝／排水孔，在上方選好種類後按「✏️ 畫標記」。</div>`}
+      ${ed ? lyColorsHTML([...Object.keys(FK), ...Object.keys(MK)]) : ''}`;
+  }
+  if(L==='frag') return fragPanelHTML(ed);
+  if(L==='pest'){ const ps = lyList('pest').sort((x,y)=>(x.code||'').localeCompare(y.code||'',undefined,{numeric:true}));
+    return `<div class="phd"><b>🐭 病媒防治設施</b><span class="muted small">點圖示看說明</span></div>
+      <div class="lycnt">${Object.entries(PK).map(([k,v])=>`<div><img class="lyico" src="${pestIcon(k)}" alt=""><b>${ps.filter(o=>o.kind===k).length}</b>${v.t.replace(/（.*）/,'')}</div>`).join('')}</div>
+      <button id="pkXls" style="width:100%;margin:0 0 10px" onclick="pestExport()" ${ps.length?'':'disabled'}>📗 匯出病媒防治設施清單（Excel）</button>
+      ${ps.length ? `<ul class="mini">${ps.map(o=>`<li class="click" onclick="MV.sel={t:'pest',id:'${o.id}'};lySide()"><span><img class="lyico" src="${pestIcon(o.kind)}" alt=""> <b>${esc(o.code)}</b> ${esc((PK[o.kind]||{}).t||'')}</span><span class="small muted">${esc(o.note||'')}</span></li>`).join('')}</ul>`
+        : `<div class="muted small">還沒有病媒防治設施。${ed?'在上方選種類（捕蟲燈、鼠板站、鼠餌站），按「放置」後在平面圖上點一下。':'切到「✏️ 編輯模式」就可以開始放。'}</div>`}`; }
+  return '';
+}
+function lyZoneSave(id){ const z = lyGet('zone', id); z.kind = $('#lzKind').value; z.name = $('#lzName').value.trim(); z.desc = $('#lzDesc').value.trim(); saveMap(); renderMap(); flash('已儲存分區'); }
+function lyFlowSave(t, id){ const o = lyGet(t, id); o.kind = $('#lfKind').value; o.note = $('#lfNote').value.trim(); saveMap(); renderMap(); flash('已儲存'); }
+function lyReverse(id){ const o = lyGet('flow', id); o.pts.reverse(); saveMap(); lyRedraw(); flash('已反轉方向'); }
+async function lyDel(t, id){
+  const o = lyGet(t, id); if(!o) return;
+  const nm = t==='zone' ? (ZK[o.kind]||{}).t : t==='flow' ? (FK[o.kind]||{}).t : t==='mark' ? (MK[o.kind]||{}).t : t==='pest' ? pestLabel(o) : fragLabel(o);
+  if(!(await ask(`確定刪除「${nm}」？${t==='frag'?'\n已存的檢查紀錄會保留。':''}`))) return;
+  MAPD[LY_ARR[t]] = MAPD[LY_ARR[t]].filter(x=>x.id!==id); saveMap(); MV.sel = null; renderMap();
+}
+function lyCopyArea(){
+  const a = areaById($('#lzFrom').value); if(!a) return;
+  const pts = a.pts ? a.pts.map(q=>q.slice()) : [[a.x,a.y],[a.x+a.w,a.y],[a.x+a.w,a.y+a.h],[a.x,a.y+a.h]];
+  lyAdd('zone', {kind:$('#lzFromK').value, name:a.name, desc:'', pts}, true);
+}
+
+/* ---- 易碎品面板 ---- */
+function fragSideHTML(f, ed, close){
+  const st = fragState(f), hist = fragHistory(f), z = zoneAt(f), a = areaAtMap(f);
+  return `<div class="phd"><b>🔶 ${esc(fragLabel(f))}</b>${close}</div>
+    <div class="mrisk" style="--rc:${st.k==='ok'?'#167a3e':st.k==='soon'?'#d97706':'#b42318'}">● ${esc(st.t)}${st.next?`　下次檢查：${fmtDate(st.next)}`:''}</div>
+    <div class="small muted" style="margin:4px 0 8px">${a?'缺失區域：'+esc(a.name)+'　':''}${z?'清潔分區：'+esc(ZK[z.kind].t)+(z.name?'（'+esc(z.name)+'）':''):''}</div>
+    ${ed ? `<div class="grid1">
+      <label class="f">編號</label><input type="text" id="fgCode" value="${esc(f.code||'')}">
+      <label class="f">名稱</label><input type="text" id="fgName" value="${esc(f.name||'')}" placeholder="例：燈罩">
+      <label class="f">材質</label><input type="text" id="fgMat" list="fgMats" value="${esc(f.mat||'')}" placeholder="例：玻璃"><datalist id="fgMats">${FRAG_MAT.map(x=>`<option value="${x}">`).join('')}</datalist>
+      <label class="f">數量</label><input type="number" id="fgQty" min="1" value="${esc(f.qty||1)}">
+      <label class="f">位置說明（選填）</label><input type="text" id="fgWhere" value="${esc(f.where||'')}" placeholder="例：包裝線上方天花板">
+      <label class="f">檢查頻率</label><select id="fgMon"><option value="">依預設（每 ${fragDefMonths()} 個月）</option>${[1,2,3,4,6,12].map(n=>`<option value="${n}" ${+f.months===n?'selected':''}>每 ${n} 個月</option>`).join('')}</select>
+      <div class="row"><button class="primary" onclick="fragSave('${f.id}')">儲存</button><button class="danger" onclick="lyDel('frag','${f.id}')">刪除易碎品</button></div></div>`
+    : `<div class="small">材質：${esc(f.mat||'—')}　數量：${esc(f.qty||1)}　檢查頻率：每 ${fragMonths(f)} 個月${f.where?'<br>位置：'+esc(f.where):''}</div>`}
+    <button class="primary" style="width:100%;margin:10px 0 6px" onclick="fragDefect('${f.id}','')">＋ 在這裡建立缺失</button>
+    <div class="st-sec">檢查紀錄（${hist.length}）</div>
+    ${hist.length ? `<ul class="mini">${hist.slice(0,12).map(h=>`<li class="click" onclick="fragCheckView('${h.cid}')"><span>${fmtDate(h.date)}　${FR[h.res].i} ${FR[h.res].t}</span><span class="small muted">${esc(h.by||'')}${h.note?'・'+esc(h.note):''}</span></li>`).join('')}</ul>` : '<div class="muted small">還沒有檢查紀錄。</div>'}
+    ${refPhotosHTML('frag', f, ed)}`;
+}
+function fragPanelHTML(ed){
+  const fs = lyList('frag').sort((x,y)=>(x.code||'').localeCompare(y.code||'',undefined,{numeric:true})), sts = fs.map(f=>[f, fragState(f)]);
+  const nDue = sts.filter(([,s])=>s.k==='due').length, nBad = sts.filter(([,s])=>s.k==='bad').length, nSoon = sts.filter(([,s])=>s.k==='soon').length;
+  const chks = fragChecksSorted().filter(c=>c.mapId===MV.mapId).slice(0,10);
+  return `<div class="phd"><b>🔶 易碎品管理</b><span class="muted small">點標記看詳細</span></div>
+    <div class="mstat"><div><b>${fs.length}</b>易碎品</div><div class="o"><b>${nDue+nSoon}</b>要檢查</div><div class="v"><b>${nBad}</b>破損／遺失</div></div>
+    <div class="row" style="align-items:center;margin:8px 0"><label class="f" style="margin:0">預設檢查頻率</label><select aria-label="預設檢查頻率" onchange="fragSetMonths(this.value)">${[1,2,3,4,6,12].map(n=>`<option value="${n}" ${fragDefMonths()===n?'selected':''}>每 ${n} 個月</option>`).join('')}</select></div>
+    <button class="primary" style="width:100%;margin:0 0 6px" onclick="fragCheckStart()" ${fs.length?'':'disabled'}>📝 開始易碎品檢查</button>
+    <button id="fgXls" style="width:100%;margin:0 0 10px" onclick="fragExport()" ${fs.length?'':'disabled'}>📗 匯出易碎品清單（Excel）</button>
+    <div class="st-sec">易碎品一覽</div>
+    ${fs.length ? `<ul class="mini">${sts.map(([f,s])=>`<li class="click" onclick="MV.sel={t:'frag',id:'${f.id}'};lySide()"><span><b>${esc(f.code)}</b> ${esc(f.name||'')}</span><span class="small ${s.k==='ok'?'muted':s.k==='soon'?'':'bad'}">${esc(s.t)}${s.next?'・'+fmtDate(s.next):''}</span></li>`).join('')}</ul>`
+      : `<div class="muted small">還沒有易碎品。${ed?'按上方「🔶 新增易碎品」，在平面圖上點一下。':'切到「✏️ 編輯模式」就可以新增。'}</div>`}
+    <div class="st-sec">最近檢查紀錄</div>
+    ${chks.length ? `<ul class="mini">${chks.map(c=>{ const bad = c.results.filter(r=>r.res==='broken'||r.res==='missing').length, n = c.results.filter(r=>r.res).length; return `<li class="click" onclick="fragCheckView('${c.id}')"><span>${fmtDate(c.date)}　${esc(c.inspector||'—')}</span><span class="small ${bad?'bad':'muted'}">檢查 ${n} 項${bad?'・異常 '+bad:''}</span></li>`; }).join('')}</ul>` : '<div class="muted small">還沒有檢查紀錄。</div>'}`;
+}
+function fragSetMonths(v){ MAPD.fragCfg = Object.assign({}, MAPD.fragCfg, {months:+v||1}); saveMap(); renderMap(); flash('預設檢查頻率：每 '+(+v||1)+' 個月'); }
+function fragSave(id){
+  const f = lyGet('frag', id), code = $('#fgCode').value.trim(), name = $('#fgName').value.trim();
+  if(!code){ say('編號不能空白。'); return; }
+  if((MAPD.frags||[]).some(x=>x.id!==id && x.code===code)){ say('已經有編號「'+code+'」的易碎品了。'); return; }
+  if(!name){ say('請填易碎品名稱。'); return; }
+  Object.assign(f, {code, name, mat:$('#fgMat').value.trim(), qty:Math.max(1, parseInt($('#fgQty').value,10)||1), where:$('#fgWhere').value.trim(), months:$('#fgMon').value});
+  saveMap(); renderMap(); flash('已儲存易碎品');
+}
+function fragDefect(fid, res){
+  const f = lyGet('frag', fid) || (MAPD.frags||[]).find(x=>x.id===fid); if(!f) return;
+  const a = areaAtMap(f, f.mapId);
+  openRecord(null, {area:a?a.name:'', areaId:a?a.id:'', ownerDept:a?(a.unit||''):'', defType:'07',
+    rawDesc:`易碎品 ${fragLabel(f)}${f.mat?'（'+f.mat+'）':''}${f.where?'，位置：'+f.where:''}${res?'，檢查發現'+FR[res].t:''}`});
+}
+
+/* ---- 易碎品檢查（逐項打勾） ---- */
+let FCK = null;
+function fragCheckStart(){
+  const fs = lyList('frag').sort((x,y)=>(x.code||'').localeCompare(y.code||'',undefined,{numeric:true}));
+  if(!fs.length){ say('這張地圖還沒有易碎品。'); return; }
+  FCK = {mapId:MV.mapId, date:today(), inspector:'', results:fs.map(f=>({fid:f.id, code:f.code, name:f.name, mat:f.mat||'', res:'', note:''}))};
+  cur = null; dirty = false; renderFragCheck(false);
+}
+function fragCheckView(id){ const c = FRAGCHK.find(x=>x.id===id); if(!c) return; FCK = JSON.parse(JSON.stringify(c)); cur = null; dirty = false; renderFragCheck(true); }
+function renderFragCheck(done){
+  const m = MAPD.maps.find(x=>x.id===FCK.mapId);
+  setSide('map');
+  $('#app').innerHTML = `
+    <div class="hcard"><div class="hc-top"><div class="ptitle big"><h1>${done?'易碎品檢查紀錄':'易碎品檢查'}｜${esc(m?m.name:'')}</h1><span class="muted">${done?'破損、遺失的項目可以按「＋ 建立缺失」接到缺失追蹤':'逐項確認是否完整，破損或遺失可以一鍵建立缺失'}</span></div><span class="lbadge">● 本機資料模式</span></div>
+      <div class="hc-bot" style="margin-top:0"><div class="hcrumb">Casevoras / 廠區地圖 / <b>易碎品檢查</b></div>
+        <div class="ptools"><button class="lite" onclick="fragCheckBack()">← 回廠區地圖</button>${done?`<button class="lite danger" onclick="fragCheckDelete('${FCK.id}')">刪除這筆檢查紀錄</button>`:''}</div></div></div>
+    <div class="card">
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">
+        <div><label class="f req">檢查日期</label><input type="date" id="fcDate" value="${esc(FCK.date)}" max="${today()}" ${done?'disabled':''}></div>
+        <div><label class="f">檢查人員</label>${done?`<div style="padding:8px 0">${esc(FCK.inspector||'—')}</div>`:combo('people', FCK.inspector, 'id="fcBy"', '例：品管人員')}</div>
+      </div>
+      <div class="notice info small" style="margin-top:10px">✅ <b>完整</b>：沒有裂痕、缺角、鬆動　❌ <b>破損</b>：有裂痕、缺角或碎片　❓ <b>遺失</b>：找不到　⊘ <b>不適用</b>：本次已拆除或停用</div>
+      <div id="fcList">${FCK.results.map((r,i)=>fragRowHTML(r,i,done)).join('')}</div>
+      ${done?'':`<div class="row" style="margin-top:14px"><button class="primary" onclick="fragCheckSave()">💾 儲存檢查紀錄</button><button onclick="fragCheckAll()">其餘全部 ✅ 完整</button><button onclick="fragCheckBack()">取消</button><span class="muted small" id="fcCount"></span></div>`}
+    </div>`;
+  if(!done){ $('#fcDate').onchange = e => { FCK.date = e.target.value; dirty = true; }; const by = $('#fcBy'); if(by) by.addEventListener('input', () => { FCK.inspector = by.value; dirty = true; }); fragCountUpd(); }
+  window.scrollTo(0,0);
+}
+function fragRowHTML(r, i, done){
+  const f = lyGet('frag', r.fid), st = f && !done ? fragState(f) : null;
+  const rc = {ok:'pass', broken:'fail', missing:'fail', na:'na'}[r.res]||'';
+  return `<div class="arow ${rc?'r-'+rc:''}" id="fc${i}"><div class="ar-h"><b>${esc(r.code)}</b> ${esc(r.name||'')}${r.mat?`<span class="small muted">（${esc(r.mat)}）</span>`:''}${st && (st.k==='due'||st.k==='bad')?`<span class="small bad">　${esc(st.t)}</span>`:''}${!f?'<span class="small muted">（已從地圖刪除）</span>':''}</div>
+    ${done ? `<div class="ar-res"><b class="${r.res?FR[r.res].c:'muted'}">${r.res?FR[r.res].i+' '+FR[r.res].t:'（未填）'}</b>${r.note?'　'+esc(r.note):''}</div>${(r.res==='broken'||r.res==='missing')&&f?`<button class="primary" style="margin-top:6px" onclick="fragDefect('${r.fid}','${r.res}')">＋ 建立缺失</button>`:''}`
+    : `<div class="ar-btns">${Object.entries(FR).map(([k,v])=>`<button class="${r.res===k?'on '+v.c:''}" onclick="fragSet(${i},'${k}')">${v.i} ${v.t}</button>`).join('')}</div>
+      <input type="text" style="margin-top:6px" placeholder="備註（選填，例：右上角有裂痕）" value="${esc(r.note||'')}" oninput="FCK.results[${i}].note=this.value;dirty=true">`}</div>`;
+}
+function fragSet(i, k){ FCK.results[i].res = FCK.results[i].res===k ? '' : k; dirty = true; $('#fc'+i).outerHTML = fragRowHTML(FCK.results[i], i, false); fragCountUpd(); }
+function fragCheckAll(){ FCK.results.forEach((r,i)=>{ if(!r.res){ r.res = 'ok'; $('#fc'+i).outerHTML = fragRowHTML(r, i, false); } }); dirty = true; fragCountUpd(); }
+function fragCountUpd(){ const e = $('#fcCount'); if(!e) return; const c = k => FCK.results.filter(r=>r.res===k).length, n = FCK.results.filter(r=>!r.res).length; e.textContent = `✅${c('ok')} ❌${c('broken')} ❓${c('missing')} ⊘${c('na')}${n?`　尚未填 ${n} 項`:''}`; }
+async function fragCheckSave(){
+  FCK.date = $('#fcDate').value; const by = $('#fcBy'); FCK.inspector = by ? by.value.trim() : FCK.inspector;
+  if(!FCK.date){ say('請填檢查日期。'); return; }
+  if(!FCK.results.some(r=>r.res)){ say('至少要填一項結果。'); return; }
+  const empty = FCK.results.filter(r=>!r.res).length;
+  if(empty && !(await ask(`還有 ${empty} 項沒有填，沒填的不算這次有檢查。確定儲存嗎？`))) return;
+  FCK.id = mapUid('fc'); FCK.createdAt = new Date().toISOString();
+  FRAGCHK.push(JSON.parse(JSON.stringify(FCK))); if(!saveFragChk()){ FRAGCHK.pop(); return; }
+  dirty = false; flash('已儲存易碎品檢查紀錄');
+  const bad = FCK.results.filter(r=>r.res==='broken'||r.res==='missing').length;
+  fragCheckView(FCK.id);
+  if(bad) say(`這次有 ${bad} 項破損或遺失。請按該項下方的「＋ 建立缺失」，接到缺失追蹤；破損的易碎品要確認碎片是否污染產品。`);
+}
+async function fragCheckBack(){ if(dirty && !(await ask('檢查還沒儲存，確定要離開嗎？'))) return; dirty = false; const mid = FCK && FCK.mapId; FCK = null; if(mid) MV.mapId = mid; MV.layer = 'frag'; lyLS('mapLayer','frag'); showMap(); }
+async function fragCheckDelete(id){ if(!(await ask('確定刪除這筆易碎品檢查紀錄？'))) return; FRAGCHK = FRAGCHK.filter(x=>x.id!==id); saveFragChk(); dirty = false; FCK = null; MV.layer = 'frag'; showMap(); flash('已刪除'); }
+
+/* ---- 病媒防治設施 ---- */
+function pestSave(id){
+  const o = lyGet('pest', id), code = $('#lpCode').value.trim();
+  if(!code){ say('編號不能空白。'); return; }
+  if((MAPD.pests||[]).some(x=>x.id!==id && x.code===code)){ say('已經有編號「'+code+'」了。'); return; }
+  Object.assign(o, {kind:$('#lpKind').value, code, note:$('#lpNote').value.trim()}); saveMap(); renderMap(); flash('已儲存');
+}
+function pestDefect(id){ const o = lyGet('pest', id); if(!o) return; const a = areaAtMap(o, o.mapId);
+  openRecord(null, {area:a?a.name:'', areaId:a?a.id:'', ownerDept:a?(a.unit||''):'', defType:'05', rawDesc:`${pestLabel(o)}${o.note?'（'+o.note+'）':''}：`}); }
+async function pestExport(){
+  const m = lyMap(), ps = lyList('pest').sort((x,y)=>(x.code||'').localeCompare(y.code||'',undefined,{numeric:true}));
+  if(!ps.length) return;
+  const cell = xlCell, last = xlCol(4); let rows = '', rn = 1; const merges = [];
+  const line = (txt, sty, h) => { rows += `<row r="${rn}"${h?` ht="${h}" customHeight="1"`:''}>${cell(0,rn,txt,sty)}</row>`; merges.push(`A${rn}:${last}${rn}`); rn++; };
+  line(`病媒防治設施清單｜${m.name}`, 3, 26);
+  line(`匯出日期：${fmtDate(today())}　${Object.entries(PK).map(([k,v])=>v.t+' '+ps.filter(o=>o.kind===k).length+' 個').join('　')}`, 0, 20); rn++;
+  const hr = rn; rows += `<row r="${rn}" ht="22" customHeight="1">${['編號','種類','缺失區域','清潔分區','位置說明'].map((h,i)=>cell(i,rn,h,4)).join('')}</row>`; rn++;
+  ps.forEach(o => { const a = areaAtMap(o), z = zoneAt(o); rows += `<row r="${rn}">${[o.code, (PK[o.kind]||{}).t, a?a.name:'', z?ZK[z.kind].t+(z.name?'（'+z.name+'）':''):'', o.note].map((x,i)=>cell(i,rn,x,2)).join('')}</row>`; rn++; });
+  const widths = [10,18,16,18,34];
+  const sheet = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><sheetViews><sheetView workbookViewId="0"/></sheetViews><cols>${widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join('')}</cols><sheetData>${rows}</sheetData><mergeCells count="${merges.length}">${merges.map(x=>`<mergeCell ref="${x}"/>`).join('')}</mergeCells><pageMargins left="0.4" right="0.4" top="0.4" bottom="0.4" header="0.2" footer="0.2"/><pageSetup orientation="portrait" paperSize="9" fitToWidth="1" fitToHeight="0"/></worksheet>`;
+  try{ await download(xlsxPack('病媒防治設施', sheet, `$${hr}:$${hr}`), `Casevoras_病媒防治設施清單_${m.name}_${today()}.xlsx`.replace(/[\\/:*?"<>|\s]+/g,'_'), 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); flash('已匯出病媒防治設施清單'); }
+  catch(e){ say('Excel 產生失敗，請重試。'); }
+}
+
+/* ---- 易碎品清單（Excel） ---- */
+async function fragExport(){
+  const m = lyMap(), fs = lyList('frag').sort((x,y)=>(x.code||'').localeCompare(y.code||'',undefined,{numeric:true}));
+  if(!fs.length){ say('這張地圖還沒有易碎品。'); return; }
+  const cell = xlCell, N = 13, last = xlCol(N-1); let rows = '', rn = 1; const merges = [];
+  const line = (txt, sty, h) => { rows += `<row r="${rn}"${h?` ht="${h}" customHeight="1"`:''}>${cell(0,rn,txt,sty)}</row>`; merges.push(`A${rn}:${last}${rn}`); rn++; };
+  line(`易碎品管制清單｜${m.name}`, 3, 26);
+  line(`匯出日期：${fmtDate(today())}　共 ${fs.length} 項　預設檢查頻率：每 ${fragDefMonths()} 個月`, 0, 20);
+  rn++;
+  const head = ['編號','名稱','材質','數量','缺失區域','清潔分區','位置說明','檢查頻率','最近檢查日','最近結果','檢查人員','下次檢查日','狀態'];
+  const hr = rn; rows += `<row r="${rn}" ht="22" customHeight="1">${head.map((h,i)=>cell(i,rn,h,4)).join('')}</row>`; rn++;
+  fs.forEach(f => { const st = fragState(f), a = areaAtMap(f), z = zoneAt(f), L = fragHistory(f)[0];
+    const v = [f.code, f.name, f.mat, f.qty||1, a?a.name:'', z?ZK[z.kind].t+(z.name?'（'+z.name+'）':''):'', f.where, '每 '+fragMonths(f)+' 個月', L?fmtDate(L.date):'', L?FR[L.res].t:'', L?L.by:'', st.next?fmtDate(st.next):'', st.t];
+    rows += `<row r="${rn}">${v.map((x,i)=>cell(i,rn,x,2)).join('')}</row>`; rn++; });
+  const chk = fragChecksSorted().filter(c=>c.mapId===MV.mapId);
+  if(chk.length){
+    rn++; line('檢查紀錄', 3, 24);
+    rows += `<row r="${rn}" ht="22" customHeight="1">${['檢查日期','檢查人員','編號','名稱','結果','備註'].map((h,i)=>cell(i,rn,h,4)).join('')}</row>`; rn++;
+    chk.forEach(c => c.results.filter(r=>r.res).forEach(r => { rows += `<row r="${rn}">${[fmtDate(c.date), c.inspector, r.code, r.name, FR[r.res].t, r.note].map((x,i)=>cell(i,rn,x,2)).join('')}</row>`; rn++; }));
+  }
+  const widths = [11,18,12,7,14,16,22,11,12,10,12,12,14];
+  const sheet = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><sheetViews><sheetView workbookViewId="0"/></sheetViews><cols>${widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join('')}</cols><sheetData>${rows}</sheetData><mergeCells count="${merges.length}">${merges.map(x=>`<mergeCell ref="${x}"/>`).join('')}</mergeCells><pageMargins left="0.3" right="0.3" top="0.4" bottom="0.4" header="0.2" footer="0.2"/><pageSetup orientation="landscape" paperSize="9" fitToWidth="1" fitToHeight="0"/></worksheet>`;
+  try{ await download(xlsxPack('易碎品清單', sheet, `$${hr}:$${hr}`), `Casevoras_易碎品清單_${m.name}_${today()}.xlsx`.replace(/[\\/:*?"<>|\s]+/g,'_'), 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); flash('已匯出易碎品清單'); }
+  catch(e){ say('Excel 產生失敗，請重試。'); }
+}
+
+/* ---- 匯出這一層的平面圖（PNG） ---- */
+function lyLegendItems(){
+  const L = MV.layer, out = [], zs = lyList('zone');
+  if(L==='frag') Object.entries(FST).forEach(([k,v]) => out.push({type:'frag', t:v.t, c:v.c, ring:v.ring}));
+  if(L==='pest'){ const ps = lyList('pest'); Object.entries(PK).forEach(([k,v]) => { if(!ps.length || ps.some(o=>o.kind===k)) out.push({type:'icon', t:v.t, k}); }); }
+  if(L==='flow'){ const fs = lyList('flow'), ms = lyList('mark');
+    Object.entries(FK).forEach(([k,v]) => { if(!MV_HIDE.has(k) && fs.some(o=>o.kind===k)) out.push({type:'line', t:v.t, c:lyColor(k), dash:v.dash}); });
+    Object.entries(MK).forEach(([k,v]) => { if(!MV_HIDE.has(k) && ms.some(o=>o.kind===k)) out.push({type:'bar', t:v.t, c:lyColor(k)}); }); }
+  if(L==='zone' || (MV_ZBG && zs.length)) Object.entries(ZK).forEach(([k,v]) => { if(L==='zone' || zs.some(z=>z.kind===k)) out.push({type:'fill', t:v.t, c:lyColor(k)}); });
+  return out;
+}
+async function layerExportImage(){
+  const m = lyMap(); if(!m) return;
+  const u = await phGet(m.img); if(!u){ say('平面圖找不到，請重新上傳。'); return; }
+  const img = new Image(); img.src = u; try{ await img.decode(); }catch(e){ say('平面圖讀取失敗。'); return; }
+  const k = Math.min(3, Math.max(1, 3200/img.naturalWidth));
+  const W = Math.round(img.naturalWidth*k), H = Math.round(img.naturalHeight*k), u1 = W/1600, s = W/1000, L = MV.layer;
+  const F = '"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif';
+  const X = x => x*W, Y = y => y*H;
+  const ICON = {}; for(const k of Object.keys(PK)){ const im = new Image(); im.src = pestIcon(k); try{ await im.decode(); ICON[k] = im; }catch(e){} }
+  /* 圖例先排版，算出下方要留多高 */
+  const items = lyLegendItems(), mc = document.createElement('canvas').getContext('2d'); mc.font = `${Math.round(16*u1)}px ${F}`;
+  const SW = 40*u1, GAP = 28*u1, LH = 34*u1, lines = [[]]; let lx = 24*u1;
+  items.forEach(it => { const w = SW + 8*u1 + mc.measureText(it.t).width; if(lx + w > W - 24*u1 && lines[lines.length-1].length){ lines.push([]); lx = 24*u1; } lines[lines.length-1].push({it, x:lx}); lx += w + GAP; });
+  const HEAD = Math.round(70*u1), FOOT = items.length ? Math.round(lines.length*LH + 22*u1) : Math.round(36*u1);
+  const c = document.createElement('canvas'); c.width = W; c.height = H + HEAD + FOOT;
+  const g = c.getContext('2d');
+  g.fillStyle = '#fff'; g.fillRect(0,0,c.width,c.height);
+  g.fillStyle = '#16213a'; g.fillRect(0,0,W,HEAD);
+  g.fillStyle = '#fffdf8'; g.font = `700 ${Math.round(30*u1)}px ${F}`; g.textBaseline = 'middle';
+  g.fillText(`Casevoras ${LAYER_NAME[L]}｜${m.name}`, Math.round(24*u1), HEAD/2);
+  g.font = `${Math.round(18*u1)}px ${F}`; g.fillStyle = '#d6c08f'; g.textAlign = 'right'; g.fillText(`匯出日期：${fmtDate(today())}`, W - Math.round(24*u1), HEAD/2); g.textAlign = 'left';
+  g.save(); g.translate(0, HEAD);
+  g.imageSmoothingQuality = 'high'; g.drawImage(img, 0, 0, W, H);
+  const hexA = (hex, a) => { const n = parseInt(hex.replace('#','').slice(0,6), 16); return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`; };
+  const rr = (x,y,w,h,r) => { g.beginPath(); g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r); g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath(); };
+  const path = pts => { g.beginPath(); pts.forEach(([x,y],i)=> i ? g.lineTo(X(x),Y(y)) : g.moveTo(X(x),Y(y))); };
+  const arrow = (x1,y1,x2,y2,c,size) => { const a = Math.atan2(y2-y1, x2-x1), tx = x2 + Math.cos(a)*size*0.4, ty = y2 + Math.sin(a)*size*0.4;
+    g.beginPath(); g.moveTo(tx, ty); g.lineTo(tx - Math.cos(a-0.45)*size, ty - Math.sin(a-0.45)*size); g.lineTo(tx - Math.cos(a+0.45)*size, ty - Math.sin(a+0.45)*size); g.closePath(); g.fillStyle = c; g.fill(); };
+  const dashOf = (d, w) => d==='dash' ? [14*s, 8*s] : d==='dot' ? [0.1, w*2] : [];
+  /* 分區 */
+  if(L==='zone' || (MV_ZBG && L!=='defect')){
+    lyList('zone').forEach(z => { const col = lyColor(z.kind); path(z.pts); g.closePath(); g.fillStyle = hexA(col, L==='zone'?0.55:0.38); g.fill(); g.lineWidth = Math.max(1.5, 1.5*s); g.strokeStyle = hexA(col, 1); g.stroke(); });
+    if(L==='zone') lyList('zone').forEach(z => { const b = lyBox(z.pts), fs = Math.round(15*u1), t = (ZK[z.kind]?ZK[z.kind].t:'')+(z.name?'｜'+z.name:''); g.font = `700 ${fs}px ${F}`;
+      const tw = g.measureText(t).width, pad = 7*u1, h = fs*1.55, x = X(b.x)+6*u1, y = Y(b.y)+6*u1;
+      rr(x, y, tw+pad*2+5*u1, h, 5*u1); g.fillStyle = 'rgba(255,253,248,.95)'; g.fill(); g.fillStyle = lyColor(z.kind); g.fillRect(x, y, 5*u1, h);
+      g.fillStyle = '#16213a'; g.textBaseline = 'middle'; g.fillText(t, x+pad+5*u1, y+h/2); });
+  }
+  /* 設施標記、動線 */
+  if(L==='flow'){
+    lyList('mark').filter(o=>!MV_HIDE.has(o.kind)).forEach(o => { path(o.pts); g.lineWidth = 11*s; g.lineCap = 'butt'; g.strokeStyle = lyColor(o.kind); g.setLineDash([]); g.stroke(); });
+    lyList('flow').filter(o=>!MV_HIDE.has(o.kind) && FK[o.kind]).forEach(o => { const v = FK[o.kind], col = lyColor(o.kind), w = 4.5*s, P = o.pts, n = P.length;
+      path(P); g.lineWidth = w; g.lineJoin = 'round'; g.lineCap = v.dash==='dot' ? 'round' : 'butt'; g.setLineDash(dashOf(v.dash, w)); g.strokeStyle = col; g.stroke(); g.setLineDash([]);
+      arrow(X(P[n-2][0]), Y(P[n-2][1]), X(P[n-1][0]), Y(P[n-1][1]), col, w*3.4);
+      if(v.tag){ g.font = `800 ${Math.round(16*s)}px ${F}`; g.textBaseline = 'alphabetic'; g.lineWidth = 3*s; g.strokeStyle = '#fff'; g.strokeText(v.tag, X(P[0][0])+7*s, Y(P[0][1])-7*s); g.fillStyle = col; g.fillText(v.tag, X(P[0][0])+7*s, Y(P[0][1])-7*s); } });
+    g.lineCap = 'butt';
+  }
+  /* 易碎品 */
+  const fragPill = (cx, cy, t, st, fs) => { g.font = `800 ${fs}px ${F}`; const tw = g.measureText(t).width, h = fs*1.9, w = tw + fs*1.2, x = cx - w/2, y = cy - h/2, v = FST[st];
+    rr(x, y, w, h, 6*u1*fs/(13*u1)); g.fillStyle = v.c; g.fill(); g.lineWidth = (v.ring?3.5:2.5)*u1; g.strokeStyle = v.ring || '#fff'; g.stroke();
+    g.fillStyle = st==='bad' ? '#fff' : '#3b2500'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(t, cx, cy+0.5); g.textAlign = 'left';
+    if(st==='due'){ const bx = x+w, by = y; g.beginPath(); g.arc(bx, by, fs*0.7, 0, Math.PI*2); g.fillStyle = '#b42318'; g.fill(); g.fillStyle = '#fff'; g.font = `800 ${Math.round(fs*0.9)}px ${F}`; g.textAlign = 'center'; g.fillText('!', bx, by+0.5); g.textAlign = 'left'; } };
+  if(L==='pest') lyList('pest').forEach(o => { const sz = 44*u1, cx = X(o.x), cy = Y(o.y), fs = Math.round(12*u1);
+    if(ICON[o.kind]) g.drawImage(ICON[o.kind], cx-sz/2, cy-sz/2, sz, sz);
+    g.font = `800 ${fs}px ${F}`; const t = o.code||'', tw = g.measureText(t).width, h = fs*1.5, x = cx+sz/2-2*u1, y = cy-h/2;
+    rr(x, y, tw+fs*0.8, h, 4*u1); g.fillStyle = 'rgba(255,253,248,.95)'; g.fill(); g.lineWidth = 1*u1; g.strokeStyle = '#16213a'; g.stroke();
+    g.fillStyle = '#16213a'; g.textBaseline = 'middle'; g.fillText(t, x+fs*0.4, y+h/2+0.5); });
+  if(L==='frag') lyList('frag').forEach(f => fragPill(X(f.x), Y(f.y), '◆ '+(f.code||''), fragState(f).k, Math.round(13*u1)));
+  g.restore();
+  /* 下方圖例 */
+  g.fillStyle = '#f3ece0'; g.fillRect(0, H+HEAD, W, FOOT); g.textBaseline = 'middle';
+  if(!items.length){ g.font = `${Math.round(15*u1)}px ${F}`; g.fillStyle = '#5d6779'; g.fillText('（這一層還沒有畫任何東西）', 24*u1, H+HEAD+FOOT/2); }
+  lines.forEach((ln, li) => { const cy = H + HEAD + 11*u1 + LH*li + LH/2;
+    ln.forEach(({it, x}) => {
+      if(it.type==='fill'){ g.fillStyle = hexA(it.c, 0.75); g.fillRect(x, cy-9*u1, SW, 18*u1); g.strokeStyle = it.c; g.lineWidth = 1.5*u1; g.strokeRect(x, cy-9*u1, SW, 18*u1); }
+      if(it.type==='bar'){ g.fillStyle = it.c; g.fillRect(x, cy-5*u1, SW, 10*u1); }
+      if(it.type==='line'){ const w = 4*u1; g.beginPath(); g.moveTo(x, cy); g.lineTo(x+SW-10*u1, cy); g.lineWidth = w; g.strokeStyle = it.c; g.lineCap = it.dash==='dot'?'round':'butt'; g.setLineDash(it.dash==='dash'?[8*u1,5*u1]:it.dash==='dot'?[0.1,w*2]:[]); g.stroke(); g.setLineDash([]); g.lineCap = 'butt'; arrow(x, cy, x+SW-10*u1, cy, it.c, w*3.4); }
+      if(it.type==='icon' && ICON[it.k]){ const sz = 24*u1; g.drawImage(ICON[it.k], x+(SW-sz)/2, cy-sz/2, sz, sz); }
+      if(it.type==='frag'){ g.save(); rr(x, cy-10*u1, SW, 20*u1, 5*u1); g.fillStyle = it.c; g.fill(); g.lineWidth = (it.ring?3:2)*u1; g.strokeStyle = it.ring||'#fff'; g.stroke(); g.restore(); }
+      g.font = `${Math.round(16*u1)}px ${F}`; g.fillStyle = '#16213a'; g.fillText(it.t, x + SW + 8*u1, cy);
+    }); });
+  const blob = await new Promise(r => c.toBlob(r, 'image/png'));
+  if(!blob){ say('圖片產生失敗，請重試。'); return; }
+  await download(blob, `Casevoras_${LAYER_NAME[L]}_${m.name}_${today()}.png`.replace(/[\\/:*?"<>|\s]+/g,'_'), 'image/png');
+  flash('已匯出'+LAYER_NAME[L]);
+}
+
 
 /* ---------- 常用選項頁 ---------- */
 const OPT_USE = { area:'缺失區域', people:'巡檢人員、負責人、已通知對象、執行人、複查人員、結案確認人員', dept:'負責單位、改善執行單位' };
