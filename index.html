@@ -1064,7 +1064,7 @@ const GUIDES = {
     gStep(12,'🧼 清潔分區', gC(gR(`${gIn('準清潔區 ▾',1)}${gN(1)}${gB('▭ 畫分區（拖曳）',{hl:1,n:2})}${gB('⬠ 多邊形分區',{hl:1})}`)+gR(`<span class="gx-sw" style="background:#c4bb7c"></span><span class="gx-s">一般作業區</span><span class="gx-sw" style="background:#b9cde5"></span><span class="gx-s">準清潔區</span><span class="gx-sw" style="background:#e6b9b8"></span><span class="gx-s">清潔區</span>`)) + gC(gR(`${gIn('包裝區 ▾')}${gIn('準清潔區 ▾')}`)+gR(gB('複製成清潔分區',{hl:1,n:3})),'📋 從缺失區域複製範圍'),
       `<p>切到「✏️ 編輯模式」，先選<b>分區種類</b>${gN(1)}，再按「▭ 畫分區」${gN(2)}在平面圖上拖曳；L 型等不規則形狀用「⬠ 多邊形分區」，每個角點一下；<b>🧲 磁鐵</b>會幫你貼齊色塊邊界和旁邊分區的角（見第 4 步）。</p><p>分區跟缺失區域一樣大時，右邊「從缺失區域複製範圍」${gN(3)}，不用重畫。</p><p>點分區可以改種類、取名稱（例：包裝室）、寫說明；拖白色方塊改角、拖「＋」加角。畫好後可以「🔒 鎖定分區」避免拖到。</p><p><b>🔤 文字在顏色上</b>（預設開）：分區顏色像螢光筆一樣<b>墊在底稿文字下面</b>，黑字照樣清楚，白底平面圖效果最好；如果底稿本身有顏色、疊起來顏色怪怪的，按一下關掉，改成半透明蓋在上面。</p><p><b>🎨 分區顏色 淡／濃</b>：地圖上方的滑桿可以調分區的透明程度，往「淡」拉底稿的字比較清楚、往「濃」拉顏色比較明顯；<b>顏色本身不變</b>，匯出圖片也照這個濃淡。</p><p class="muted small">顏色預設：一般作業區卡其、準清潔區淺藍、清潔區淺粉；編輯模式右邊「🎨 圖例顏色」可以改。</p>`),
     gStep(13,'🔶 易碎品：標示', gC(gR(`${gIn('攝影機 ▾',1)}${gN(1)}${gB('放置',{hl:1,n:2})}`)+gR(`<img src="${fragIcon('clock')}" alt="" style="width:22px;height:22px"><span class="gx-s">時鐘</span><img src="${fragIcon('camera')}" alt="" style="width:22px;height:22px"><span class="gx-s">攝影機</span><img src="${fragIcon('glass')}" alt="" style="width:22px;height:22px"><span class="gx-s">玻璃</span><img src="${fragIcon('plastic')}" alt="" style="width:22px;height:22px"><span class="gx-s">塑膠</span>`)+gR(`<span class="gx-tag" style="background:#f59e0b;color:#3b2500;border-color:#fff">◆ G05</span><span class="gx-s">其它（自己打字，不用圖）</span>`)) + gC(gR(`${gIn('材質：玻璃')}${gIn('數量：2')}`)+gR(`${gIn('每 1 個月 ▾',1)}${gN(2)}`),'🔶 G01 燈罩'),
-      `<p>編輯模式先選<b>種類</b>${gN(1)}：<b>時鐘、攝影機、玻璃、塑膠</b>有圖示；不在這四種的選「其它（自己打字）」，標記用 ◆ 編號、不用圖。</p><p>按「放置」${gN(2)}後在所在位置點一下，確認或輸入名稱（例：觀察窗玻璃、塑膠籃），編號自動編 <b>G01、G02…</b>；可以連續放，放完按「■ 停止放置」。點標記也可以改種類。</p><p>點標記可以填材質、數量、位置說明、加參考照片（可 Ctrl+V 貼上）。</p><p><b>檢查頻率</b>${gN(2)}：預設<b>每個月一次</b>，右邊面板可改成每 2、3、4、6、12 個月；個別項目也可以單獨設定。</p><p>「📗 匯出易碎品清單（Excel）」含最近檢查日、下次檢查日與檢查紀錄。</p>`),
+      `<p>編輯模式先選<b>種類</b>${gN(1)}：<b>時鐘、攝影機、玻璃、塑膠</b>有圖示；不在這四種的選「其它（自己打字）」，標記用 ◆ 編號、不用圖。</p><p>按「放置」${gN(2)}後在所在位置<b>點一下就放好</b>（跟病媒防治一樣，不會跳視窗），編號自動編 <b>G01、G02…</b>；名稱先用種類（例：時鐘、玻璃），「其它」先叫「其它易碎品」，之後點標記在右邊改名稱（例：觀察窗玻璃、塑膠籃）。可以連續放，放完按「■ 停止放置」。點標記也可以改種類。</p><p>點標記可以填材質、數量、位置說明、加參考照片（可 Ctrl+V 貼上）。</p><p><b>檢查頻率</b>${gN(2)}：預設<b>每個月一次</b>，右邊面板可改成每 2、3、4、6、12 個月；個別項目也可以單獨設定。</p><p>「📗 匯出易碎品清單（Excel）」含最近檢查日、下次檢查日與檢查紀錄。</p>`),
     gStep(14,'🔶 易碎品：定期檢查', gC(gR(gB('📝 開始易碎品檢查',{dk:1,hl:1,n:1}))+gR(`<span class="gx-s" style="flex:1">G01 燈罩</span>${gN(2)}${gB('✅ 完整',{ok:1})}${gB('❌ 破損',{rd:1,hl:1})}${gB('❓ 遺失')}`)+gR(gB('＋ 建立缺失',{dk:1,hl:1,n:3}))) + gC(gR(`<img src="${fragIcon('clock')}" alt="" style="width:22px;height:22px"><span class="gx-tag" style="background:#f59e0b;color:#3b2500;border-color:#fff">G01</span><span class="gx-s">正常</span><img src="${fragIcon('camera')}" alt="" style="width:22px;height:22px"><span class="gx-tag" style="background:#f59e0b;color:#3b2500;box-shadow:0 0 0 2px #b42318">G02 !</span><span class="gx-s">到期未檢查</span>`)+gR(`<img src="${fragIcon('glass')}" alt="" style="width:22px;height:22px"><span class="gx-tag" style="background:#b42318;color:#fff">G03</span><span class="gx-s">破損</span>`),'編號標籤的顏色'),
       `<p>按「📝 開始易碎品檢查」${gN(1)}，逐項選${gN(2)}：✅ 完整、❌ 破損、❓ 遺失、⊘ 不適用；沒問題的可以按「其餘全部 ✅ 完整」。</p><p>儲存後，破損或遺失的項目按「＋ 建立缺失」${gN(3)}，自動帶入區域與描述，接到缺失追蹤；破損要確認碎片有沒有污染產品。</p><p>圖示旁的<b>編號標籤</b>會提醒你：<b>橘框</b>＝7 天內要檢查、<b>紅框＋!</b>＝到期沒檢查、<b>整顆紅</b>＝上次檢查破損或遺失。</p>`),
     gStep(15,'➡️ 動線與設施', gC(gR(`${gIn('物流（原料） ▾',1)}${gN(1)}${gB('✏️ 畫箭頭',{hl:1,n:2})}`)+gR(`<span class="gx-s" style="color:#e46c0a;font-weight:800">──➜ 人流</span><span class="gx-s" style="color:#ff0000;font-weight:800">──➜ 原料</span><span class="gx-s" style="color:#c00000;font-weight:800">╌╌➜ 成品</span><span class="gx-s" style="color:#7f0000;font-weight:800">┄┄➜ 廢棄物</span>`)+gR(`<span class="gx-s" style="color:#0070c0;font-weight:800">──➜ 氣流</span><span class="gx-s" style="color:#a6a6a6;font-weight:800">──➜ 水流</span>`)) + gC(gR(`<span class="gx-sw" style="background:#0d0d0d"></span><span class="gx-s">門</span><span class="gx-sw" style="background:#00b050"></span><span class="gx-s">冷氣</span><span class="gx-sw" style="background:#7030a0"></span><span class="gx-s">抽風口</span><span class="gx-sw" style="background:#ff77ff"></span><span class="gx-s">水源</span><span class="gx-sw" style="background:#984807"></span><span class="gx-s">水溝</span>`)+gR(`${gN(3)}<span class="gx-s">點圖例＝隱藏／顯示</span>`),'設施標記（粗線）'),
@@ -3209,7 +3209,7 @@ function lyTipHTML(){
   if(T==='fline') return `畫「<b>${FK[MV.fk].t}</b>」：從起點開始「一個轉彎點一下」，最後一點會變成箭頭；在最後一點<b>再點一下</b>或按「完成」結束。已點 <span id="lyCnt">${n}</span> 點　<button class="primary" onclick="lyPolyFinish()">✔ 完成這條</button> <button onclick="lyUndo()">↶ 退一步</button> <button onclick="lyDrawToggle()">■ 停止畫</button>`;
   if(T==='mark') return `畫「<b>${MK[MV.fk].t}</b>」：在平面圖上「按住拖曳」畫一段粗線（例如門口那一段牆）：<b>直的門就上下拖、橫的門就左右拖</b>，接近水平或垂直會自動拉直（按住 Alt 不拉直）；只點一下會放一小段橫的，點選後按「↻ 轉 90°」或 R 變直的。可以連續畫，畫完按「■ 停止畫」。`;
   if(T==='pest') return `在平面圖上「點一下」放「<b>${PK[MV.pk].t}</b>」，編號自動編 ${PK[MV.pk].p}01、${PK[MV.pk].p}02…；可以連續放，放完按「■ 停止放置」。換種類請改上方的下拉選單。`;
-  if(T==='frag') return `在「<b>${FT[MV.ftk]?FT[MV.ftk].t:'其它'}</b>」所在的位置「點一下」，${FT[MV.ftk]&&FT[MV.ftk].name?'確認名稱':'輸入名稱（例：'+(MV.ftk==='glass'?'觀察窗玻璃、燈罩':MV.ftk==='plastic'?'塑膠籃、壓克力蓋':'陶瓷碗、鏡子')+'）'}；編號自動編 G01、G02…，可以連續放，放完按「■ 停止放置」。換種類請改上方的下拉選單。`;
+  if(T==='frag') return `在「<b>${FT[MV.ftk]?FT[MV.ftk].t:'其它'}</b>」所在的位置「點一下」就放好，編號自動編 G01、G02…；名稱先用「${FT[MV.ftk]?(FT[MV.ftk].name||FT[MV.ftk].t):'其它易碎品'}」，之後在右邊改。可以連續放，放完按「■ 停止放置」；換種類請改上方的下拉選單。`;
   if(MV.mode==='edit') return (MV.layer==='zone' ? (MV_LOCK?'🔒 分區已鎖定：分區不會被拖動。':'編輯模式：拖曳可移動分區；點選後拖白色方塊改角、拖「＋」加角，右邊可改種類或刪除。')
     : MV.layer==='pest' ? '編輯模式：拖曳可移動捕蟲燈、鼠板站、鼠餌站；點選後在右邊改編號、位置說明或刪除。'
     : MV.layer==='flow' ? '編輯模式：拖曳可移動箭頭或標記；點選後拖白色方塊改轉彎點、拖「＋」多加轉彎點，右邊可改種類、反轉方向或刪除。'
@@ -3328,10 +3328,13 @@ function layerBind(){
     }
     if(d.k==='pest'){ if(d.moved) return; lyAdd('pest', {kind:MV.pk, code:pestNextCode(MV.pk), note:'', x:p.x, y:p.y}, false); return; }
     if(d.k==='place'){
+      /* 跟病媒一樣：點一下就放好，名稱先用種類，之後在右邊改 */
+      if(d.moved) return;
       const k = MV.ftk, T0 = FT[k];
-      const name = await askText(T0 ? `${T0.t}的名稱${T0.name?'':'（例：'+(k==='glass'?'觀察窗玻璃、燈罩、玻璃溫度計':'塑膠籃、壓克力蓋、塑膠刮板')+'）'}：` : '易碎品名稱（自己打字，例：陶瓷碗、鏡子）：', T0 ? T0.name : ''); if(!name) return;
-      const f = {kind:'frag', ft:k, code:fragNextCode(), name:name.trim(), mat:T0 ? T0.mat : (/玻璃/.test(name)?'玻璃':''), qty:1, where:'', months:'', photos:[], x:p.x, y:p.y};
-      lyAdd('frag', f, false); return;
+      const f = {kind:'frag', ft:k, code:fragNextCode(), name:T0 ? (T0.name || T0.t) : '其它易碎品', mat:T0 ? T0.mat : '', qty:1, where:'', months:'', photos:[], x:p.x, y:p.y};
+      lyAdd('frag', f, false);
+      if(!T0){ const i = $('#fgName'); if(i){ i.focus(); i.select(); } }
+      return;
     }
     if(d.k==='vtx'){
       if(!d.moved && !d.added){
@@ -3475,7 +3478,7 @@ function fragSideHTML(f, ed, close){
     ${ed ? `<div class="grid1">
       <label class="f">種類</label><select id="fgFt">${Object.entries(FT).map(([k,v])=>`<option value="${k}" ${fragType(f)===k?'selected':''}>${v.t}</option>`).join('')}<option value="other" ${fragType(f)==='other'?'selected':''}>其它（自己打字，不用圖）</option></select>
       <label class="f">編號</label><input type="text" id="fgCode" value="${esc(f.code||'')}">
-      <label class="f">名稱</label><input type="text" id="fgName" value="${esc(f.name||'')}" placeholder="例：燈罩">
+      <label class="f">名稱</label><input type="text" id="fgName" value="${esc(f.name||'')}" placeholder="例：燈罩" onkeydown="if(event.key==='Enter'){event.preventDefault();fragSave('${f.id}')}">
       <label class="f">材質</label><input type="text" id="fgMat" list="fgMats" value="${esc(f.mat||'')}" placeholder="例：玻璃"><datalist id="fgMats">${FRAG_MAT.map(x=>`<option value="${x}">`).join('')}</datalist>
       <label class="f">數量</label><input type="number" id="fgQty" min="1" value="${esc(f.qty||1)}">
       <label class="f">位置說明（選填）</label><input type="text" id="fgWhere" value="${esc(f.where||'')}" placeholder="例：包裝線上方天花板">
