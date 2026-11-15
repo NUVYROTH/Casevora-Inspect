@@ -174,6 +174,10 @@ body.wide main{max-width:none}
 .ar-btns button{padding:6px 12px}.ar-btns button.on.ok{background:var(--ok);color:#fff;border-color:var(--ok)}.ar-btns button.on.bad{background:var(--bad);color:#fff;border-color:var(--bad)}
 .ar-btns button.on.warn{background:var(--warn);color:#fff;border-color:var(--warn)}.ar-btns button.on.muted{background:#6b7280;color:#fff;border-color:#6b7280}
 .arow textarea{margin-top:4px}.ar-res{margin-top:6px}.ar-res .ok{color:var(--ok)}.ar-res .bad{color:var(--bad)}.ar-res .warn{color:var(--warn)}
+.mpin.warn3::after{content:'⚠';position:absolute;top:-11px;right:-11px;width:18px;height:18px;border-radius:50%;background:#fff4e0;color:#b45309;font-size:12px;line-height:18px;text-align:center;border:1px solid #f0c27b;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.mpin.warn3{animation:mwarn 1.6s ease-in-out infinite}@keyframes mwarn{0%,100%{box-shadow:0 0 0 0 rgba(180,35,24,.55)}50%{box-shadow:0 0 0 7px rgba(180,35,24,0)}}
+.mwarn{color:#b45309}
+.mstreak{background:#fff4e0;border:1px solid #f0c27b;border-left:4px solid #b45309;border-radius:8px;padding:8px 10px;margin:4px 0 10px;font-size:13px;color:#7a3d06}.mstreak b{display:block;margin-bottom:2px}
 .mlegend{flex-basis:100%;display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--muted)}.mlegend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
 /* 風險顏色開啟時：平面圖改成黑白，區域用風險顏色填色，不會跟平面圖原本的顏色疊在一起 */
 .mapview.riskon .mapinner img{filter:grayscale(1) contrast(.7) brightness(1.22)}
@@ -987,18 +991,18 @@ const GUIDES = {
   map: { t:'廠區地圖使用說明', steps:() => [
     gStep(1,'上傳平面圖', gC(gR(`<b style="flex:1">廠區地圖</b>${gB('＋ 新增地圖（上傳平面圖）',{dk:1,hl:1,n:1})}`)) + gC(gR(`${gIn('一樓 ▾')}<span style="flex:1"></span>${gB('適應畫面',{hl:1})}${gB('⤢ 整張顯示',{hl:1,n:2})}`)),
       `<p>按「＋ 新增地圖」${gN(1)}，上傳 JPG／PNG 平面圖並取名（例：一樓）；可以有多張地圖。</p><p>按「適應畫面」會<b>依比例縮小</b>，整張放進螢幕；「⤢ 整張顯示」${gN(2)}保持寬度、把框拉高；也可以用 ＋／－ 或 Ctrl＋滾輪縮放。</p>`),
-    gStep(2,'畫區域', gC(gR(`${gN(1)}<span class="gx-seg"><i>👀 檢視</i><i class="on">✏️ 編輯</i></span>`)+gR(`${gB('▭ 新增區域',{hl:1,n:2})}${gB('⬠ 多邊形區域',{hl:1,n:3})}`)) + `<div class="gx-map"><span class="gx-poly"></span></div>`,
-      `<p>切到「✏️ 編輯模式」${gN(1)}。</p><p>方形區域按「▭ 新增區域」${gN(2)}，在平面圖上按住拖曳；L 型等不規則區域按「⬠ 多邊形」${gN(3)}，每個角點一下，點回第一點完成。</p>`),
+    gStep(2,'畫區域、鎖定區域', gC(gR(`${gN(1)}<span class="gx-seg"><i>👀 檢視</i><i class="on">✏️ 編輯</i></span>`)+gR(`${gB('▭ 新增區域',{hl:1,n:2})}${gB('⬠ 多邊形區域',{hl:1,n:3})}`)+gR(`${gB('🔒 區域已鎖定',{dk:1,hl:1,n:4})}`)) + `<div class="gx-map"><span class="gx-poly"></span></div>`,
+      `<p>切到「✏️ 編輯模式」${gN(1)}。</p><p>方形區域按「▭ 新增區域」${gN(2)}，在平面圖上按住拖曳；L 型等不規則區域按「⬠ 多邊形」${gN(3)}，每個角點一下，點回第一點完成。</p><p>區域畫好後按<b>「🔓 鎖定區域」</b>${gN(4)}，之後新增、移動位置時區域就不會被拖到；要改範圍時按「✏️ 修改範圍」會自動解鎖。</p>`),
     gStep(3,'修改範圍', gC(gR(`${gTag('🏭 打漿區')}<span style="flex:1"></span>${gB('✏️ 修改範圍',{hl:1,n:1})}`)) + `<div class="gx-map"><span class="gx-rng"><i class="v" style="left:-5px;top:-5px"></i><i class="v" style="right:-5px;top:-5px"></i><i class="v" style="left:-5px;bottom:-5px"></i><i class="v" style="right:-5px;bottom:-5px"></i><i class="p" style="left:calc(50% - 7px);top:-7px">+</i><i class="p" style="right:-7px;top:calc(50% - 7px)">+</i></span>${gN(2)}</div>`,
       `<p>點區域 → 「✏️ 修改範圍」${gN(1)}。</p><p>拖<b>白色方塊</b>移動角；拖邊中間<b>金色＋</b>${gN(2)}多加一個角（延伸到隔壁）；在角上<b>連點兩下</b>刪除那個角。放開就自動存好。</p>`),
-    gStep(4,'放位置、參考照片', gC(gR(`${gB('📍 新增位置',{hl:1,n:1})}`)+gR(`${gTag('P01','dk')}${gTag('P03','rd')}<span class="gx-s">打漿機／地面及排水溝</span>`)) + gC(gR(`<span class="gx-ph"></span><span class="gx-ph b"></span>${gB('＋ 加參考照片',{hl:1,n:2})}`),'📷 參考照片（正常狀態）'),
-      `<p>按「📍 新增位置」${gN(1)}，在區域框裡點一下，輸入例如「P03 地面及排水溝」。</p><p>編輯模式點區域或位置，「＋ 加參考照片」${gN(2)}放正常、清潔時的樣子，方便對照。</p>`),
+    gStep(4,'放位置、參考照片', gC(gR(`${gB('📍 新增位置',{hl:1,n:1})}`)+gR(`${gTag('P01','dk')}${gTag('P03','rd')}<span class="gx-s">打漿機／地面及排水溝</span>`)) + gC(gR(`<span class="gx-ph"></span><span class="gx-ph b"></span>${gB('＋ 加參考照片',{hl:1,n:2})}`)+`<div class="gx-dash">📋 點這裡，再按 Ctrl+V 貼上</div>`,'📷 參考照片（正常狀態）'),
+      `<p>按「📍 新增位置」${gN(1)}，在區域框裡點一下，輸入<b>位置編號</b>（例：P03、輸送帶），名稱可以之後在右邊補。</p><p>編輯模式點區域或位置，「＋ 加參考照片」${gN(2)}放正常、清潔時的樣子；也可以點虛線框按 <b>Ctrl+V</b> 貼上。</p>`),
     gStep(5,'看缺失、新增缺失、匯出', gC(gR(`<span class="gx-k">3<small>累計</small></span><span class="gx-k b">2<small>未結案</small></span><span class="gx-k rd">1<small>逾期</small></span>`)+gR(gB('＋ 在「打漿區」新增缺失',{dk:1,hl:1,n:1}))+gR(gB('📗 匯出這個區域（Excel）',{hl:1,n:2})),'🏭 打漿區'),
       `<p>檢視模式點區域或位置，右邊會出現件數與歷史缺失。</p><p>「＋ 新增缺失」${gN(1)}自動帶入區域、位置、負責單位；「📗 匯出這個區域」${gN(2)}依類別由多到少，含改善前後照片。</p>`),
     gStep(6,'現場稽核', gC(gR(`${gB('＋ 新增稽核重點',{n:1})}${gB('載入範例')}`)+gR(gB('📋 開始稽核',{ok:1,hl:1,n:2}))) + gC(gR(`<span class="gx-s" style="flex:1">排水溝清潔暢通</span>${gN(3)}${gB('✅ 合格',{ok:1})}${gB('❌ 不合格',{rd:1,hl:1})}`)),
       `<p>編輯模式「＋ 新增稽核重點」${gN(1)}寫清楚<b>查核標準</b>（或載入範例 8 項）。</p><p>到現場按「📋 開始稽核」${gN(2)}，每項選${gN(3)}：✅ 合格、❌ 不合格（可「＋ 建立缺失」）、👁 觀察事項、⊘ 不適用。</p>`),
-    gStep(7,'風險顏色與地圖統計', gC(gR(`${gB('🎨 風險顏色（開）',{dk:1,hl:1,n:1})}`)+gR(`<span class="gx-sw" style="background:#b42318"></span><span class="gx-s">重大／逾期／重複</span><span class="gx-sw" style="background:#d97706"></span><span class="gx-s">未結案</span><span class="gx-sw" style="background:#167a3e"></span><span class="gx-s">都結案</span>`)) + gC(gR(`${gN(2)}${gTag('本月','dk')}${gTag('最近三個月')}${gTag('自訂')}`),'📊 地圖統計'),
-      `<p>檢視模式依缺失狀況自動上色${gN(1)}：紅＝重大、逾期或<b>重複發生</b>；黃＝有未結案；綠＝都結案；灰＝沒紀錄。</p><p>地圖下方「📊 地圖統計」${gN(2)}選期間，看各區域、類型、月份與高風險位置排行，點了會跳到那裡。</p>`),
+    gStep(7,'風險顏色、連續發生警示、地圖統計', gC(gR(`${gB('🎨 風險顏色（開）',{dk:1,hl:1,n:1})}`)+gR(`<span class="gx-sw" style="background:#b42318"></span><span class="gx-s">重大／逾期／重複</span><span class="gx-sw" style="background:#d97706"></span><span class="gx-s">未結案</span><span class="gx-sw" style="background:#167a3e"></span><span class="gx-s">都結案</span>`)) + gC(gR(`${gN(2)}${gTag('本月','dk')}${gTag('最近三個月')}${gTag('自訂')}`),'📊 地圖統計'),
+      `<p>檢視模式依缺失狀況自動上色${gN(1)}：紅＝重大、逾期或<b>重複發生</b>；黃＝有未結案；綠＝都結案；灰＝沒紀錄。</p><p><b>⚠ 連續發生警示</b>：同一位置同一類缺失<b>連續 3 個月</b>都發生，位置標記會閃動並加 ⚠，右邊面板會提醒檢討根本原因。</p><p>地圖下方「📊 地圖統計」${gN(2)}選期間；<b>點某個區域時，統計會變成那一區各位置的分布</b>，按「看全部區域」回到全廠。</p>`),
     gStep(8,'給同事用同一張地圖', gC(gR(`${gB('匯出地圖設定',{hl:1,n:1})}${gB('匯入地圖設定',{hl:1,n:2})}`)) + `<div class="gx-s" style="text-align:center">只含平面圖・區域・位置・稽核重點・參考照片<br>不含案件，不會蓋掉同事的資料</div>`,
       `<p>按「匯出地圖設定」${gN(1)}存成檔案給同事，同事按「匯入地圖設定」${gN(2)}就有同一張地圖。</p><p class="muted small">「下載備份」會連稽核紀錄一起存。平面圖屬公司內部資料，不會上傳也不會送給 AI。</p>`)
   ]},
@@ -1519,9 +1523,10 @@ function addPhotoFiles(field, files){
 /* 貼上（Ctrl+V）與拖曳：先點選照片區下方的貼上框，再貼上 */
 const clipImages = dt => [...(dt && dt.items || [])].filter(it => it.kind==='file' && /^image\//.test(it.type)).map(it => it.getAsFile()).filter(Boolean);
 document.addEventListener('paste', e => {
-  if(!cur) return;
   const imgs = clipImages(e.clipboardData); if(!imgs.length) return;
   const z = document.activeElement && document.activeElement.closest && document.activeElement.closest('.pzone');
+  if(z && z.dataset.ref){ e.preventDefault(); const [k,id] = z.dataset.ref.split(':'); refPhotoFiles(k, id, imgs); flash('已貼上 '+imgs.length+' 張參考照片'); return; }
+  if(!cur) return;
   e.preventDefault();
   if(!z){ say('請先點一下「缺失照片」或「改善後照片」下方的貼上框，再按 Ctrl+V。'); return; }
   addPhotoFiles(z.dataset.pf, imgs.map((f,i) => new File([f], `貼上_${Date.now()}_${i}.png`, {type:f.type})));
@@ -1532,6 +1537,7 @@ document.addEventListener('dragleave', e => { const z = e.target.closest && e.ta
 document.addEventListener('drop', e => {
   const z = e.target.closest && e.target.closest('.pzone'); if(!z) return;
   e.preventDefault(); z.classList.remove('over');
+  if(z.dataset.ref){ const [k,id] = z.dataset.ref.split(':'); refPhotoFiles(k, id, [...e.dataTransfer.files]); return; }
   addPhotoFiles(z.dataset.pf, [...e.dataTransfer.files]);
 });
 function removePhoto(field,i){ cur[field].splice(i,1); dirty=true; renderPhotoBox(field); refresh(); }
@@ -2170,6 +2176,8 @@ function saveMap(){ try{ localStorage.setItem(KEY_M, JSON.stringify(MAPD)); retu
 const mapUid = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
 const MV = { mapId:'', mode:'view', tool:'', zoom:1, sel:null };
 let REP = new Set();
+let MV_LOCK = false; try{ MV_LOCK = localStorage.getItem('qaHygieneTracker_v1_mapLock')==='1'; }catch(e){}
+function mapLockToggle(v){ MV_LOCK = v===undefined ? !MV_LOCK : v; try{ localStorage.setItem('qaHygieneTracker_v1_mapLock', MV_LOCK?'1':'0'); }catch(e){} renderMap(); }
 const clamp01 = v => Math.max(0, Math.min(1, v));
 function mapAreas(mid){ return MAPD.areas.filter(a=>a.mapId===(mid||MV.mapId)); }
 function areaById(id){ return MAPD.areas.find(a=>a.id===id); }
@@ -2191,7 +2199,7 @@ async function showMap(focus){
 }
 function renderMap(){
   const m = MAPD.maps.find(x=>x.id===MV.mapId);
-  REP = repeatSet();
+  REP = repeatSet(); STREAK = streakAlerts();
   $('#app').innerHTML = `
     <div class="hcard">
       <div class="hc-top"><div class="ptitle big"><h1>廠區地圖</h1><span class="muted">平面圖上點區域、位置，查看歷史缺失並直接新增缺失</span></div><span class="lbadge">● 本機資料模式</span></div>
@@ -2211,6 +2219,7 @@ function renderMap(){
       <select aria-label="選擇地圖" onchange="MV.mapId=this.value;MV.sel=null;MV.tool='';renderMap()">${MAPD.maps.map(x=>`<option value="${x.id}" ${x.id===MV.mapId?'selected':''}>${esc(x.name)}</option>`).join('')}</select>
       <div class="seg">${['view','edit'].map(k=>`<button class="${MV.mode===k?'on':''}" onclick="MV.mode='${k}';MV.tool='';renderMap()">${k==='view'?'👀 檢視模式':'✏️ 編輯模式'}</button>`).join('')}</div>
       ${MV.mode==='edit' ? `<button class="${MV.tool==='area'?'primary':''}" onclick="MV.tool=MV.tool==='area'?'':'area';renderMap()">▭ 新增區域</button>
+        <button class="${MV_LOCK?'primary':''}" onclick="mapLockToggle()" title="鎖定後區域不會被拖動或改大小，方便新增位置">${MV_LOCK?'🔒 區域已鎖定':'🔓 鎖定區域'}</button>
         <button class="${MV.tool==='poly'&&!(MV.poly&&MV.poly.areaId)?'primary':''}" onclick="MV.tool==='poly'?mapPolyCancel():mapPolyStart('')">⬠ 新增多邊形區域</button>
         <button class="${MV.tool==='loc'?'primary':''}" onclick="MV.tool=MV.tool==='loc'?'':'loc';renderMap()">📍 新增位置</button>
         <button onclick="mapRename()">地圖改名</button>
@@ -2218,7 +2227,7 @@ function renderMap(){
         <button class="danger" onclick="mapDelete()">刪除地圖</button>` : ''}
       ${MV.mode==='view'?`<button class="${MV_RISK?'primary':''}" onclick="mapRiskToggle()" title="依缺失狀況自動上色">🎨 風險顏色${MV_RISK?'（開）':'（關）'}</button>`:''}
       <span class="mzoom"><button onclick="mapZoom(-1)" aria-label="縮小">－</button><span id="mzPct">${Math.round(MV.zoom*100)}%</span><button onclick="mapZoom(1)" aria-label="放大">＋</button><button onclick="mapFitScreen()" title="依比例縮小，整張平面圖放進螢幕">適應畫面</button><button onclick="mapFitHeight()" title="地圖框拉高到整張平面圖都看得到，不用上下捲動">⤢ 整張顯示</button></span>
-      <div class="mtip">${MV.tool==='poly'?`沿著區域邊界「每個角點一下」（L 型倉庫點 6 個角），點回第一個點或按「完成」結束。已點 ${MV.poly?MV.poly.pts.length:0} 個角　<button class="primary" onclick="mapPolyFinish()">✔ 完成</button> <button onclick="if(MV.poly&&MV.poly.pts.length){MV.poly.pts.pop();renderMap()}">↶ 退一步</button> <button onclick="mapPolyCancel()">取消</button>`:MV.tool==='area'?'在平面圖上「按住拖曳」畫出區域範圍。':MV.tool==='loc'?'在區域框裡「點一下」放位置標記。':MV.mode==='edit'?'編輯模式：拖曳可移動區域與位置，拉區域右下角可改大小；點選後可在右邊修改或刪除。':'檢視模式：點區域或位置看缺失紀錄；在空白處按住拖曳可移動平面圖。'}</div>
+      <div class="mtip">${MV.tool==='poly'?`沿著區域邊界「每個角點一下」（L 型倉庫點 6 個角），點回第一個點或按「完成」結束。已點 ${MV.poly?MV.poly.pts.length:0} 個角　<button class="primary" onclick="mapPolyFinish()">✔ 完成</button> <button onclick="if(MV.poly&&MV.poly.pts.length){MV.poly.pts.pop();renderMap()}">↶ 退一步</button> <button onclick="mapPolyCancel()">取消</button>`:MV.tool==='area'?'在平面圖上「按住拖曳」畫出區域範圍。':MV.tool==='loc'?'在區域框裡「點一下」放位置標記。':MV.mode==='edit'?(MV_LOCK?'🔒 區域已鎖定：區域不會被拖動，可以放心新增、移動位置；點選後可在右邊修改。':'編輯模式：拖曳可移動區域與位置，拉區域右下角可改大小；點選後可在右邊修改或刪除。新增位置前可以先「🔓 鎖定區域」。'):'檢視模式：點區域或位置看缺失紀錄；在空白處按住拖曳可移動平面圖。'}</div>
       ${riskLegendHTML()}
     </div>
     <div class="mapwrap">
@@ -2226,17 +2235,17 @@ function renderMap(){
         <img id="mapImg" alt="${esc(m.name)}" draggable="false">
         <svg class="mpoly" viewBox="0 0 100 100" preserveAspectRatio="none">${mapAreas().filter(a=>a.pts).map(a=>`<polygon data-aid="${a.id}" class="${MV.sel&&MV.sel.t==='area'&&MV.sel.id===a.id?'sel':''} ${MV_RISK&&MV.mode==='view'?'rk':''}" style="--c:${esc(areaColor(a, REP))}" points="${ptsAttr(a.pts)}"/>`).join('')}
           ${MV.tool==='poly'&&MV.poly&&MV.poly.pts.length?`<polyline class="mtmp" points="${ptsAttr(MV.poly.pts)}"/>`:''}</svg>
-        ${mapAreas().filter(a=>a.pts).map(a=>{ const s = mapStats(recsForArea(a)); return `<span class="mlab mplab ${MV_RISK&&MV.mode==='view'?'rk':''}" data-lab="${a.id}" style="left:${a.pts[0][0]*100}%;top:${a.pts[0][1]*100}%;--c:${esc(areaColor(a, REP))}">${esc(a.name)}${s.open?` <b class="mcnt">${s.open}</b>`:''}</span>`; }).join('')}
-        ${MV.mode==='edit'&&MV.sel&&MV.sel.t==='area'&&areaById(MV.sel.id)&&areaById(MV.sel.id).pts&&MV.tool!=='poly'?(P=>P.map((q,i)=>{ const r = P[(i+1)%P.length]; return `<i class="mmid" data-aid="${MV.sel.id}" data-mid="${i}" title="拖曳可加一個角" style="left:${(q[0]+r[0])*50}%;top:${(q[1]+r[1])*50}%">+</i>`; }).join('')+P.map((q,i)=>`<i class="mvtx" data-aid="${MV.sel.id}" data-vtx="${i}" title="拖曳調整；連點兩下刪除這個角" style="left:${q[0]*100}%;top:${q[1]*100}%"></i>`).join(''))(areaById(MV.sel.id).pts):''}
+        ${mapAreas().filter(a=>a.pts).map(a=>{ const s = mapStats(recsForArea(a)); return `<span class="mlab mplab ${MV_RISK&&MV.mode==='view'?'rk':''}" data-lab="${a.id}" style="left:${a.pts[0][0]*100}%;top:${a.pts[0][1]*100}%;--c:${esc(areaColor(a, REP))}">${esc(a.name)}${s.open?` <b class="mcnt">${s.open}</b>`:''}${STREAK.some(x=>x.aid===a.id)?' <b class="mwarn" title="連續發生警示">⚠</b>':''}</span>`; }).join('')}
+        ${MV.mode==='edit'&&!MV_LOCK&&MV.sel&&MV.sel.t==='area'&&areaById(MV.sel.id)&&areaById(MV.sel.id).pts&&MV.tool!=='poly'?(P=>P.map((q,i)=>{ const r = P[(i+1)%P.length]; return `<i class="mmid" data-aid="${MV.sel.id}" data-mid="${i}" title="拖曳可加一個角" style="left:${(q[0]+r[0])*50}%;top:${(q[1]+r[1])*50}%">+</i>`; }).join('')+P.map((q,i)=>`<i class="mvtx" data-aid="${MV.sel.id}" data-vtx="${i}" title="拖曳調整；連點兩下刪除這個角" style="left:${q[0]*100}%;top:${q[1]*100}%"></i>`).join(''))(areaById(MV.sel.id).pts):''}
         ${MV.tool==='poly'&&MV.poly?MV.poly.pts.map((q,i)=>`<i class="mdot ${i===0?'first':''}" style="left:${q[0]*100}%;top:${q[1]*100}%"></i>`).join(''):''}
-        ${mapAreas().filter(a=>!a.pts).map(a=>{ const s = mapStats(recsForArea(a)); return `<div class="marea ${MV.sel&&MV.sel.t==='area'&&MV.sel.id===a.id?'sel':''} ${MV_RISK&&MV.mode==='view'?'rk':''}" data-aid="${a.id}" style="left:${a.x*100}%;top:${a.y*100}%;width:${a.w*100}%;height:${a.h*100}%;--c:${esc(areaColor(a, REP))}"><span class="mlab">${esc(a.name)}${s.open?` <b class="mcnt">${s.open}</b>`:''}</span>${MV.mode==='edit'?'<i class="mres" data-res="1"></i>':''}</div>`; }).join('')}
-        ${MAPD.locs.filter(l=>areaById(l.areaId)&&areaById(l.areaId).mapId===MV.mapId).map(l=>{ const s = mapStats(recsForLoc(l)); return `<div class="mpin ${locRiskCls(l, REP)} ${MV.sel&&MV.sel.t==='loc'&&MV.sel.id===l.id?'sel':''}" data-lid="${l.id}" style="left:${l.x*100}%;top:${l.y*100}%" title="${esc(l.code+' '+l.name)}">${esc(l.code||'•')}</div>`; }).join('')}
+        ${mapAreas().filter(a=>!a.pts).map(a=>{ const s = mapStats(recsForArea(a)); return `<div class="marea ${MV.sel&&MV.sel.t==='area'&&MV.sel.id===a.id?'sel':''} ${MV_RISK&&MV.mode==='view'?'rk':''}" data-aid="${a.id}" style="left:${a.x*100}%;top:${a.y*100}%;width:${a.w*100}%;height:${a.h*100}%;--c:${esc(areaColor(a, REP))}"><span class="mlab">${esc(a.name)}${s.open?` <b class="mcnt">${s.open}</b>`:''}${STREAK.some(x=>x.aid===a.id)?' <b class="mwarn" title="連續發生警示">⚠</b>':''}</span>${MV.mode==='edit'&&!MV_LOCK?'<i class="mres" data-res="1"></i>':''}</div>`; }).join('')}
+        ${MAPD.locs.filter(l=>areaById(l.areaId)&&areaById(l.areaId).mapId===MV.mapId).map(l=>{ const s = mapStats(recsForLoc(l)); return `<div class="mpin ${locRiskCls(l, REP)} ${STREAK.some(x=>x.lid===l.id)?'warn3':''} ${MV.sel&&MV.sel.t==='loc'&&MV.sel.id===l.id?'sel':''}" data-lid="${l.id}" style="left:${l.x*100}%;top:${l.y*100}%" title="${esc((l.code+' '+l.name).trim())}">${esc(l.code||'•')}</div>`; }).join('')}
         <div class="mdraw" id="mDraw" hidden></div>
       </div></div>
       <div class="mgrip" id="mGrip" role="separator" aria-label="拖曳調整地圖高度" title="上下拖曳調整高度；連點兩下＝整張顯示">⇕ 拖這裡調整地圖高度（連點兩下＝整張顯示）</div></div>
       <div class="card mside" id="mSide">${mapSideHTML()}</div>
     </div>
-    ${mapStatsHTML()}` : `<div class="card empty" style="padding:30px">還沒有廠區地圖。請按「＋ 新增地圖（上傳平面圖）」上傳工廠平面圖（JPG、PNG）。<br><span class="small muted">同事已經做好地圖的話，可以請他「匯出地圖設定」給你，再按「匯入地圖設定」。</span></div>`}
+    <div id="mStatsBox">${mapStatsHTML()}</div>` : `<div class="card empty" style="padding:30px">還沒有廠區地圖。請按「＋ 新增地圖（上傳平面圖）」上傳工廠平面圖（JPG、PNG）。<br><span class="small muted">同事已經做好地圖的話，可以請他「匯出地圖設定」給你，再按「匯入地圖設定」。</span></div>`}
     ${mapGuideHTML()}`;
   hydrate($('#mSide'));
   if(m){ phGet(m.img).then(u=>{ const im = $('#mapImg'); if(im){ if(mapHRaw()==='fit') im.onload = () => mapFitHeight(true); im.src = u || ''; } if(!u) say('平面圖找不到，請在編輯模式按「換圖片」重新上傳。'); }); mapBind(); mapGripBind(); mapScaleUpd();
@@ -2313,7 +2322,7 @@ function mapSideHTML(){
         <button onclick="mapPolyStart('${a.id}')">⬠ 重新畫範圍（多邊形，例如 L 型）</button>
         ${a.pts?'<div class="notice info small" style="margin:6px 0 0">✏️ <b>修改範圍</b>：拖白色方塊＝移動那個角；拖邊中間的「＋」＝多加一個角（例如延伸到隔壁）；在角上<b>連點兩下</b>＝刪除那個角。</div>':`<button onclick="mapRectToPoly('${a.id}')">✏️ 修改範圍（改成可以加角、拉成不規則形狀）</button>`}</div>`
       : `<div class="small muted">${a.unit?'負責單位：'+esc(a.unit)+'　':''}${esc(a.desc||'')}</div><button class="lite" style="margin-top:6px" onclick="mapEditRange('${a.id}')">✏️ 修改範圍</button>`}
-      ${mapStatHTML(mapStats(recsForArea(a)))}${riskBadgeHTML(recsForArea(a), a.id)}
+      ${mapStatHTML(mapStats(recsForArea(a)))}${riskBadgeHTML(recsForArea(a), a.id)}${streakBannerHTML(STREAK.filter(x=>x.aid===a.id))}
       <button class="primary" style="width:100%;margin:6px 0 6px" onclick="mapNewDefect('${a.id}','')">＋ 在「${esc(a.name)}」新增缺失</button>
       <button id="maXls" style="width:100%;margin:0 0 10px" onclick="mapAreaExport('${a.id}','')">📗 匯出這個區域（Excel，含照片）</button>
       ${auditSideHTML(a)}
@@ -2333,8 +2342,8 @@ function mapSideHTML(){
         <label class="f">位置描述</label><textarea id="mlDesc" rows="2">${esc(l.desc||'')}</textarea>
         <div class="row"><button class="primary" onclick="mapLocSave('${l.id}')">儲存位置</button><button class="danger" onclick="mapLocDel('${l.id}')">刪除位置</button></div></div>`
       : (l.desc?`<div class="small">${esc(l.desc)}</div>`:'')}
-      ${mapStatHTML(mapStats(recsForLoc(l)))}${riskBadgeHTML(recsForLoc(l), '')}
-      <button class="primary" style="width:100%;margin:6px 0 6px" onclick="mapNewDefect('${l.areaId}','${l.id}')">＋ 在「${esc(l.code+' '+l.name)}」新增缺失</button>
+      ${mapStatHTML(mapStats(recsForLoc(l)))}${riskBadgeHTML(recsForLoc(l), '')}${streakBannerHTML(STREAK.filter(x=>x.lid===l.id))}
+      <button class="primary" style="width:100%;margin:6px 0 6px" onclick="mapNewDefect('${l.areaId}','${l.id}')">＋ 在「${esc((l.code+' '+l.name).trim())}」新增缺失</button>
       <button id="maXls" style="width:100%;margin:0 0 10px" onclick="mapAreaExport('${l.areaId}','${l.id}')">📗 匯出這個位置（Excel，含照片）</button>
       ${refPhotosHTML('loc', l, ed)}
       <div class="st-sec">歷史缺失</div>${mapRecTable(recsForLoc(l))}`;
@@ -2344,7 +2353,7 @@ function mapSideHTML(){
     ${as.length ? `<ul class="mini">${as.map(a=>{ const s = mapStats(recsForArea(a)); return `<li class="click" onclick="MV.sel={t:'area',id:'${a.id}'};renderMap()"><span>${esc(a.name)}</span><span class="small ${s.over?'bad':s.open?'':'muted'}">${s.open?'未結案 '+s.open:'共 '+s.total+' 件'}${s.over?'・逾期 '+s.over:''}</span></li>`; }).join('')}</ul>`
       : `<div class="muted small">這張地圖還沒有區域。請切到「✏️ 編輯模式」，按「▭ 新增區域」，在平面圖上拖曳畫出範圍。</div>`}`;
 }
-function mapSide(){ const s = $('#mSide'); if(s){ REP = repeatSet(); s.innerHTML = mapSideHTML(); hydrate(s); if(MV.sel && MV.mode==='view' && window.innerWidth<900) s.scrollIntoView({behavior:'smooth', block:'start'}); } document.querySelectorAll('.marea,.mpin').forEach(e=>e.classList.toggle('sel', !!MV.sel && ((MV.sel.t==='area'&&e.dataset.aid===MV.sel.id)||(MV.sel.t==='loc'&&e.dataset.lid===MV.sel.id)))); }
+function mapSide(){ const s = $('#mSide'); const sb = $('#mStatsBox'); if(sb) sb.innerHTML = mapStatsHTML(); if(s){ REP = repeatSet(); STREAK = streakAlerts(); s.innerHTML = mapSideHTML(); hydrate(s); if(MV.sel && MV.mode==='view' && window.innerWidth<900) s.scrollIntoView({behavior:'smooth', block:'start'}); } document.querySelectorAll('.marea,.mpin').forEach(e=>e.classList.toggle('sel', !!MV.sel && ((MV.sel.t==='area'&&e.dataset.aid===MV.sel.id)||(MV.sel.t==='loc'&&e.dataset.lid===MV.sel.id)))); }
 
 /* 平面圖上的拖曳：畫區域、放位置、移動、改大小、檢視模式拖曳平移 */
 function mapBind(){
@@ -2356,13 +2365,13 @@ function mapBind(){
     const p = frac(e), aEl = e.target.closest('[data-aid]'), lEl = e.target.closest('.mpin');
     if(MV.tool==='poly'){ drag = {k:'poly', s:p}; }
     else if(MV.tool==='area'){ drag = {k:'draw', s:p}; }
-    else if(!MV.tool && MV.mode==='edit' && e.target.dataset.mid!==undefined){ const a = areaById(e.target.dataset.aid), i = +e.target.dataset.mid + 1; a.pts.splice(i, 0, [p.x, p.y]); drag = {k:'vtx', a, i, el:e.target, s:p, added:true}; mapPolyDom(a, false); }
-    else if(!MV.tool && MV.mode==='edit' && e.target.dataset.vtx!==undefined){ const a = areaById(e.target.dataset.aid); drag = {k:'vtx', a, i:+e.target.dataset.vtx, el:e.target, s:p}; }
-    else if(!MV.tool && MV.mode==='edit' && aEl && areaById(aEl.dataset.aid) && areaById(aEl.dataset.aid).pts && !lEl){ const a = areaById(aEl.dataset.aid); drag = {k:'mvp', a, s:p, o:a.pts.map(q=>q.slice())}; }
+    else if(!MV.tool && !MV_LOCK && MV.mode==='edit' && e.target.dataset.mid!==undefined){ const a = areaById(e.target.dataset.aid), i = +e.target.dataset.mid + 1; a.pts.splice(i, 0, [p.x, p.y]); drag = {k:'vtx', a, i, el:e.target, s:p, added:true}; mapPolyDom(a, false); }
+    else if(!MV.tool && !MV_LOCK && MV.mode==='edit' && e.target.dataset.vtx!==undefined){ const a = areaById(e.target.dataset.aid); drag = {k:'vtx', a, i:+e.target.dataset.vtx, el:e.target, s:p}; }
+    else if(!MV.tool && !MV_LOCK && MV.mode==='edit' && aEl && areaById(aEl.dataset.aid) && areaById(aEl.dataset.aid).pts && !lEl){ const a = areaById(aEl.dataset.aid); drag = {k:'mvp', a, s:p, o:a.pts.map(q=>q.slice())}; }
     else if(MV.tool==='loc'){ drag = {k:'place', s:p}; }
-    else if(MV.mode==='edit' && e.target.dataset.res){ const a = areaById(aEl.dataset.aid); drag = {k:'res', a, s:p, o:{w:a.w,h:a.h}}; }
+    else if(MV.mode==='edit' && !MV_LOCK && e.target.dataset.res){ const a = areaById(aEl.dataset.aid); drag = {k:'res', a, s:p, o:{w:a.w,h:a.h}}; }
     else if(MV.mode==='edit' && lEl){ const l = locById(lEl.dataset.lid); drag = {k:'mvl', l, s:p, o:{x:l.x,y:l.y}, el:lEl}; }
-    else if(MV.mode==='edit' && aEl){ const a = areaById(aEl.dataset.aid); drag = {k:'mva', a, s:p, o:{x:a.x,y:a.y}, el:aEl}; }
+    else if(MV.mode==='edit' && !MV_LOCK && aEl && !lEl){ const a = areaById(aEl.dataset.aid); drag = {k:'mva', a, s:p, o:{x:a.x,y:a.y}, el:aEl}; }
     else drag = {k:'pan', cx:e.clientX, cy:e.clientY, sl:view.scrollLeft, st:view.scrollTop, aEl, lEl};
     drag.moved = false; inner.setPointerCapture(e.pointerId); e.preventDefault();
   };
@@ -2416,10 +2425,9 @@ function mapBind(){
       const hit = areaAt(p);
       if(!hit){ say('位置要放在區域框裡面。請先畫好區域，再點在區域框內。'); return; }
       const n = mapAreaLocs(hit.id).length + 1;
-      const t = await askText(`位置編號與名稱（放在「${hit.name}」，例：P0${n} 地面及排水溝）：`, `P${String(n).padStart(2,'0')} `);
+      const t = await askText(`位置編號（放在「${hit.name}」，例：P0${n}、輸送帶）：`, `P${String(n).padStart(2,'0')}`);
       if(!t) return;
-      const m = t.match(/^\s*([A-Za-z]*\d+[A-Za-z0-9-]*)\s*(.*)$/);
-      const l = {id:mapUid('lc'), areaId:hit.id, code:m?m[1]:'', name:(m?m[2]:t).trim()||t, desc:'', x:p.x, y:p.y};
+      const l = {id:mapUid('lc'), areaId:hit.id, code:t.trim(), name:'', desc:'', x:p.x, y:p.y};  /* 打的字就是位置編號；名稱可以之後在右邊補 */
       MAPD.locs.push(l); if(!saveMap()){ MAPD.locs.pop(); return; }
       MV.tool = ''; MV.sel = {t:'loc', id:l.id}; renderMap(); flash('已新增位置：'+(l.code+' '+l.name).trim());
       return;
@@ -2440,7 +2448,7 @@ function mapBind(){
   };
 }
 /* 修改範圍：切到編輯模式並選取；矩形先轉成 4 個角的多邊形，才能加角 */
-function mapEditRange(aid){ const a = areaById(aid); if(!a) return; if(!a.pts) a.pts = [[a.x,a.y],[a.x+a.w,a.y],[a.x+a.w,a.y+a.h],[a.x,a.y+a.h]]; saveMap(); MV.mode = 'edit'; MV.tool = ''; MV.sel = {t:'area', id:aid}; renderMap(); }
+function mapEditRange(aid){ const a = areaById(aid); if(!a) return; if(MV_LOCK){ MV_LOCK = false; try{ localStorage.setItem('qaHygieneTracker_v1_mapLock','0'); }catch(e){} flash('已解除區域鎖定，可以修改範圍'); } if(!a.pts) a.pts = [[a.x,a.y],[a.x+a.w,a.y],[a.x+a.w,a.y+a.h],[a.x,a.y+a.h]]; saveMap(); MV.mode = 'edit'; MV.tool = ''; MV.sel = {t:'area', id:aid}; renderMap(); }
 function mapRectToPoly(aid){ mapEditRange(aid); flash('已改成可加角的範圍，拖邊中間的「＋」可以多加角'); }
 /* 拖曳多邊形時只更新那一塊，不重畫整張圖 */
 function mapPolyDom(a, handles=true){
@@ -2827,6 +2835,26 @@ function repeatSet(){
   live().forEach(r=>{ if(r.recurred) out.add(r.id); });
   return out;
 }
+/* 連續發生警示：同一位置（沒有位置就看同一區域）＋同一缺失類別，連續 3 個月以上每個月都有發生，而且最後一個月是本月或上個月 */
+function monthIdx(d){ return (+d.slice(0,4))*12 + (+d.slice(5,7)) - 1; }
+function monthTxt(m){ return (m%12+1)+' 月'; }
+function streakAlerts(){
+  const g = new Map();
+  live().filter(r=>r.defType && r.foundDate).forEach(r=>{
+    const lid = r.locId && locById(r.locId) ? r.locId : '', aid = lid ? locById(lid).areaId : areaIdOf(r); if(!aid) return;
+    const k = (lid ? 'L'+lid : 'A'+aid) + '|' + r.defType;
+    if(!g.has(k)) g.set(k, {lid, aid, type:r.defType, months:new Set()});
+    g.get(k).months.add(monthIdx(r.foundDate));
+  });
+  const now = monthIdx(today()), out = [];
+  g.forEach(o => { const ms = [...o.months].sort((a,b)=>a-b); let run = 1, best = null;
+    for(let i=1;i<=ms.length;i++){ if(i<ms.length && ms[i]===ms[i-1]+1) run++; else { if(run>=3) best = {from:ms[i-run], to:ms[i-1], n:run}; run = 1; } }
+    if(best && best.to >= now-1) out.push(Object.assign({}, o, best)); });
+  return out;
+}
+let STREAK = [];
+function streakText(x){ const l = locById(x.lid), a = areaById(x.aid); return `${esc(l ? (l.code+' '+l.name).trim() : (a ? a.name : ''))}「${esc(typeName(x.type))}」已連續 ${x.n} 個月發生（${monthTxt(x.from)}～${monthTxt(x.to)}）`; }
+function streakBannerHTML(list){ return list.length ? `<div class="mstreak"><b>⚠ 連續發生警示</b>${list.map(x=>`<div>${streakText(x)}</div>`).join('')}<div class="small">請檢討根本原因，加強預防再發措施，必要時提升缺失等級。</div></div>` : ''; }
 /* 風險顏色：紅＝有重大、逾期或重複發生且未結案；黃＝有未結案或稽核不合格還沒建缺失；綠＝都已結案；灰＝還沒有紀錄 */
 const RISK = { red:{c:'#b42318', t:'紅：有重大、逾期或重複發生的缺失未結案'}, yellow:{c:'#d97706', t:'黃：有未結案缺失，或稽核不合格尚未建立缺失'}, green:{c:'#167a3e', t:'綠：缺失都已結案'}, gray:{c:'#9aa3b2', t:'灰：還沒有缺失或稽核紀錄'} };
 function riskOf(rs, aid, rep){
@@ -2857,15 +2885,23 @@ function mstRange(){
   return ['0000-00-00','9999-12-31'];
 }
 function mapStatsHTML(){
-  const as = mapAreas(); if(!as.length) return '';
+  if(!mapAreas().length) return '';
+  const selA = MV.sel ? (MV.sel.t==='area' ? areaById(MV.sel.id) : areaById((locById(MV.sel.id)||{}).areaId)) : null;
+  const as = selA ? [selA] : mapAreas();
   const [f,t] = mstRange(), inP = r => (r.foundDate||'')>=f && (r.foundDate||'')<=t, rep = repeatSet();
   const ids = new Set(as.map(a=>a.id)), locs = MAPD.locs.filter(l=>ids.has(l.areaId));
   const all = [...new Map(as.flatMap(a=>recsForArea(a)).map(r=>[r.id,r])).values()].filter(inP);
   const open = all.filter(r=>!r.closed).length, over = all.filter(isOverdue).length, rp = all.filter(r=>rep.has(r.id)).length;
   const done = all.length ? Math.round(all.filter(r=>r.closed).length/all.length*100) : 0;
   const lastFail = as.reduce((n,a)=>{ const au = auditsOf(a.id).filter(x=>x.date>=f && x.date<=t)[0]; return n + (au ? auditCount(au).fail : 0); }, 0);
+  const st3 = STREAK.filter(x=>ids.has(x.aid)).length;
   const bars = (rows, mx, cls) => rows.length ? rows.map(([k,v,extra,on])=>`<div class="hb ${on?'click':''}" ${on?`onclick="${on}"`:''}><span>${esc(k)}</span><span class="b"><i style="width:${mx?v/mx*100:0}%" class="${cls||''}"></i></span><span class="v">${v}${extra||''}</span></div>`).join('') : '<div class="muted small">這段期間沒有資料。</div>';
-  const byArea = as.map(a=>{ const rs = recsForArea(a).filter(inP); return [a.name, rs.length, rs.filter(r=>!r.closed).length, a.id]; }).sort((x,y)=>y[1]-x[1]);
+  /* 全部區域時比較各區域；選了某一區時改成比較這一區的各個位置 */
+  const go = (k,id) => `MV.sel={t:'${k}',id:'${id}'};renderMap();document.getElementById('mapView').scrollIntoView({behavior:'smooth'})`;
+  const byArea = selA
+    ? [...locs.map(l=>{ const rs = recsForLoc(l).filter(inP); return [(l.code+' '+l.name).trim(), rs.length, rs.filter(r=>!r.closed).length, go('loc', l.id)]; }),
+       ...(()=>{ const rs = all.filter(r=>!(r.locId && locs.some(l=>l.id===r.locId))); return rs.length ? [['（未指定位置）', rs.length, rs.filter(r=>!r.closed).length, '']] : []; })()].sort((x,y)=>y[1]-x[1])
+    : as.map(a=>{ const rs = recsForArea(a).filter(inP); return [a.name, rs.length, rs.filter(r=>!r.closed).length, go('area', a.id)]; }).sort((x,y)=>y[1]-x[1]);
   const mxA = Math.max(1,...byArea.map(x=>x[1]));
   const tm = new Map(); all.forEach(r=>{ const k = r.defType ? typeName(r.defType) : '未選類別'; tm.set(k,(tm.get(k)||0)+1); });
   const types = [...tm.entries()].sort((a,b)=>b[1]-a[1]).slice(0,8);
@@ -2876,12 +2912,12 @@ function mapStatsHTML(){
     return {l, a:areaById(l.areaId), score:o*2+v*3+p*2+rs.length, n:rs.length, o, v, p}; }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,5);
   const per = [['all','全部期間'],['m1','本月'],['m3','最近三個月'],['m6','最近六個月'],['custom','自訂']];
   return `<details class="card mstats" ${MST.open?'open':''} ontoggle="MST.open=this.open;try{localStorage.setItem('qaHygieneTracker_v1_mapStat',this.open?'1':'0')}catch(e){}">
-    <summary><b>📊 地圖統計</b><span class="muted small">（${esc(MAPD.maps.find(m=>m.id===MV.mapId)?.name||'')}）</span></summary>
+    <summary><b>📊 地圖統計</b><span class="muted small">（${selA?`<b style="color:var(--ink)">${esc(selA.name)}</b>`:esc((MAPD.maps.find(m=>m.id===MV.mapId)||{}).name||'')+'・全部區域'}）</span>${selA?`<button class="lite" style="margin-left:auto" onclick="event.preventDefault();MV.sel=null;renderMap()">看全部區域</button>`:''}</summary>
     <div class="row" style="margin:10px 0">${per.map(([k,t])=>`<button class="${MST.per===k?'primary':''}" onclick="MST.per='${k}';renderMap()">${t}</button>`).join('')}
       ${MST.per==='custom'?`<input type="date" value="${esc(MST.from)}" onchange="MST.from=this.value;renderMap()" style="width:auto"> ～ <input type="date" value="${esc(MST.to)}" onchange="MST.to=this.value;renderMap()" style="width:auto">`:''}</div>
-    <div class="mkpi">${[['廠區（區域）',as.length,''],['已建立位置',locs.length,''],['缺失總數',all.length,''],['未結案',open,'o'],['逾期',over,'v'],['重複發生',rp,'v'],['最近稽核不合格',lastFail,'v'],['改善完成率',done+'%','g']].map(([t,n,c])=>`<div class="${c}"><b>${n}</b>${t}</div>`).join('')}</div>
+    <div class="mkpi">${[...(selA?[]:[['廠區（區域）',as.length,'']]),['已建立位置',locs.length,''],['連續 3 個月警示',st3,'v'],['缺失總數',all.length,''],['未結案',open,'o'],['逾期',over,'v'],['重複發生',rp,'v'],['最近稽核不合格',lastFail,'v'],['改善完成率',done+'%','g']].map(([t,n,c])=>`<div class="${c}"><b>${n}</b>${t}</div>`).join('')}</div>
     <div class="mcharts">
-      <div><div class="st-sec">各區域缺失數（未結案）</div>${bars(byArea.map(([k,n,o,id])=>[k,n,o?`<small class="bad">（未結 ${o}）</small>`:'',`MV.sel={t:'area',id:'${id}'};renderMap();document.getElementById('mapView').scrollIntoView({behavior:'smooth'})`]), mxA)}</div>
+      <div><div class="st-sec">${selA?'各位置缺失數（未結案）':'各區域缺失數（未結案）'}</div>${bars(byArea.map(([k,n,o,on])=>[k,n,o?`<small class="bad">（未結 ${o}）</small>`:'',on]), mxA)}</div>
       <div><div class="st-sec">缺失類型分布</div>${bars(types, Math.max(1,...types.map(x=>x[1])))}</div>
       <div><div class="st-sec">月份缺失趨勢（最近 6 個月）</div>${bars(trend, Math.max(1,...trend.map(x=>x[1])))}</div>
       <div><div class="st-sec">高風險位置排行</div>${hot.length ? `<ol class="mhot">${hot.map(x=>`<li class="click" onclick="MV.sel={t:'loc',id:'${x.l.id}'};renderMap();document.getElementById('mapView').scrollIntoView({behavior:'smooth'})"><b>${esc((x.l.code+' '+x.l.name).trim())}</b><span class="muted small">${esc(x.a?x.a.name:'')}</span><span class="small">共 ${x.n}・未結 ${x.o}${x.v?'・<b class="bad">逾期 '+x.v+'</b>':''}${x.p?'・🔁 重複 '+x.p:''}</span></li>`).join('')}</ol>` : '<div class="muted small">目前沒有需要優先注意的位置。</div>'}
@@ -2895,11 +2931,13 @@ function refPhotosHTML(kind, obj, ed){
   const ps = obj.photos || [];
   return `<div class="st-sec">📷 參考照片（正常狀態）</div>
     ${ps.length ? `<div class="photos">${ps.map((p,i)=>`<div class="ph"><img src="${phSync(p)}" ${isRef(p)?`data-ph="${p}"`:''} alt="參考照片${i+1}" onclick="showImg(this.src)" style="cursor:zoom-in">${ed?`<button class="x" onclick="refPhotoDel('${kind}','${obj.id}',${i})">✕</button>`:''}</div>`).join('')}</div>` : `<div class="muted small">還沒有參考照片。${ed?'':'切到「編輯模式」可以上傳。'}</div>`}
-    ${ed?`<div class="row" style="margin:6px 0 10px"><button onclick="this.nextElementSibling.click()">＋ 加參考照片</button><input type="file" accept="image/*" multiple hidden onchange="refPhotoAdd('${kind}','${obj.id}',this)"><span class="small muted">放這裡正常、清潔時的樣子，方便對照</span></div>`:''}`;
+    ${ed?`<div class="row" style="margin:6px 0 4px"><button onclick="this.nextElementSibling.click()">＋ 加參考照片</button><input type="file" accept="image/*" multiple hidden onchange="refPhotoAdd('${kind}','${obj.id}',this)"><span class="small muted">放這裡正常、清潔時的樣子，方便對照</span></div>
+      <div class="pzone" tabindex="0" data-ref="${kind}:${obj.id}" role="button" aria-label="貼上或拖曳參考照片" style="margin-bottom:10px">📋 點這裡，再按 <b>Ctrl+V</b> 貼上參考照片（也可以拖進來）</div>`:''}`;
 }
 function refObj(kind, id){ return kind==='area' ? areaById(id) : locById(id); }
-function refPhotoAdd(kind, id, input){
-  const o = refObj(kind, id), files = [...input.files].filter(f=>/^image\//.test(f.type)); input.value = '';
+function refPhotoAdd(kind, id, input){ const files = [...input.files]; input.value = ''; refPhotoFiles(kind, id, files); }
+function refPhotoFiles(kind, id, files){
+  const o = refObj(kind, id); files = files.filter(f=>/^image\//.test(f.type));
   if(!o) return; o.photos = o.photos || [];
   if(o.photos.length + files.length > 6){ say('參考照片最多 6 張。'); return; }
   files.forEach(file => { const fr = new FileReader(); fr.onload = () => { const img = new Image(); img.onload = async () => {
