@@ -1037,8 +1037,8 @@ const GUIDES = {
       `<p>點區域 → 「✏️ 修改範圍」${gN(1)}。</p><p>拖<b>白色方塊</b>移動角；拖邊中間<b>金色＋</b>${gN(2)}多加一個角（延伸到隔壁）；在角上<b>連點兩下</b>刪除那個角。放開就自動存好。</p>`),
     gStep(4,'🧲 磁鐵：邊角畫整齊', gC(gR(`${gB('🧲 磁鐵（開）',{dk:1,hl:1,n:1})}<span class="gx-s">編輯模式上方</span>`)) + `<div class="gx-map" style="position:relative;overflow:hidden"><span style="position:absolute;left:12%;top:18%;width:46%;height:42%;background:#acd3ef;border:1px solid #999"></span><span style="position:absolute;left:58%;top:18%;width:28%;height:62%;background:#de97b9;border:1px solid #999"></span><span style="position:absolute;left:58%;top:0;bottom:0;border-left:1px dashed #d9480f"></span><span style="position:absolute;left:0;right:0;top:60%;border-top:1px dashed #d9480f"></span><span style="position:absolute;left:58%;top:60%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;border:2px solid #d9480f;background:#ffd8a8;box-shadow:0 0 0 4px rgba(217,72,15,.22)"></span><span style="position:absolute;left:62%;top:64%">${gN(2)}</span></div>` + gC(gR(`<span class="gx-tag dk">Alt</span><span class="gx-s">＋ 點一下＝這一點不吸</span>${gN(3)}`)),
       `<p>畫多邊形、拖曳畫方形、拖角修改時，<b>🧲 磁鐵</b>${gN(1)}（預設開）會輕輕把點吸到：</p><p>① <b>附近別的角</b>：相鄰的區域或分區角會完全重合，中間不留縫。<br>② <b>跟別的角對齊</b>：上下或左右對齊，邊就是筆直的。<br>③ <b>平面圖上的線條、色塊邊界</b>。</p><p>吸到時游標旁的小圓點會變<b>橘色</b>，並出現<b>橘色虛線</b>${gN(2)}，點下去前就知道位置。只有靠近 10 個像素以內才會吸，遠一點就照你點的位置。</p><p>想放在線旁邊不要被吸，<b>按住 Alt 再點</b>${gN(3)}；或按「🧲 磁鐵」關掉。缺失區域、清潔分區、動線箭頭、門窗標記都適用。</p><p class="muted small">色塊分明的平面圖效果最好；手繪或照片拍的平面圖可能會吸到文字，按住 Alt 就好。</p>`),
-    gStep(5,'⌨️ 快捷鍵：刪除、複製、貼上', gC(gR(`${gN(1)}<span class="gx-tag dk">Delete</span><span class="gx-s">刪除選取的物件</span>`)+gR(`${gN(2)}<span class="gx-tag dk">Ctrl</span>＋<span class="gx-tag dk">C</span><span class="gx-s">複製</span><span class="gx-tag dk">Ctrl</span>＋<span class="gx-tag dk">V</span><span class="gx-s">貼在滑鼠位置</span>`)+gR(`${gN(3)}<span class="gx-tag dk">Ctrl</span>＋<span class="gx-tag dk">Z</span><span class="gx-s">復原</span><span class="gx-tag dk">Esc</span><span class="gx-s">取消畫圖／取消選取</span>`),'編輯模式，先點一下要處理的物件'),
-      `<p>在「✏️ 編輯模式」先<b>點一下</b>分區、箭頭、門窗標記、易碎品或病媒防治設施：</p><p>按 <b>Delete</b>${gN(1)} 直接刪除；刪錯了按 <b>Ctrl＋Z</b>${gN(3)} 救回來。</p><p>按 <b>Ctrl＋C</b> 複製、<b>Ctrl＋V</b>${gN(2)} 貼上：會貼在<b>滑鼠所在的位置</b>；連按 Ctrl＋V 會往右下錯開，不會疊在一起。適合一次放很多個一樣的門、鼠板站或捕蟲燈；易碎品、病媒設施貼上時會自動給新編號。也可以切換地圖，把東西貼到另一張地圖。</p><p><b>Esc</b> 取消正在畫的線或多邊形，或取消選取。</p><p class="muted small">缺失區域和位置因為有案件資料，按 Delete 會先跳確認，而且不能複製（名稱不能重複）。打字的時候（輸入框裡）快捷鍵不會作用。Mac 用 ⌘ 代替 Ctrl。</p>`),
+    gStep(5,'⌨️ 快捷鍵：刪除、複製、貼上', gC(gR(`${gN(1)}<span class="gx-tag dk">Delete</span><span class="gx-s">刪除選取的物件</span>`)+gR(`${gN(2)}<span class="gx-tag dk">Ctrl</span>＋<span class="gx-tag dk">C</span><span class="gx-s">複製</span><span class="gx-tag dk">Ctrl</span>＋<span class="gx-tag dk">V</span><span class="gx-s">貼在滑鼠位置</span>`)+gR(`${gN(3)}<span class="gx-tag dk">Ctrl</span>＋<span class="gx-tag dk">Z</span><span class="gx-s">復原</span><span class="gx-tag dk">Esc</span><span class="gx-s">取消畫圖／取消選取</span>`)+gR(`<span class="gx-tag dk">R</span><span class="gx-s">門、冷氣等標記轉 90°</span>`),'編輯模式，先點一下要處理的物件'),
+      `<p>在「✏️ 編輯模式」先<b>點一下</b>分區、箭頭、門窗標記、易碎品或病媒防治設施：</p><p>按 <b>Delete</b>${gN(1)} 直接刪除；刪錯了按 <b>Ctrl＋Z</b>${gN(3)} 救回來。</p><p>按 <b>Ctrl＋C</b> 複製、<b>Ctrl＋V</b>${gN(2)} 貼上：會貼在<b>滑鼠所在的位置</b>；連按 Ctrl＋V 會往右下錯開，不會疊在一起。適合一次放很多個一樣的門、鼠板站或捕蟲燈；易碎品、病媒設施貼上時會自動給新編號。也可以切換地圖，把東西貼到另一張地圖。</p><p><b>Esc</b> 取消正在畫的線或多邊形，或取消選取；選了門、冷氣等標記按 <b>R</b> 轉 90°。</p><p class="muted small">缺失區域和位置因為有案件資料，按 Delete 會先跳確認，而且不能複製（名稱不能重複）。打字的時候（輸入框裡）快捷鍵不會作用。Mac 用 ⌘ 代替 Ctrl。</p>`),
     gStep(6,'放位置、參考照片', gC(gR(`${gB('📍 新增位置',{hl:1,n:1})}`)+gR(`${gTag('P01','dk')}${gTag('P03','rd')}<span class="gx-s">打漿機／地面及排水溝</span>`)) + gC(gR(`<span class="gx-ph"></span><span class="gx-ph b"></span>${gB('＋ 加參考照片',{hl:1,n:2})}`)+`<div class="gx-dash">📋 點這裡，再按 Ctrl+V 貼上</div>`,'📷 參考照片（正常狀態）'),
       `<p>按「📍 新增位置」${gN(1)}，在區域框裡點一下，輸入<b>位置編號</b>（例：P03、輸送帶），名稱可以之後在右邊補。</p><p>編輯模式點區域或位置，「＋ 加參考照片」${gN(2)}放正常、清潔時的樣子；也可以點虛線框按 <b>Ctrl+V</b> 貼上。</p>`),
     gStep(7,'看缺失、新增缺失、匯出', gC(gR(`<span class="gx-k">3<small>累計</small></span><span class="gx-k b">2<small>未結案</small></span><span class="gx-k rd">1<small>逾期</small></span>`)+gR(gB('＋ 在「打漿區」新增缺失',{dk:1,hl:1,n:1}))+gR(gB('📗 匯出這個區域（Excel）',{hl:1,n:2})),'🏭 打漿區'),
@@ -1058,7 +1058,7 @@ const GUIDES = {
     gStep(14,'🔶 易碎品：定期檢查', gC(gR(gB('📝 開始易碎品檢查',{dk:1,hl:1,n:1}))+gR(`<span class="gx-s" style="flex:1">G01 燈罩</span>${gN(2)}${gB('✅ 完整',{ok:1})}${gB('❌ 破損',{rd:1,hl:1})}${gB('❓ 遺失')}`)+gR(gB('＋ 建立缺失',{dk:1,hl:1,n:3}))) + gC(gR(`<span class="gx-tag" style="background:#f59e0b;color:#3b2500;border-color:#fff">◆ G01</span><span class="gx-s">正常</span><span class="gx-tag" style="background:#f59e0b;color:#3b2500;box-shadow:0 0 0 2px #b42318">◆ G02 !</span><span class="gx-s">到期未檢查</span><span class="gx-tag" style="background:#b42318;color:#fff">◆ G03</span><span class="gx-s">破損</span>`),'地圖上的顏色'),
       `<p>按「📝 開始易碎品檢查」${gN(1)}，逐項選${gN(2)}：✅ 完整、❌ 破損、❓ 遺失、⊘ 不適用；沒問題的可以按「其餘全部 ✅ 完整」。</p><p>儲存後，破損或遺失的項目按「＋ 建立缺失」${gN(3)}，自動帶入區域與描述，接到缺失追蹤；破損要確認碎片有沒有污染產品。</p><p>地圖標記會提醒你：<b>橘框</b>＝7 天內要檢查、<b>紅框＋!</b>＝到期沒檢查、<b>整顆紅</b>＝上次檢查破損或遺失。</p>`),
     gStep(15,'➡️ 動線與設施', gC(gR(`${gIn('物流（原料） ▾',1)}${gN(1)}${gB('✏️ 畫箭頭',{hl:1,n:2})}`)+gR(`<span class="gx-s" style="color:#e46c0a;font-weight:800">──➜ 人流</span><span class="gx-s" style="color:#ff0000;font-weight:800">──➜ 原料</span><span class="gx-s" style="color:#c00000;font-weight:800">╌╌➜ 成品</span><span class="gx-s" style="color:#7f0000;font-weight:800">┄┄➜ 廢棄物</span>`)+gR(`<span class="gx-s" style="color:#0070c0;font-weight:800">──➜ 氣流</span><span class="gx-s" style="color:#a6a6a6;font-weight:800">──➜ 水流</span>`)) + gC(gR(`<span class="gx-sw" style="background:#0d0d0d"></span><span class="gx-s">門</span><span class="gx-sw" style="background:#00b050"></span><span class="gx-s">冷氣</span><span class="gx-sw" style="background:#7030a0"></span><span class="gx-s">抽風口</span><span class="gx-sw" style="background:#ff77ff"></span><span class="gx-s">水源</span><span class="gx-sw" style="background:#984807"></span><span class="gx-s">水溝</span>`)+gR(`${gN(3)}<span class="gx-s">點圖例＝隱藏／顯示</span>`),'設施標記（粗線）'),
-      `<p>編輯模式先選<b>種類</b>${gN(1)}，按「✏️ 畫箭頭」${gN(2)}：從起點開始，一個轉彎點點一下，最後一點會變成箭頭；在最後一點<b>再點一下</b>或按「完成這條」結束，可以接著畫下一條。</p><p>物流分三種：<b>原料實線、成品虛線、廢棄物點線</b>，起點標「原／成／廢」。畫反了，點箭頭按「⇄ 反轉方向」。</p><p>門、冷氣、抽風口、水源供應處、水溝／排水孔選好後按「✏️ 畫標記」，在平面圖上<b>拖曳</b>畫一段粗線。</p><p>檢視模式點上方圖例${gN(3)}可以只看某幾種（例如只看人流），匯出圖片也只會有顯示中的。</p>`),
+      `<p>編輯模式先選<b>種類</b>${gN(1)}，按「✏️ 畫箭頭」${gN(2)}：從起點開始，一個轉彎點點一下，最後一點會變成箭頭；在最後一點<b>再點一下</b>或按「完成這條」結束，可以接著畫下一條。</p><p>物流分三種：<b>原料實線、成品虛線、廢棄物點線</b>，起點標「原／成／廢」。畫反了，點箭頭按「⇄ 反轉方向」。</p><p>門、冷氣、抽風口、水源供應處、水溝／排水孔選好後按「✏️ 畫標記」，在平面圖上<b>拖曳</b>畫一段粗線：<b>直的門上下拖、橫的門左右拖</b>，接近水平或垂直會自動拉直。已經畫好的，點一下按「↻ 轉 90°」（或鍵盤 <b>R</b>）就能橫的變直的。</p><p>檢視模式點上方圖例${gN(3)}可以只看某幾種（例如只看人流），匯出圖片也只會有顯示中的。</p>`),
     gStep(16,'🐭 病媒防治', gC(gR(`${gIn('鼠板站（黏鼠板） ▾',1)}${gN(1)}${gB('放置',{hl:1,n:2})}`)+gR(`<img src="${pestIcon('light')}" alt="" style="width:22px;height:22px"><span class="gx-s">捕蟲燈 L01</span><img src="${pestIcon('board')}" alt="" style="width:22px;height:22px"><span class="gx-s">鼠板站 B01</span><img src="${pestIcon('bait')}" alt="" style="width:22px;height:22px"><span class="gx-s">鼠餌站 R01</span>`)) + gC(gR(gB('📗 匯出病媒防治設施清單（Excel）',{hl:1,n:3}))+gR(gB('＋ 在這裡建立缺失（病媒防治）',{dk:1,hl:1,n:4}))),
       `<p>編輯模式先選<b>設施種類</b>${gN(1)}，按「放置」${gN(2)}後在平面圖上點一下；可以連續放，放完按「■ 停止放置」。</p><p>圖示：<b>紫色的蟲＝捕蟲燈</b>、<b>黏鼠板＝鼠板站</b>、<b>老鼠＝鼠餌站</b>；編號自動編 L01／B01／R01，點圖示可以改編號、寫位置說明。</p><p>「📗 匯出設施清單」${gN(3)}給病媒防治廠商或稽核用；現場發現蟲鼠問題，點圖示按「＋ 建立缺失」${gN(4)}，類別預設 05 病媒防治。</p><p class="muted small">這幾張圖會露出工廠動線與設施位置，傳給外面的人前請先確認可以外流。</p>`)
   ]},
@@ -3176,7 +3176,7 @@ function lyTipHTML(){
   if(T==='zpoly') return `選好上方「分區種類」，沿著分區邊界「每個角點一下」，點回第一個點或按「完成」。${MV_SNAP?'🧲 磁鐵會吸到附近的角和線（按住 Alt 不吸）。':''}已點 <span id="lyCnt">${n}</span> 個角　<button class="primary" onclick="lyPolyFinish()">✔ 完成</button> <button onclick="lyUndo()">↶ 退一步</button> <button onclick="lyPolyStart('zpoly')">取消</button>`;
   if(T==='zrect') return `選好上方「分區種類」（目前：<b>${ZK[MV.zk].t}</b>），在平面圖上「按住拖曳」畫出範圍。`;
   if(T==='fline') return `畫「<b>${FK[MV.fk].t}</b>」：從起點開始「一個轉彎點一下」，最後一點會變成箭頭；在最後一點<b>再點一下</b>或按「完成」結束。已點 <span id="lyCnt">${n}</span> 點　<button class="primary" onclick="lyPolyFinish()">✔ 完成這條</button> <button onclick="lyUndo()">↶ 退一步</button> <button onclick="lyDrawToggle()">■ 停止畫</button>`;
-  if(T==='mark') return `畫「<b>${MK[MV.fk].t}</b>」：在平面圖上「按住拖曳」畫一段粗線（例如門口那一段牆）；只點一下會放一小段。可以連續畫，畫完按「■ 停止畫」。`;
+  if(T==='mark') return `畫「<b>${MK[MV.fk].t}</b>」：在平面圖上「按住拖曳」畫一段粗線（例如門口那一段牆）：<b>直的門就上下拖、橫的門就左右拖</b>，接近水平或垂直會自動拉直（按住 Alt 不拉直）；只點一下會放一小段橫的，點選後按「↻ 轉 90°」或 R 變直的。可以連續畫，畫完按「■ 停止畫」。`;
   if(T==='pest') return `在平面圖上「點一下」放「<b>${PK[MV.pk].t}</b>」，編號自動編 ${PK[MV.pk].p}01、${PK[MV.pk].p}02…；可以連續放，放完按「■ 停止放置」。換種類請改上方的下拉選單。`;
   if(T==='frag') return '在易碎品所在的位置「點一下」，輸入名稱（例：燈罩、觀察窗玻璃）；編號會自動編 G01、G02…';
   if(MV.mode==='edit') return (MV.layer==='zone' ? (MV_LOCK?'🔒 分區已鎖定：分區不會被拖動。':'編輯模式：拖曳可移動分區；點選後拖白色方塊改角、拖「＋」加角，右邊可改種類或刪除。')
@@ -3254,7 +3254,7 @@ function layerBind(){
     if(!drag){ if(SNAP_TOOLS.includes(MV.tool)) snapShow(mapSnap(frac(e), e)); return; }
     if(drag.k==='pan'){ const dx = e.clientX-drag.cx, dy = e.clientY-drag.cy; if(Math.abs(dx)+Math.abs(dy)>4) drag.moved = true; view.scrollLeft = drag.sl-dx; view.scrollTop = drag.st-dy; return; }
     let p = frac(e);
-    if(drag.k==='draw' || drag.k==='mark' || drag.k==='vtx'){ p = mapSnap(p, e, drag.k==='vtx' ? {o:drag.o, i:drag.i} : null); snapShow(p); }
+    if(drag.k==='draw' || drag.k==='mark' || drag.k==='vtx'){ p = mapSnap(p, e, drag.k==='vtx' ? {o:drag.o, i:drag.i} : null); if(drag.k==='mark') p = lyStraight([drag.s.x, drag.s.y], p, e); snapShow(p); }
     const dx = p.x-drag.s.x, dy = p.y-drag.s.y; if(Math.abs(dx)+Math.abs(dy)>0.005) drag.moved = true;
     if(!drag.moved) return;
     if(drag.k==='draw'){ const d = $('#mDraw'); d.hidden = false; Object.assign(d.style,{left:Math.min(p.x,drag.s.x)*100+'%',top:Math.min(p.y,drag.s.y)*100+'%',width:Math.abs(dx)*100+'%',height:Math.abs(dy)*100+'%'}); }
@@ -3272,6 +3272,8 @@ function layerBind(){
     const d = drag; drag = null; if(!d) return;
     let p = frac(e); snapShow(null);
     if(d.k==='click' || d.k==='draw' || d.k==='mark') p = mapSnap(p, e);
+    if(d.k==='mark') p = lyStraight([d.s.x, d.s.y], p, e);
+    if(d.k==='click' && MV.poly && MV.poly.pts.length) p = lyStraight(MV.poly.pts[MV.poly.pts.length-1], p, e);
     if(d.k==='click'){
       if(d.moved) return;
       const P = MV.poly, b = inner.getBoundingClientRect(), near = q => Math.hypot((p.x-q[0])*b.width, (p.y-q[1])*b.height) < 14;
@@ -3311,6 +3313,23 @@ function layerBind(){
     if(d.k==='mv'){ if(d.moved) saveMap(); MV.sel = {t:d.h.t, id:d.h.o.id}; lySide(); return; }
     if(d.k==='pan' && !d.moved){ MV.sel = d.hit ? {t:d.hit.t, id:d.hit.o.id} : null; lySide(); }
   };
+}
+/* 接近水平或垂直（8 度以內）就拉直；按住 Alt 不拉直 */
+function lyStraight(prev, q, e){
+  const m = lyMap(); if(!prev || !m || (e && e.altKey)) return q;
+  const dx = Math.abs(q.x-prev[0])*(m.w||1), dy = Math.abs(q.y-prev[1])*(m.h||1); if(dx+dy < 1) return q;
+  const ang = Math.atan2(dy, dx)*180/Math.PI;
+  if(ang < 8) return Object.assign({}, q, {y:prev[1]});
+  if(ang > 82) return Object.assign({}, q, {x:prev[0]});
+  return q;
+}
+/* 標記（門、冷氣…）以中心點轉 90 度：用平面圖實際比例算，轉完長度不變 */
+function lyRotate(id){
+  const o = lyGet('mark', id), m = lyMap(); if(!o || !m) return;
+  const W = m.w||1, H = m.h||1, b = lyBox(o.pts), cx = b.x+b.w/2, cy = b.y+b.h/2;
+  let pts = o.pts.map(q => { const vx = (q[0]-cx)*W, vy = (q[1]-cy)*H; return [cx - vy/W, cy + vx/H]; });
+  const nb = lyBox(pts), sx = Math.max(-nb.x, Math.min(1-nb.x-nb.w, 0)), sy = Math.max(-nb.y, Math.min(1-nb.y-nb.h, 0));
+  o.pts = pts.map(q=>[q[0]+sx, q[1]+sy]); saveMap(); lyRedraw(); flash('已轉 90°');
 }
 function lyUndo(){ if(MV.poly && MV.poly.pts.length){ MV.poly.pts.pop(); lyRedraw(); } }
 function lyAdd(t, o, stop){
@@ -3356,7 +3375,7 @@ function layerSideHTML(){
     ${ed ? `<div class="grid1">
       <label class="f">種類</label><select id="lfKind">${Object.entries(K).map(([k,v])=>`<option value="${k}" ${o.kind===k?'selected':''}>${v.t}</option>`).join('')}</select>
       <label class="f">說明（選填）</label><input type="text" id="lfNote" value="${esc(o.note||'')}" placeholder="${sel.t==='flow'?'例：原料由後門進入，經解凍區到前處理':'例：後門（捲門）'}">
-      <div class="row"><button class="primary" onclick="lyFlowSave('${sel.t}','${o.id}')">儲存</button>${sel.t==='flow'?`<button onclick="lyReverse('${o.id}')">⇄ 反轉方向</button>`:''}<button class="danger" onclick="lyDel('${sel.t}','${o.id}')">刪除</button></div>
+      <div class="row"><button class="primary" onclick="lyFlowSave('${sel.t}','${o.id}')">儲存</button>${sel.t==='flow'?`<button onclick="lyReverse('${o.id}')">⇄ 反轉方向</button>`:`<button onclick="lyRotate('${o.id}')" title="鍵盤也可以按 R">↻ 轉 90°</button>`}<button class="danger" onclick="lyDel('${sel.t}','${o.id}')">刪除</button></div>
       <div class="notice info small" style="margin:6px 0 0">✏️ 拖白色方塊＝移動${sel.t==='flow'?'起點、轉彎點、終點；拖「＋」＝多加一個轉彎點；在點上<b>連點兩下</b>＝刪除那個點':'兩端'}。</div></div>`
     : `<div class="small">${esc(o.note||'')}</div>`}`; }
   if(o && sel.t==='frag') return fragSideHTML(o, ed, close);
@@ -3743,6 +3762,7 @@ document.addEventListener('keydown', e => {
   if((k==='delete' || k==='backspace') && !mod){ if(!MV.sel) return; e.preventDefault(); mapKeyDelete(); return; }
   if(mod && k==='c'){ if(!MV.sel || String(window.getSelection ? window.getSelection() : '')) return; e.preventDefault(); mapKeyCopy(); return; }
   if(mod && k==='v'){ if(!MAP_CLIP) return; e.preventDefault(); mapKeyPaste(); return; }
+  if(k==='r' && !mod && MV.sel && MV.sel.t==='mark'){ if(MV.mode!=='edit'){ flash('切到「✏️ 編輯模式」才能旋轉'); return; } e.preventDefault(); lyRotate(MV.sel.id); return; }
   if(mod && k==='z' && !e.shiftKey){ if(!MAP_UNDO.length) return; e.preventDefault(); mapKeyUndo(); return; }
 });
 function mapKeyDelete(){
