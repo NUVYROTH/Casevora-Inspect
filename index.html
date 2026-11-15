@@ -175,7 +175,10 @@ body.wide main{max-width:none}
 .ar-btns button.on.warn{background:var(--warn);color:#fff;border-color:var(--warn)}.ar-btns button.on.muted{background:#6b7280;color:#fff;border-color:#6b7280}
 .arow textarea{margin-top:4px}.ar-res{margin-top:6px}.ar-res .ok{color:var(--ok)}.ar-res .bad{color:var(--bad)}.ar-res .warn{color:var(--warn)}
 .mlegend{flex-basis:100%;display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--muted)}.mlegend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
-.marea.rk{background:color-mix(in srgb,var(--c) 22%,transparent)}.mpoly polygon.rk{fill:color-mix(in srgb,var(--c) 22%,transparent)}
+/* 風險顏色：只畫框線、不填色，避免跟平面圖本身的顏色疊在一起 */
+.marea.rk{background:transparent;border-width:3px}.marea.rk:hover{background:color-mix(in srgb,var(--c) 10%,transparent)}
+.mpoly polygon.rk{fill:rgba(255,255,255,0);stroke-width:3.5}.mpoly polygon.rk:hover{fill:color-mix(in srgb,var(--c) 10%,transparent)}
+.marea.rk .mlab,.mplab.rk{border-left:5px solid var(--c);box-shadow:0 1px 3px rgba(0,0,0,.25)}
 .mpin.rk-red{background:#b42318}.mpin.rk-yellow{background:#d97706}.mpin.rk-green{background:#167a3e}.mpin.rk-gray{background:#9aa3b2}
 .mrisk{font-size:12.5px;font-weight:700;color:var(--rc);margin:-4px 0 8px}
 .mr-rep{font-size:11.5px;font-weight:700;color:#7a3d06;background:#fff4e0;border-radius:9px;padding:0 7px}
@@ -2222,7 +2225,7 @@ function renderMap(){
         <img id="mapImg" alt="${esc(m.name)}" draggable="false">
         <svg class="mpoly" viewBox="0 0 100 100" preserveAspectRatio="none">${mapAreas().filter(a=>a.pts).map(a=>`<polygon data-aid="${a.id}" class="${MV.sel&&MV.sel.t==='area'&&MV.sel.id===a.id?'sel':''} ${MV_RISK&&MV.mode==='view'?'rk':''}" style="--c:${esc(areaColor(a, REP))}" points="${ptsAttr(a.pts)}"/>`).join('')}
           ${MV.tool==='poly'&&MV.poly&&MV.poly.pts.length?`<polyline class="mtmp" points="${ptsAttr(MV.poly.pts)}"/>`:''}</svg>
-        ${mapAreas().filter(a=>a.pts).map(a=>{ const s = mapStats(recsForArea(a)); return `<span class="mlab mplab" data-lab="${a.id}" style="left:${a.pts[0][0]*100}%;top:${a.pts[0][1]*100}%">${esc(a.name)}${s.open?` <b class="mcnt">${s.open}</b>`:''}</span>`; }).join('')}
+        ${mapAreas().filter(a=>a.pts).map(a=>{ const s = mapStats(recsForArea(a)); return `<span class="mlab mplab ${MV_RISK&&MV.mode==='view'?'rk':''}" data-lab="${a.id}" style="left:${a.pts[0][0]*100}%;top:${a.pts[0][1]*100}%;--c:${esc(areaColor(a, REP))}">${esc(a.name)}${s.open?` <b class="mcnt">${s.open}</b>`:''}</span>`; }).join('')}
         ${MV.mode==='edit'&&MV.sel&&MV.sel.t==='area'&&areaById(MV.sel.id)&&areaById(MV.sel.id).pts&&MV.tool!=='poly'?(P=>P.map((q,i)=>{ const r = P[(i+1)%P.length]; return `<i class="mmid" data-aid="${MV.sel.id}" data-mid="${i}" title="拖曳可加一個角" style="left:${(q[0]+r[0])*50}%;top:${(q[1]+r[1])*50}%">+</i>`; }).join('')+P.map((q,i)=>`<i class="mvtx" data-aid="${MV.sel.id}" data-vtx="${i}" title="拖曳調整；連點兩下刪除這個角" style="left:${q[0]*100}%;top:${q[1]*100}%"></i>`).join(''))(areaById(MV.sel.id).pts):''}
         ${MV.tool==='poly'&&MV.poly?MV.poly.pts.map((q,i)=>`<i class="mdot ${i===0?'first':''}" style="left:${q[0]*100}%;top:${q[1]*100}%"></i>`).join(''):''}
         ${mapAreas().filter(a=>!a.pts).map(a=>{ const s = mapStats(recsForArea(a)); return `<div class="marea ${MV.sel&&MV.sel.t==='area'&&MV.sel.id===a.id?'sel':''} ${MV_RISK&&MV.mode==='view'?'rk':''}" data-aid="${a.id}" style="left:${a.x*100}%;top:${a.y*100}%;width:${a.w*100}%;height:${a.h*100}%;--c:${esc(areaColor(a, REP))}"><span class="mlab">${esc(a.name)}${s.open?` <b class="mcnt">${s.open}</b>`:''}</span>${MV.mode==='edit'?'<i class="mres" data-res="1"></i>':''}</div>`; }).join('')}
