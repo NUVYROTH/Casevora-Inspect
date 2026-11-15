@@ -1037,27 +1037,29 @@ const GUIDES = {
       `<p>點區域 → 「✏️ 修改範圍」${gN(1)}。</p><p>拖<b>白色方塊</b>移動角；拖邊中間<b>金色＋</b>${gN(2)}多加一個角（延伸到隔壁）；在角上<b>連點兩下</b>刪除那個角。放開就自動存好。</p>`),
     gStep(4,'🧲 磁鐵：邊角畫整齊', gC(gR(`${gB('🧲 磁鐵（開）',{dk:1,hl:1,n:1})}<span class="gx-s">編輯模式上方</span>`)) + `<div class="gx-map" style="position:relative;overflow:hidden"><span style="position:absolute;left:12%;top:18%;width:46%;height:42%;background:#acd3ef;border:1px solid #999"></span><span style="position:absolute;left:58%;top:18%;width:28%;height:62%;background:#de97b9;border:1px solid #999"></span><span style="position:absolute;left:58%;top:0;bottom:0;border-left:1px dashed #d9480f"></span><span style="position:absolute;left:0;right:0;top:60%;border-top:1px dashed #d9480f"></span><span style="position:absolute;left:58%;top:60%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;border:2px solid #d9480f;background:#ffd8a8;box-shadow:0 0 0 4px rgba(217,72,15,.22)"></span><span style="position:absolute;left:62%;top:64%">${gN(2)}</span></div>` + gC(gR(`<span class="gx-tag dk">Alt</span><span class="gx-s">＋ 點一下＝這一點不吸</span>${gN(3)}`)),
       `<p>畫多邊形、拖曳畫方形、拖角修改時，<b>🧲 磁鐵</b>${gN(1)}（預設開）會輕輕把點吸到：</p><p>① <b>附近別的角</b>：相鄰的區域或分區角會完全重合，中間不留縫。<br>② <b>跟別的角對齊</b>：上下或左右對齊，邊就是筆直的。<br>③ <b>平面圖上的線條、色塊邊界</b>。</p><p>吸到時游標旁的小圓點會變<b>橘色</b>，並出現<b>橘色虛線</b>${gN(2)}，點下去前就知道位置。只有靠近 10 個像素以內才會吸，遠一點就照你點的位置。</p><p>想放在線旁邊不要被吸，<b>按住 Alt 再點</b>${gN(3)}；或按「🧲 磁鐵」關掉。缺失區域、清潔分區、動線箭頭、門窗標記都適用。</p><p class="muted small">色塊分明的平面圖效果最好；手繪或照片拍的平面圖可能會吸到文字，按住 Alt 就好。</p>`),
-    gStep(5,'放位置、參考照片', gC(gR(`${gB('📍 新增位置',{hl:1,n:1})}`)+gR(`${gTag('P01','dk')}${gTag('P03','rd')}<span class="gx-s">打漿機／地面及排水溝</span>`)) + gC(gR(`<span class="gx-ph"></span><span class="gx-ph b"></span>${gB('＋ 加參考照片',{hl:1,n:2})}`)+`<div class="gx-dash">📋 點這裡，再按 Ctrl+V 貼上</div>`,'📷 參考照片（正常狀態）'),
+    gStep(5,'⌨️ 快捷鍵：刪除、複製、貼上', gC(gR(`${gN(1)}<span class="gx-tag dk">Delete</span><span class="gx-s">刪除選取的物件</span>`)+gR(`${gN(2)}<span class="gx-tag dk">Ctrl</span>＋<span class="gx-tag dk">C</span><span class="gx-s">複製</span><span class="gx-tag dk">Ctrl</span>＋<span class="gx-tag dk">V</span><span class="gx-s">貼在滑鼠位置</span>`)+gR(`${gN(3)}<span class="gx-tag dk">Ctrl</span>＋<span class="gx-tag dk">Z</span><span class="gx-s">復原</span><span class="gx-tag dk">Esc</span><span class="gx-s">取消畫圖／取消選取</span>`),'編輯模式，先點一下要處理的物件'),
+      `<p>在「✏️ 編輯模式」先<b>點一下</b>分區、箭頭、門窗標記、易碎品或病媒防治設施：</p><p>按 <b>Delete</b>${gN(1)} 直接刪除；刪錯了按 <b>Ctrl＋Z</b>${gN(3)} 救回來。</p><p>按 <b>Ctrl＋C</b> 複製、<b>Ctrl＋V</b>${gN(2)} 貼上：會貼在<b>滑鼠所在的位置</b>；連按 Ctrl＋V 會往右下錯開，不會疊在一起。適合一次放很多個一樣的門、鼠板站或捕蟲燈；易碎品、病媒設施貼上時會自動給新編號。也可以切換地圖，把東西貼到另一張地圖。</p><p><b>Esc</b> 取消正在畫的線或多邊形，或取消選取。</p><p class="muted small">缺失區域和位置因為有案件資料，按 Delete 會先跳確認，而且不能複製（名稱不能重複）。打字的時候（輸入框裡）快捷鍵不會作用。Mac 用 ⌘ 代替 Ctrl。</p>`),
+    gStep(6,'放位置、參考照片', gC(gR(`${gB('📍 新增位置',{hl:1,n:1})}`)+gR(`${gTag('P01','dk')}${gTag('P03','rd')}<span class="gx-s">打漿機／地面及排水溝</span>`)) + gC(gR(`<span class="gx-ph"></span><span class="gx-ph b"></span>${gB('＋ 加參考照片',{hl:1,n:2})}`)+`<div class="gx-dash">📋 點這裡，再按 Ctrl+V 貼上</div>`,'📷 參考照片（正常狀態）'),
       `<p>按「📍 新增位置」${gN(1)}，在區域框裡點一下，輸入<b>位置編號</b>（例：P03、輸送帶），名稱可以之後在右邊補。</p><p>編輯模式點區域或位置，「＋ 加參考照片」${gN(2)}放正常、清潔時的樣子；也可以點虛線框按 <b>Ctrl+V</b> 貼上。</p>`),
-    gStep(6,'看缺失、新增缺失、匯出', gC(gR(`<span class="gx-k">3<small>累計</small></span><span class="gx-k b">2<small>未結案</small></span><span class="gx-k rd">1<small>逾期</small></span>`)+gR(gB('＋ 在「打漿區」新增缺失',{dk:1,hl:1,n:1}))+gR(gB('📗 匯出這個區域（Excel）',{hl:1,n:2})),'🏭 打漿區'),
+    gStep(7,'看缺失、新增缺失、匯出', gC(gR(`<span class="gx-k">3<small>累計</small></span><span class="gx-k b">2<small>未結案</small></span><span class="gx-k rd">1<small>逾期</small></span>`)+gR(gB('＋ 在「打漿區」新增缺失',{dk:1,hl:1,n:1}))+gR(gB('📗 匯出這個區域（Excel）',{hl:1,n:2})),'🏭 打漿區'),
       `<p>檢視模式點區域或位置，右邊會出現件數與歷史缺失。</p><p>「＋ 新增缺失」${gN(1)}自動帶入區域、位置、負責單位；「📗 匯出這個區域」${gN(2)}依類別由多到少，含改善前後照片。</p>`),
-    gStep(7,'現場稽核', gC(gR(`${gB('＋ 新增稽核重點',{n:1})}${gB('載入範例')}`)+gR(gB('📋 開始稽核',{ok:1,hl:1,n:2}))) + gC(gR(`<span class="gx-s" style="flex:1">排水溝清潔暢通</span>${gN(3)}${gB('✅ 合格',{ok:1})}${gB('❌ 不合格',{rd:1,hl:1})}`)),
+    gStep(8,'現場稽核', gC(gR(`${gB('＋ 新增稽核重點',{n:1})}${gB('載入範例')}`)+gR(gB('📋 開始稽核',{ok:1,hl:1,n:2}))) + gC(gR(`<span class="gx-s" style="flex:1">排水溝清潔暢通</span>${gN(3)}${gB('✅ 合格',{ok:1})}${gB('❌ 不合格',{rd:1,hl:1})}`)),
       `<p>編輯模式「＋ 新增稽核重點」${gN(1)}寫清楚<b>查核標準</b>（或載入範例 8 項）。</p><p>到現場按「📋 開始稽核」${gN(2)}，每項選${gN(3)}：✅ 合格、❌ 不合格（可「＋ 建立缺失」）、👁 觀察事項、⊘ 不適用。</p>`),
-    gStep(8,'風險顏色、連續發生警示、地圖統計', gC(gR(`${gB('🎨 風險顏色（開）',{dk:1,hl:1,n:1})}`)+gR(`<span class="gx-sw" style="background:#b42318"></span><span class="gx-s">重大／逾期／重複</span><span class="gx-sw" style="background:#d97706"></span><span class="gx-s">未結案</span><span class="gx-sw" style="background:#167a3e"></span><span class="gx-s">都結案</span>`)) + gC(gR(`${gN(2)}${gTag('本月','dk')}${gTag('最近三個月')}${gTag('自訂')}`),'📊 地圖統計'),
+    gStep(9,'風險顏色、連續發生警示、地圖統計', gC(gR(`${gB('🎨 風險顏色（開）',{dk:1,hl:1,n:1})}`)+gR(`<span class="gx-sw" style="background:#b42318"></span><span class="gx-s">重大／逾期／重複</span><span class="gx-sw" style="background:#d97706"></span><span class="gx-s">未結案</span><span class="gx-sw" style="background:#167a3e"></span><span class="gx-s">都結案</span>`)) + gC(gR(`${gN(2)}${gTag('本月','dk')}${gTag('最近三個月')}${gTag('自訂')}`),'📊 地圖統計'),
       `<p>檢視模式依缺失狀況自動上色${gN(1)}：紅＝重大、逾期或<b>重複發生</b>；黃＝有未結案；綠＝都結案；灰＝沒紀錄。</p><p><b>⚠ 連續發生警示</b>：同一位置同一類缺失<b>連續 3 個月</b>都發生，位置標記會閃動並加 ⚠，右邊面板會提醒檢討根本原因。</p><p>地圖下方「📊 地圖統計」${gN(2)}選期間；<b>點某個區域時，統計會變成那一區各位置的分布</b>，按「看全部區域」回到全廠。</p>`),
-    gStep(9,'給同事用同一張地圖', gC(gR(`${gB('匯出地圖設定',{hl:1,n:1})}${gB('匯入地圖設定',{hl:1,n:2})}`)) + `<div class="gx-s" style="text-align:center">只含平面圖・區域・位置・稽核重點・參考照片<br>不含案件，不會蓋掉同事的資料</div>`,
+    gStep(10,'給同事用同一張地圖', gC(gR(`${gB('匯出地圖設定',{hl:1,n:1})}${gB('匯入地圖設定',{hl:1,n:2})}`)) + `<div class="gx-s" style="text-align:center">只含平面圖・區域・位置・稽核重點・參考照片<br>不含案件，不會蓋掉同事的資料</div>`,
       `<p>按「匯出地圖設定」${gN(1)}存成檔案給同事，同事按「匯入地圖設定」${gN(2)}就有同一張地圖。</p><p>要放進報告或貼公告時，按上方<b>「🖼 匯出平面圖（圖片）」</b>，會把區域、位置、顏色一起存成清晰的 PNG（依目前風險顏色開／關）。</p><p class="muted small">「下載備份」會連稽核紀錄一起存。平面圖屬公司內部資料，不會上傳也不會送給 AI；匯出的圖片傳給別人前請先確認可以外流。</p>`),
-    gStep(10,'切換圖層（缺失以外的圖）', gC(gR(`${gN(1)}<span class="gx-seg" style="flex-wrap:wrap"><i class="on">🔍 缺失</i><i>🧼 清潔分區</i><i>🔶 易碎品</i><i>➡️ 動線與設施</i><i>🐭 病媒防治</i></span>`)+gR(`${gB('🧼 疊清潔分區（開）',{dk:1,hl:1,n:2})}${gB('🖼 匯出平面圖（圖片）',{hl:1,n:3})}`)),
+    gStep(11,'切換圖層（缺失以外的圖）', gC(gR(`${gN(1)}<span class="gx-seg" style="flex-wrap:wrap"><i class="on">🔍 缺失</i><i>🧼 清潔分區</i><i>🔶 易碎品</i><i>➡️ 動線與設施</i><i>🐭 病媒防治</i></span>`)+gR(`${gB('🧼 疊清潔分區（開）',{dk:1,hl:1,n:2})}${gB('🖼 匯出平面圖（圖片）',{hl:1,n:3})}`)),
       `<p>地圖上方有一排圖層${gN(1)}，每一層<b>分開畫、分開看</b>，不會跟缺失混在一起；平面圖只要上傳一次，五層共用。</p><p>易碎品、動線、病媒這三層可以按「🧼 疊清潔分區」${gN(2)}，把分區淡淡地墊在底下對照。</p><p>在哪一層按「🖼 匯出平面圖（圖片）」${gN(3)}，就匯出<b>那一層</b>的清晰 PNG，下方附圖例。</p>`),
-    gStep(11,'🧼 清潔分區', gC(gR(`${gIn('準清潔區 ▾',1)}${gN(1)}${gB('▭ 畫分區（拖曳）',{hl:1,n:2})}${gB('⬠ 多邊形分區',{hl:1})}`)+gR(`<span class="gx-sw" style="background:#c4bb7c"></span><span class="gx-s">一般作業區</span><span class="gx-sw" style="background:#b9cde5"></span><span class="gx-s">準清潔區</span><span class="gx-sw" style="background:#e6b9b8"></span><span class="gx-s">清潔區</span>`)) + gC(gR(`${gIn('包裝區 ▾')}${gIn('準清潔區 ▾')}`)+gR(gB('複製成清潔分區',{hl:1,n:3})),'📋 從缺失區域複製範圍'),
+    gStep(12,'🧼 清潔分區', gC(gR(`${gIn('準清潔區 ▾',1)}${gN(1)}${gB('▭ 畫分區（拖曳）',{hl:1,n:2})}${gB('⬠ 多邊形分區',{hl:1})}`)+gR(`<span class="gx-sw" style="background:#c4bb7c"></span><span class="gx-s">一般作業區</span><span class="gx-sw" style="background:#b9cde5"></span><span class="gx-s">準清潔區</span><span class="gx-sw" style="background:#e6b9b8"></span><span class="gx-s">清潔區</span>`)) + gC(gR(`${gIn('包裝區 ▾')}${gIn('準清潔區 ▾')}`)+gR(gB('複製成清潔分區',{hl:1,n:3})),'📋 從缺失區域複製範圍'),
       `<p>切到「✏️ 編輯模式」，先選<b>分區種類</b>${gN(1)}，再按「▭ 畫分區」${gN(2)}在平面圖上拖曳；L 型等不規則形狀用「⬠ 多邊形分區」，每個角點一下；<b>🧲 磁鐵</b>會幫你貼齊色塊邊界和旁邊分區的角（見第 4 步）。</p><p>分區跟缺失區域一樣大時，右邊「從缺失區域複製範圍」${gN(3)}，不用重畫。</p><p>點分區可以改種類、取名稱（例：包裝室）、寫說明；拖白色方塊改角、拖「＋」加角。畫好後可以「🔒 鎖定分區」避免拖到。</p><p class="muted small">顏色預設：一般作業區卡其、準清潔區淺藍、清潔區淺粉；編輯模式右邊「🎨 圖例顏色」可以改。</p>`),
-    gStep(12,'🔶 易碎品：標示', gC(gR(`${gB('🔶 新增易碎品',{hl:1,n:1})}`)+gR(`<span class="gx-tag" style="background:#f59e0b;color:#3b2500;border-color:#fff">◆ G01</span><span class="gx-s">燈罩（玻璃）× 2</span>`)) + gC(gR(`${gIn('材質：玻璃')}${gIn('數量：2')}`)+gR(`${gIn('每 1 個月 ▾',1)}${gN(2)}`),'🔶 G01 燈罩'),
+    gStep(13,'🔶 易碎品：標示', gC(gR(`${gB('🔶 新增易碎品',{hl:1,n:1})}`)+gR(`<span class="gx-tag" style="background:#f59e0b;color:#3b2500;border-color:#fff">◆ G01</span><span class="gx-s">燈罩（玻璃）× 2</span>`)) + gC(gR(`${gIn('材質：玻璃')}${gIn('數量：2')}`)+gR(`${gIn('每 1 個月 ▾',1)}${gN(2)}`),'🔶 G01 燈罩'),
       `<p>編輯模式按「🔶 新增易碎品」${gN(1)}，在所在位置點一下，輸入名稱（例：燈罩、觀察窗玻璃、玻璃溫度計），編號自動編 <b>G01、G02…</b></p><p>點標記可以填材質、數量、位置說明、加參考照片（可 Ctrl+V 貼上）。</p><p><b>檢查頻率</b>${gN(2)}：預設<b>每個月一次</b>，右邊面板可改成每 2、3、4、6、12 個月；個別項目也可以單獨設定。</p><p>「📗 匯出易碎品清單（Excel）」含最近檢查日、下次檢查日與檢查紀錄。</p>`),
-    gStep(13,'🔶 易碎品：定期檢查', gC(gR(gB('📝 開始易碎品檢查',{dk:1,hl:1,n:1}))+gR(`<span class="gx-s" style="flex:1">G01 燈罩</span>${gN(2)}${gB('✅ 完整',{ok:1})}${gB('❌ 破損',{rd:1,hl:1})}${gB('❓ 遺失')}`)+gR(gB('＋ 建立缺失',{dk:1,hl:1,n:3}))) + gC(gR(`<span class="gx-tag" style="background:#f59e0b;color:#3b2500;border-color:#fff">◆ G01</span><span class="gx-s">正常</span><span class="gx-tag" style="background:#f59e0b;color:#3b2500;box-shadow:0 0 0 2px #b42318">◆ G02 !</span><span class="gx-s">到期未檢查</span><span class="gx-tag" style="background:#b42318;color:#fff">◆ G03</span><span class="gx-s">破損</span>`),'地圖上的顏色'),
+    gStep(14,'🔶 易碎品：定期檢查', gC(gR(gB('📝 開始易碎品檢查',{dk:1,hl:1,n:1}))+gR(`<span class="gx-s" style="flex:1">G01 燈罩</span>${gN(2)}${gB('✅ 完整',{ok:1})}${gB('❌ 破損',{rd:1,hl:1})}${gB('❓ 遺失')}`)+gR(gB('＋ 建立缺失',{dk:1,hl:1,n:3}))) + gC(gR(`<span class="gx-tag" style="background:#f59e0b;color:#3b2500;border-color:#fff">◆ G01</span><span class="gx-s">正常</span><span class="gx-tag" style="background:#f59e0b;color:#3b2500;box-shadow:0 0 0 2px #b42318">◆ G02 !</span><span class="gx-s">到期未檢查</span><span class="gx-tag" style="background:#b42318;color:#fff">◆ G03</span><span class="gx-s">破損</span>`),'地圖上的顏色'),
       `<p>按「📝 開始易碎品檢查」${gN(1)}，逐項選${gN(2)}：✅ 完整、❌ 破損、❓ 遺失、⊘ 不適用；沒問題的可以按「其餘全部 ✅ 完整」。</p><p>儲存後，破損或遺失的項目按「＋ 建立缺失」${gN(3)}，自動帶入區域與描述，接到缺失追蹤；破損要確認碎片有沒有污染產品。</p><p>地圖標記會提醒你：<b>橘框</b>＝7 天內要檢查、<b>紅框＋!</b>＝到期沒檢查、<b>整顆紅</b>＝上次檢查破損或遺失。</p>`),
-    gStep(14,'➡️ 動線與設施', gC(gR(`${gIn('物流（原料） ▾',1)}${gN(1)}${gB('✏️ 畫箭頭',{hl:1,n:2})}`)+gR(`<span class="gx-s" style="color:#e46c0a;font-weight:800">──➜ 人流</span><span class="gx-s" style="color:#ff0000;font-weight:800">──➜ 原料</span><span class="gx-s" style="color:#c00000;font-weight:800">╌╌➜ 成品</span><span class="gx-s" style="color:#7f0000;font-weight:800">┄┄➜ 廢棄物</span>`)+gR(`<span class="gx-s" style="color:#0070c0;font-weight:800">──➜ 氣流</span><span class="gx-s" style="color:#a6a6a6;font-weight:800">──➜ 水流</span>`)) + gC(gR(`<span class="gx-sw" style="background:#0d0d0d"></span><span class="gx-s">門</span><span class="gx-sw" style="background:#00b050"></span><span class="gx-s">冷氣</span><span class="gx-sw" style="background:#7030a0"></span><span class="gx-s">抽風口</span><span class="gx-sw" style="background:#ff77ff"></span><span class="gx-s">水源</span><span class="gx-sw" style="background:#984807"></span><span class="gx-s">水溝</span>`)+gR(`${gN(3)}<span class="gx-s">點圖例＝隱藏／顯示</span>`),'設施標記（粗線）'),
+    gStep(15,'➡️ 動線與設施', gC(gR(`${gIn('物流（原料） ▾',1)}${gN(1)}${gB('✏️ 畫箭頭',{hl:1,n:2})}`)+gR(`<span class="gx-s" style="color:#e46c0a;font-weight:800">──➜ 人流</span><span class="gx-s" style="color:#ff0000;font-weight:800">──➜ 原料</span><span class="gx-s" style="color:#c00000;font-weight:800">╌╌➜ 成品</span><span class="gx-s" style="color:#7f0000;font-weight:800">┄┄➜ 廢棄物</span>`)+gR(`<span class="gx-s" style="color:#0070c0;font-weight:800">──➜ 氣流</span><span class="gx-s" style="color:#a6a6a6;font-weight:800">──➜ 水流</span>`)) + gC(gR(`<span class="gx-sw" style="background:#0d0d0d"></span><span class="gx-s">門</span><span class="gx-sw" style="background:#00b050"></span><span class="gx-s">冷氣</span><span class="gx-sw" style="background:#7030a0"></span><span class="gx-s">抽風口</span><span class="gx-sw" style="background:#ff77ff"></span><span class="gx-s">水源</span><span class="gx-sw" style="background:#984807"></span><span class="gx-s">水溝</span>`)+gR(`${gN(3)}<span class="gx-s">點圖例＝隱藏／顯示</span>`),'設施標記（粗線）'),
       `<p>編輯模式先選<b>種類</b>${gN(1)}，按「✏️ 畫箭頭」${gN(2)}：從起點開始，一個轉彎點點一下，最後一點會變成箭頭；在最後一點<b>再點一下</b>或按「完成這條」結束，可以接著畫下一條。</p><p>物流分三種：<b>原料實線、成品虛線、廢棄物點線</b>，起點標「原／成／廢」。畫反了，點箭頭按「⇄ 反轉方向」。</p><p>門、冷氣、抽風口、水源供應處、水溝／排水孔選好後按「✏️ 畫標記」，在平面圖上<b>拖曳</b>畫一段粗線。</p><p>檢視模式點上方圖例${gN(3)}可以只看某幾種（例如只看人流），匯出圖片也只會有顯示中的。</p>`),
-    gStep(15,'🐭 病媒防治', gC(gR(`${gIn('鼠板站（黏鼠板） ▾',1)}${gN(1)}${gB('放置',{hl:1,n:2})}`)+gR(`<img src="${pestIcon('light')}" alt="" style="width:22px;height:22px"><span class="gx-s">捕蟲燈 L01</span><img src="${pestIcon('board')}" alt="" style="width:22px;height:22px"><span class="gx-s">鼠板站 B01</span><img src="${pestIcon('bait')}" alt="" style="width:22px;height:22px"><span class="gx-s">鼠餌站 R01</span>`)) + gC(gR(gB('📗 匯出病媒防治設施清單（Excel）',{hl:1,n:3}))+gR(gB('＋ 在這裡建立缺失（病媒防治）',{dk:1,hl:1,n:4}))),
+    gStep(16,'🐭 病媒防治', gC(gR(`${gIn('鼠板站（黏鼠板） ▾',1)}${gN(1)}${gB('放置',{hl:1,n:2})}`)+gR(`<img src="${pestIcon('light')}" alt="" style="width:22px;height:22px"><span class="gx-s">捕蟲燈 L01</span><img src="${pestIcon('board')}" alt="" style="width:22px;height:22px"><span class="gx-s">鼠板站 B01</span><img src="${pestIcon('bait')}" alt="" style="width:22px;height:22px"><span class="gx-s">鼠餌站 R01</span>`)) + gC(gR(gB('📗 匯出病媒防治設施清單（Excel）',{hl:1,n:3}))+gR(gB('＋ 在這裡建立缺失（病媒防治）',{dk:1,hl:1,n:4}))),
       `<p>編輯模式先選<b>設施種類</b>${gN(1)}，按「放置」${gN(2)}後在平面圖上點一下；可以連續放，放完按「■ 停止放置」。</p><p>圖示：<b>紫色的蟲＝捕蟲燈</b>、<b>黏鼠板＝鼠板站</b>、<b>老鼠＝鼠餌站</b>；編號自動編 L01／B01／R01，點圖示可以改編號、寫位置說明。</p><p>「📗 匯出設施清單」${gN(3)}給病媒防治廠商或稽核用；現場發現蟲鼠問題，點圖示按「＋ 建立缺失」${gN(4)}，類別預設 05 病媒防治。</p><p class="muted small">這幾張圖會露出工廠動線與設施位置，傳給外面的人前請先確認可以外流。</p>`)
   ]},
   trash: { t:'最近刪除使用說明', steps:() => [
@@ -2288,7 +2290,7 @@ function renderMap(){
       ${MV.layer==='frag'||MV.layer==='flow'||MV.layer==='pest'?`<button class="${MV_ZBG?'primary':''}" onclick="lyZbgToggle()" title="把清潔分區淡淡地墊在底下對照">🧼 疊清潔分區${MV_ZBG?'（開）':'（關）'}</button>`:''}
       ${MV.layer==='frag'&&lyList('frag').length?`<button class="primary" onclick="fragCheckStart()">📝 開始易碎品檢查</button>`:''}
       <span class="mzoom"><button onclick="mapZoom(-1)" aria-label="縮小">－</button><span id="mzPct">${Math.round(MV.zoom*100)}%</span><button onclick="mapZoom(1)" aria-label="放大">＋</button><button onclick="mapFitScreen()" title="依比例縮小，整張平面圖放進螢幕">適應畫面</button><button onclick="mapFitHeight()" title="地圖框拉高到整張平面圖都看得到，不用上下捲動">⤢ 整張顯示</button></span>
-      <div class="mtip">${MV.layer!=='defect'?lyTipHTML():MV.tool==='poly'?`沿著區域邊界「每個角點一下」（L 型倉庫點 6 個角），點回第一個點或按「完成」結束。${MV_SNAP?'🧲 磁鐵會吸到附近的角和線（按住 Alt 不吸）。':''}已點 ${MV.poly?MV.poly.pts.length:0} 個角　<button class="primary" onclick="mapPolyFinish()">✔ 完成</button> <button onclick="if(MV.poly&&MV.poly.pts.length){MV.poly.pts.pop();renderMap()}">↶ 退一步</button> <button onclick="mapPolyCancel()">取消</button>`:MV.tool==='area'?'在平面圖上「按住拖曳」畫出區域範圍。':MV.tool==='loc'?'在區域框裡「點一下」放位置標記。':MV.mode==='edit'?(MV_LOCK?'🔒 區域已鎖定：區域不會被拖動，可以放心新增、移動位置；點選後可在右邊修改。':'編輯模式：拖曳可移動區域與位置，拉區域右下角可改大小；點選後可在右邊修改或刪除。新增位置前可以先「🔓 鎖定區域」。'):'檢視模式：點區域或位置看缺失紀錄；在空白處按住拖曳可移動平面圖。'}</div>
+      <div class="mtip">${MV.layer!=='defect'?lyTipHTML():MV.tool==='poly'?`沿著區域邊界「每個角點一下」（L 型倉庫點 6 個角），點回第一個點或按「完成」結束。${MV_SNAP?'🧲 磁鐵會吸到附近的角和線（按住 Alt 不吸）。':''}已點 ${MV.poly?MV.poly.pts.length:0} 個角　<button class="primary" onclick="mapPolyFinish()">✔ 完成</button> <button onclick="if(MV.poly&&MV.poly.pts.length){MV.poly.pts.pop();renderMap()}">↶ 退一步</button> <button onclick="mapPolyCancel()">取消</button>`:MV.tool==='area'?'在平面圖上「按住拖曳」畫出區域範圍。':MV.tool==='loc'?'在區域框裡「點一下」放位置標記。':MV.mode==='edit'?(MV_LOCK?'🔒 區域已鎖定：區域不會被拖動，可以放心新增、移動位置；點選後可在右邊修改。':'編輯模式：拖曳可移動區域與位置，拉區域右下角可改大小；點選後可在右邊修改或刪除。新增位置前可以先「🔓 鎖定區域」。')+'　⌨️ 點選後按 Delete 可以刪除，Esc 取消。':'檢視模式：點區域或位置看缺失紀錄；在空白處按住拖曳可移動平面圖。'}</div>
       ${MV.layer==='defect'?riskLegendHTML():lyLegendHTML()}
     </div>
     <div class="mapwrap">
@@ -3177,10 +3179,10 @@ function lyTipHTML(){
   if(T==='mark') return `畫「<b>${MK[MV.fk].t}</b>」：在平面圖上「按住拖曳」畫一段粗線（例如門口那一段牆）；只點一下會放一小段。可以連續畫，畫完按「■ 停止畫」。`;
   if(T==='pest') return `在平面圖上「點一下」放「<b>${PK[MV.pk].t}</b>」，編號自動編 ${PK[MV.pk].p}01、${PK[MV.pk].p}02…；可以連續放，放完按「■ 停止放置」。換種類請改上方的下拉選單。`;
   if(T==='frag') return '在易碎品所在的位置「點一下」，輸入名稱（例：燈罩、觀察窗玻璃）；編號會自動編 G01、G02…';
-  if(MV.mode==='edit') return MV.layer==='zone' ? (MV_LOCK?'🔒 分區已鎖定：分區不會被拖動。':'編輯模式：拖曳可移動分區；點選後拖白色方塊改角、拖「＋」加角，右邊可改種類或刪除。')
+  if(MV.mode==='edit') return (MV.layer==='zone' ? (MV_LOCK?'🔒 分區已鎖定：分區不會被拖動。':'編輯模式：拖曳可移動分區；點選後拖白色方塊改角、拖「＋」加角，右邊可改種類或刪除。')
     : MV.layer==='pest' ? '編輯模式：拖曳可移動捕蟲燈、鼠板站、鼠餌站；點選後在右邊改編號、位置說明或刪除。'
     : MV.layer==='flow' ? '編輯模式：拖曳可移動箭頭或標記；點選後拖白色方塊改轉彎點、拖「＋」多加轉彎點，右邊可改種類、反轉方向或刪除。'
-    : '編輯模式：拖曳可移動易碎品標記；點選後在右邊修改名稱、材質、數量與檢查頻率。';
+    : '編輯模式：拖曳可移動易碎品標記；點選後在右邊修改名稱、材質、數量與檢查頻率。') + '　⌨️ 快捷鍵：Delete 刪除、Ctrl+C／Ctrl+V 複製貼上、Ctrl+Z 復原、Esc 取消。';
   if(MV.layer==='pest') return '檢視模式：點圖示看說明；發現蟲鼠問題可以在右邊直接「＋ 建立缺失」。';
   return MV.layer==='zone' ? '檢視模式：點分區看說明；在空白處按住拖曳可移動平面圖。' : MV.layer==='flow' ? '檢視模式：點下方圖例可以隱藏／顯示某一種（匯出圖片也只會有顯示中的）。' : '檢視模式：點易碎品看檢查紀錄；按「📝 開始易碎品檢查」逐項打勾，到期沒檢查的會出現紅框和「!」。';
 }
@@ -3721,6 +3723,72 @@ function snapShow(q){
   if(gx){ gx.hidden = !q.sx; gx.style.left = q.x*100+'%'; } if(gy){ gy.hidden = !q.sy; gy.style.top = q.y*100+'%'; }
 }
 const SNAP_TOOLS = ['poly','area','zpoly','fline','zrect','mark'];
+
+
+/* ---------- 廠區地圖鍵盤快捷鍵：Delete 刪除、Ctrl+C 複製、Ctrl+V 貼上、Ctrl+Z 復原、Esc 取消 ---------- */
+let MAP_CLIP = null, MAP_UNDO = [], MAP_MOUSE = null, MAP_LASTPASTE = null;
+const LY_LAYER = { zone:'zone', flow:'flow', mark:'flow', frag:'frag', pest:'pest' };
+const LY_NAME = o => o.t==='zone' ? (ZK[o.o.kind]||{}).t : o.t==='flow' ? (FK[o.o.kind]||{}).t : o.t==='mark' ? (MK[o.o.kind]||{}).t : o.t==='pest' ? pestLabel(o.o) : fragLabel(o.o);
+document.addEventListener('pointermove', e => {
+  const i = $('#mapInner'); if(!i){ MAP_MOUSE = null; return; }
+  const b = i.getBoundingClientRect(), x = (e.clientX-b.left)/b.width, y = (e.clientY-b.top)/b.height;
+  MAP_MOUSE = (x>=0 && x<=1 && y>=0 && y<=1) ? {x, y} : null;
+}, {passive:true});
+document.addEventListener('keydown', e => {
+  if(!$('#mapInner') || !$('#mSide') || document.querySelector('.modal')) return;
+  const t = e.target, tag = (t && t.tagName) || '';
+  if(/^(INPUT|TEXTAREA|SELECT)$/.test(tag) || (t && t.isContentEditable) || (t && t.closest && t.closest('.pzone'))) return;
+  const k = (e.key||'').toLowerCase(), mod = e.ctrlKey || e.metaKey;
+  if(k==='escape'){ if(MV.tool){ MV.tool = ''; MV.poly = null; MV.tmp = null; renderMap(); } else if(MV.sel){ MV.sel = null; mapSide(); } return; }
+  if((k==='delete' || k==='backspace') && !mod){ if(!MV.sel) return; e.preventDefault(); mapKeyDelete(); return; }
+  if(mod && k==='c'){ if(!MV.sel || String(window.getSelection ? window.getSelection() : '')) return; e.preventDefault(); mapKeyCopy(); return; }
+  if(mod && k==='v'){ if(!MAP_CLIP) return; e.preventDefault(); mapKeyPaste(); return; }
+  if(mod && k==='z' && !e.shiftKey){ if(!MAP_UNDO.length) return; e.preventDefault(); mapKeyUndo(); return; }
+});
+function mapKeyDelete(){
+  const sel = MV.sel;
+  if(MV.mode!=='edit'){ flash('切到「✏️ 編輯模式」才能刪除'); return; }
+  if(sel.t==='area'){ mapAreaDel(sel.id); return; }   /* 缺失區域、位置有案件，照原本的方式先確認 */
+  if(sel.t==='loc'){ mapLocDel(sel.id); return; }
+  const arr = MAPD[LY_ARR[sel.t]] || [], i = arr.findIndex(x=>x.id===sel.id); if(i<0) return;
+  const o = arr[i]; arr.splice(i, 1); if(!saveMap()){ arr.splice(i, 0, o); return; }
+  MAP_UNDO.push({k:'del', t:sel.t, o, i}); if(MAP_UNDO.length>30) MAP_UNDO.shift();
+  MV.sel = null; renderMap(); flash(`已刪除「${LY_NAME({t:sel.t, o})}」，按 Ctrl+Z 可以復原`);
+}
+function mapKeyCopy(){
+  const sel = MV.sel;
+  if(sel.t==='area' || sel.t==='loc'){ flash('缺失區域和位置不能複製（名稱不能重複），請用「新增」'); return; }
+  const o = lyGet(sel.t, sel.id); if(!o) return;
+  MAP_CLIP = {t:sel.t, o:JSON.parse(JSON.stringify(o))}; MAP_LASTPASTE = null;
+  flash(`已複製「${LY_NAME(MAP_CLIP)}」，按 Ctrl+V 貼上（貼在滑鼠位置）`);
+}
+function mapKeyPaste(){
+  if(!MV.mapId) return;
+  if(MV.mode!=='edit'){ flash('切到「✏️ 編輯模式」才能貼上'); return; }
+  const c = MAP_CLIP, o = JSON.parse(JSON.stringify(c.o)), pt = !!o.pts;
+  const box = pt ? lyBox(o.pts) : {x:o.x, y:o.y, w:0, h:0}, cx = box.x+box.w/2, cy = box.y+box.h/2;
+  /* 貼在滑鼠位置；滑鼠沒動（或不在地圖上）就往右下錯開一點，才不會疊在一起 */
+  let to = MAP_MOUSE && !(MAP_LASTPASTE && Math.hypot(MAP_MOUSE.x-MAP_LASTPASTE.m.x, MAP_MOUSE.y-MAP_LASTPASTE.m.y) < 0.004) ? {x:MAP_MOUSE.x, y:MAP_MOUSE.y} : null;
+  if(!to){ const b = MAP_LASTPASTE ? MAP_LASTPASTE.at : {x:cx, y:cy}; to = {x:b.x+0.02, y:b.y+0.02}; }
+  const dx = Math.max(-box.x, Math.min(1-box.x-box.w, to.x-cx)), dy = Math.max(-box.y, Math.min(1-box.y-box.h, to.y-cy));
+  if(pt) o.pts = o.pts.map(q=>[q[0]+dx, q[1]+dy]); else { o.x = clamp01(o.x+dx); o.y = clamp01(o.y+dy); }
+  MAP_LASTPASTE = {m: MAP_MOUSE ? {x:MAP_MOUSE.x, y:MAP_MOUSE.y} : {x:-1, y:-1}, at:{x:cx+dx, y:cy+dy}};
+  o.id = mapUid(c.t.slice(0,2)); o.mapId = MV.mapId;
+  if(c.t==='frag') o.code = fragNextCode();
+  if(c.t==='pest') o.code = pestNextCode(o.kind);
+  MAPD[LY_ARR[c.t]] = MAPD[LY_ARR[c.t]] || []; MAPD[LY_ARR[c.t]].push(o);
+  if(!saveMap()){ MAPD[LY_ARR[c.t]].pop(); return; }
+  MAP_UNDO.push({k:'add', t:c.t, id:o.id}); if(MAP_UNDO.length>30) MAP_UNDO.shift();
+  if(MV.layer!==LY_LAYER[c.t]){ MV.layer = LY_LAYER[c.t]; lyLS('mapLayer', MV.layer); }
+  MV.tool = ''; MV.poly = null; MV.sel = {t:c.t, id:o.id}; renderMap();
+  flash(`已貼上「${LY_NAME({t:c.t, o})}」${c.t==='frag'||c.t==='pest'?'（新編號 '+o.code+'）':''}`);
+}
+function mapKeyUndo(){
+  const u = MAP_UNDO.pop(); if(!u) return; const k = LY_ARR[u.t]; MAPD[k] = MAPD[k] || [];
+  if(u.k==='del'){ MAPD[k].splice(Math.min(u.i, MAPD[k].length), 0, u.o); MV.sel = u.o.mapId===MV.mapId ? {t:u.t, id:u.o.id} : null; }
+  else { MAPD[k] = MAPD[k].filter(x=>x.id!==u.id); MV.sel = null; }
+  saveMap(); renderMap(); flash(u.k==='del' ? '已復原刪除' : '已取消貼上');
+}
 
 /* ---------- 常用選項頁 ---------- */
 const OPT_USE = { area:'缺失區域', people:'巡檢人員、負責人、已通知對象、執行人、複查人員、結案確認人員', dept:'負責單位、改善執行單位' };
