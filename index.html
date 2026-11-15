@@ -189,8 +189,10 @@ body.wide main{max-width:none}
 .mapbar .mlayers{order:-1;flex-basis:100%;display:flex;flex-wrap:wrap;border-radius:12px;background:#efe6d6}
 .mapbar .mlayers button{flex:1 1 auto;border-radius:9px;padding:8px 12px}
 .lysvg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
-.lysvg .lz{pointer-events:visiblePainted;fill:var(--c);fill-opacity:.55;stroke:var(--c);stroke-width:2;stroke-opacity:1;cursor:pointer;filter:saturate(1.15)}
-.lysvg .lz:hover{fill-opacity:.68}.lysvg .lz.bg{pointer-events:none;fill-opacity:.38;stroke-opacity:.55}
+.lysvg.lyzs{mix-blend-mode:multiply}
+.mapview.ly-zone .mapinner img{filter:grayscale(1) brightness(1.3) contrast(1.4)}
+.lysvg .lz{pointer-events:visiblePainted;fill:var(--c);fill-opacity:.9;stroke:var(--c);stroke-width:2;stroke-opacity:1;cursor:pointer}
+.lysvg .lz:hover{fill-opacity:1}.lysvg .lz.bg{pointer-events:none;fill-opacity:.45;stroke-opacity:.55}
 .lysvg .lz.sel{stroke:#16213a;stroke-width:3.5}
 .lysvg .ln{fill:none;stroke-linejoin:round}.lysvg .lf .ln{stroke-width:4.5}.lysvg .lf .ln.dash{stroke-dasharray:14 8}.lysvg .lf .ln.dot{stroke-dasharray:.1 9;stroke-linecap:round}
 .lysvg .lm .ln{stroke-width:11}
@@ -1050,7 +1052,7 @@ const GUIDES = {
     gStep(10,'切換圖層（缺失以外的圖）', gC(gR(`${gN(1)}<span class="gx-seg" style="flex-wrap:wrap"><i class="on">🔍 缺失</i><i>🧼 清潔分區</i><i>🔶 易碎品</i><i>➡️ 動線與設施</i><i>🐭 病媒防治</i></span>`)+gR(`${gB('🧼 疊清潔分區（開）',{dk:1,hl:1,n:2})}${gB('🖼 匯出平面圖（圖片）',{hl:1,n:3})}`)),
       `<p>地圖上方有一排圖層${gN(1)}，每一層<b>分開畫、分開看</b>，不會跟缺失混在一起；平面圖只要上傳一次，五層共用。</p><p>易碎品、動線、病媒這三層可以按「🧼 疊清潔分區」${gN(2)}，把分區淡淡地墊在底下對照。</p><p>在哪一層按「🖼 匯出平面圖（圖片）」${gN(3)}，就匯出<b>那一層</b>的清晰 PNG，下方附圖例。</p>`),
     gStep(11,'🧼 清潔分區', gC(gR(`${gIn('準清潔區 ▾',1)}${gN(1)}${gB('▭ 畫分區（拖曳）',{hl:1,n:2})}${gB('⬠ 多邊形分區',{hl:1})}`)+gR(`<span class="gx-sw" style="background:#c4bb7c"></span><span class="gx-s">一般作業區</span><span class="gx-sw" style="background:#b9cde5"></span><span class="gx-s">準清潔區</span><span class="gx-sw" style="background:#e6b9b8"></span><span class="gx-s">清潔區</span>`)) + gC(gR(`${gIn('包裝區 ▾')}${gIn('準清潔區 ▾')}`)+gR(gB('複製成清潔分區',{hl:1,n:3})),'📋 從缺失區域複製範圍'),
-      `<p>切到「✏️ 編輯模式」，先選<b>分區種類</b>${gN(1)}，再按「▭ 畫分區」${gN(2)}在平面圖上拖曳；L 型等不規則形狀用「⬠ 多邊形分區」，每個角點一下；<b>🧲 磁鐵</b>會幫你貼齊色塊邊界和旁邊分區的角（見第 4 步）。</p><p>分區跟缺失區域一樣大時，右邊「從缺失區域複製範圍」${gN(3)}，不用重畫。</p><p>點分區可以改種類、取名稱（例：包裝室）、寫說明；拖白色方塊改角、拖「＋」加角。畫好後可以「🔒 鎖定分區」避免拖到。</p><p class="muted small">顏色預設：一般作業區卡其、準清潔區淺藍、清潔區淺粉；編輯模式右邊「🎨 圖例顏色」可以改。</p>`),
+      `<p>切到「✏️ 編輯模式」，先選<b>分區種類</b>${gN(1)}，再按「▭ 畫分區」${gN(2)}在平面圖上拖曳；L 型等不規則形狀用「⬠ 多邊形分區」，每個角點一下；<b>🧲 磁鐵</b>會幫你貼齊色塊邊界和旁邊分區的角（見第 4 步）。</p><p>分區跟缺失區域一樣大時，右邊「從缺失區域複製範圍」${gN(3)}，不用重畫。</p><p>點分區可以改種類、取名稱（例：包裝室）、寫說明；拖白色方塊改角、拖「＋」加角。畫好後可以「🔒 鎖定分區」避免拖到。</p><p>在這一層，平面圖會自動變成<b>淡灰底</b>，分區顏色用「相乘」疊上去：顏色跟圖例一樣，<b>底稿上的文字和線條會透出來</b>（匯出圖片也一樣）。</p><p class="muted small">顏色預設：一般作業區卡其、準清潔區淺藍、清潔區淺粉；編輯模式右邊「🎨 圖例顏色」可以改。</p>`),
     gStep(12,'🔶 易碎品：標示', gC(gR(`${gB('🔶 新增易碎品',{hl:1,n:1})}`)+gR(`<span class="gx-tag" style="background:#f59e0b;color:#3b2500;border-color:#fff">◆ G01</span><span class="gx-s">燈罩（玻璃）× 2</span>`)) + gC(gR(`${gIn('材質：玻璃')}${gIn('數量：2')}`)+gR(`${gIn('每 1 個月 ▾',1)}${gN(2)}`),'🔶 G01 燈罩'),
       `<p>編輯模式按「🔶 新增易碎品」${gN(1)}，在所在位置點一下，輸入名稱（例：燈罩、觀察窗玻璃、玻璃溫度計），編號自動編 <b>G01、G02…</b></p><p>點標記可以填材質、數量、位置說明、加參考照片（可 Ctrl+V 貼上）。</p><p><b>檢查頻率</b>${gN(2)}：預設<b>每個月一次</b>，右邊面板可改成每 2、3、4、6、12 個月；個別項目也可以單獨設定。</p><p>「📗 匯出易碎品清單（Excel）」含最近檢查日、下次檢查日與檢查紀錄。</p>`),
     gStep(13,'🔶 易碎品：定期檢查', gC(gR(gB('📝 開始易碎品檢查',{dk:1,hl:1,n:1}))+gR(`<span class="gx-s" style="flex:1">G01 燈罩</span>${gN(2)}${gB('✅ 完整',{ok:1})}${gB('❌ 破損',{rd:1,hl:1})}${gB('❓ 遺失')}`)+gR(gB('＋ 建立缺失',{dk:1,hl:1,n:3}))) + gC(gR(`<span class="gx-tag" style="background:#f59e0b;color:#3b2500;border-color:#fff">◆ G01</span><span class="gx-s">正常</span><span class="gx-tag" style="background:#f59e0b;color:#3b2500;box-shadow:0 0 0 2px #b42318">◆ G02 !</span><span class="gx-s">到期未檢查</span><span class="gx-tag" style="background:#b42318;color:#fff">◆ G03</span><span class="gx-s">破損</span>`),'地圖上的顏色'),
@@ -3197,9 +3199,9 @@ function lyLegendHTML(){
 function lyPts(pts, VH){ return pts.map(q=>(q[0]*1000).toFixed(1)+','+(q[1]*VH).toFixed(1)).join(' '); }
 function lyOverlay(m){
   const VH = lyVH(m), L = MV.layer, sel = MV.sel, ed = MV.mode==='edit', isSel = (t,id) => sel && sel.t===t && sel.id===id;
-  let defs = '', body = '', html = '';
+  let defs = '', body = '', html = '', zbody = '';
   if(L==='zone' || (MV_ZBG && L!=='defect')){
-    lyList('zone').forEach(z => { body += `<polygon data-lo="zone:${z.id}" class="lz ${L!=='zone'?'bg':''} ${isSel('zone',z.id)?'sel':''}" points="${lyPts(z.pts, VH)}" style="--c:${lyColor(z.kind)}"/>`; });
+    lyList('zone').forEach(z => { zbody += `<polygon data-lo="zone:${z.id}" class="lz ${L!=='zone'?'bg':''} ${isSel('zone',z.id)?'sel':''}" points="${lyPts(z.pts, VH)}" style="--c:${lyColor(z.kind)}"/>`; });
     if(L==='zone') lyList('zone').forEach(z => { const b = lyLabPt(z.pts); html += `<span class="mplab lzlab" style="left:${b.x*100}%;top:${b.y*100}%;--c:${lyColor(z.kind)}">${esc(ZK[z.kind]?ZK[z.kind].t:'')}${z.name?'｜'+esc(z.name):''}</span>`; });
   }
   if(L==='flow'){
@@ -3221,7 +3223,8 @@ function lyOverlay(m){
     if(sel.t!=='mark') P.forEach((q,i) => { if(!closed && i===P.length-1) return; const r = P[(i+1)%P.length]; html += `<i class="mmid" data-lmid="${i}" title="拖曳可多加一個${closed?'角':'轉彎點'}" style="left:${(q[0]+r[0])*50}%;top:${(q[1]+r[1])*50}%">+</i>`; });
     P.forEach((q,i) => { html += `<i class="mvtx" data-lvtx="${i}" title="拖曳調整；連點兩下刪除" style="left:${q[0]*100}%;top:${q[1]*100}%"></i>`; });
   }
-  return `<svg class="lysvg" viewBox="0 0 1000 ${VH.toFixed(1)}" preserveAspectRatio="none"><defs>${defs}</defs>${body}</svg>${html}`;
+  /* 分區另外一層，用「色版相乘」疊在平面圖上：白底變分區顏色，底稿的黑字、線條照樣透出來 */
+  return `${zbody?`<svg class="lysvg lyzs" viewBox="0 0 1000 ${VH.toFixed(1)}" preserveAspectRatio="none">${zbody}</svg>`:''}<svg class="lysvg" viewBox="0 0 1000 ${VH.toFixed(1)}" preserveAspectRatio="none"><defs>${defs}</defs>${body}</svg>${html}`;
 }
 function lyRedraw(){ const ov = $('#lyOv'), m = lyMap(); if(ov && m) ov.innerHTML = lyOverlay(m); const c = $('#lyCnt'); if(c) c.textContent = MV.poly ? MV.poly.pts.length : 0; }
 function lySide(){ const s = $('#mSide'); if(s){ s.innerHTML = layerSideHTML(); hydrate(s); if(MV.sel && MV.mode==='view' && window.innerWidth<900) s.scrollIntoView({behavior:'smooth', block:'start'}); } lyRedraw(); }
@@ -3599,7 +3602,8 @@ async function layerExportImage(){
   g.fillText(`Casevoras ${LAYER_NAME[L]}｜${m.name}`, Math.round(24*u1), HEAD/2);
   g.font = `${Math.round(18*u1)}px ${F}`; g.fillStyle = '#d6c08f'; g.textAlign = 'right'; g.fillText(`匯出日期：${fmtDate(today())}`, W - Math.round(24*u1), HEAD/2); g.textAlign = 'left';
   g.save(); g.translate(0, HEAD);
-  g.imageSmoothingQuality = 'high'; g.drawImage(img, 0, 0, W, H);
+  if(L==='zone') g.filter = 'grayscale(1) brightness(1.3) contrast(1.4)';
+  g.imageSmoothingQuality = 'high'; g.drawImage(img, 0, 0, W, H); g.filter = 'none';
   const hexA = (hex, a) => { const n = parseInt(hex.replace('#','').slice(0,6), 16); return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`; };
   const rr = (x,y,w,h,r) => { g.beginPath(); g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r); g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath(); };
   const path = pts => { g.beginPath(); pts.forEach(([x,y],i)=> i ? g.lineTo(X(x),Y(y)) : g.moveTo(X(x),Y(y))); };
@@ -3608,7 +3612,9 @@ async function layerExportImage(){
   const dashOf = (d, w) => d==='dash' ? [14*s, 8*s] : d==='dot' ? [0.1, w*2] : [];
   /* 分區 */
   if(L==='zone' || (MV_ZBG && L!=='defect')){
-    lyList('zone').forEach(z => { const col = lyColor(z.kind); path(z.pts); g.closePath(); g.fillStyle = hexA(col, L==='zone'?0.55:0.38); g.fill(); g.lineWidth = Math.max(1.5, 1.5*s); g.strokeStyle = hexA(col, 1); g.stroke(); });
+    g.globalCompositeOperation = 'multiply';
+    lyList('zone').forEach(z => { const col = lyColor(z.kind); path(z.pts); g.closePath(); g.fillStyle = hexA(col, L==='zone'?0.9:0.45); g.fill(); g.lineWidth = Math.max(1.5, 1.5*s); g.strokeStyle = hexA(col, 1); g.stroke(); });
+    g.globalCompositeOperation = 'source-over';
     if(L==='zone') lyList('zone').forEach(z => { const b = lyLabPt(z.pts), fs = Math.round(15*u1), t = (ZK[z.kind]?ZK[z.kind].t:'')+(z.name?'｜'+z.name:''); g.font = `700 ${fs}px ${F}`;
       const tw = g.measureText(t).width, pad = 7*u1, h = fs*1.55, x = X(b.x)+6*u1, y = Y(b.y)+6*u1;
       rr(x, y, tw+pad*2+5*u1, h, 5*u1); g.fillStyle = 'rgba(255,253,248,.95)'; g.fill(); g.fillStyle = lyColor(z.kind); g.fillRect(x, y, 5*u1, h);
