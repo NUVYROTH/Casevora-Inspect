@@ -87,6 +87,21 @@ body.wide main{max-width:none}
 .mini li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line);font-size:13.5px}
 .mini li:last-child{border:0}
 .hb.click{cursor:pointer;border-radius:6px}
+.lccard{margin-top:16px}.lcgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,480px),1fr));gap:22px}
+.lcplot{width:100%;min-width:0}.lcsvg{display:block;overflow:visible;touch-action:pan-y}
+.lcsvg .lcs.dim{opacity:.12}.lcsvg .lcs.dim .lch{pointer-events:none}
+.lcsvg .lcg{stroke:#ece4d5;stroke-width:1}.lcsvg .lcax{stroke:#c9bda6;stroke-width:1}
+.lcsvg .lcy{font-size:11px;fill:#6b6455;text-anchor:end}.lcsvg .lcx{font-size:11px;fill:#6b6455;text-anchor:middle}
+.lcsvg .lcl{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.lcsvg .lcd{stroke:#fffdf8;stroke-width:2;pointer-events:none}.lcsvg .lch{fill:transparent;cursor:pointer}
+.lcsvg .lcb{fill:transparent}.lcsvg .lcn{font-size:11.5px;fill:#16213a;font-weight:600}
+.lcsvg .lccross{stroke:#9a8f7a;stroke-width:1;stroke-dasharray:3 3;pointer-events:none}
+.lcleg{display:flex;flex-wrap:wrap;gap:2px 4px;font-size:12px;color:#4a4436;margin:4px 0 6px}
+.lcleg button{border:1px solid transparent;background:none;padding:2px 7px;border-radius:6px;font-size:12px;color:#4a4436;cursor:pointer}.lcleg button:hover{border-color:var(--line)}.lcleg button.on{border-color:#16213a;background:#fff;font-weight:700}
+.lcleg i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:5px;vertical-align:3px}
+.lctab summary{cursor:pointer;font-size:12px;color:var(--muted);margin-top:4px}.lctab .st-table{font-size:12px;white-space:nowrap}
+.lctip{position:fixed;z-index:60;background:#fffdf8;border:1px solid var(--line);border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.15);padding:8px 10px;font-size:12px;color:#16213a;pointer-events:none;min-width:150px}
+.lctip div{display:flex;align-items:center;gap:6px;margin-top:3px}.lctip i{width:10px;height:3px;border-radius:2px}.lctip span{margin-left:auto;font-weight:700;padding-left:10px}.lctip .muted{color:var(--muted);font-weight:400}
 /* 廠區地圖 */
 .mapbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.mapbar select{width:auto}.mapbar .seg{margin:0}
 .mzoom{display:inline-flex;gap:4px;align-items:center;margin-left:auto}.mzoom span{min-width:46px;text-align:center;font-size:13px}
@@ -1040,9 +1055,11 @@ const GUIDES = {
     gStep(2,'看四個數字、點開案件', gC(gR(`<span class="gx-k">59<small>新增</small></span><span class="gx-k ok">26<small>結案</small></span><span class="gx-k b">32<small>尚未結案</small></span>${gN(1)}<span class="gx-k rd hl">1<small>逾期</small></span>`)),
       `<p>新增＝結案＋尚未結案＋逾期。</p><p>點任一格${gN(1)}，會列出是哪幾件；再點案件就能直接打開處理。</p>`),
     gStep(3,'右側圖表', gC(`<div class="gx-donut"></div>`,'處理狀態') + gC(gR(`<span class="gx-s" style="width:60px">生產課</span><span class="gx-bar" style="width:70%"></span>`)+gR(`${gN(1)}<span class="gx-s hl" style="width:54px">尚未指定</span><span class="gx-bar" style="width:20%"></span>`),'負責單位件數'),
-      `<p>右邊有今年的處理狀態、缺失類別、負責單位件數。</p><p>「缺失類別」「負責單位件數」的每一列都能點${gN(1)}，例如點「尚未指定」就知道哪幾件還沒指派。</p>`),
+      `<p>右邊有今年的處理狀態、缺失類別、負責單位件數。</p><p>「缺失類別」「負責單位件數」的每一列都能點${gN(1)}，例如點「尚未指定」就知道哪幾件還沒指派。</p><p>一件寫兩個單位、用「、」隔開的（例：打漿組、蒸煮組），會<b>各算一件</b>；用「／」寫的細部單位（例：生產課／打漿組）算同一個。</p>`),
     gStep(4,'趨勢圖與報表下載', gC(`<div class="gx-line"></div>`+gR(gB('⬇ 下載圖片',{hl:1,n:1}))) + gR(`${gB('下載 Word 報表',{dk:1,hl:1,n:2})}${gB('列印／存成 PDF',{n:3})}`),
-      `<p>趨勢圖下方「⬇ 下載圖片」${gN(1)}可存成 PNG。</p><p>上方「下載 Word 報表」${gN(2)}產生月報／季報／年報；網址版另有「列印／存成 PDF」${gN(3)}。</p>`)
+      `<p>趨勢圖下方「⬇ 下載圖片」${gN(1)}可存成 PNG。</p><p>上方「下載 Word 報表」${gN(2)}產生月報／季報／年報；網址版另有「列印／存成 PDF」${gN(3)}。</p>`),
+    gStep(5,'📈 每月趨勢折線圖', gC(`<span style="display:flex;gap:8px;font-size:11px;margin-bottom:4px"><span style="color:#2a78d6;font-weight:700">── 新增</span><span style="color:#eb6834;font-weight:700">── 結案</span>${gN(1)}</span><svg viewBox="0 0 200 70" style="width:100%;height:auto;display:block"><line x1="10" x2="190" y1="60" y2="60" stroke="#c9bda6"/><polyline points="10,40 40,35 70,28 100,38 130,20 160,12 190,30" fill="none" stroke="#2a78d6" stroke-width="2"/><polyline points="10,48 40,44 70,40 100,45 130,30 160,26 190,55" fill="none" stroke="#eb6834" stroke-width="2"/><line x1="130" x2="130" y1="5" y2="60" stroke="#9a8f7a" stroke-dasharray="3 3"/><circle cx="130" cy="20" r="4" fill="#2a78d6" stroke="#fff" stroke-width="2"/></svg>`,'每月缺失總數') + gC(gR(`${gN(2)}<span class="gx-tag dk">打漿組</span><span class="gx-tag">蒸煮組</span><span class="gx-tag">包裝組</span>`)+gR(`<span class="gx-s">${gN(3)}看數字表格</span>`),'各負責單位／各缺失類別'),
+      `<p>統計頁最下面「📈 每月趨勢」有三張折線圖（看上方選的年份，依發現日期）：<b>每月缺失總數</b>（新增、結案）、<b>各負責單位每月件數</b>、<b>各缺失類別每月件數</b>（各取今年前 5 名，其餘合成「其它」）。</p><p>滑鼠移到某個月${gN(1)}會出現虛線和各條線的數字；<b>點圓點</b>會列出那個月的案件，點案件可以直接打開。</p><p>線太多看不清楚時，<b>點圖例</b>${gN(2)}只看那一條線，其它變淡；再點一次恢復。每張圖下面「看數字表格」${gN(3)}可以看每個月的數字。</p>`)
   ]},
   map: { t:'廠區地圖使用說明', steps:() => [
     gStep(1,'上傳平面圖', gC(gR(`<b style="flex:1">廠區地圖</b>${gB('＋ 新增地圖（上傳平面圖）',{dk:1,hl:1,n:1})}`)) + gC(gR(`${gIn('一樓 ▾')}<span style="flex:1"></span>${gB('適應畫面',{hl:1})}${gB('⤢ 整張顯示',{hl:1,n:2})}`)),
@@ -4265,20 +4282,98 @@ function showTileList(k){
 }
 /* 點統計長條 → 列出今年屬於這一項的案件，點案件可直接打開 */
 const GROUP_KEY = { type: r => r.defType ? typeName(r.defType) : '未選類別', dept: r => r.ownerDept || '尚未指定' };
+/* 負責單位用「、」或逗號隔開時拆開各算一個（例：打漿組、蒸煮組 → 打漿組 +1、蒸煮組 +1）；「／」是同一單位的細部，不拆 */
+const deptsOf = r => { const a = String(r.ownerDept||'').split(/[、,，;；]+/).map(x=>x.trim()).filter(Boolean); return a.length ? [...new Set(a)] : ['尚未指定']; };
 function showGroup(kind, key){
   const yr = today().slice(0,4);
-  const rs = live().filter(r=>(r.foundDate||'').startsWith(yr) && GROUP_KEY[kind](r)===key).sort((a,b)=>(b.foundDate||'').localeCompare(a.foundDate||''));
+  const rs = live().filter(r=>(r.foundDate||'').startsWith(yr) && (kind==='dept' ? deptsOf(r).includes(key) : GROUP_KEY[kind](r)===key)).sort((a,b)=>(b.foundDate||'').localeCompare(a.foundDate||''));
   caseListModal(`${kind==='dept'?'負責單位':'缺失類別'}：${esc(key)}`, '今年', rs);
 }
 function statSideHTML(){
   const yr = today().slice(0,4), Y = live().filter(r=>(r.foundDate||'').startsWith(yr));
   const tc = new Map(); Y.forEach(r=>{ const k = r.defType ? typeName(r.defType) : '未選類別'; tc.set(k,(tc.get(k)||0)+1); });
-  const oc = new Map(); Y.forEach(r=>{ const k = r.ownerDept || '尚未指定'; oc.set(k,(oc.get(k)||0)+1); });
+  const oc = new Map(); Y.forEach(r=>deptsOf(r).forEach(k=>oc.set(k,(oc.get(k)||0)+1)));
   const sorted = m => [...m.entries()].sort((a,b)=>b[1]-a[1]);
   return `<div class="card"><div class="phd"><b>處理狀態</b><span class="muted small">今年</span></div>${donutHTML(Y)}</div>
     <div class="card"><div class="phd"><b>缺失類別</b><span class="muted small">今年</span></div>${hbarHTML(sorted(tc),'type')}</div>
-    <div class="card"><div class="phd"><b>負責單位件數</b><span class="muted small">今年</span></div>${hbarHTML(sorted(oc),'dept')}</div>`;
+    <div class="card"><div class="phd"><b>負責單位件數</b><span class="muted small">今年</span></div>${hbarHTML(sorted(oc),'dept')}<div class="muted small" style="margin-top:6px">一件寫兩個單位（用「、」隔開）會各算一件。</div></div>`;
 }
+
+/* ---------- 統計頁折線圖：每月趨勢（一張圖一個量；顏色依固定順序；線尾直接標名稱；滑過看數字、點圓點看案件） ---------- */
+const LC_COL = ['#2a78d6','#eb6834','#1baf7a','#eda100','#e87ba4','#6250d6'];
+const LC = {};
+function lcNice(m){ if(m<=4) return 4; const p = Math.pow(10, Math.floor(Math.log10(m))), f = m/p; return (f<=1?1:f<=2?2:f<=5?5:10)*p; }
+function lineChartHTML(id, title, months, series){
+  LC[id] = {title, months, series, hl:-1};
+  if(!series.length || series.every(x=>x.vals.every(v=>!v))) return `<div class="lcbox"><div class="st-sec">${title}</div><div class="muted small">這一年還沒有資料。</div></div>`;
+  const legend = `<div class="lcleg">${series.map((x,si)=>`<button type="button" data-hl="${si}" onclick="lcFocus('${id}',${si})" title="點一下只看這條線，再點一次恢復"><i style="background:${LC_COL[si%LC_COL.length]}"></i>${esc(x.name)}</button>`).join('')}</div>`;
+  const table = `<details class="lctab"><summary>看數字表格</summary><div class="gwrap"><table class="st-table"><thead><tr><th></th>${months.map(m=>`<th>${m}</th>`).join('')}<th>合計</th></tr></thead><tbody>${series.map(x=>`<tr><td>${esc(x.name)}</td>${x.vals.map(v=>`<td>${v==null?'':v}</td>`).join('')}<td><b>${x.vals.reduce((a,v)=>a+(v||0),0)}</b></td></tr>`).join('')}</tbody></table></div></details>`;
+  return `<div class="lcbox" data-lc="${id}"><div class="st-sec">${title}</div>${legend}<div class="lcplot"></div>${table}</div>`;
+}
+/* 依實際寬度畫（字固定大小，不會縮到看不見） */
+function lcDraw(box){
+  const id = box.dataset.lc, c = LC[id], plot = box.querySelector('.lcplot'); if(!c || !plot) return;
+  const W = Math.max(280, Math.round(plot.clientWidth)), series = c.series, months = c.months, n = months.length, few = series.length<=4;
+  const H = 230, L = 30, R = few ? 64 : 12, T = 10, B = 24, pw = W-L-R, ph = H-T-B;
+  const mx = lcNice(Math.max(1, ...series.flatMap(x=>x.vals.filter(v=>v!=null)))), X = i => L + (n>1 ? i*pw/(n-1) : pw/2), Y = v => T + ph - v/mx*ph;
+  const ticks = [0, mx/4, mx/2, mx*3/4, mx].filter(v=>Number.isInteger(v)), every = pw/(n-1) < 30 ? 2 : 1;
+  let g = ticks.map(v=>`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" class="lcg"/><text x="${L-6}" y="${Y(v)+4}" class="lcy">${v}</text>`).join('');
+  g += months.map((m,i)=> i%every ? '' : `<text x="${X(i)}" y="${H-6}" class="lcx">${m}</text>`).join('');
+  const lines = series.map((x,si)=>{ const col = LC_COL[si%LC_COL.length]; let d = '', on = false;
+    x.vals.forEach((v,i)=>{ if(v==null){ on = false; return; } d += (on?'L':'M') + X(i).toFixed(1) + ',' + Y(v).toFixed(1); on = true; });
+    const dots = x.vals.map((v,i)=> v==null ? '' : `<circle cx="${X(i)}" cy="${Y(v)}" r="4" fill="${col}" class="lcd"/><circle cx="${X(i)}" cy="${Y(v)}" r="11" class="lch" data-s="${si}" data-i="${i}"/>`).join('');
+    return `<g class="lcs ${c.hl>=0 && c.hl!==si ? 'dim' : ''}" data-s="${si}"><path d="${d}" stroke="${col}" class="lcl"/>${dots}</g>`; }).join('');
+  /* 4 條線以內才在線尾標名稱（太多會擠在一起，改看圖例） */
+  let labs = '';
+  if(few){ const ends = series.map((x,si)=>{ let li = x.vals.length-1; while(li>=0 && x.vals[li]==null) li--; return {si, li, y: li>=0 ? Y(x.vals[li]) : null}; }).filter(e=>e.y!=null).sort((a,b)=>a.y-b.y);
+    for(let k=1;k<ends.length;k++) if(ends[k].y - ends[k-1].y < 14) ends[k].y = ends[k-1].y + 14;
+    labs = ends.map(e=>`<text x="${X(e.li)+9}" y="${e.y+4}" class="lcn">${esc(series[e.si].name)}</text>`).join(''); }
+  const bw = pw/Math.max(1,n-1), bands = months.map((m,i)=>`<rect x="${X(i)-bw/2}" y="${T}" width="${bw}" height="${ph}" class="lcb" data-i="${i}"/>`).join('');
+  plot.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" class="lcsvg" role="img" aria-label="${esc(c.title)}折線圖">${g}<line x1="${L}" x2="${L}" y1="${T}" y2="${T+ph}" class="lcax"/><line x1="0" x2="0" y1="${T}" y2="${T+ph}" class="lccross" visibility="hidden"/>${bands}${lines}${labs}</svg>`;
+  box.querySelectorAll('.lcleg button').forEach(b=>b.classList.toggle('on', c.hl===+b.dataset.hl));
+}
+function lcDrawAll(){ document.querySelectorAll('.lcbox[data-lc]').forEach(lcDraw); }
+function lcFocus(id, si){ const c = LC[id]; if(!c) return; c.hl = c.hl===si ? -1 : si; const b = document.querySelector(`.lcbox[data-lc="${id}"]`); if(b) lcDraw(b); }
+let LC_RT = 0; window.addEventListener('resize', () => { clearTimeout(LC_RT); LC_RT = setTimeout(lcDrawAll, 150); });
+/* 滑過某個月：直線＋小框列出各條線的數字；點圓點：列出那些案件 */
+document.addEventListener('pointermove', e => {
+  const tip = $('#lcTip'), box = e.target.closest && e.target.closest('.lcbox[data-lc]');
+  const hit = e.target.closest && e.target.closest('[data-i]');
+  if(!box || !hit || !hit.closest('.lcsvg')){ if(tip) tip.hidden = true; document.querySelectorAll('.lccross').forEach(l=>l.setAttribute('visibility','hidden')); return; }
+  const c = LC[box.dataset.lc]; if(!c) return; const i = +hit.dataset.i;
+  const cross = box.querySelector('.lccross'), svg = box.querySelector('.lcsvg'), cx = hit.tagName==='rect' ? +hit.getAttribute('x') + +hit.getAttribute('width')/2 : +hit.getAttribute('cx');
+  cross.setAttribute('x1', cx); cross.setAttribute('x2', cx); cross.setAttribute('visibility','visible');
+  let t = tip; if(!t){ t = document.createElement('div'); t.id = 'lcTip'; t.className = 'lctip'; document.body.appendChild(t); }
+  t.innerHTML = `<b>${c.months[i]}</b>${c.series.map((x,si)=>c.hl>=0&&c.hl!==si?'':`<div><i style="background:${LC_COL[si%LC_COL.length]}"></i>${esc(x.name)}<span>${x.vals[i]==null?'—':x.vals[i]+' 件'}</span></div>`).join('')}<div class="muted">點圓點看案件</div>`;
+  t.hidden = false; const r = t.getBoundingClientRect();
+  t.style.left = Math.min(innerWidth - r.width - 8, e.clientX + 14) + 'px'; t.style.top = Math.max(8, e.clientY - r.height - 10) + 'px';
+}, {passive:true});
+document.addEventListener('click', e => {
+  const h = e.target.closest && e.target.closest('.lch'); if(!h) return;
+  const box = h.closest('.lcbox'), c = LC[box.dataset.lc], x = c.series[+h.dataset.s], i = +h.dataset.i; const tip = $('#lcTip'); if(tip) tip.hidden = true;
+  const rs = (x.rs[i]||[]).slice().sort((a,b)=>(b.foundDate||'').localeCompare(a.foundDate||''));
+  if(!rs.length){ flash('這個月沒有案件'); return; }
+  caseListModal(`${esc(c.title)}：${esc(x.name)}`, `${statY} 年 ${c.months[i]}`, rs);
+});
+function statTrendHTML(){
+  const y = String(statY), months = Array.from({length:12}, (_,i)=>(i+1)+'月'), now = today().slice(0,7);
+  const ym = i => y + '-' + String(i+1).padStart(2,'0'), future = i => ym(i) > now;
+  const L = live(), Y = L.filter(r=>(r.foundDate||'').startsWith(y));
+  const per = (pick) => Array.from({length:12}, (_,i)=> future(i) ? null : pick(i));
+  const mk = (name, filt) => { const rs = per(i => filt(i)); return {name, rs, vals: rs.map(a => a==null ? null : a.length)}; };
+  /* 1. 每月缺失總數：新增（發現日期）、結案（結案日期） */
+  const total = [mk('新增', i => Y.filter(r=>(r.foundDate||'').startsWith(ym(i)))), mk('結案', i => L.filter(r=>r.closed && (r.closedDate||'').startsWith(ym(i))))];
+  /* 2. 各負責單位、3. 各缺失類別：今年件數前 5 名各一條線，其餘合成「其它」 */
+  const top = (keyOf, other) => { const cnt = new Map(); Y.forEach(r=>keyOf(r).forEach(k=>cnt.set(k,(cnt.get(k)||0)+1)));
+    const ks = [...cnt.entries()].sort((a,b)=>b[1]-a[1]).map(x=>x[0]), main = ks.slice(0,5), rest = new Set(ks.slice(5));
+    const out = main.map(k => mk(k, i => Y.filter(r=>(r.foundDate||'').startsWith(ym(i)) && keyOf(r).includes(k))));
+    if(rest.size) out.push(mk(other+'（'+rest.size+' 個）', i => Y.filter(r=>(r.foundDate||'').startsWith(ym(i)) && keyOf(r).some(k=>rest.has(k)))));
+    return out; };
+  const dept = top(deptsOf, '其它單位'), type = top(r => [r.defType ? typeName(r.defType) : '未選類別'], '其它類別');
+  return `<div class="card lccard"><div class="phd"><b>📈 每月趨勢</b><span class="muted small">${y} 年・依發現日期（結案依結案日期）・滑過看數字、點圓點看案件</span></div>
+    <div class="lcgrid">${lineChartHTML('lcTotal','每月缺失總數', months, total)}${lineChartHTML('lcDept','各負責單位每月件數（前 5 名）', months, dept)}${lineChartHTML('lcType','各缺失類別每月件數（前 5 名）', months, type)}</div></div>`;
+}
+
 async function showStats(){
   if(dirty && !(await ask('有尚未儲存的修改，確定要離開嗎？'))) return;
   cur=null; dirty=false; setSide('stats'); stInit(); renderStats(); window.scrollTo(0,0);
@@ -4322,7 +4417,9 @@ function renderStats(){
     </div>
     <div class="rcol">${statSideHTML()}</div>
     </div>
+    ${statTrendHTML()}
     ${guideBox('stats')}`;
+  requestAnimationFrame(lcDrawAll);
 }
 function printStats(){
   if(inClaude()){ say('claude.ai 版無法開啟列印視窗。請改按「下載 Word 報表」，或到網址版按「列印／存成 PDF」。'); return; }
