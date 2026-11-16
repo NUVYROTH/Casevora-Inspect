@@ -970,7 +970,7 @@ async function showList(){
           <button class="primary pnew" onclick="openRecord()">＋ 新增衛生缺失</button>
           <button class="lite" onclick="showTrash()">最近刪除（${records.filter(r=>r.deleted).length}）</button>
           <button class="lite" onclick="exportPick()" title="選擇年份、月份後匯出；Excel 可開">匯出報表（Excel）</button>
-          <button class="lite" onclick="backup()" title="下載所有案件與照片的備份檔，換電腦時用「從備份還原」匯回">下載備份</button>
+          <button class="lite" onclick="backup()" title="一個檔案帶走全部：案件與照片（含最近刪除）、常用選項、廠區地圖所有圖層、稽核、易碎品檢查、畫面設定；換電腦時用「從備份還原」匯回">下載備份</button>
           <button class="lite" onclick="$('#restoreFile').click()" title="用備份檔還原；會取代目前資料">從備份還原</button>
           <input type="file" id="restoreFile" accept=".json" hidden onchange="restore(this)">
         </div>
@@ -1035,19 +1035,19 @@ const GUIDES = {
     gStep(1,'新增衛生缺失', gC(gR(`<b style="flex:1">缺失清單</b>${gB('＋ 新增衛生缺失',{dk:1,hl:1,n:1})}`)) + gC(gR(`${gIn('發現日期 2026/10/26')}${gIn('缺失區域 ▾',1)}`)+gR(gIn('缺失描述：包裝區地面積水…'))+gR(`${gIn('缺失類別 ▾')}${gN(2)}${gIn('缺失等級 ▾',1)}`)),
       `<p>按右上角「＋ 新增衛生缺失」${gN(1)}，填發現日期、缺失區域、缺失描述、缺失類別。</p><p><b>缺失等級</b>${gN(2)}由品管／品保人員選；打 * 的都要填才能儲存。區域、人員可以用「常用選項」的下拉選。</p>`),
     gStep(2,'加照片、整理描述', gC(gR(`<span class="gx-ph"></span><span class="gx-ph b"></span>${gB('＋ 加入照片',{hl:1,n:1})}`)+`<div class="gx-dash">📋 點這裡，再按 Ctrl+V 貼上</div>`) + gC(gR(`${gB('📝 範本整理')}${gB('📋 提示詞')}${gB('✨ 產生分析',{dk:1,hl:1,n:2})}`)),
-      `<p>「＋ 加入照片」${gN(1)}選照片；電腦上也可以先點虛線框，再按 <b>Ctrl+V</b> 貼上截圖。</p><p>「文字整理」${gN(2)}產生草稿，<b>確認無誤再按「套用」</b>，不會自動存。描述不要寫人名、電話。</p>`),
+      `<p>「＋ 加入照片」${gN(1)}選照片；電腦上也可以先點虛線框，再按 <b>Ctrl+V</b> 貼上截圖。</p><p>「文字整理」${gN(2)}有三種，選一種就好：<b>範本整理</b>（兩版都能用、不是 AI）、<b>複製 AI 提示詞</b>（貼到你慣用的 AI 工具）、<b>產生分析</b>（只有 claude.ai 版）。結果會先給你看，<b>確認無誤再按「套用」</b>，不會自動存。描述不要寫人名、電話。</p>`),
     gStep(3,'指派與儲存', gC(gR(`${gIn('負責單位 生產課 ▾')}${gIn('負責人 作業員 A ▾')}`)+gR(`${gIn('改善期限 2026/11/02',1)}`)+`<div class="gx-s">一般 7 天・限期改善 20 天</div>`) + gR(`${gB('儲存',{dk:1,hl:1,n:1})}${gB('返回清單')}`),
       `<p>填負責單位、負責人與<b>改善期限</b>（一般缺失預設 7 天、限期改善缺失預設 20 天）。</p><p>按下方「儲存」${gN(1)}，之後從清單點這筆案件就能繼續填。</p>`),
     gStep(4,'改善與複查', gC(gR(gIn('如何改善：清除積水並修理排水口'))+gR(`<span class="gx-ph b"></span><span class="gx-s">改善後照片</span>`),'3 實際改善情形') + gC(gR(`${gTag('第 1 次 ✅ 通過','ok')}`)+gR(`${gB('＋ 新增複查紀錄',{dk:1,hl:1,n:1})}`),'4 複查紀錄'),
       `<p>改善完成後填「如何改善」、改善後照片，按「儲存」。</p><p>到現場確認後按「＋ 新增複查紀錄」${gN(1)}。複查未通過或再次發生會變「持續追蹤」，不能結案。</p>`),
     gStep(5,'結案確認', gC(gR(gIn('結案確認人員 品管人員'))+gR(`<span class="gx-ck">✓</span><span class="gx-s">已確認改善完成、符合結案條件</span>`)+gR(gB('確認結案',{ok:1,hl:1,n:1})),'5 結案確認（品管）'),
-      `<p>結案條件都符合後，由品管人員填姓名、勾選確認，按「確認結案」${gN(1)}。結案後資料鎖定，需要修改可以「撤銷結案」。</p>`),
+      `<p>結案條件都符合後，由品管人員填姓名、勾選確認，按「確認結案」${gN(1)}。結案後資料鎖定，需要修改可以「撤銷結案」。</p><p>結案後還是可以補兩欄，選好就自動存：<b>細部位置（廠區地圖）</b>、<b>負責單位</b>（例：改成生產課／打漿組）。</p>`),
     gStep(6,'查找案件', gC(gR(`${gN(1)}${gTag('未結案','dk')}${gTag('逾期')}${gTag('已結案')}${gTag('全部')}`)+gR(`${gN(2)}${gIn('🔍 10/26／包裝區／作業員 A／編號',1)}`)+gR(`${gIn('全部類別 ▾')}${gIn('2026 年 ▾')}${gIn('10 月 ▾')}`)),
       `<p>用分頁${gN(1)}看未結案、逾期、待結案確認、已結案。</p><p>搜尋欄${gN(2)}可以打<b>日期（例：10/26）、缺失區域、負責人員、編號</b>；也能依類別、年份、月份篩選。</p>`),
     gStep(7,'報表與匯出', gC(gR(`${gB('匯出報表（Excel）',{hl:1,n:1})}`)+gR(`${gB('📸 改善前後報告',{n:2})}`)+gR(`${gB('📗 改善通知單 Excel',{hl:1,n:3})}`)),
-      `<p>「匯出報表」${gN(1)}：選年月、狀態，公司表單或完整資料。</p><p>「改善前後報告」${gN(2)}可列印／存 PDF；「改善通知單 Excel」${gN(3)}照公司通知單格式含照片。有勾選案件時只做勾選的。</p>`),
+      `<p>「匯出報表」${gN(1)}：選年月、狀態，公司表單或完整資料。</p><p>「改善前後報告」${gN(2)}會下載一個網頁檔，用瀏覽器打開後列印或存成 PDF；「改善通知單 Excel」${gN(3)}照公司通知單格式含照片。有勾選案件時只做勾選的。</p>`),
     gStep(8,'備份（每兩週到一個月）', gC(gR(`${gB('下載備份',{dk:1,hl:1,n:1})}${gB('從備份還原',{n:2})}`)) + `<div class="gx-warn">⚠ 清除瀏覽資料、無痕視窗 → 資料會不見</div>`,
-      `<p>按「下載備份」${gN(1)}存到雲端硬碟；換電腦時用「從備份還原」${gN(2)}（會取代目前資料）。</p><p class="muted small">備份會連照片、常用選項、廠區地圖、稽核紀錄一起存。</p>`)
+      `<p>按「下載備份」${gN(1)}會存成<b>一個檔案</b>（Casevoras_完整備份_日期.json），建議存到雲端硬碟。裡面有全部資料：</p><p>✔ 案件與照片（含「最近刪除」）<br>✔ 常用選項<br>✔ 廠區地圖所有圖層（缺失區域、清潔分區、易碎品、動線、病媒防治、平面圖與參考照片）<br>✔ 稽核紀錄、易碎品檢查紀錄<br>✔ 畫面設定（風險顏色、磁鐵、地圖高度…）</p><p>換電腦時用「從備份還原」${gN(2)}，<b>會取代目前的資料</b>（常用選項是合併）。網址版和 claude.ai 版的資料分開存，要各自下載備份。</p>`)
   ]},
   stats: { t:'統計分析使用說明', steps:() => [
     gStep(1,'選期間', gC(gR(`${gN(1)}<span class="gx-seg"><i>年度</i><i>每季</i><i class="on">每月</i></span>`)+gR(`${gN(2)}${gIn('2026 年 ▾',1)}${gIn('10 月 ▾',1)}`)),
@@ -1082,8 +1082,8 @@ const GUIDES = {
       `<p>檢視模式依缺失狀況自動上色${gN(1)}：紅＝重大、逾期或<b>重複發生</b>；黃＝有未結案；綠＝都結案；灰＝沒紀錄。</p><p><b>⚠ 連續發生警示</b>：同一位置同一類缺失<b>連續 3 個月</b>都發生，位置標記會閃動並加 ⚠，右邊面板會提醒檢討根本原因。</p><p>地圖下方「📊 地圖統計」${gN(2)}選期間；<b>點某個區域時，統計會變成那一區各位置的分布</b>，按「看全部區域」回到全廠。</p><p class="muted small">地圖統計的數字卡和長條都可以點開看案件，見第 10 步。</p>`),
     gStep(10,'📊 地圖統計：點開看案件', gC(gR(`<span class="gx-k">8<small>缺失總數</small></span>${gN(1)}<span class="gx-k b" style="box-shadow:0 0 0 2px var(--gold)">2<small>未結案</small></span><span class="gx-k rd">2<small>逾期</small></span>`)+gR(`<span class="gx-s" style="width:52px">包裝區</span><span style="flex:1;height:8px;border-radius:4px;background:#16213a;max-width:120px"></span><span class="gx-s">7</span>${gN(2)}`),'📊 地圖統計') + gC(gR(`<span class="gx-s" style="flex:1"><b>QA-001</b>　包裝區　待改善（逾期）</span>${gN(3)}`)+gR(`<span class="gx-s" style="flex:1"><b>QA-002</b>　包裝區　待改善</span>`)+gR(`<span style="flex:1"></span>${gB('關閉',{dk:1})}`),'未結案　一樓・全部區域・全部期間 2 件'),
       `<p>地圖下方「📊 地圖統計」的<b>數字卡</b>${gN(1)}可以點：缺失總數、未結案、逾期、重複發生、連續 3 個月警示、改善完成率（列出已結案的）。</p><p><b>長條</b>${gN(2)}也可以點：各區域（或各位置）、缺失類型、月份趨勢，會列出那一項的案件。</p><p>跳出的清單${gN(3)}上方寫著範圍（地圖・區域・期間），未結案排前面；<b>點案件就直接打開</b>，可以補資料或結案。</p><p class="muted small">範圍跟著上方選的期間；點了地圖上某個區域，就只列那一區。「廠區」「已建立位置」「最近稽核不合格」不是缺失案件，不能點。</p>`),
-    gStep(11,'給同事用同一張地圖', gC(gR(`${gB('匯出地圖設定',{hl:1,n:1})}${gB('匯入地圖設定',{hl:1,n:2})}`)) + `<div class="gx-s" style="text-align:center">只含平面圖・區域・位置・稽核重點・參考照片<br>不含案件，不會蓋掉同事的資料</div>`,
-      `<p>按「匯出地圖設定」${gN(1)}存成檔案給同事，同事按「匯入地圖設定」${gN(2)}就有同一張地圖。</p><p>要放進報告或貼公告時，按上方<b>「🖼 匯出平面圖（圖片）」</b>，會把區域、位置、顏色一起存成清晰的 PNG（依目前風險顏色開／關）。</p><p class="muted small">「下載備份」會連稽核紀錄一起存。平面圖屬公司內部資料，不會上傳也不會送給 AI；匯出的圖片傳給別人前請先確認可以外流。</p>`),
+    gStep(11,'給同事用同一張地圖', gC(gR(`${gB('匯出地圖設定',{hl:1,n:1})}${gB('匯入地圖設定',{hl:1,n:2})}`)) + `<div class="gx-s" style="text-align:center">含平面圖・區域・位置・稽核重點・參考照片<br>＋清潔分區・易碎品・動線・病媒防治・顏色設定<br>不含案件，不會蓋掉同事的案件</div>`,
+      `<p>按「匯出地圖設定」${gN(1)}存成檔案給同事，同事按「匯入地圖設定」${gN(2)}就有同一張地圖。</p><p>「匯出地圖設定」包含<b>所有圖層</b>（清潔分區、易碎品、動線、病媒防治）和顏色設定；只有地圖，不含案件、稽核紀錄、易碎品檢查紀錄。</p><p>要放進報告或貼公告時，按上方<b>「🖼 匯出平面圖（圖片）」</b>，會把目前這一層存成清晰的 PNG，四周留白、附圖例（缺失層依目前風險顏色開／關）。</p><p class="muted small">要連案件一起帶走，請用缺失清單的「下載備份」。平面圖屬公司內部資料，不會上傳也不會送給 AI；匯出的圖片傳給別人前請先確認可以外流。</p>`),
     gStep(12,'切換圖層（缺失以外的圖）', gC(gR(`${gN(1)}<span class="gx-seg" style="flex-wrap:wrap"><i class="on">🔍 缺失</i><i>🧼 清潔分區</i><i>🔶 易碎品</i><i>➡️ 動線與設施</i><i>🐭 病媒防治</i></span>`)+gR(`${gB('🧼 疊清潔分區（開）',{dk:1,hl:1,n:2})}${gB('🖼 匯出平面圖（圖片）',{hl:1,n:3})}`)),
       `<p>地圖上方有一排圖層${gN(1)}，每一層<b>分開畫、分開看</b>，不會跟缺失混在一起；平面圖只要上傳一次，五層共用。</p><p>易碎品、動線、病媒這三層可以按「🧼 疊清潔分區」${gN(2)}，把分區淡淡地墊在底下對照。</p><p>在哪一層按「🖼 匯出平面圖（圖片）」${gN(3)}，就匯出<b>那一層</b>的清晰 PNG，下方附圖例。</p>`),
     gStep(13,'🧼 清潔分區', gC(gR(`${gIn('準清潔區 ▾',1)}${gN(1)}${gB('▭ 畫分區（拖曳）',{hl:1,n:2})}${gB('⬠ 多邊形分區',{hl:1})}`)+gR(`<span class="gx-sw" style="background:#c4bb7c"></span><span class="gx-s">一般作業區</span><span class="gx-sw" style="background:#b9cde5"></span><span class="gx-s">準清潔區</span><span class="gx-sw" style="background:#e6b9b8"></span><span class="gx-s">清潔區</span>`)) + gC(gR(`${gIn('包裝區 ▾')}${gIn('準清潔區 ▾')}`)+gR(gB('複製成清潔分區',{hl:1,n:3})),'📋 從缺失區域複製範圍'),
@@ -1101,7 +1101,7 @@ const GUIDES = {
     gStep(1,'刪除的案件會先放這裡', gC(gR(`<span class="gx-s" style="flex:1">QA-20261026-001 包裝區</span>${gB('編輯')}${gB('刪除',{rd:1,hl:1,n:1})}`),'缺失清單'),
       `<p>在缺失清單按「刪除」${gN(1)}，案件會移到「最近刪除」，<b>保留 30 天</b>。</p><p class="muted small">已結案的案件不能刪除。</p>`),
     gStep(2,'還原', gC(gR(`<span class="gx-ck">✓</span><span class="gx-s" style="flex:1">QA-20261026-001　剩 28 天</span>`)+gR(`${gB('全選')}${gB('還原',{dk:1,hl:1,n:1})}`)),
-      `<p>勾選要救回的案件，按「還原」${gN(1)}，就會回到缺失清單，資料和照片都在。</p>`),
+      `<p>勾選要救回的案件，按「還原」${gN(1)}，就會回到缺失清單，資料和照片都在。</p><p class="muted small">「下載備份」也會帶走最近刪除的案件，用備份還原後一樣還在這裡（剩餘天數照原本的刪除日算）。</p>`),
     gStep(3,'永久刪除', gC(gR(`<span class="gx-ck">✓</span><span class="gx-s" style="flex:1">QA-20261001-003　剩 2 天</span>`)+gR(`${gB('永久刪除',{rd:1,hl:1,n:1})}`)),
       `<p>確定不要的案件，勾選後按「永久刪除」${gN(1)}，<b>無法復原</b>。</p><p class="muted small">超過 30 天的案件，會在下次打開本工具時自動永久刪除。</p>`)
   ]},
@@ -2220,15 +2220,20 @@ async function download(content, name, type){
 }
 
 /* ---------- 備份 / 還原 ---------- */
+/* 畫面設定（風險顏色、磁鐵、圖層、地圖高度、隱藏的圖例、說明展開…）：只帶設定，不含資料 */
+const PREF_KEYS = ['mapH','mapZ','mapRisk','mapLock','mapStat','mapLayer','mapZbg','mapHide','mapSnap'];
+function prefsGet(){ const o = {}; try{ for(let i=0;i<localStorage.length;i++){ const k = localStorage.key(i); if(!k.startsWith(KEY+'_')) continue; const n = k.slice(KEY.length+1); if(PREF_KEYS.includes(n) || n.startsWith('guide_')) o[n] = localStorage.getItem(k); } }catch(e){} return o; }
+function prefsSet(o){ if(!o || typeof o!=='object') return; try{ Object.entries(o).forEach(([n,v])=>{ if((PREF_KEYS.includes(n) || /^guide_\w+$/.test(n)) && typeof v==='string') localStorage.setItem(KEY+'_'+n, v); }); }catch(e){} }
 async function backup(){
   /* 備份檔裡放照片本身（不是編號），換電腦還原時照片才會跟著過去 */
-  const rs = live();
+  /* 完整備份：案件（含「最近刪除」）與照片、常用選項、廠區地圖全部圖層、稽核、易碎品檢查、畫面設定 */
+  const rs = records.slice();
   await preloadPhotos(rs);
   const out = rs.map(r => Object.assign({}, r, { photos:r.photos.map(phSync).filter(Boolean), improvePhotos:r.improvePhotos.map(phSync).filter(Boolean) }));
   const mapImages = {}; for(const id of mapImageIds()){ mapImages[id] = await phGet(id); }
   const audits = await auditsForBackup();
-  download(JSON.stringify({app:'qaHygieneTracker', version:2, exportedAt:new Date().toISOString(), records:out, tombs, opts:OPTS, map:MAPD, mapImages, audits, fragChecks:FRAGCHK}, null, 1),
-    `hygiene_backup_${today()}.json`, 'application/json');
+  download(JSON.stringify({app:'qaHygieneTracker', version:3, exportedAt:new Date().toISOString(), records:out, tombs, opts:OPTS, map:MAPD, mapImages, audits, fragChecks:FRAGCHK, prefs:prefsGet()}, null, 1),
+    `Casevoras_完整備份_${today()}.json`, 'application/json');
 }
 function restore(input){
   const file = input.files[0]; input.value='';
@@ -2238,11 +2243,11 @@ function restore(input){
     try{
       const data = JSON.parse(fr.result);
       if(!data || !Array.isArray(data.records)) throw 0;
-      const incoming = data.records.filter(r=>!r.deleted);
+      const incoming = data.records.filter(r=>!r.deleted), inTrash = data.records.filter(r=>r.deleted);
       const trashN = records.filter(r=>r.deleted).length;
-      if(!(await ask(`備份檔內有 ${incoming.length} 筆紀錄。\n還原會「取代」目前瀏覽器中的 ${live().length} 筆資料，目前「最近刪除」裡的 ${trashN} 筆案件也會一併被取代，${data.map&&Array.isArray(data.map.maps)&&data.map.maps.length?'\n備份裡的廠區地圖也會取代目前的地圖。':''}\n確定嗎？`))) return;
+      if(!(await ask(`備份檔內有 ${incoming.length} 筆紀錄${inTrash.length?`（另有「最近刪除」${inTrash.length} 筆）`:''}。\n還原會「取代」目前瀏覽器中的 ${live().length} 筆資料，目前「最近刪除」裡的 ${trashN} 筆案件也會一併被取代，${data.map&&Array.isArray(data.map.maps)&&data.map.maps.length?'\n備份裡的廠區地圖（含所有圖層）也會取代目前的地圖。':''}\n確定嗎？`))) return;
       const old = records, oldT = tombs.slice();
-      const next = incoming.map(r=>Object.assign(blankRecord(), migrate(r)));
+      const next = [...incoming, ...inTrash].map(r=>Object.assign(blankRecord(), migrate(r)));
       if(PH.ok){ try{ await phMoveOut(next); }catch(e){ say('照片存不進去，瀏覽器的儲存空間可能已滿，還原已取消，目前資料沒有變動。'); return; } }
       records = next;
       const have = new Set(tombs.map(t=>t.id));
@@ -2254,7 +2259,8 @@ function restore(input){
       if(data.map && Array.isArray(data.map.maps) && data.map.maps.length) await mapApply(data.map, data.mapImages);
       if(Array.isArray(data.audits)) await auditsRestore(data.audits);
       if(Array.isArray(data.fragChecks)){ FRAGCHK = data.fragChecks.filter(c=>c && c.id && Array.isArray(c.results)); saveFragChk(); }
-      flash('還原完成'); showList();
+      if(data.prefs){ prefsSet(data.prefs); MV_RISK = lyLS('mapRisk')!=='0'; MV_LOCK = lyLS('mapLock')==='1'; MV_ZBG = lyLS('mapZbg')!=='0'; MV_SNAP = lyLS('mapSnap')!=='0'; try{ MV_HIDE = new Set(JSON.parse(lyLS('mapHide')||'[]')); }catch(e){} if(LAYERS[lyLS('mapLayer')]) MV.layer = lyLS('mapLayer'); }
+      optUnify(); flash('還原完成'); showList();
     }catch(e){ say('無法讀取：這不是本工具的備份檔。'); }
   };
   fr.readAsText(file);
