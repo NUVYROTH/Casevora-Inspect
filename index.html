@@ -3028,7 +3028,7 @@ async function mapExportImage(){
   const k = Math.min(3, Math.max(1, 3200/img.naturalWidth));     /* 放大到約 3200px 寬，線條、文字比較銳利 */
   const W = Math.round(img.naturalWidth*k), H = Math.round(img.naturalHeight*k), u1 = W/1600;  /* u1：字與線條的基本單位 */
   const risk = MV_RISK && MV.mode==='view', rep = repeatSet(), streak = streakAlerts();
-  const HEAD = Math.round(70*u1), FOOT = risk ? Math.round(56*u1) : Math.round(36*u1);
+  const HEAD = Math.round(70*u1), FOOT = Math.round(60*u1);
   const c = document.createElement('canvas'); /* 平面圖四周留白，邊緣的標記不會被切掉 */
   const M = Math.round(70*u1), PW = W + 2*M; c.width = PW; c.height = H + 2*M + HEAD + FOOT;
   const g = c.getContext('2d'), F = '"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif';
@@ -3060,7 +3060,7 @@ async function mapExportImage(){
   as.forEach(a => {
     const s = mapStats(recsForArea(a)), warn = streak.some(x=>x.aid===a.id);
     const lx = X(a.pts ? a.pts[0][0] : a.x) + 6*u1, ly = Y(a.pts ? a.pts[0][1] : a.y) + 6*u1;
-    const fs = Math.round(15*u1); g.font = `700 ${fs}px ${F}`;
+    const fs = Math.round(20*u1); g.font = `700 ${fs}px ${F}`;
     const txt = a.name + (warn ? ' ⚠' : ''), tw = g.measureText(txt).width, cw = s.open ? fs*1.3 : 0, pad = 7*u1, h = fs*1.55;
     rr(lx, ly, tw + pad*2 + cw, h, 5*u1); g.fillStyle = 'rgba(255,253,248,.95)'; g.fill();
     if(risk){ g.fillStyle = RISK[riskOf(recsForArea(a), a.id, rep)].c; g.fillRect(lx, ly, 5*u1, h); }
@@ -3073,7 +3073,7 @@ async function mapExportImage(){
   MAPD.locs.filter(l=>ids.has(l.areaId)).forEach(l => {
     const rk = risk ? riskOf(recsForLoc(l), '', rep) : (mapStats(recsForLoc(l)).open ? 'red' : '');
     const bg = rk ? ({red:'#b42318', yellow:'#d97706', green:'#167a3e', gray:'#9aa3b2'})[rk] : '#16213a';
-    const fs = Math.round(13*u1); g.font = `700 ${fs}px ${F}`;
+    const fs = Math.round(18*u1); g.font = `700 ${fs}px ${F}`;
     const t = l.code || l.name || '•', tw = g.measureText(t).width, h = fs*1.9, w = Math.max(h, tw + fs*1.2), x = X(l.x) - w/2, y = Y(l.y) - h/2;
     rr(x, y, w, h, h/2); g.fillStyle = bg; g.fill(); g.lineWidth = 2.5*u1; g.strokeStyle = '#fff'; g.stroke();
     g.fillStyle = '#fff'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(t, X(l.x), Y(l.y)+0.5); g.textAlign = 'left';
@@ -3083,8 +3083,8 @@ async function mapExportImage(){
   g.restore();
   /* 下方圖例 */
   g.fillStyle = '#f3ece0'; g.fillRect(0, H+2*M+HEAD, PW, FOOT); g.textBaseline = 'middle';
-  g.font = `${Math.round(15*u1)}px ${F}`; let fx = Math.round(24*u1); const fy = H + 2*M + HEAD + FOOT/2;
-  if(risk){ Object.values(RISK).forEach(v => { g.fillStyle = v.c; g.fillRect(fx, fy-7*u1, 14*u1, 14*u1); fx += 20*u1; g.fillStyle = '#16213a'; const t = v.t; g.fillText(t, fx, fy); fx += g.measureText(t).width + 26*u1; }); }
+  g.font = `${Math.round(21*u1)}px ${F}`; let fx = Math.round(24*u1); const fy = H + 2*M + HEAD + FOOT/2;
+  if(risk){ Object.values(RISK).forEach(v => { g.fillStyle = v.c; g.fillRect(fx, fy-10*u1, 20*u1, 20*u1); fx += 28*u1; g.fillStyle = '#16213a'; const t = v.t.replace(/^.：/,''); g.fillText(t, fx, fy); fx += g.measureText(t).width + 34*u1; }); }
   else { g.fillStyle = '#5d6779'; g.fillText('區域旁紅色數字＝未結案件數；紅色位置標記＝有未結案缺失；⚠＝連續 3 個月發生', fx, fy); }
   const blob = await new Promise(r => c.toBlob(r, 'image/png'));
   if(!blob){ say('圖片產生失敗，請重試。'); return; }
@@ -3732,10 +3732,10 @@ async function layerExportImage(){
   const X = x => x*W, Y = y => y*H;
   const ICON = {}; for(const [k, u] of [...Object.keys(PK).map(k=>[k, pestIcon(k)]), ...Object.keys(FT).map(k=>['ft_'+k, fragIcon(k)])]){ const im = new Image(); im.src = u; try{ await im.decode(); ICON[k] = im; }catch(e){} }
   /* 圖例先排版，算出下方要留多高 */
-  const items = lyLegendItems(), mc = document.createElement('canvas').getContext('2d'); mc.font = `${Math.round(16*u1)}px ${F}`;
-  const SW = 40*u1, GAP = 28*u1, LH = 34*u1, lines = [[]]; let lx = 24*u1;
-  items.forEach(it => { const w = SW + 8*u1 + mc.measureText(it.t).width; if(lx + w > W - 24*u1 && lines[lines.length-1].length){ lines.push([]); lx = 24*u1; } lines[lines.length-1].push({it, x:lx}); lx += w + GAP; });
-  const HEAD = Math.round(70*u1), FOOT = items.length ? Math.round(lines.length*LH + 22*u1) : Math.round(36*u1);
+  const items = lyLegendItems(), mc = document.createElement('canvas').getContext('2d'); mc.font = `${Math.round(24*u1)}px ${F}`;
+  const v = 1.5*u1, SW = 40*v, GAP = 28*v, LH = 34*v, lines = [[]]; let lx = 24*u1;   /* v：圖例放大 1.5 倍，印出來也看得清楚 */
+  items.forEach(it => { const w = SW + 8*v + mc.measureText(it.t).width; if(lx + w > W - 24*u1 && lines[lines.length-1].length){ lines.push([]); lx = 24*u1; } lines[lines.length-1].push({it, x:lx}); lx += w + GAP; });
+  const HEAD = Math.round(70*u1), FOOT = items.length ? Math.round(lines.length*LH + 30*u1) : Math.round(36*u1);
   const c = document.createElement('canvas'); /* 平面圖四周留白，邊緣的標記不會被切掉 */
   const M = Math.round(70*u1), PW = W + 2*M; c.width = PW; c.height = H + 2*M + HEAD + FOOT;
   const g = c.getContext('2d');
@@ -3757,7 +3757,7 @@ async function layerExportImage(){
     if(lyZoneMul()) g.globalCompositeOperation = 'multiply';
     lyList('zone').forEach(z => { const col = lyColor(z.kind); path(z.pts); g.closePath(); g.fillStyle = hexA(col, L==='zone' ? lyZoneAlpha() : lyZoneAlpha()*0.7); g.fill(); g.lineWidth = Math.max(1.5, 1.5*s); g.strokeStyle = hexA(col, 1); g.stroke(); });
     g.globalCompositeOperation = 'source-over';
-    if(L==='zone') lyList('zone').forEach(z => { const b = lyLabPt(z.pts), fs = Math.round(15*u1), t = (ZK[z.kind]?ZK[z.kind].t:'')+(z.name?'｜'+z.name:''); g.font = `700 ${fs}px ${F}`;
+    if(L==='zone') lyList('zone').forEach(z => { const b = lyLabPt(z.pts), fs = Math.round(20*u1), t = (ZK[z.kind]?ZK[z.kind].t:'')+(z.name?'｜'+z.name:''); g.font = `700 ${fs}px ${F}`;
       const tw = g.measureText(t).width, pad = 7*u1, h = fs*1.55, x = X(b.x)+6*u1, y = Y(b.y)+6*u1;
       rr(x, y, tw+pad*2+5*u1, h, 5*u1); g.fillStyle = 'rgba(255,253,248,.95)'; g.fill(); g.fillStyle = lyColor(z.kind); g.fillRect(x, y, 5*u1, h);
       g.fillStyle = '#16213a'; g.textBaseline = 'middle'; g.fillText(t, x+pad+5*u1, y+h/2); });
@@ -3776,28 +3776,28 @@ async function layerExportImage(){
     rr(x, y, w, h, 6*u1*fs/(13*u1)); g.fillStyle = v.c; g.fill(); g.lineWidth = (v.ring?3.5:2.5)*u1; g.strokeStyle = v.ring || '#fff'; g.stroke();
     g.fillStyle = st==='bad' ? '#fff' : '#3b2500'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(t, cx, cy+0.5); g.textAlign = 'left';
     if(st==='due'){ const bx = x+w, by = y; g.beginPath(); g.arc(bx, by, fs*0.7, 0, Math.PI*2); g.fillStyle = '#b42318'; g.fill(); g.fillStyle = '#fff'; g.font = `800 ${Math.round(fs*0.9)}px ${F}`; g.textAlign = 'center'; g.fillText('!', bx, by+0.5); g.textAlign = 'left'; } };
-  if(L==='pest') lyList('pest').forEach(o => { const sz = 44*u1, cx = X(o.x), cy = Y(o.y), fs = Math.round(12*u1);
+  if(L==='pest') lyList('pest').forEach(o => { const sz = 62*u1, cx = X(o.x), cy = Y(o.y), fs = Math.round(18*u1);
     if(ICON[o.kind]) g.drawImage(ICON[o.kind], cx-sz/2, cy-sz/2, sz, sz);
     g.font = `800 ${fs}px ${F}`; const t = o.code||'', tw = g.measureText(t).width, h = fs*1.5, x = cx+sz/2-2*u1, y = cy-h/2;
     rr(x, y, tw+fs*0.8, h, 4*u1); g.fillStyle = 'rgba(255,253,248,.95)'; g.fill(); g.lineWidth = 1*u1; g.strokeStyle = '#16213a'; g.stroke();
     g.fillStyle = '#16213a'; g.textBaseline = 'middle'; g.fillText(t, x+fs*0.4, y+h/2+0.5); });
   if(L==='frag') lyList('frag').forEach(f => { const st = fragState(f).k, im = ICON['ft_'+fragType(f)];
-    if(!im){ fragPill(X(f.x), Y(f.y), '◆ '+(f.code||''), st, Math.round(13*u1)); return; }
-    const sz = 44*u1, cx = X(f.x), cy = Y(f.y), fs = Math.round(13*u1); g.drawImage(im, cx-sz/2, cy-sz/2, sz, sz);
+    if(!im){ fragPill(X(f.x), Y(f.y), '◆ '+(f.code||''), st, Math.round(18*u1)); return; }
+    const sz = 62*u1, cx = X(f.x), cy = Y(f.y), fs = Math.round(18*u1); g.drawImage(im, cx-sz/2, cy-sz/2, sz, sz);
     g.font = `800 ${fs}px ${F}`; const t = f.code||'', w = g.measureText(t).width + fs*1.0, x = cx + sz/2 - 3*u1;
     fragPill(x + w/2, cy, t, st, fs); });
   g.restore();
   /* 下方圖例 */
   g.fillStyle = '#f3ece0'; g.fillRect(0, H+2*M+HEAD, PW, FOOT); g.textBaseline = 'middle';
   if(!items.length){ g.font = `${Math.round(15*u1)}px ${F}`; g.fillStyle = '#5d6779'; g.fillText('（這一層還沒有畫任何東西）', 24*u1, H+2*M+HEAD+FOOT/2); }
-  lines.forEach((ln, li) => { const cy = H + 2*M + HEAD + 11*u1 + LH*li + LH/2;
+  lines.forEach((ln, li) => { const cy = H + 2*M + HEAD + 15*u1 + LH*li + LH/2;
     ln.forEach(({it, x}) => {
-      if(it.type==='fill'){ g.fillStyle = hexA(it.c, 0.75); g.fillRect(x, cy-9*u1, SW, 18*u1); g.strokeStyle = it.c; g.lineWidth = 1.5*u1; g.strokeRect(x, cy-9*u1, SW, 18*u1); }
-      if(it.type==='bar'){ g.fillStyle = it.c; g.fillRect(x, cy-5*u1, SW, 10*u1); }
-      if(it.type==='line'){ const w = 4*u1; g.beginPath(); g.moveTo(x, cy); g.lineTo(x+SW-10*u1, cy); g.lineWidth = w; g.strokeStyle = it.c; g.lineCap = it.dash==='dot'?'round':'butt'; g.setLineDash(it.dash==='dash'?[8*u1,5*u1]:it.dash==='dot'?[0.1,w*2]:[]); g.stroke(); g.setLineDash([]); g.lineCap = 'butt'; arrow(x, cy, x+SW-10*u1, cy, it.c, w*3.4); }
-      if(it.type==='icon' && ICON[it.k]){ const sz = 24*u1; g.drawImage(ICON[it.k], x+(SW-sz)/2, cy-sz/2, sz, sz); }
-      if(it.type==='frag'){ g.save(); rr(x, cy-10*u1, SW, 20*u1, 5*u1); g.fillStyle = it.c; g.fill(); g.lineWidth = (it.ring?3:2)*u1; g.strokeStyle = it.ring||'#fff'; g.stroke(); g.restore(); }
-      g.font = `${Math.round(16*u1)}px ${F}`; g.fillStyle = '#16213a'; g.fillText(it.t, x + SW + 8*u1, cy);
+      if(it.type==='fill'){ g.fillStyle = hexA(it.c, 0.75); g.fillRect(x, cy-9*v, SW, 18*v); g.strokeStyle = it.c; g.lineWidth = 1.5*v; g.strokeRect(x, cy-9*v, SW, 18*v); }
+      if(it.type==='bar'){ g.fillStyle = it.c; g.fillRect(x, cy-5*v, SW, 10*v); }
+      if(it.type==='line'){ const w = 4*v; g.beginPath(); g.moveTo(x, cy); g.lineTo(x+SW-10*v, cy); g.lineWidth = w; g.strokeStyle = it.c; g.lineCap = it.dash==='dot'?'round':'butt'; g.setLineDash(it.dash==='dash'?[8*v,5*v]:it.dash==='dot'?[0.1,w*2]:[]); g.stroke(); g.setLineDash([]); g.lineCap = 'butt'; arrow(x, cy, x+SW-10*v, cy, it.c, w*3.4); }
+      if(it.type==='icon' && ICON[it.k]){ const sz = 24*v; g.drawImage(ICON[it.k], x+(SW-sz)/2, cy-sz/2, sz, sz); }
+      if(it.type==='frag'){ g.save(); rr(x, cy-10*v, SW, 20*v, 5*v); g.fillStyle = it.c; g.fill(); g.lineWidth = (it.ring?3:2)*u1; g.strokeStyle = it.ring||'#fff'; g.stroke(); g.restore(); }
+      g.font = `${Math.round(16*v)}px ${F}`; g.fillStyle = '#16213a'; g.fillText(it.t, x + SW + 8*v, cy);
     }); });
   const blob = await new Promise(r => c.toBlob(r, 'image/png'));
   if(!blob){ say('圖片產生失敗，請重試。'); return; }
