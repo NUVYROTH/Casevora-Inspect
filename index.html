@@ -752,7 +752,12 @@ function today(){ const d=new Date(); return new Date(d.getTime()-d.getTimezoneO
 /* ---------- 常用選項（使用者自己設定的下拉清單，只存在這個瀏覽器；下載備份會一起帶走） ---------- */
 const KEY_O = 'qaHygieneTracker_v1_opts';
 const OPT_KINDS = { area:'缺失區域', people:'人員', dept:'單位' };
-function optList(a){ return Array.isArray(a) ? [...new Set(a.map(x=>String(x??'').trim()).filter(x=>x && x!=='其它'))] : []; }
+/* 名稱比對用：全形半形視為相同（１＝1、Ａ＝A）、去掉空白與看不見的字元 */
+const nkey = v => String(v??'').normalize('NFKC').replace(/[\s\u200b-\u200f\u2060\ufeff]+/g,'');
+const nclean = v => String(v??'').replace(/[\u200b-\u200f\u2060\ufeff]/g,'').trim();
+function optList(a){ if(!Array.isArray(a)) return []; const seen = new Set(), out = [];
+  a.map(nclean).forEach(x=>{ const k = nkey(x); if(x && x!=='其它' && !seen.has(k)){ seen.add(k); out.push(x); } }); return out; }
+function optFind(kind, v){ const k = nkey(v); return k ? OPTS[kind].find(x=>nkey(x)===k) : undefined; }
 function loadOpts(){ let o = {}; try{ o = JSON.parse(localStorage.getItem(KEY_O)||'{}') || {}; }catch(e){}
   return { area:optList(o.area), people:optList(o.people), dept: Array.isArray(o.dept) ? optList(o.dept) : ['生產課','儲運'] }; }
 let OPTS = loadOpts();
@@ -763,7 +768,7 @@ function combo(kind, v, attr, ph, dis){
   return `<div class="combo" data-kind="${kind}"><select class="cmsel lockable" aria-label="${OPT_KINDS[kind]}常用選項" onchange="comboPick(this)" ${dis?'disabled':''}>${comboOpts(kind, comboSel(kind,v))}</select>
     <div class="cmrow" ${comboSel(kind,v)==='__o'?'':'hidden'}><input type="text" ${attr} value="${esc(v)}" placeholder="${esc(ph||'')}" ${dis?'disabled':''}><button type="button" class="cmadd lockable" onclick="comboAdd(this)" ${dis?'disabled':''}>＋加入常用</button></div></div>`;
 }
-function comboSel(kind, v){ return v ? (OPTS[kind].includes(v) ? v : '__o') : (OPTS[kind].length ? '' : '__o'); }
+function comboSel(kind, v){ return v ? (optFind(kind, v) || '__o') : (OPTS[kind].length ? '' : '__o'); }
 function comboOpts(kind, sel){ return `<option value="">— 請選擇 —</option>${OPTS[kind].map(x=>`<option value="${esc(x)}" ${x===sel?'selected':''}>${esc(x)}</option>`).join('')}<option value="__o" ${sel==='__o'?'selected':''}>其它（自己打字）</option>`; }
 function comboPick(sel){
   const row = sel.closest('.combo').querySelector('.cmrow'), inp = row.querySelector('input'), other = sel.value==='__o';
@@ -781,7 +786,7 @@ function comboAdd(btn){
   const box = btn.closest('.combo'), kind = box.dataset.kind, v = box.querySelector('input').value.trim();
   if(!v){ say('請先在框裡輸入要加入的'+OPT_KINDS[kind]+'。'); return; }
   if(v==='其它'){ say('「其它」不能加入常用。'); return; }
-  if(!OPTS[kind].includes(v)){ OPTS[kind].push(v); if(!saveOpts()){ OPTS[kind].pop(); return; } }
+  if(!optFind(kind, v)){ OPTS[kind].push(v); if(!saveOpts()){ OPTS[kind].pop(); return; } }
   document.querySelectorAll(`.combo[data-kind=${kind}]`).forEach(comboSync);
   flash('已加入常用：'+v);
 }
@@ -1087,7 +1092,7 @@ const GUIDES = {
     gStep(1,'新增常用選項', gC(gR(`${gIn('例：包裝區',1)}${gB('新增',{dk:1,hl:1,n:1})}`),'缺失區域'),
       `<p>在「缺失區域、人員、單位」三欄輸入名稱，按「新增」${gN(1)}（或按 Enter）。</p><p class="muted small">廠區地圖畫的區域，也會自動加進「缺失區域」。</p>`),
     gStep(2,'排序、編輯、刪除', gC(gR(`<span class="gx-s" style="flex:1">打漿區</span>${gN(1)}${gB('↑')}${gB('↓')}${gB('編輯',{hl:1,n:2})}${gB('刪除',{rd:1,n:3})}`)),
-      `<p>用 ↑↓${gN(1)} 調整下拉選單的順序。</p><p>「編輯」${gN(2)}改名時，會問你要不要把<b>舊案件</b>一起改；「刪除」${gN(3)}只會從清單移除，不會改到已存的案件。</p>`),
+      `<p>用 ↑↓${gN(1)} 調整下拉選單的順序。</p><p>「編輯」${gN(2)}改名時，會問你要不要把<b>舊案件</b>一起改；「刪除」${gN(3)}只會從清單移除，不會改到已存的案件。</p><p><b>合併重複的名稱</b>：只差全形／半形（例：打漿區１樓、打漿區1樓）或多了空白的，打開本工具時會<b>自動合併</b>。寫法不一樣的（例：1樓倉儲區、1F倉儲區），按其中一個的「編輯」，改成另一個的名稱，就會問你要不要合併，舊案件一起改，統計就會合在一起。</p>`),
     gStep(3,'填表時怎麼用', gC(gR(`${gN(1)}${gIn('其它（自己打字） ▾',1)}`)+gR(`${gIn('支援組')}${gB('＋加入常用',{hl:1,n:2})}`),'負責單位'),
       `<p>填缺失單時直接從下拉選；不在清單上的，選「其它（自己打字）」${gN(1)}輸入。</p><p>打完按「＋加入常用」${gN(2)}，下次就能直接選。</p>`),
     gStep(4,'給同事用同一份清單', gC(gR(`${gB('下載備份',{dk:1,hl:1,n:1})}`)+gR(`${gB('從備份還原',{hl:1,n:2})}`)),
@@ -2257,11 +2262,11 @@ function mapAreas(mid){ return MAPD.areas.filter(a=>a.mapId===(mid||MV.mapId)); 
 function areaById(id){ return MAPD.areas.find(a=>a.id===id); }
 function locById(id){ return MAPD.locs.find(l=>l.id===id); }
 /* 缺失「區域」文字對到地圖區域（名稱相同即算），舊案件不用改也能統計 */
-function areaByName(name){ const n = (name||'').trim(); return n ? MAPD.areas.find(a=>a.name===n) : null; }
+function areaByName(name){ const n = nkey(name); return n ? MAPD.areas.find(a=>nkey(a.name)===n) : null; }
 function recsForArea(a){ return live().filter(r => r.areaId===a.id || (!areaById(r.areaId) && (r.area||'').trim()===a.name)); }
 function recsForLoc(l){ return live().filter(r => r.locId===l.id); }
 function mapStats(rs){ return { total:rs.length, open:rs.filter(r=>!r.closed).length, over:rs.filter(isOverdue).length }; }
-function addAreaOpt(name){ if(name && !OPTS.area.includes(name)){ OPTS.area.push(name); saveOpts(); } }
+function addAreaOpt(name){ if(name && !optFind('area', name)){ OPTS.area.push(name); saveOpts(); } }
 
 async function showMap(focus){
   if(dirty && !(await ask('有尚未儲存的修改，確定要離開嗎？'))) return;
@@ -3956,6 +3961,17 @@ function askText(title, value){
     document.body.appendChild(m); inp.focus(); inp.select();
   });
 }
+/* 開啟時整理：常用清單裡只差全形半形、空白的視為同一個；舊案件的寫法統一成清單上的 */
+function optUnify(){
+  let raw = {}; try{ raw = JSON.parse(localStorage.getItem(KEY_O)||'{}') || {}; }catch(e){}
+  const changedOpts = Object.keys(OPT_KINDS).some(k => Array.isArray(raw[k]) && raw[k].length !== OPTS[k].length);
+  if(changedOpts) saveOpts();
+  let n = 0;
+  records.forEach(r => Object.entries(OPT_FIELDS).forEach(([k, fs]) => fs.forEach(f => {
+    const v = r[f]; if(!v) return; const c = optFind(k, v); if(c && c!==v){ r[f] = c; n++; } })));
+  if(n) persistAll();
+  return n;
+}
 /* 改名：清單改掉；已存的案件裡「完全相同」的值，問過後一起改 */
 const OPT_FIELDS = { area:['area'], dept:['ownerDept','improveDept'], people:['finder','ownerNote','notifyTarget','improveNote','closedBy'] };
 async function optEdit(k,i){
@@ -3963,7 +3979,17 @@ async function optEdit(k,i){
   if(v===null || v===old) return;
   if(!v){ say('名稱不能空白。'); return; }
   if(v==='其它'){ say('「其它」不能加入常用。'); return; }
-  if(OPTS[k].includes(v)){ say('「'+v+'」已經在清單裡了。'); return; }
+  const dup = OPTS[k].find((x,j)=>j!==i && nkey(x)===nkey(v));
+  if(dup){ /* 改成清單裡已經有的名稱 → 合併成一個，舊案件一起改 */
+    const hit = records.filter(r => OPT_FIELDS[k].some(f=>nkey(r[f])===nkey(old)));
+    if(!(await ask(`清單裡已經有「${dup}」。\n要把「${old}」合併到「${dup}」嗎？${hit.length?`\n用到「${old}」的 ${hit.length} 件案件會一起改成「${dup}」，統計就會合在一起。`:''}`))) return;
+    OPTS[k].splice(i,1); if(!saveOpts()) return;
+    hit.forEach(r => OPT_FIELDS[k].forEach(f=>{ if(nkey(r[f])===nkey(old)) r[f] = dup; }));
+    if(k==='people') records.forEach(r=>(r.reviews||[]).forEach(x=>{ if(nkey(x.by)===nkey(old)) x.by = dup; }));
+    if(k==='area') MAPD.areas.forEach(a=>{ if(nkey(a.name)===nkey(old)) a.name = dup; }), saveMap();
+    if(persistAll()) flash(`已合併到「${dup}」${hit.length?'，更新 '+hit.length+' 件案件':''}`);
+    renderOpts(); return;
+  }
   OPTS[k][i] = v; if(!saveOpts()){ OPTS[k][i] = old; return; }
   const hit = records.filter(r => OPT_FIELDS[k].some(f=>r[f]===old) || (k==='people' && (r.reviews||[]).some(x=>x.by===old)));
   if(hit.length && await ask(`已存的案件中有 ${hit.length} 件用到「${old}」，要一起改成「${v}」嗎？\n（選「取消」只改清單，舊案件維持原樣）`)){
@@ -3976,7 +4002,7 @@ function optAdd(k){
   const inp = $('#oi_'+k), v = inp.value.trim();
   if(!v) return;
   if(v==='其它'){ say('「其它」不能加入常用。'); return; }
-  if(OPTS[k].includes(v)){ say('「'+v+'」已經在清單裡了。'); return; }
+  if(optFind(k, v)){ say('「'+optFind(k, v)+'」已經在清單裡了。'); return; }
   OPTS[k].push(v); if(!saveOpts()){ OPTS[k].pop(); return; }
   renderOpts(); $('#oi_'+k).focus();
 }
@@ -4429,6 +4455,7 @@ async function printReport(){
   try{ localStorage.setItem('__t','1'); localStorage.removeItem('__t'); }
   catch(e){ say('注意：目前瀏覽器無法保存資料（可能是無痕模式或已封鎖網站資料），關閉後資料會遺失。'); }
   purgeExpired();
+  optUnify();
   $('#app').innerHTML = '<div class="empty">資料載入中…</div>';
   if(await phOpen()){
     try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
