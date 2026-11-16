@@ -1051,7 +1051,7 @@ const GUIDES = {
     gStep(5,'⌨️ 快捷鍵：刪除、複製、貼上', gC(gR(`${gN(1)}<span class="gx-tag dk">Delete</span><span class="gx-s">刪除選取的物件</span>`)+gR(`${gN(2)}<span class="gx-tag dk">Ctrl</span>＋<span class="gx-tag dk">C</span><span class="gx-s">複製</span><span class="gx-tag dk">Ctrl</span>＋<span class="gx-tag dk">V</span><span class="gx-s">貼在滑鼠位置</span>`)+gR(`${gN(3)}<span class="gx-tag dk">Ctrl</span>＋<span class="gx-tag dk">Z</span><span class="gx-s">復原</span><span class="gx-tag dk">Esc</span><span class="gx-s">取消畫圖／取消選取</span>`)+gR(`<span class="gx-tag dk">R</span><span class="gx-s">門、冷氣等標記轉 90°</span>`),'編輯模式，先點一下要處理的物件'),
       `<p>在「✏️ 編輯模式」先<b>點一下</b>分區、箭頭、門窗標記、易碎品或病媒防治設施：</p><p>按 <b>Delete</b>${gN(1)} 直接刪除；刪錯了按 <b>Ctrl＋Z</b>${gN(3)} 救回來。</p><p>按 <b>Ctrl＋C</b> 複製、<b>Ctrl＋V</b>${gN(2)} 貼上：會貼在<b>滑鼠所在的位置</b>；連按 Ctrl＋V 會往右下錯開，不會疊在一起。適合一次放很多個一樣的門、鼠板站或捕蟲燈；易碎品、病媒設施貼上時會自動給新編號。也可以切換地圖，把東西貼到另一張地圖。</p><p><b>Esc</b> 取消正在畫的線或多邊形，或取消選取；選了門、冷氣等標記按 <b>R</b> 轉 90°。</p><p class="muted small">缺失區域和位置因為有案件資料，按 Delete 會先跳確認，而且不能複製（名稱不能重複）。打字的時候（輸入框裡）快捷鍵不會作用。Mac 用 ⌘ 代替 Ctrl。</p>`),
     gStep(6,'放位置、參考照片', gC(gR(`${gB('📍 新增位置',{hl:1,n:1})}`)+gR(`${gTag('P01','dk')}${gTag('P03','rd')}<span class="gx-s">打漿機／地面及排水溝</span>`)) + gC(gR(`<span class="gx-ph"></span><span class="gx-ph b"></span>${gB('＋ 加參考照片',{hl:1,n:2})}`)+`<div class="gx-dash">📋 點這裡，再按 Ctrl+V 貼上</div>`,'📷 參考照片（正常狀態）'),
-      `<p>按「📍 新增位置」${gN(1)}，在區域框裡點一下，輸入<b>位置編號</b>（例：P03、輸送帶），名稱可以之後在右邊補。</p><p>編輯模式點區域或位置，「＋ 加參考照片」${gN(2)}放正常、清潔時的樣子；也可以點虛線框按 <b>Ctrl+V</b> 貼上。</p>`),
+      `<p>按「📍 新增位置」${gN(1)}，在區域框裡點一下，輸入<b>位置編號</b>（例：P03、輸送帶），名稱可以之後在右邊補。</p><p><b>舊案件補位置</b>：打開缺失單，在「細部位置（廠區地圖）」選位置；<b>已結案的也可以補</b>（只改位置，選了就自動存）。缺失區域名稱跟地圖不一樣時（例：打漿區2樓），先選「對應到地圖區域」再選位置。</p><p>編輯模式點區域或位置，「＋ 加參考照片」${gN(2)}放正常、清潔時的樣子；也可以點虛線框按 <b>Ctrl+V</b> 貼上。</p>`),
     gStep(7,'看缺失、新增缺失、匯出', gC(gR(`<span class="gx-k">3<small>累計</small></span><span class="gx-k b">2<small>未結案</small></span><span class="gx-k rd">1<small>逾期</small></span>`)+gR(gB('＋ 在「打漿區」新增缺失',{dk:1,hl:1,n:1}))+gR(gB('📗 匯出這個區域（Excel）',{hl:1,n:2})),'🏭 打漿區'),
       `<p>檢視模式點區域或位置，右邊會出現件數與歷史缺失。</p><p>「＋ 新增缺失」${gN(1)}自動帶入區域、位置、負責單位；「📗 匯出這個區域」${gN(2)}依類別由多到少，含改善前後照片。</p>`),
     gStep(8,'現場稽核', gC(gR(`${gB('＋ 新增稽核重點',{n:1})}${gB('載入範例')}`)+gR(gB('📋 開始稽核',{ok:1,hl:1,n:2}))) + gC(gR(`<span class="gx-s" style="flex:1">排水溝清潔暢通</span>${gN(3)}${gB('✅ 合格',{ok:1})}${gB('❌ 不合格',{rd:1,hl:1})}`)),
@@ -1447,7 +1447,7 @@ function renderDetail(){
       <button onclick="showList()">返回清單</button>
       <span id="dirtyMark"></span>
       <span class="spacer"></span>
-      <span class="muted small">${r.updatedAt?'最後儲存：'+esc(r.updatedAt):'尚未儲存'}</span>
+      <span class="muted small" id="savedAt">${r.updatedAt?'最後儲存：'+esc(r.updatedAt):'尚未儲存'}</span>
     </div></div>`;
   refresh(); hydrate($('#app'));
 }
@@ -1859,7 +1859,7 @@ function saveRecord(silent){
   if(!r.rawDesc.trim()) miss.push('缺失描述');
   if(!r.defType) miss.push('缺失類別');
   if(!r.category) miss.push('缺失等級');
-  { const a = areaByName(r.area); r.areaId = a ? a.id : ''; if(r.locId && !(a && mapAreaLocs(a.id).some(l=>l.id===r.locId))) r.locId = ''; }
+  { const a = recMapArea(r); r.areaManual = !!(a && !areaByName(r.area)); r.areaId = a ? a.id : ''; if(r.locId && !(a && mapAreaLocs(a.id).some(l=>l.id===r.locId))) r.locId = ''; }
   if(miss.length){ say('請先填寫：' + miss.join('、')); return false; }
   if(dlError(r)){
     showDlErr = true; refresh();
@@ -2688,15 +2688,39 @@ async function mapAreaExport(aid, lid){
 function mapNewDefect(aid, lid){ const a = areaById(aid); if(!a) return; openRecord(null, {area:a.name, areaId:a.id, locId:lid||'', ownerDept:a.unit||''}); }
 
 /* 缺失表單：選了地圖上的區域，就可以再選位置 */
+/* 缺失區域文字對到地圖區域：名稱一樣就自動對應；不一樣（例：打漿區2樓）可以手動選「對應到地圖區域」 */
+function recMapArea(r){ return areaByName(r.area) || (r.areaManual && areaById(r.areaId)) || null; }
+function locAreaOpts(sel){ return MAPD.maps.map(m=>{ const as = mapAreas(m.id); return as.length ? `<optgroup label="${esc(m.name)}">${as.map(a=>`<option value="${a.id}" ${sel===a.id?'selected':''}>${esc(a.name)}</option>`).join('')}</optgroup>` : ''; }).join(''); }
 function locSelHTML(){
-  const a = areaByName(cur.area);
   if(!MAPD.areas.length) return '';
-  if(!a) return `<div><label class="f">細部位置（廠區地圖）</label><div class="small muted" style="padding:8px 0">這個區域還沒畫在廠區地圖上。</div></div>`;
-  const ls = mapAreaLocs(a.id).sort((x,y)=>(x.code||'').localeCompare(y.code||'',undefined,{numeric:true}));
-  return `<div><label class="f">細部位置（廠區地圖）</label><select data-f="locId" class="lockable"><option value="">— 不指定位置 —</option>${ls.map(l=>`<option value="${l.id}" ${cur.locId===l.id?'selected':''}>${esc((l.code+' '+l.name).trim())}</option>`).join('')}</select>
-    <div class="small" style="margin-top:4px"><a href="#" onclick="showMap({areaId:'${a.id}',locId:cur.locId});return false">🗺️ 在地圖上看「${esc(a.name)}」</a></div></div>`;
+  const a = recMapArea(cur), byName = !!areaByName(cur.area), closed = !!cur.closed;
+  /* 已結案：整張鎖住，只有細部位置可以補（直接存，不動其它內容） */
+  const on = closed ? 'onchange="locPatch()"' : '';
+  const areaSel = byName ? '' : `<select id="locArea" aria-label="對應到地圖區域" ${closed?on:'onchange="locAreaPick(this.value)"'} style="margin-bottom:6px"><option value="">— 對應到地圖區域 —</option>${locAreaOpts(a?a.id:'')}</select>`;
+  const ls = a ? mapAreaLocs(a.id).sort((x,y)=>(x.code||'').localeCompare(y.code||'',undefined,{numeric:true})) : [];
+  const locSel = a ? `<select ${closed?`id="locPick" ${on}`:'data-f="locId" class="lockable"'} aria-label="細部位置"><option value="">— 不指定位置 —</option>${ls.map(l=>`<option value="${l.id}" ${cur.locId===l.id?'selected':''}>${esc((l.code+' '+l.name).trim())}</option>`).join('')}</select>` : '';
+  return `<div><label class="f">細部位置（廠區地圖）</label>
+    ${byName ? '' : `<div class="small muted" style="margin:2px 0 6px">「${esc(cur.area||'')}」跟地圖上的區域名稱不一樣，請選它在地圖上的哪一區：</div>`}${areaSel}${locSel}
+    ${closed ? '<div class="small" style="margin-top:4px;color:var(--ok)">🔓 已結案也可以補位置（只改位置，其它內容不會動，選了就自動存）</div>' : ''}
+    ${a ? `<div class="small" style="margin-top:4px"><a href="#" onclick="showMap({areaId:'${a.id}',locId:cur.locId});return false">🗺️ 在地圖上看「${esc(a.name)}」</a></div>` : ''}</div>`;
 }
-function locSelRefresh(){ const b = $('#locBox'); if(!b || !cur) return; const a = areaByName(cur.area); if(cur.locId && (!a || !mapAreaLocs(a.id).some(l=>l.id===cur.locId))) cur.locId = ''; b.innerHTML = locSelHTML(); }
+function locAreaPick(id){ cur.areaId = id; cur.areaManual = !!id; cur.locId = ''; dirty = true; locSelRefresh(); refresh(); }
+function locSelRefresh(){ const b = $('#locBox'); if(!b || !cur) return; const a = recMapArea(cur); if(cur.locId && (!a || !mapAreaLocs(a.id).some(l=>l.id===cur.locId))) cur.locId = ''; b.innerHTML = locSelHTML(); }
+/* 已結案補位置：只更新 areaId／locId，直接存檔 */
+function locPatch(){
+  if(!cur || !cur.id) return;
+  const r = records.find(x=>x.id===cur.id); if(!r) return;
+  const ae = $('#locArea'), le = $('#locPick');
+  let a = areaByName(cur.area);
+  if(!a && ae){ a = ae.value ? areaById(ae.value) : null; }
+  const prevA = r.areaId, lid = (le && a && a.id===(recMapArea(r)||{}).id) ? le.value : '';
+  r.areaId = a ? a.id : ''; r.areaManual = !!(a && !areaByName(r.area)); r.locId = a && mapAreaLocs(a.id).some(l=>l.id===lid) ? lid : '';
+  r.updatedAt = new Date().toLocaleString('zh-TW');
+  if(!persistAll()){ r.areaId = prevA; return; }
+  Object.assign(cur, {areaId:r.areaId, areaManual:r.areaManual, locId:r.locId, updatedAt:r.updatedAt});
+  { const sa = $('#savedAt'); if(sa) sa.textContent = '最後儲存：'+r.updatedAt; }
+  locSelRefresh(); flash(r.locId ? '已補上細部位置' : a ? '已對應到地圖區域「'+a.name+'」，可以再選位置' : '已取消對應');
+}
 
 /* 匯出／匯入地圖設定（只有地圖、區域、位置與平面圖，不含案件） */
 async function mapExport(){
