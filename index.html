@@ -800,9 +800,9 @@ function migrate(r){
   if(r.improveBy && !r.improveDept){ r.improveDept='其它'; r.improveNote=r.improveBy; }
   delete r.owner; delete r.improveBy; return r;
 }
-function deptSel(f,label,idAttr,r){
+function deptSel(f,label,idAttr,r,extra){
   /* 單位：下拉選常用，選「其它（自己打字）」可輸入，也能「＋加入常用」；舊資料的「其它」照樣顯示 */
-  return `<div><label class="f" ${idAttr?`id="${idAttr}"`:''}>${label}</label>${combo('dept', r[f], `data-f="${f}"`, '例：品保課、支援組')}</div>`; }
+  return `<div><label class="f" ${idAttr?`id="${idAttr}"`:''}>${label}</label>${combo('dept', r[f], `data-f="${f}"`, '例：品保課、支援組')}${extra||''}</div>`; }
 function cfld(kind, f, label, opt={}){ return `<div><label class="${opt.req?'f req':'f'}">${label}</label>${combo(kind, cur[f], `data-f="${f}"`, opt.ph)}</div>`; }
 function addDays(ymd,n){ const [y,m,d]=ymd.split('-').map(Number); const t=new Date(y,m-1,d+n); return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0'); }
 let showDlErr=false;
@@ -1051,7 +1051,7 @@ const GUIDES = {
     gStep(5,'⌨️ 快捷鍵：刪除、複製、貼上', gC(gR(`${gN(1)}<span class="gx-tag dk">Delete</span><span class="gx-s">刪除選取的物件</span>`)+gR(`${gN(2)}<span class="gx-tag dk">Ctrl</span>＋<span class="gx-tag dk">C</span><span class="gx-s">複製</span><span class="gx-tag dk">Ctrl</span>＋<span class="gx-tag dk">V</span><span class="gx-s">貼在滑鼠位置</span>`)+gR(`${gN(3)}<span class="gx-tag dk">Ctrl</span>＋<span class="gx-tag dk">Z</span><span class="gx-s">復原</span><span class="gx-tag dk">Esc</span><span class="gx-s">取消畫圖／取消選取</span>`)+gR(`<span class="gx-tag dk">R</span><span class="gx-s">門、冷氣等標記轉 90°</span>`),'編輯模式，先點一下要處理的物件'),
       `<p>在「✏️ 編輯模式」先<b>點一下</b>分區、箭頭、門窗標記、易碎品或病媒防治設施：</p><p>按 <b>Delete</b>${gN(1)} 直接刪除；刪錯了按 <b>Ctrl＋Z</b>${gN(3)} 救回來。</p><p>按 <b>Ctrl＋C</b> 複製、<b>Ctrl＋V</b>${gN(2)} 貼上：會貼在<b>滑鼠所在的位置</b>；連按 Ctrl＋V 會往右下錯開，不會疊在一起。適合一次放很多個一樣的門、鼠板站或捕蟲燈；易碎品、病媒設施貼上時會自動給新編號。也可以切換地圖，把東西貼到另一張地圖。</p><p><b>Esc</b> 取消正在畫的線或多邊形，或取消選取；選了門、冷氣等標記按 <b>R</b> 轉 90°。</p><p class="muted small">缺失區域和位置因為有案件資料，按 Delete 會先跳確認，而且不能複製（名稱不能重複）。打字的時候（輸入框裡）快捷鍵不會作用。Mac 用 ⌘ 代替 Ctrl。</p>`),
     gStep(6,'放位置、參考照片', gC(gR(`${gB('📍 新增位置',{hl:1,n:1})}`)+gR(`${gTag('P01','dk')}${gTag('P03','rd')}<span class="gx-s">打漿機／地面及排水溝</span>`)) + gC(gR(`<span class="gx-ph"></span><span class="gx-ph b"></span>${gB('＋ 加參考照片',{hl:1,n:2})}`)+`<div class="gx-dash">📋 點這裡，再按 Ctrl+V 貼上</div>`,'📷 參考照片（正常狀態）'),
-      `<p>按「📍 新增位置」${gN(1)}，在區域框裡點一下，輸入<b>位置編號</b>（例：P03、輸送帶），名稱可以之後在右邊補。</p><p><b>舊案件補位置</b>：打開缺失單，在「細部位置（廠區地圖）」選位置；<b>已結案的也可以補</b>（只改位置，選了就自動存）。缺失區域名稱跟地圖不一樣時（例：打漿區2樓），先選「對應到地圖區域」再選位置。</p><p>編輯模式點區域或位置，「＋ 加參考照片」${gN(2)}放正常、清潔時的樣子；也可以點虛線框按 <b>Ctrl+V</b> 貼上。</p>`),
+      `<p>按「📍 新增位置」${gN(1)}，在區域框裡點一下，輸入<b>位置編號</b>（例：P03、輸送帶），名稱可以之後在右邊補。</p><p><b>舊案件補位置</b>：打開缺失單，在「細部位置（廠區地圖）」選位置；<b>已結案的也可以補</b>（只改位置，選了就自動存）。缺失區域名稱跟地圖不一樣時（例：打漿區2樓），先選「對應到地圖區域」再選位置。已結案的<b>負責單位</b>也可以改得更細（例：生產課／打漿組），改完自動存。</p><p>編輯模式點區域或位置，「＋ 加參考照片」${gN(2)}放正常、清潔時的樣子；也可以點虛線框按 <b>Ctrl+V</b> 貼上。</p>`),
     gStep(7,'看缺失、新增缺失、匯出', gC(gR(`<span class="gx-k">3<small>累計</small></span><span class="gx-k b">2<small>未結案</small></span><span class="gx-k rd">1<small>逾期</small></span>`)+gR(gB('＋ 在「打漿區」新增缺失',{dk:1,hl:1,n:1}))+gR(gB('📗 匯出這個區域（Excel）',{hl:1,n:2})),'🏭 打漿區'),
       `<p>檢視模式點區域或位置，右邊會出現件數與歷史缺失。</p><p>「＋ 新增缺失」${gN(1)}自動帶入區域、位置、負責單位；「📗 匯出這個區域」${gN(2)}依類別由多到少，含改善前後照片。</p>`),
     gStep(8,'現場稽核', gC(gR(`${gB('＋ 新增稽核重點',{n:1})}${gB('載入範例')}`)+gR(gB('📋 開始稽核',{ok:1,hl:1,n:2}))) + gC(gR(`<span class="gx-s" style="flex:1">排水溝清潔暢通</span>${gN(3)}${gB('✅ 合格',{ok:1})}${gB('❌ 不合格',{rd:1,hl:1})}`)),
@@ -1359,7 +1359,7 @@ function renderDetail(){
           <label class="check"><input type="checkbox" data-f="consecutive" ${r.consecutive?'checked':''}> 相同缺失連續兩天發生</label>
           <label class="check"><input type="checkbox" data-f="recurred" ${r.recurred?'checked':''}> 已通知改善後，再次發生相同問題（改善完成後，於下一週再次發生相同問題）</label>
         </div>
-        ${deptSel('ownerDept','負責單位','ownerLab',r)}
+        <div id="ownerBox" style="display:contents">${deptSel('ownerDept','負責單位','ownerLab',r, r.closed?'<div class="small" style="margin-top:4px;color:var(--ok)">🔓 已結案也可以改負責單位（例：生產課／打漿組；只改這一欄，改完自動存）</div>':'')}</div>
         ${cfld('people','ownerNote','負責人或說明',{ph:'例：李組長'})}
         <div><label class="f req" id="deadlineLab">改善期限</label><input type="date" data-f="deadline" class="dl-input" value="${esc(r.deadline||'')}"><div class="dl-hint" id="dlHint">${dlHint(r.category)}</div><div class="ferr" id="errDeadline"></div></div>
         ${cfld('people','notifyTarget','已通知對象',{ph:'例：生產課 李組長、廠長'})}
@@ -1529,6 +1529,8 @@ function applyLock(){
   document.querySelectorAll('#app [data-f], #app .lockable, #reviewForm input, #reviewForm select, #reviewForm textarea, #reviewForm button')
     .forEach(el => el.disabled = locked);
   if(locked) $('#reviewForm').hidden = true;
+  /* 已結案：負責單位仍可修改（自動存） */
+  if(locked){ const ob = $('#ownerBox'); if(ob) ob.querySelectorAll('select,input,button').forEach(e => e.disabled = false); }
   document.querySelectorAll('.pzone').forEach(z => z.hidden = locked);
 }
 
@@ -1538,6 +1540,7 @@ document.addEventListener('change', onField);
 function onField(e){
   const el = e.target; const f = el.dataset && el.dataset.f;
   if(!f || !cur) return;
+  if(f==='ownerDept' && cur.closed){ cur.ownerDept = el.value; clearTimeout(OWNER_T); if(e.type==='change') ownerPatch(); else OWNER_T = setTimeout(ownerPatch, 600); return; }
   const oldFound = cur.foundDate;
   cur[f] = el.type==='checkbox' ? el.checked : el.value;
   if(f==='foundDate' && cur.foundDate && oldFound && dlIsDefault(cur, oldFound)){
@@ -2703,6 +2706,17 @@ function locSelHTML(){
     ${byName ? '' : `<div class="small muted" style="margin:2px 0 6px">「${esc(cur.area||'')}」跟地圖上的區域名稱不一樣，請選它在地圖上的哪一區：</div>`}${areaSel}${locSel}
     ${closed ? '<div class="small" style="margin-top:4px;color:var(--ok)">🔓 已結案也可以補位置（只改位置，其它內容不會動，選了就自動存）</div>' : ''}
     ${a ? `<div class="small" style="margin-top:4px"><a href="#" onclick="showMap({areaId:'${a.id}',locId:cur.locId});return false">🗺️ 在地圖上看「${esc(a.name)}」</a></div>` : ''}</div>`;
+}
+/* 已結案改負責單位：只更新 ownerDept，直接存檔 */
+let OWNER_T = 0;
+function ownerPatch(){
+  if(!cur || !cur.id || !cur.closed) return;
+  const r = records.find(x=>x.id===cur.id); if(!r) return;
+  const v = (cur.ownerDept||'').trim(); if(v===(r.ownerDept||'')) return;
+  const old = r.ownerDept; r.ownerDept = v; r.updatedAt = new Date().toLocaleString('zh-TW');
+  if(!persistAll()){ r.ownerDept = old; return; }
+  cur.updatedAt = r.updatedAt; const sa = $('#savedAt'); if(sa) sa.textContent = '最後儲存：'+r.updatedAt;
+  flash(v ? '已更新負責單位：'+v : '已清空負責單位');
 }
 function locAreaPick(id){ cur.areaId = id; cur.areaManual = !!id; cur.locId = ''; dirty = true; locSelRefresh(); refresh(); }
 function locSelRefresh(){ const b = $('#locBox'); if(!b || !cur) return; const a = recMapArea(cur); if(cur.locId && (!a || !mapAreaLocs(a.id).some(l=>l.id===cur.locId))) cur.locId = ''; b.innerHTML = locSelHTML(); }
