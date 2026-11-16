@@ -3776,16 +3776,18 @@ async function layerExportImage(){
     rr(x, y, w, h, 6*u1*fs/(13*u1)); g.fillStyle = v.c; g.fill(); g.lineWidth = (v.ring?3.5:2.5)*u1; g.strokeStyle = v.ring || '#fff'; g.stroke();
     g.fillStyle = st==='bad' ? '#fff' : '#3b2500'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(t, cx, cy+0.5); g.textAlign = 'left';
     if(st==='due'){ const bx = x+w, by = y; g.beginPath(); g.arc(bx, by, fs*0.7, 0, Math.PI*2); g.fillStyle = '#b42318'; g.fill(); g.fillStyle = '#fff'; g.font = `800 ${Math.round(fs*0.9)}px ${F}`; g.textAlign = 'center'; g.fillText('!', bx, by+0.5); g.textAlign = 'left'; } };
-  if(L==='pest') lyList('pest').forEach(o => { const sz = 62*u1, cx = X(o.x), cy = Y(o.y), fs = Math.round(18*u1);
-    if(ICON[o.kind]) g.drawImage(ICON[o.kind], cx-sz/2, cy-sz/2, sz, sz);
-    g.font = `800 ${fs}px ${F}`; const t = o.code||'', tw = g.measureText(t).width, h = fs*1.5, x = cx+sz/2-2*u1, y = cy-h/2;
-    rr(x, y, tw+fs*0.8, h, 4*u1); g.fillStyle = 'rgba(255,253,248,.95)'; g.fill(); g.lineWidth = 1*u1; g.strokeStyle = '#16213a'; g.stroke();
-    g.fillStyle = '#16213a'; g.textBaseline = 'middle'; g.fillText(t, x+fs*0.4, y+h/2+0.5); });
+  /* 圖示＋編號這一整組的中間對準位置，跟畫面上完全一樣（比例照畫面：圖示 36、字 11、內距 4、重疊 3） */
+  if(L==='pest') lyList('pest').forEach(o => { const e = 62*u1/36, sz = 36*e, cx = X(o.x), cy = Y(o.y), fs = Math.round(11*e), pad = 4*e, ov = 3*e;
+    g.font = `800 ${fs}px ${F}`; const t = o.code||'', tw = g.measureText(t).width, lw = tw + pad*2 + 2*e, left = cx - (sz - ov + lw)/2, h = fs*1.45, x = left + sz - ov, y = cy-h/2;
+    if(ICON[o.kind]) g.drawImage(ICON[o.kind], left, cy-sz/2, sz, sz);
+    rr(x, y, lw, h, 4*e); g.fillStyle = 'rgba(255,253,248,.95)'; g.fill(); g.lineWidth = 1*e; g.strokeStyle = '#16213a'; g.stroke();
+    g.fillStyle = '#16213a'; g.textBaseline = 'middle'; g.fillText(t, x+pad+e, y+h/2+0.5); });
   if(L==='frag') lyList('frag').forEach(f => { const st = fragState(f).k, im = ICON['ft_'+fragType(f)];
     if(!im){ fragPill(X(f.x), Y(f.y), '◆ '+(f.code||''), st, Math.round(18*u1)); return; }
-    const sz = 62*u1, cx = X(f.x), cy = Y(f.y), fs = Math.round(18*u1); g.drawImage(im, cx-sz/2, cy-sz/2, sz, sz);
-    g.font = `800 ${fs}px ${F}`; const t = f.code||'', w = g.measureText(t).width + fs*1.0, x = cx + sz/2 - 3*u1;
-    fragPill(x + w/2, cy, t, st, fs); });
+    /* 跟畫面一樣：圖示＋編號整組置中（比例：圖示 34、字 11、內距 6、重疊 4） */
+    const e = 62*u1/34, sz = 34*e, cx = X(f.x), cy = Y(f.y), fs = Math.round(11*e), ov = 4*e;
+    g.font = `800 ${fs}px ${F}`; const t = f.code||'', lw = g.measureText(t).width + fs*1.2, left = cx - (sz - ov + lw)/2;
+    g.drawImage(im, left, cy-sz/2, sz, sz); fragPill(left + sz - ov + lw/2, cy, t, st, fs); });
   g.restore();
   /* 下方圖例 */
   g.fillStyle = '#f3ece0'; g.fillRect(0, H+2*M+HEAD, PW, FOOT); g.textBaseline = 'middle';
