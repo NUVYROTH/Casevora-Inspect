@@ -3023,17 +3023,18 @@ async function mapExportImage(){
   const W = Math.round(img.naturalWidth*k), H = Math.round(img.naturalHeight*k), u1 = W/1600;  /* u1：字與線條的基本單位 */
   const risk = MV_RISK && MV.mode==='view', rep = repeatSet(), streak = streakAlerts();
   const HEAD = Math.round(70*u1), FOOT = risk ? Math.round(56*u1) : Math.round(36*u1);
-  const c = document.createElement('canvas'); c.width = W; c.height = H + HEAD + FOOT;
+  const c = document.createElement('canvas'); /* 平面圖四周留白，邊緣的標記不會被切掉 */
+  const M = Math.round(70*u1), PW = W + 2*M; c.width = PW; c.height = H + 2*M + HEAD + FOOT;
   const g = c.getContext('2d'), F = '"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif';
   g.fillStyle = '#fff'; g.fillRect(0,0,c.width,c.height);
   /* 標題列 */
-  g.fillStyle = '#16213a'; g.fillRect(0,0,W,HEAD);
+  g.fillStyle = '#16213a'; g.fillRect(0,0,PW,HEAD);
   g.fillStyle = '#fffdf8'; g.font = `700 ${Math.round(30*u1)}px ${F}`; g.textBaseline = 'middle';
   g.fillText(`Casevoras 廠區地圖｜${m.name}`, Math.round(24*u1), HEAD/2);
   g.font = `${Math.round(18*u1)}px ${F}`; g.fillStyle = '#d6c08f'; g.textAlign = 'right';
-  g.fillText(`匯出日期：${fmtDate(today())}${risk?'　風險顏色':''}`, W - Math.round(24*u1), HEAD/2); g.textAlign = 'left';
+  g.fillText(`匯出日期：${fmtDate(today())}${risk?'　風險顏色':''}`, PW - Math.round(24*u1), HEAD/2); g.textAlign = 'left';
   /* 平面圖 */
-  g.save(); g.translate(0, HEAD);
+  g.save(); g.translate(M, HEAD + M);
   if(risk) g.filter = 'grayscale(1) contrast(.7) brightness(1.22)';
   g.imageSmoothingQuality = 'high'; g.drawImage(img, 0, 0, W, H); g.filter = 'none';
   const X = x => x*W, Y = y => y*H;
@@ -3075,8 +3076,8 @@ async function mapExportImage(){
   });
   g.restore();
   /* 下方圖例 */
-  g.fillStyle = '#f3ece0'; g.fillRect(0, H+HEAD, W, FOOT); g.textBaseline = 'middle';
-  g.font = `${Math.round(15*u1)}px ${F}`; let fx = Math.round(24*u1); const fy = H + HEAD + FOOT/2;
+  g.fillStyle = '#f3ece0'; g.fillRect(0, H+2*M+HEAD, PW, FOOT); g.textBaseline = 'middle';
+  g.font = `${Math.round(15*u1)}px ${F}`; let fx = Math.round(24*u1); const fy = H + 2*M + HEAD + FOOT/2;
   if(risk){ Object.values(RISK).forEach(v => { g.fillStyle = v.c; g.fillRect(fx, fy-7*u1, 14*u1, 14*u1); fx += 20*u1; g.fillStyle = '#16213a'; const t = v.t; g.fillText(t, fx, fy); fx += g.measureText(t).width + 26*u1; }); }
   else { g.fillStyle = '#5d6779'; g.fillText('區域旁紅色數字＝未結案件數；紅色位置標記＝有未結案缺失；⚠＝連續 3 個月發生', fx, fy); }
   const blob = await new Promise(r => c.toBlob(r, 'image/png'));
@@ -3729,14 +3730,15 @@ async function layerExportImage(){
   const SW = 40*u1, GAP = 28*u1, LH = 34*u1, lines = [[]]; let lx = 24*u1;
   items.forEach(it => { const w = SW + 8*u1 + mc.measureText(it.t).width; if(lx + w > W - 24*u1 && lines[lines.length-1].length){ lines.push([]); lx = 24*u1; } lines[lines.length-1].push({it, x:lx}); lx += w + GAP; });
   const HEAD = Math.round(70*u1), FOOT = items.length ? Math.round(lines.length*LH + 22*u1) : Math.round(36*u1);
-  const c = document.createElement('canvas'); c.width = W; c.height = H + HEAD + FOOT;
+  const c = document.createElement('canvas'); /* 平面圖四周留白，邊緣的標記不會被切掉 */
+  const M = Math.round(70*u1), PW = W + 2*M; c.width = PW; c.height = H + 2*M + HEAD + FOOT;
   const g = c.getContext('2d');
   g.fillStyle = '#fff'; g.fillRect(0,0,c.width,c.height);
-  g.fillStyle = '#16213a'; g.fillRect(0,0,W,HEAD);
+  g.fillStyle = '#16213a'; g.fillRect(0,0,PW,HEAD);
   g.fillStyle = '#fffdf8'; g.font = `700 ${Math.round(30*u1)}px ${F}`; g.textBaseline = 'middle';
   g.fillText(`Casevoras ${LAYER_NAME[L]}｜${m.name}`, Math.round(24*u1), HEAD/2);
-  g.font = `${Math.round(18*u1)}px ${F}`; g.fillStyle = '#d6c08f'; g.textAlign = 'right'; g.fillText(`匯出日期：${fmtDate(today())}`, W - Math.round(24*u1), HEAD/2); g.textAlign = 'left';
-  g.save(); g.translate(0, HEAD);
+  g.font = `${Math.round(18*u1)}px ${F}`; g.fillStyle = '#d6c08f'; g.textAlign = 'right'; g.fillText(`匯出日期：${fmtDate(today())}`, PW - Math.round(24*u1), HEAD/2); g.textAlign = 'left';
+  g.save(); g.translate(M, HEAD + M);
   g.imageSmoothingQuality = 'high'; g.drawImage(img, 0, 0, W, H);
   const hexA = (hex, a) => { const n = parseInt(hex.replace('#','').slice(0,6), 16); return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`; };
   const rr = (x,y,w,h,r) => { g.beginPath(); g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r); g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath(); };
@@ -3780,9 +3782,9 @@ async function layerExportImage(){
     fragPill(x + w/2, cy, t, st, fs); });
   g.restore();
   /* 下方圖例 */
-  g.fillStyle = '#f3ece0'; g.fillRect(0, H+HEAD, W, FOOT); g.textBaseline = 'middle';
-  if(!items.length){ g.font = `${Math.round(15*u1)}px ${F}`; g.fillStyle = '#5d6779'; g.fillText('（這一層還沒有畫任何東西）', 24*u1, H+HEAD+FOOT/2); }
-  lines.forEach((ln, li) => { const cy = H + HEAD + 11*u1 + LH*li + LH/2;
+  g.fillStyle = '#f3ece0'; g.fillRect(0, H+2*M+HEAD, PW, FOOT); g.textBaseline = 'middle';
+  if(!items.length){ g.font = `${Math.round(15*u1)}px ${F}`; g.fillStyle = '#5d6779'; g.fillText('（這一層還沒有畫任何東西）', 24*u1, H+2*M+HEAD+FOOT/2); }
+  lines.forEach((ln, li) => { const cy = H + 2*M + HEAD + 11*u1 + LH*li + LH/2;
     ln.forEach(({it, x}) => {
       if(it.type==='fill'){ g.fillStyle = hexA(it.c, 0.75); g.fillRect(x, cy-9*u1, SW, 18*u1); g.strokeStyle = it.c; g.lineWidth = 1.5*u1; g.strokeRect(x, cy-9*u1, SW, 18*u1); }
       if(it.type==='bar'){ g.fillStyle = it.c; g.fillRect(x, cy-5*u1, SW, 10*u1); }
