@@ -106,7 +106,14 @@ body.wide main{max-width:none}
 .mapbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.mapbar select{width:auto}.mapbar .seg{margin:0}
 .mzoom{display:inline-flex;gap:4px;align-items:center;margin-left:auto}.mzoom span{min-width:46px;text-align:center;font-size:13px}
 .mtip{flex-basis:100%;font-size:13px;color:var(--muted)}
-.mapwrap{display:grid;grid-template-columns:minmax(0,1fr) clamp(360px,28vw,480px);gap:14px;margin-top:14px;align-items:start}.mapwrap>*{min-width:0}
+.mapwrap{display:grid;grid-template-columns:minmax(0,1fr) 14px var(--sw,clamp(360px,28vw,480px));column-gap:0;row-gap:14px;margin-top:14px;align-items:start}
+.mcol{position:relative}
+.msplit{align-self:stretch;cursor:ew-resize;touch-action:none;display:flex;align-items:flex-start;justify-content:center;padding-top:120px;border-radius:7px;user-select:none}
+.msplit span{display:block;width:6px;height:64px;border-radius:4px;background:repeating-linear-gradient(to bottom,#c9bda6 0 3px,transparent 3px 6px);position:sticky;top:45vh}
+.msplit:hover span,.mresizing .msplit span{background:repeating-linear-gradient(to bottom,var(--gold) 0 3px,transparent 3px 6px);width:8px}
+.msplit:hover{background:rgba(184,149,90,.12)}
+.mcorner{position:absolute;right:0;bottom:0;width:22px;height:22px;cursor:nwse-resize;touch-action:none;font-style:normal;border-radius:0 0 10px 0;background:linear-gradient(135deg,transparent 50%,var(--gold) 50%);opacity:.75;z-index:2}
+.mcorner:hover{opacity:1}.mresizing{user-select:none;cursor:ew-resize}.mapwrap>*{min-width:0}
 .mcol{min-width:0}
 .mapview{position:relative;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:10px 10px 0 0;cursor:grab}
 .mgrip{height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted);background:var(--brand-soft);border:1px solid var(--line);border-top:0;border-radius:0 0 10px 10px;cursor:ns-resize;touch-action:none;user-select:none}
@@ -267,7 +274,7 @@ body.wide main{max-width:none}
 .mstat b{display:block;font-size:20px;color:var(--ink)}.mstat .o b{color:var(--warn)}.mstat .v b{color:var(--bad)}
 .grid1{display:grid;gap:4px;margin:8px 0}.grid1 .row{margin-top:6px}.grid1 input[type=color]{width:60px;height:34px;padding:2px}
 .mdesc{white-space:normal!important;min-width:140px}.small.bad{color:var(--bad)}
-@media (max-width:899px){.mapwrap{grid-template-columns:1fr}.mapview{max-height:none}.mside{position:static;max-height:none}.mzoom{margin-left:0}}.st-tile.click{cursor:pointer}.st-tile.click:hover{box-shadow:0 0 0 2px var(--gold)}.hb.click:hover{background:var(--brand-soft)}
+@media (max-width:899px){.mapwrap{grid-template-columns:1fr}.msplit,.mcorner{display:none}.mapview{max-height:none}.mside{position:static;max-height:none}.mzoom{margin-left:0}}.st-tile.click{cursor:pointer}.st-tile.click:hover{box-shadow:0 0 0 2px var(--gold)}.hb.click:hover{background:var(--brand-soft)}
 .modal .box.glist{max-width:720px}.gwrap{max-height:60vh;overflow:auto}.gwrap th,.gwrap td{white-space:nowrap}.gwrap tr.click{cursor:pointer}.gwrap tr.click:hover td{background:var(--brand-soft)}
 /* 常用選項：下拉＋其它自己打字 */
 .combo .cmrow{display:flex;gap:6px;margin-top:6px}
@@ -1072,7 +1079,7 @@ const GUIDES = {
   ]},
   map: { t:'廠區地圖使用說明', steps:() => [
     gStep(1,'上傳平面圖', gC(gR(`<b style="flex:1">廠區地圖</b>${gB('＋ 新增地圖（上傳平面圖）',{dk:1,hl:1,n:1})}`)) + gC(gR(`${gIn('一樓 ▾')}<span style="flex:1"></span>${gB('適應畫面',{hl:1})}${gB('⤢ 整張顯示',{hl:1,n:2})}`)),
-      `<p>按「＋ 新增地圖」${gN(1)}，上傳 JPG／PNG 平面圖並取名（例：一樓）；可以有多張地圖。</p><p>按「適應畫面」會<b>依比例縮小</b>，整張放進螢幕；「⤢ 整張顯示」${gN(2)}保持寬度、把框拉高；也可以用 ＋／－ 或 Ctrl＋滾輪縮放。</p>`),
+      `<p>按「＋ 新增地圖」${gN(1)}，上傳 JPG／PNG 平面圖並取名（例：一樓）；可以有多張地圖。</p><p>按「適應畫面」會<b>依比例縮小</b>，整張放進螢幕；「⤢ 整張顯示」${gN(2)}保持寬度、把框拉高；也可以用 ＋／－ 或 Ctrl＋滾輪縮放。</p><p><b>自己調地圖框大小</b>：拖地圖下方的「⇕」改高度；拖地圖和右邊面板中間的<b>直條把手</b>改寬度（連點兩下恢復預設）；拖地圖框右下角的金色三角形可以同時改寬和高。大小會記住；放大後點區域，畫面會停在原處。</p>`),
     gStep(2,'畫區域、鎖定區域', gC(gR(`${gN(1)}<span class="gx-seg"><i>👀 檢視</i><i class="on">✏️ 編輯</i></span>`)+gR(`${gB('▭ 新增區域',{hl:1,n:2})}${gB('⬠ 多邊形區域',{hl:1,n:3})}`)+gR(`${gB('🔒 區域已鎖定',{dk:1,hl:1,n:4})}`)) + `<div class="gx-map"><span class="gx-poly"></span></div>`,
       `<p>切到「✏️ 編輯模式」${gN(1)}。</p><p>方形區域按「▭ 新增區域」${gN(2)}，在平面圖上按住拖曳；L 型等不規則區域按「⬠ 多邊形」${gN(3)}，每個角點一下，點回第一點完成。</p><p class="muted small">🧲 磁鐵會幫你把角吸整齊，見第 4 步。</p><p>區域畫好後按<b>「🔓 鎖定區域」</b>${gN(4)}，之後新增、移動位置時區域就不會被拖到；要改範圍時按「✏️ 修改範圍」會自動解鎖。</p>`),
     gStep(3,'修改範圍', gC(gR(`${gTag('🏭 打漿區')}<span style="flex:1"></span>${gB('✏️ 修改範圍',{hl:1,n:1})}`)) + `<div class="gx-map"><span class="gx-rng"><i class="v" style="left:-5px;top:-5px"></i><i class="v" style="right:-5px;top:-5px"></i><i class="v" style="left:-5px;bottom:-5px"></i><i class="v" style="right:-5px;bottom:-5px"></i><i class="p" style="left:calc(50% - 7px);top:-7px">+</i><i class="p" style="right:-7px;top:calc(50% - 7px)">+</i></span>${gN(2)}</div>`,
@@ -2309,7 +2316,7 @@ async function download(content, name, type){
 
 /* ---------- 備份 / 還原 ---------- */
 /* 畫面設定（風險顏色、磁鐵、圖層、地圖高度、隱藏的圖例、說明展開…）：只帶設定，不含資料 */
-const PREF_KEYS = ['mapH','mapZ','mapRisk','mapLock','mapStat','mapLayer','mapZbg','mapHide','mapSnap'];
+const PREF_KEYS = ['mapH','mapZ','mapRisk','mapLock','mapStat','mapLayer','mapZbg','mapHide','mapSnap','mapSW'];
 function prefsGet(){ const o = {}; try{ for(let i=0;i<localStorage.length;i++){ const k = localStorage.key(i); if(!k.startsWith(KEY+'_')) continue; const n = k.slice(KEY.length+1); if(PREF_KEYS.includes(n) || n.startsWith('guide_')) o[n] = localStorage.getItem(k); } }catch(e){} return o; }
 function prefsSet(o){ if(!o || typeof o!=='object') return; try{ Object.entries(o).forEach(([n,v])=>{ if((PREF_KEYS.includes(n) || /^guide_\w+$/.test(n)) && typeof v==='string') localStorage.setItem(KEY+'_'+n, v); }); }catch(e){} }
 async function backup(){
@@ -2389,6 +2396,8 @@ async function showMap(focus){
 }
 function renderMap(){
   const m = MAPD.maps.find(x=>x.id===MV.mapId);
+  /* 重畫前記住地圖捲到哪裡，畫完放回去（放大後點區域不會跳回左上角） */
+  const pv = $('#mapView'), keep = pv && m && pv.dataset.mid===m.id ? {l:pv.scrollLeft, t:pv.scrollTop} : null;
   REP = repeatSet(); STREAK = streakAlerts();
   $('#app').innerHTML = `
     <div class="hcard">
@@ -2427,8 +2436,8 @@ function renderMap(){
       <div class="mtip">${MV.layer!=='defect'?lyTipHTML():MV.tool==='poly'?`沿著區域邊界「每個角點一下」（L 型倉庫點 6 個角），點回第一個點或按「完成」結束。${MV_SNAP?'🧲 磁鐵會吸到附近的角和線（按住 Alt 不吸）。':''}已點 ${MV.poly?MV.poly.pts.length:0} 個角　<button class="primary" onclick="mapPolyFinish()">✔ 完成</button> <button onclick="if(MV.poly&&MV.poly.pts.length){MV.poly.pts.pop();renderMap()}">↶ 退一步</button> <button onclick="mapPolyCancel()">取消</button>`:MV.tool==='area'?'在平面圖上「按住拖曳」畫出區域範圍。':MV.tool==='loc'?'在區域框裡「點一下」放位置標記。':MV.mode==='edit'?(MV_LOCK?'🔒 區域已鎖定：區域不會被拖動，可以放心新增、移動位置；點選後可在右邊修改。':'編輯模式：拖曳可移動區域與位置，拉區域右下角可改大小；點選後可在右邊修改或刪除。新增位置前可以先「🔓 鎖定區域」。')+'　⌨️ 點選後按 Delete 可以刪除，Esc 取消。':'檢視模式：點區域或位置看缺失紀錄；在空白處按住拖曳可移動平面圖。'}</div>
       ${MV.layer==='defect'?riskLegendHTML():lyLegendHTML()}
     </div>
-    <div class="mapwrap">
-      <div class="mcol"><div class="mapview ${MV.mode==='edit'?'editing':''} ${MV.tool?'tool':''} ${MV_RISK&&MV.mode==='view'&&MV.layer==='defect'?'riskon':''} ly-${MV.layer}" id="mapView" style="height:${mapH()}"><div class="mapinner" id="mapInner" style="width:${MV.zoom*100}%;--za:${lyZoneAlpha()}">
+    <div class="mapwrap" id="mapWrap" style="${mapSW()?'--sw:'+mapSW()+'px':''}">
+      <div class="mcol"><div class="mapview ${MV.mode==='edit'?'editing':''} ${MV.tool?'tool':''} ${MV_RISK&&MV.mode==='view'&&MV.layer==='defect'?'riskon':''} ly-${MV.layer}" id="mapView" data-mid="${m.id}" style="height:${mapH()}"><div class="mapinner" id="mapInner" style="width:${MV.zoom*100}%;--za:${lyZoneAlpha()}">
         <img id="mapImg" alt="${esc(m.name)}" draggable="false">
         ${MV.layer!=='defect' ? `<div id="lyOv">${lyOverlay(m)}</div>` : `<svg class="mpoly" viewBox="0 0 100 100" preserveAspectRatio="none">${mapAreas().filter(a=>a.pts).map(a=>`<polygon data-aid="${a.id}" class="${MV.sel&&MV.sel.t==='area'&&MV.sel.id===a.id?'sel':''} ${MV_RISK&&MV.mode==='view'?'rk':''}" style="--c:${esc(areaColor(a, REP))}" points="${ptsAttr(a.pts)}"/>`).join('')}
           ${MV.tool==='poly'&&MV.poly&&MV.poly.pts.length?`<polyline class="mtmp" points="${ptsAttr(MV.poly.pts)}"/>`:''}</svg>
@@ -2439,16 +2448,42 @@ function renderMap(){
         ${MAPD.locs.filter(l=>areaById(l.areaId)&&areaById(l.areaId).mapId===MV.mapId).map(l=>{ const s = mapStats(recsForLoc(l)); return `<div class="mpin ${locRiskCls(l, REP)} ${STREAK.some(x=>x.lid===l.id)?'warn3':''} ${MV.sel&&MV.sel.t==='loc'&&MV.sel.id===l.id?'sel':''}" data-lid="${l.id}" style="left:${l.x*100}%;top:${l.y*100}%" title="${esc((l.code+' '+l.name).trim())}">${esc(l.code||'•')}</div>`; }).join('')}`}
         <div class="mdraw" id="mDraw" hidden></div><i class="msnapx" id="mSnapX" hidden></i><i class="msnapy" id="mSnapY" hidden></i><i class="msnap" id="mSnap" hidden></i>
       </div></div>
-      <div class="mgrip" id="mGrip" role="separator" aria-label="拖曳調整地圖高度" title="上下拖曳調整高度；連點兩下＝整張顯示">⇕ 拖這裡調整地圖高度（連點兩下＝整張顯示）</div></div>
+      <div class="mgrip" id="mGrip" role="separator" aria-label="拖曳調整地圖高度" title="上下拖曳調整高度；連點兩下＝整張顯示">⇕ 拖這裡調整地圖高度（連點兩下＝整張顯示）</div><i class="mcorner" id="mCorner" role="separator" aria-label="拖曳同時調整地圖寬度和高度" title="拖曳同時調整寬度和高度"></i></div>
+      <div class="msplit" id="mSplit" role="separator" aria-orientation="vertical" aria-label="拖曳調整地圖寬度" title="左右拖曳調整地圖寬度；連點兩下＝恢復預設寬度"><span></span></div>
       <div class="card mside" id="mSide">${MV.layer==='defect'?mapSideHTML():layerSideHTML()}</div>
     </div>
     ${MV.layer==='defect'?`<div id="mStatsBox">${mapStatsHTML()}</div>`:''}` : `<div class="card empty" style="padding:30px">還沒有廠區地圖。請按「＋ 新增地圖（上傳平面圖）」上傳工廠平面圖（JPG、PNG）。<br><span class="small muted">同事已經做好地圖的話，可以請他「匯出地圖設定」給你，再按「匯入地圖設定」。</span></div>`}
     ${mapGuideHTML()}`;
   hydrate($('#mSide'));
-  if(m){ phGet(m.img).then(u=>{ const im = $('#mapImg'); if(im){ if(mapHRaw()==='fit') im.onload = () => mapFitHeight(true); im.src = u || ''; } if(!u) say('平面圖找不到，請在編輯模式按「換圖片」重新上傳。'); }); (MV.layer==='defect'?mapBind:layerBind)(); mapGripBind(); mapScaleUpd();
-    const im2 = $('#mapImg'); if(im2) im2.addEventListener('load', () => { mapScaleUpd(); if(mapZoomMode()==='screen') mapFitScreen(true); });
+  if(m){ phGet(m.img).then(u=>{ const im = $('#mapImg'); if(im){ if(mapHRaw()==='fit') im.onload = () => mapFitHeight(true); im.src = u || ''; } if(!u) say('平面圖找不到，請在編輯模式按「換圖片」重新上傳。'); }); (MV.layer==='defect'?mapBind:layerBind)(); mapGripBind(); mapSplitBind(); mapScaleUpd();
+    const im2 = $('#mapImg'); if(im2) im2.addEventListener('load', () => { mapScaleUpd(); if(mapZoomMode()==='screen') mapFitScreen(true); mapKeepScroll(keep); });
+    mapKeepScroll(keep);
     if(mapZoomMode()==='screen') requestAnimationFrame(() => mapFitScreen(true));
     const vw = $('#mapView'); if(vw) vw.addEventListener('wheel', e => { if(!e.ctrlKey) return; e.preventDefault(); mapZoom(e.deltaY<0?1:-1); }, {passive:false}); }
+}
+/* 重畫後把捲動放回去；選取的東西不在畫面裡時捲過去 */
+function mapKeepScroll(keep){
+  const v = $('#mapView'); if(!v) return;
+  if(keep){ v.scrollLeft = keep.l; v.scrollTop = keep.t; }
+  const s = MV.sel; if(!s) return;
+  const el = s.t==='area' ? document.querySelector(`.marea[data-aid="${s.id}"], polygon[data-aid="${s.id}"]`) : s.t==='loc' ? document.querySelector(`.mpin[data-lid="${s.id}"]`) : document.querySelector(`[data-lo="${s.t}:${s.id}"]`);
+  if(!el) return;
+  const r = el.getBoundingClientRect(), b = v.getBoundingClientRect();
+  if(r.right < b.left || r.left > b.right || r.bottom < b.top || r.top > b.bottom){ v.scrollLeft += (r.left + r.width/2) - (b.left + b.width/2); v.scrollTop += (r.top + r.height/2) - (b.top + b.height/2); }
+}
+/* 地圖框寬度：拖中間的分隔線或右下角，記在這個瀏覽器（px＝右邊面板寬度） */
+const KEY_SW = 'qaHygieneTracker_v1_mapSW';
+function mapSW(){ try{ const n = parseInt(localStorage.getItem(KEY_SW),10); return n>0 ? n : 0; }catch(e){ return 0; } }
+function mapSetSW(px, save){ const w = $('#mapWrap'); if(!w) return; const max = Math.max(260, w.getBoundingClientRect().width - 320); px = Math.round(Math.max(240, Math.min(max, px))); w.style.setProperty('--sw', px+'px'); mapScaleUpd(); if(save){ try{ localStorage.setItem(KEY_SW, px); }catch(e){} if(mapZoomMode()==='screen') mapFitScreen(true); } return px; }
+function mapSplitBind(){
+  const sp = $('#mSplit'), co = $('#mCorner'), v = $('#mapView'), side = $('#mSide'); if(!sp || !v || !side) return;
+  let st = null, last = 0;
+  const start = (e, corner) => { st = {x:e.clientX, y:e.clientY, sw:side.getBoundingClientRect().width, h:v.getBoundingClientRect().height, corner}; e.currentTarget.setPointerCapture(e.pointerId); e.preventDefault(); document.body.classList.add('mresizing'); };
+  const move = e => { if(!st) return; mapSetSW(st.sw - (e.clientX - st.x)); if(st.corner) mapSetH(st.h + e.clientY - st.y); };
+  const end = () => { if(!st) return; mapSetSW(side.getBoundingClientRect().width, true); st = null; document.body.classList.remove('mresizing'); };
+  sp.onpointerdown = e => { const now = Date.now(); if(now-last<400){ try{ localStorage.removeItem(KEY_SW); }catch(err){} $('#mapWrap').style.removeProperty('--sw'); mapScaleUpd(); flash('已恢復預設寬度'); last = 0; return; } last = now; start(e, false); };
+  if(co) co.onpointerdown = e => start(e, true);
+  [sp, co].forEach(x => { if(!x) return; x.onpointermove = move; x.onpointerup = end; x.onpointercancel = end; });
 }
 /* 地圖框高度：使用者可以自己拉，記在這個瀏覽器 */
 const KEY_MH = 'qaHygieneTracker_v1_mapH';
