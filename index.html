@@ -365,6 +365,7 @@ tbody tr.click:hover{background:#f7f1e6}
 .muted{color:var(--muted)}
 .small{font-size:13px}
 .photos{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.aiimp{margin-top:10px;border:1px solid #e9d7b5;background:#fffaf0;border-radius:10px;padding:10px 12px}.aiimp-h{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
 .pzone{margin-top:8px;padding:10px 12px;border:2px dashed var(--field);border-radius:8px;color:var(--muted);font-size:13.5px;text-align:center;cursor:pointer;background:var(--card)}
 .pzone:hover{border-color:var(--gold)}
 .pzone:focus,.pzone.over{outline:none;border-color:var(--gold);background:#fff4e0;color:#7a3d06}
@@ -1047,7 +1048,7 @@ const GUIDES = {
     gStep(3,'指派與儲存', gC(gR(`${gIn('負責單位 生產課 ▾')}${gIn('負責人 作業員 A ▾')}`)+gR(`${gIn('改善期限 2026/11/02',1)}`)+`<div class="gx-s">一般 7 天・限期改善 20 天</div>`) + gR(`${gB('儲存',{dk:1,hl:1,n:1})}${gB('返回清單')}`),
       `<p>填負責單位、負責人與<b>改善期限</b>（一般缺失預設 7 天、限期改善缺失預設 20 天）。</p><p>按下方「儲存」${gN(1)}，之後從清單點這筆案件就能繼續填。</p>`),
     gStep(4,'改善與複查', gC(gR(gIn('如何改善：清除積水並修理排水口'))+gR(`<span class="gx-ph b"></span><span class="gx-s">改善後照片</span>`),'3 實際改善情形') + gC(gR(`${gTag('第 1 次 ✅ 通過','ok')}`)+gR(`${gB('＋ 新增複查紀錄',{dk:1,hl:1,n:1})}`),'4 複查紀錄'),
-      `<p>改善完成後填「如何改善」、改善後照片，按「儲存」。</p><p>到現場確認後按「＋ 新增複查紀錄」${gN(1)}。複查未通過或再次發生會變「持續追蹤」，不能結案。</p>`),
+      `<p>改善完成後填「如何改善」、改善後照片，按「儲存」。</p><p>「如何改善」上方有 <b>✨ AI 改善建議</b>：claude.ai 版按「產生改善建議」，網址版按「複製 AI 提示詞」貼到你慣用的 AI；建議出來可以先改，<b>按「套用」才會填入</b>。</p><p>到現場確認後按「＋ 新增複查紀錄」${gN(1)}。複查未通過或再次發生會變「持續追蹤」，不能結案。</p>`),
     gStep(5,'結案確認', gC(gR(gIn('結案確認人員 品管人員'))+gR(`<span class="gx-ck">✓</span><span class="gx-s">已確認改善完成、符合結案條件</span>`)+gR(gB('確認結案',{ok:1,hl:1,n:1})),'5 結案確認（品管）'),
       `<p>結案條件都符合後，由品管人員填姓名、勾選確認，按「確認結案」${gN(1)}。結案後資料鎖定，需要修改可以「撤銷結案」。</p><p>結案後還是可以補兩欄，選好就自動存：<b>細部位置（廠區地圖）</b>、<b>負責單位</b>（例：改成生產課／打漿組）。</p>`),
     gStep(6,'查找案件', gC(gR(`${gN(1)}${gTag('未結案','dk')}${gTag('逾期')}${gTag('已結案')}${gTag('全部')}`)+gR(`${gN(2)}${gIn('🔍 10/26／包裝區／作業員 A／編號',1)}`)+gR(`${gIn('全部類別 ▾')}${gIn('2026 年 ▾')}${gIn('10 月 ▾')}`)),
@@ -1438,6 +1439,11 @@ function renderDetail(){
       <h2><span class="no">3</span>實際改善情形</h2>
       <div data-show="risk" class="subbox"><div class="grid">${fld('riskControl','已採取的風險控制措施（重大缺失必填）','textarea',{full:1,req:1,ph:'請依實際採取的措施填寫，例如：\n・已將相關產品／設備隔離，並貼上「暫停使用」標示\n・已用圍欄或隔板區隔缺失區域\n・已暫停該區作業，並通知相關單位'})}</div></div>
       <div data-show="cause" class="subbox"><div class="grid">${fld('causeAnalysis','發生原因確認','textarea',{full:1,req:1,ph:'請填寫經確認的原因，勿以推測代替'})}</div></div>
+      <div class="aiimp">
+        <div class="aiimp-h"><b>✨ AI 改善建議</b><span class="small muted">依缺失描述幫你草擬「如何改善」「預防再發措施」，${inClaude()?'用你自己的 Claude 帳號':'網址版請複製提示詞到你慣用的 AI 工具'}；只是建議，<b>按「套用」才會填入</b>，不會自動儲存</span></div>
+        <div class="row" style="margin-top:6px">${inClaude()?`<button class="primary lockable" id="aiImpGo" onclick="aiImprove()">✨ 產生改善建議</button>`:''}<button class="lockable" onclick="aiImpPrompt()">📋 複製 AI 提示詞</button><span class="small muted" id="aiImpStatus"></span></div>
+        <div id="aiImpBox"></div>
+      </div>
       <div class="grid" style="margin-top:10px">
         ${fld('improveContent','如何改善','textarea',{full:1,ph:'請填寫如何改善（由改善單位自行判斷）'})}
         ${fld('prevention','預防再發措施','textarea',{full:1,ph:'描述如何防止問題再次發生'})}
@@ -1878,6 +1884,78 @@ async function applyAISheet(k, lv){
   if(text){ cur.rawDesc = text; document.querySelector('[data-f=rawDesc]').value = text; }
   if(okLv){ cur.category = lv; const el = document.querySelector('[data-f=category]'); if(el) el.value = lv; dlApplyDefault(); const h = $('#dlHint'); if(h) h.textContent = dlHint(lv); }
   dirty = true; refresh(); flash('已套用缺失單，記得按「儲存」');
+}
+/* ---------- AI 改善建議：如何改善、預防再發措施（claude.ai 版用自己的帳號；網址版複製提示詞） ---------- */
+const AI_IMP_SYS = `你是食品工廠衛生缺失改善顧問。請根據下面這筆衛生缺失，草擬「如何改善」與「預防再發措施」兩段文字，讓改善單位修改後填入缺失追蹤單。
+規則：
+1. 只根據提供的資料，不可捏造未提供的事實（原因、數量、日期、人員、產品、已完成的動作）。缺失原因沒有提供時，用「經確認原因後」等保留說法，不要自己斷定原因。
+2. 「如何改善」寫針對這次缺失的矯正做法：做什麼、在哪個作業點、由哪個職務負責、完成後怎麼確認（例：目視確認、拍照、紀錄）。如果「目前已填的如何改善」有內容，保留其中的事實，只潤飾並補充具體做法，不要改變已寫的事實。
+3. 「預防再發措施」寫防止同樣問題再發生的管理做法，要對應可能的根本原因類型，例如：清潔頻率或方法、標準作業程序修訂、自主檢查表、設備或設施改善、教育訓練、主管或品管查核頻率，並寫出用什麼紀錄或佐證追蹤。有勾選「重複發生」時，要加強根本原因檢討與查核頻率。
+4. 不可只寫「加強宣導」「加強管理」「注意」這類空泛字眼。
+5. 不寫任何人名、電話等個人資料，人員一律寫職務（例：作業員、組長、品管人員、工務人員）。不寫具體日期。
+6. 每段寫 2～4 點，用「1. 2. 3.」編號，每點一句，專業、簡潔、可執行，繁體中文。
+7. 缺失等級為「重大缺失」時，「如何改善」第一點要先寫產品隔離或停止相關作業等風險管制。
+只輸出 JSON，不要任何其他文字或 markdown：
+{"improve":"如何改善（1. 2. 3. 編號，用換行分開）","prevent":"預防再發措施（1. 2. 3. 編號，用換行分開）","check":["改善單位需要再確認或補充的事項"]}`;
+function aiImpData(r){
+  return `【缺失類別】${typeName(r.defType)||'（未選）'}\n【缺失區域】${r.area||'（未填）'}\n【缺失描述】${r.rawDesc||'（未填）'}\n【缺失等級】${CAT[r.category]||'（未判定）'}\n【相同缺失連續兩天發生】${r.consecutive?'是':'否'}\n【已通知改善後再次發生（重複發生）】${r.recurred?'是':'否'}\n【已採取的風險控制措施】${(r.riskControl||'').trim()||'（未填）'}\n【發生原因確認】${(r.causeAnalysis||'').trim()||'（未填）'}\n【改善執行單位】${r.improveDept||r.ownerDept||'（未填）'}\n【目前已填的如何改善】${(r.improveContent||'').trim()||'（未填）'}\n【目前已填的預防再發措施】${(r.prevention||'').trim()||'（未填）'}\n【照片】${(r.photos.length+r.improvePhotos.length)?'有（未傳送，請勿描述照片內容）':'無'}`;
+}
+function aiImpCheck(r){
+  if(!(r.rawDesc||'').trim()){ say('請先填寫「缺失描述」，AI 才知道要改善什麼。'); return false; }
+  const text = [r.rawDesc, r.riskControl, r.causeAnalysis, r.improveContent, r.prevention, r.improveNote].join(' ');
+  if(PII_RE.test(text)){ say('偵測到疑似電話或身分證字號。請先刪除個人資料，改用代稱後再分析。'); return false; }
+  return true;
+}
+let aiImpBusy = false;
+async function aiImprove(){
+  const r = cur; if(aiImpBusy || !aiImpCheck(r)) return;
+  const st = $('#aiImpStatus'); let sample = null;
+  try{ sample = (typeof claude!=='undefined' && claude && claude.use) ? await claude.use('sample') : null; }catch(e){}
+  if(!sample){ st.textContent = 'AI 改善建議目前僅限 claude.ai 版使用；請改用「複製 AI 提示詞」。'; return; }
+  aiImpBusy = true; const go = $('#aiImpGo'); if(go) go.disabled = true; st.textContent = '產生中，請稍候…';
+  try{
+    const res = await sample(AI_IMP_SYS + '\n\n' + aiImpData(r), {cache:false});
+    const j = JSON.parse(res.text.replace(/```json|```/g,'').trim().replace(/^[^{]*/,'').replace(/[^}]*$/,''));
+    renderAIImp(j); st.textContent = '';
+  }catch(e){
+    st.textContent = e && e.code==='not_granted' ? '你沒有允許使用 AI，所以無法產生。可改用「複製 AI 提示詞」。' : '產生失敗（'+((e&&(e.message||e.code))||'格式錯誤')+'），請重試。';
+  }
+  aiImpBusy = false; if(go) go.disabled = false;
+}
+function renderAIImp(j){
+  const li = a => (Array.isArray(a)&&a.length) ? '<ul>'+a.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>' : '<div class="muted small">（無）</div>';
+  $('#aiImpBox').innerHTML = `<div class="subbox aires" style="margin-top:8px">
+    <div class="small muted"><b>AI 改善建議</b>：僅供參考，可以先在框裡修改；<b>按「套用」才會填入</b>，填入後記得按「儲存」。</div>
+    <div style="margin-top:8px"><b>如何改善（建議）</b></div><textarea id="aiImp1" rows="5">${esc(j.improve||'')}</textarea>
+    <div class="row" style="margin-top:4px"><button class="lockable" onclick="applyAIImp('improveContent','aiImp1')">套用到「如何改善」</button></div>
+    <div style="margin-top:10px"><b>預防再發措施（建議）</b></div><textarea id="aiImp2" rows="5">${esc(j.prevent||'')}</textarea>
+    <div class="row" style="margin-top:4px"><button class="lockable" onclick="applyAIImp('prevention','aiImp2')">套用到「預防再發措施」</button></div>
+    <h4>需要再確認或補充</h4>${li(j.check)}
+    <div class="row" style="margin-top:10px"><button class="primary lockable" onclick="applyAIImp('both')">兩個都套用</button><button onclick="$('#aiImpBox').innerHTML=''">關閉</button></div>
+  </div>`;
+}
+async function applyAIImp(f, id){
+  const pairs = f==='both' ? [['improveContent','aiImp1'],['prevention','aiImp2']] : [[f,id]];
+  const names = {improveContent:'如何改善', prevention:'預防再發措施'};
+  const vals = pairs.map(([k,i]) => [k, ($('#'+i)||{}).value ? $('#'+i).value.trim() : '']).filter(([,v])=>v);
+  if(!vals.length){ say('建議內容是空的。'); return; }
+  const filled = vals.filter(([k])=>(cur[k]||'').trim()).map(([k])=>names[k]);
+  if(!(await ask((filled.length ? `「${filled.join('」「')}」已經有內容，套用後會被取代。\n` : '') + '確定要套用嗎？'))) return;
+  vals.forEach(([k,v]) => { cur[k] = v; const el = document.querySelector(`[data-f=${k}]`); if(el) el.value = v; });
+  dirty = true; refresh(); flash('已套用，記得按「儲存」');
+}
+function aiImpPrompt(){
+  const r = cur; if(!aiImpCheck(r)) return;
+  const text = AI_IMP_SYS.replace(/只輸出 JSON[\s\S]*$/, '請直接輸出兩段：\n【如何改善】\n1. …\n【預防再發措施】\n1. …\n【需要再確認或補充】\n- …') + '\n\n' + aiImpData(r);
+  $('#aiImpBox').innerHTML = `<div class="subbox" style="margin-top:8px"><div class="small muted">按「複製」後貼到你慣用的 AI 工具，把結果貼回「如何改善」「預防再發措施」。照片不會包含在提示詞裡。</div>
+    <textarea id="aiImpPromptText" rows="8" style="margin-top:6px">${esc(text)}</textarea>
+    <div class="row" style="margin-top:6px"><button class="primary" onclick="aiImpCopy()">複製</button><button onclick="$('#aiImpBox').innerHTML=''">關閉</button><span class="small muted" id="aiImpCopyMsg"></span></div></div>`;
+}
+function aiImpCopy(){
+  const ta = $('#aiImpPromptText'); ta.select();
+  const ok = () => $('#aiImpCopyMsg').textContent = '已複製到剪貼簿';
+  const fallback = () => { try{ document.execCommand('copy') ? ok() : ($('#aiImpCopyMsg').textContent='請手動全選複製'); }catch(e){ $('#aiImpCopyMsg').textContent='請手動全選複製'; } };
+  if(navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(ta.value).then(ok, fallback); else fallback();
 }
 function copyPrompt(){
   const ta = $('#promptText'); ta.select();
