@@ -87,7 +87,13 @@ body.wide main{max-width:none}
 .mini li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line);font-size:13.5px}
 .mini li:last-child{border:0}
 .hb.click{cursor:pointer;border-radius:6px}
-.lccard{margin-top:16px}.lcgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,480px),1fr));gap:22px}
+.lccard{margin-top:16px}
+.dnwrap{display:flex;gap:16px;align-items:center;flex-wrap:wrap}.dnsvg{width:180px;height:180px;flex:none}
+.dnsvg .dns{fill:none;stroke-width:30;cursor:pointer}.dnsvg .dns:hover{stroke-width:36}
+.dnsvg .dnt{font-size:30px;font-weight:800;fill:#16213a;text-anchor:middle}.dnsvg .dnu{font-size:12px;fill:#6b6455;text-anchor:middle}
+.dnleg{flex:1;min-width:180px;display:flex;flex-direction:column;gap:2px}
+.dnleg button{display:grid;grid-template-columns:14px minmax(0,1fr) auto 44px;gap:8px;align-items:center;border:1px solid transparent;background:none;padding:5px 8px;border-radius:6px;font-size:13px;color:#16213a;cursor:pointer;text-align:left}
+.dnleg button:hover{border-color:var(--line);background:#fffdf8}.dnleg i{width:12px;height:12px;border-radius:3px}.dnleg .dnn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dnleg .dnp{color:var(--muted);text-align:right;font-size:12px}.lcgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,480px),1fr));gap:22px}
 .lcplot{width:100%;min-width:0}.lcsvg{display:block;overflow:visible;touch-action:pan-y}
 .lcsvg .lcs.dim{opacity:.12}.lcsvg .lcs.dim .lch{pointer-events:none}
 .lcsvg .lcg{stroke:#ece4d5;stroke-width:1}.lcsvg .lcax{stroke:#c9bda6;stroke-width:1}
@@ -1075,7 +1081,9 @@ const GUIDES = {
     gStep(4,'趨勢圖與報表下載', gC(`<div class="gx-line"></div>`+gR(gB('⬇ 下載圖片',{hl:1,n:1}))) + gR(`${gB('下載 Word 報表',{dk:1,hl:1,n:2})}${gB('列印／存成 PDF',{n:3})}`),
       `<p>趨勢圖下方「⬇ 下載圖片」${gN(1)}可存成 PNG。</p><p>上方「下載 Word 報表」${gN(2)}產生月報／季報／年報；網址版另有「列印／存成 PDF」${gN(3)}。</p>`),
     gStep(5,'📈 每月趨勢折線圖', gC(`<span style="display:flex;gap:8px;font-size:11px;margin-bottom:4px"><span style="color:#2a78d6;font-weight:700">── 新增</span><span style="color:#eb6834;font-weight:700">── 結案</span>${gN(1)}</span><svg viewBox="0 0 200 70" style="width:100%;height:auto;display:block"><line x1="10" x2="190" y1="60" y2="60" stroke="#c9bda6"/><polyline points="10,40 40,35 70,28 100,38 130,20 160,12 190,30" fill="none" stroke="#2a78d6" stroke-width="2"/><polyline points="10,48 40,44 70,40 100,45 130,30 160,26 190,55" fill="none" stroke="#eb6834" stroke-width="2"/><line x1="130" x2="130" y1="5" y2="60" stroke="#9a8f7a" stroke-dasharray="3 3"/><circle cx="130" cy="20" r="4" fill="#2a78d6" stroke="#fff" stroke-width="2"/></svg>`,'每月缺失總數') + gC(gR(`${gN(2)}<span class="gx-tag dk">打漿組</span><span class="gx-tag">蒸煮組</span><span class="gx-tag">包裝組</span>`)+gR(`<span class="gx-s">${gN(3)}看數字表格</span>`),'各負責單位／各缺失類別'),
-      `<p>統計頁最下面「📈 每月趨勢」有三張折線圖（看上方選的年份，依發現日期）：<b>每月缺失總數</b>（新增、結案）、<b>各負責單位每月件數</b>、<b>各缺失類別每月件數</b>（各取今年前 5 名，其餘合成「其它」）。</p><p>滑鼠移到某個月${gN(1)}會出現虛線和各條線的數字；<b>點圓點</b>會列出那個月的案件，點案件可以直接打開。</p><p>線太多看不清楚時，<b>點圖例</b>${gN(2)}只看那一條線，其它變淡；再點一次恢復。每張圖下面「看數字表格」${gN(3)}可以看每個月的數字。</p>`)
+      `<p>統計頁最下面「📈 每月趨勢」有三張折線圖（看上方選的年份，依發現日期）：<b>每月缺失總數</b>（新增、結案）、<b>各負責單位每月件數</b>、<b>各缺失類別每月件數</b>（各取今年前 5 名，其餘合成「其它」）。</p><p>滑鼠移到某個月${gN(1)}會出現虛線和各條線的數字；<b>點圓點</b>會列出那個月的案件，點案件可以直接打開。</p><p>線太多看不清楚時，<b>點圖例</b>${gN(2)}只看那一條線，其它變淡；再點一次恢復。每張圖下面「看數字表格」${gN(3)}可以看每個月的數字。</p>`),
+    gStep(6,'📍 缺失區域分析（圓餅圖、曲線圖）', gC(gR(`<svg viewBox="0 0 120 120" style="width:84px;height:84px;flex:none"><circle cx="60" cy="60" r="44" fill="none" stroke="#2a78d6" stroke-width="20" stroke-dasharray="96 400" transform="rotate(-90 60 60)"/><circle cx="60" cy="60" r="44" fill="none" stroke="#eb6834" stroke-width="20" stroke-dasharray="0 98 64 400" transform="rotate(-90 60 60)"/><circle cx="60" cy="60" r="44" fill="none" stroke="#1baf7a" stroke-width="20" stroke-dasharray="0 164 44 400" transform="rotate(-90 60 60)"/><circle cx="60" cy="60" r="44" fill="none" stroke="#9aa3b2" stroke-width="20" stroke-dasharray="0 210 66 400" transform="rotate(-90 60 60)"/><text x="60" y="66" text-anchor="middle" font-size="20" font-weight="800" fill="#16213a">90</text></svg><span style="display:flex;flex-direction:column;gap:3px;font-size:11px;flex:1"><span><i style="display:inline-block;width:9px;height:9px;background:#2a78d6;border-radius:2px"></i> 包裝區　<b>28</b>　31%</span><span><i style="display:inline-block;width:9px;height:9px;background:#eb6834;border-radius:2px"></i> 打漿區　<b>19</b>　21%</span><span><i style="display:inline-block;width:9px;height:9px;background:#1baf7a;border-radius:2px"></i> 緩衝區　<b>12</b>　13%</span><span><i style="display:inline-block;width:9px;height:9px;background:#9aa3b2;border-radius:2px"></i> 其它區域</span></span>${gN(1)}`),'缺失區域分布') + gC(`<svg viewBox="0 0 200 60" style="width:100%;height:auto;display:block"><line x1="6" x2="196" y1="54" y2="54" stroke="#c9bda6"/><polyline points="6,40 44,30 82,20 120,34 158,26 196,10" fill="none" stroke="#2a78d6" stroke-width="2"/><polyline points="6,46 44,42 82,36 120,30 158,40 196,38" fill="none" stroke="#eb6834" stroke-width="2"/><polyline points="6,50 44,48 82,44 120,46 158,36 196,44" fill="none" stroke="#1baf7a" stroke-width="2"/></svg>`+gR(`<span class="gx-s">${gN(2)}各缺失區域每月件數</span>`)),
+      `<p>統計頁最下面「📍 缺失區域分析」看上方選的年份（依發現日期）：</p><p><b>圓餅圖</b>${gN(1)}：今年各缺失區域佔多少，右邊列出件數和百分比；前 5 名各一塊，其餘合成灰色的「其它區域」。<b>點一塊或右邊清單</b>就列出那個區域的案件。</p><p><b>曲線圖</b>${gN(2)}：各缺失區域每個月幾件，看哪一區最近變多或變少；滑過看數字、點圓點看那個月的案件、點圖例只看一條線。</p><p class="muted small">同一個區域在圓餅圖和曲線圖是同一個顏色。區域名稱寫法不同（例：1F倉儲區、1樓倉儲區）會被當成兩區，可以到「常用選項」合併。</p>`)
   ]},
   map: { t:'廠區地圖使用說明', steps:() => [
     gStep(1,'上傳平面圖', gC(gR(`<b style="flex:1">廠區地圖</b>${gB('＋ 新增地圖（上傳平面圖）',{dk:1,hl:1,n:1})}`)) + gC(gR(`${gIn('一樓 ▾')}<span style="flex:1"></span>${gB('適應畫面',{hl:1})}${gB('⤢ 整張顯示',{hl:1,n:2})}`)),
@@ -1098,19 +1106,21 @@ const GUIDES = {
       `<p>檢視模式依缺失狀況自動上色${gN(1)}：紅＝重大、逾期或<b>重複發生</b>；黃＝有未結案；綠＝都結案；灰＝沒紀錄。</p><p><b>⚠ 連續發生警示</b>：同一位置同一類缺失<b>連續 3 個月</b>都發生，位置標記會閃動並加 ⚠，右邊面板會提醒檢討根本原因。</p><p>地圖下方「📊 地圖統計」${gN(2)}選期間；<b>點某個區域時，統計會變成那一區各位置的分布</b>，按「看全部區域」回到全廠。</p><p class="muted small">地圖統計的數字卡和長條都可以點開看案件，見第 10 步。</p>`),
     gStep(10,'📊 地圖統計：點開看案件', gC(gR(`<span class="gx-k">8<small>缺失總數</small></span>${gN(1)}<span class="gx-k b" style="box-shadow:0 0 0 2px var(--gold)">2<small>未結案</small></span><span class="gx-k rd">2<small>逾期</small></span>`)+gR(`<span class="gx-s" style="width:52px">包裝區</span><span style="flex:1;height:8px;border-radius:4px;background:#16213a;max-width:120px"></span><span class="gx-s">7</span>${gN(2)}`),'📊 地圖統計') + gC(gR(`<span class="gx-s" style="flex:1"><b>QA-001</b>　包裝區　待改善（逾期）</span>${gN(3)}`)+gR(`<span class="gx-s" style="flex:1"><b>QA-002</b>　包裝區　待改善</span>`)+gR(`<span style="flex:1"></span>${gB('關閉',{dk:1})}`),'未結案　一樓・全部區域・全部期間 2 件'),
       `<p>地圖下方「📊 地圖統計」的<b>數字卡</b>${gN(1)}可以點：缺失總數、未結案、逾期、重複發生、連續 3 個月警示、改善完成率（列出已結案的）。</p><p><b>長條</b>${gN(2)}也可以點：各區域（或各位置）、缺失類型、月份趨勢，會列出那一項的案件。</p><p>跳出的清單${gN(3)}上方寫著範圍（地圖・區域・期間），未結案排前面；<b>點案件就直接打開</b>，可以補資料或結案。</p><p class="muted small">範圍跟著上方選的期間；點了地圖上某個區域，就只列那一區。「廠區」「已建立位置」「最近稽核不合格」不是缺失案件，不能點。</p>`),
-    gStep(11,'給同事用同一張地圖', gC(gR(`${gB('匯出地圖設定',{hl:1,n:1})}${gB('匯入地圖設定',{hl:1,n:2})}`)) + `<div class="gx-s" style="text-align:center">含平面圖・區域・位置・稽核重點・參考照片<br>＋清潔分區・易碎品・動線・病媒防治・顏色設定<br>不含案件，不會蓋掉同事的案件</div>`,
+    gStep(11,'📊 地圖統計：區域分布圓餅圖與趨勢', gC(gR(`<svg viewBox="0 0 120 120" style="width:84px;height:84px;flex:none"><circle cx="60" cy="60" r="44" fill="none" stroke="#2a78d6" stroke-width="20" stroke-dasharray="96 400" transform="rotate(-90 60 60)"/><circle cx="60" cy="60" r="44" fill="none" stroke="#eb6834" stroke-width="20" stroke-dasharray="0 98 64 400" transform="rotate(-90 60 60)"/><circle cx="60" cy="60" r="44" fill="none" stroke="#1baf7a" stroke-width="20" stroke-dasharray="0 164 44 400" transform="rotate(-90 60 60)"/><circle cx="60" cy="60" r="44" fill="none" stroke="#9aa3b2" stroke-width="20" stroke-dasharray="0 210 66 400" transform="rotate(-90 60 60)"/><text x="60" y="66" text-anchor="middle" font-size="20" font-weight="800" fill="#16213a">90</text></svg><span style="display:flex;flex-direction:column;gap:3px;font-size:11px;flex:1"><span><i style="display:inline-block;width:9px;height:9px;background:#2a78d6;border-radius:2px"></i> 包裝區　<b>28</b>　31%</span><span><i style="display:inline-block;width:9px;height:9px;background:#eb6834;border-radius:2px"></i> 打漿區　<b>19</b>　21%</span><span><i style="display:inline-block;width:9px;height:9px;background:#1baf7a;border-radius:2px"></i> 緩衝區　<b>12</b>　13%</span><span><i style="display:inline-block;width:9px;height:9px;background:#9aa3b2;border-radius:2px"></i> 其它區域</span></span>${gN(1)}`),'各區域缺失分布') + gC(`<svg viewBox="0 0 200 60" style="width:100%;height:auto;display:block"><line x1="6" x2="196" y1="54" y2="54" stroke="#c9bda6"/><polyline points="6,40 44,30 82,20 120,34 158,26 196,10" fill="none" stroke="#2a78d6" stroke-width="2"/><polyline points="6,46 44,42 82,36 120,30 158,40 196,38" fill="none" stroke="#eb6834" stroke-width="2"/><polyline points="6,50 44,48 82,44 120,46 158,36 196,44" fill="none" stroke="#1baf7a" stroke-width="2"/></svg>`+gR(`<span class="gx-s">${gN(2)}各區域每月件數（最近 6 個月）</span>`)),
+      `<p>地圖下方「📊 地圖統計」最下面有兩張圖，範圍跟著上方選的期間：</p><p><b>圓餅圖</b>${gN(1)}：這張地圖各區域的缺失佔多少（前 5 名＋其它），<b>點一塊或右邊清單</b>列出那一區的案件。</p><p><b>曲線圖</b>${gN(2)}：各區域最近 6 個月每月幾件；點圓點看那個月的案件。</p><p><b>點地圖上某個區域</b>時，兩張圖會自動變成<b>那一區各位置</b>的分布和趨勢（沒指定位置的算「未指定位置」）；按「看全部區域」回到全廠。</p>`),
+    gStep(12,'給同事用同一張地圖', gC(gR(`${gB('匯出地圖設定',{hl:1,n:1})}${gB('匯入地圖設定',{hl:1,n:2})}`)) + `<div class="gx-s" style="text-align:center">含平面圖・區域・位置・稽核重點・參考照片<br>＋清潔分區・易碎品・動線・病媒防治・顏色設定<br>不含案件，不會蓋掉同事的案件</div>`,
       `<p>按「匯出地圖設定」${gN(1)}存成檔案給同事，同事按「匯入地圖設定」${gN(2)}就有同一張地圖。</p><p>「匯出地圖設定」包含<b>所有圖層</b>（清潔分區、易碎品、動線、病媒防治）和顏色設定；只有地圖，不含案件、稽核紀錄、易碎品檢查紀錄。</p><p>要放進報告或貼公告時，按上方<b>「🖼 匯出平面圖（圖片）」</b>，會把目前這一層存成清晰的 PNG，四周留白、附圖例（缺失層依目前風險顏色開／關）。</p><p class="muted small">要連案件一起帶走，請用缺失清單的「下載備份」。平面圖屬公司內部資料，不會上傳也不會送給 AI；匯出的圖片傳給別人前請先確認可以外流。</p>`),
-    gStep(12,'切換圖層（缺失以外的圖）', gC(gR(`${gN(1)}<span class="gx-seg" style="flex-wrap:wrap"><i class="on">🔍 缺失</i><i>🧼 清潔分區</i><i>🔶 易碎品</i><i>➡️ 動線與設施</i><i>🐭 病媒防治</i></span>`)+gR(`${gB('🧼 疊清潔分區（開）',{dk:1,hl:1,n:2})}${gB('🖼 匯出平面圖（圖片）',{hl:1,n:3})}`)),
+    gStep(13,'切換圖層（缺失以外的圖）', gC(gR(`${gN(1)}<span class="gx-seg" style="flex-wrap:wrap"><i class="on">🔍 缺失</i><i>🧼 清潔分區</i><i>🔶 易碎品</i><i>➡️ 動線與設施</i><i>🐭 病媒防治</i></span>`)+gR(`${gB('🧼 疊清潔分區（開）',{dk:1,hl:1,n:2})}${gB('🖼 匯出平面圖（圖片）',{hl:1,n:3})}`)),
       `<p>地圖上方有一排圖層${gN(1)}，每一層<b>分開畫、分開看</b>，不會跟缺失混在一起；平面圖只要上傳一次，五層共用。</p><p>易碎品、動線、病媒這三層可以按「🧼 疊清潔分區」${gN(2)}，把分區淡淡地墊在底下對照。</p><p>在哪一層按「🖼 匯出平面圖（圖片）」${gN(3)}，就匯出<b>那一層</b>的清晰 PNG，下方附圖例。</p>`),
-    gStep(13,'🧼 清潔分區', gC(gR(`${gIn('準清潔區 ▾',1)}${gN(1)}${gB('▭ 畫分區（拖曳）',{hl:1,n:2})}${gB('⬠ 多邊形分區',{hl:1})}`)+gR(`<span class="gx-sw" style="background:#c4bb7c"></span><span class="gx-s">一般作業區</span><span class="gx-sw" style="background:#b9cde5"></span><span class="gx-s">準清潔區</span><span class="gx-sw" style="background:#e6b9b8"></span><span class="gx-s">清潔區</span>`)) + gC(gR(`${gIn('包裝區 ▾')}${gIn('準清潔區 ▾')}`)+gR(gB('複製成清潔分區',{hl:1,n:3})),'📋 從缺失區域複製範圍'),
+    gStep(14,'🧼 清潔分區', gC(gR(`${gIn('準清潔區 ▾',1)}${gN(1)}${gB('▭ 畫分區（拖曳）',{hl:1,n:2})}${gB('⬠ 多邊形分區',{hl:1})}`)+gR(`<span class="gx-sw" style="background:#c4bb7c"></span><span class="gx-s">一般作業區</span><span class="gx-sw" style="background:#b9cde5"></span><span class="gx-s">準清潔區</span><span class="gx-sw" style="background:#e6b9b8"></span><span class="gx-s">清潔區</span>`)) + gC(gR(`${gIn('包裝區 ▾')}${gIn('準清潔區 ▾')}`)+gR(gB('複製成清潔分區',{hl:1,n:3})),'📋 從缺失區域複製範圍'),
       `<p>切到「✏️ 編輯模式」，先選<b>分區種類</b>${gN(1)}，再按「▭ 畫分區」${gN(2)}在平面圖上拖曳；L 型等不規則形狀用「⬠ 多邊形分區」，每個角點一下；<b>🧲 磁鐵</b>會幫你貼齊色塊邊界和旁邊分區的角（見第 4 步）。</p><p>分區跟缺失區域一樣大時，右邊「從缺失區域複製範圍」${gN(3)}，不用重畫。</p><p>點分區可以改種類、取名稱（例：包裝室）、寫說明；拖白色方塊改角、拖「＋」加角。畫好後可以「🔒 鎖定分區」避免拖到。</p><p><b>🔤 文字在顏色上</b>（預設開）：分區顏色像螢光筆一樣<b>墊在底稿文字下面</b>，黑字照樣清楚，白底平面圖效果最好；如果底稿本身有顏色、疊起來顏色怪怪的，按一下關掉，改成半透明蓋在上面。</p><p><b>🎨 分區顏色 淡／濃</b>：地圖上方的滑桿可以調分區的透明程度，往「淡」拉底稿的字比較清楚、往「濃」拉顏色比較明顯；<b>顏色本身不變</b>，匯出圖片也照這個濃淡。</p><p class="muted small">顏色預設：一般作業區卡其、準清潔區淺藍、清潔區淺粉；編輯模式右邊「🎨 圖例顏色」可以改。</p>`),
-    gStep(14,'🔶 易碎品：標示', gC(gR(`${gIn('攝影機 ▾',1)}${gN(1)}${gB('放置',{hl:1,n:2})}`)+gR(`<img src="${fragIcon('clock')}" alt="" style="width:22px;height:22px"><span class="gx-s">時鐘</span><img src="${fragIcon('camera')}" alt="" style="width:22px;height:22px"><span class="gx-s">攝影機</span><img src="${fragIcon('glass')}" alt="" style="width:22px;height:22px"><span class="gx-s">玻璃</span><img src="${fragIcon('plastic')}" alt="" style="width:22px;height:22px"><span class="gx-s">塑膠</span>`)+gR(`<span class="gx-tag" style="background:#f59e0b;color:#3b2500;border-color:#fff">◆ G05</span><span class="gx-s">其它（自己打字，不用圖）</span>`)) + gC(gR(`${gIn('材質：玻璃')}${gIn('數量：2')}`)+gR(`${gIn('每 1 個月 ▾',1)}${gN(2)}`),'🔶 G01 燈罩'),
+    gStep(15,'🔶 易碎品：標示', gC(gR(`${gIn('攝影機 ▾',1)}${gN(1)}${gB('放置',{hl:1,n:2})}`)+gR(`<img src="${fragIcon('clock')}" alt="" style="width:22px;height:22px"><span class="gx-s">時鐘</span><img src="${fragIcon('camera')}" alt="" style="width:22px;height:22px"><span class="gx-s">攝影機</span><img src="${fragIcon('glass')}" alt="" style="width:22px;height:22px"><span class="gx-s">玻璃</span><img src="${fragIcon('plastic')}" alt="" style="width:22px;height:22px"><span class="gx-s">塑膠</span>`)+gR(`<span class="gx-tag" style="background:#f59e0b;color:#3b2500;border-color:#fff">◆ G05</span><span class="gx-s">其它（自己打字，不用圖）</span>`)) + gC(gR(`${gIn('材質：玻璃')}${gIn('數量：2')}`)+gR(`${gIn('每 1 個月 ▾',1)}${gN(2)}`),'🔶 G01 燈罩'),
       `<p>編輯模式先選<b>種類</b>${gN(1)}：<b>時鐘、攝影機、玻璃、塑膠</b>有圖示；不在這四種的選「其它（自己打字）」，標記用 ◆ 編號、不用圖。</p><p>按「放置」${gN(2)}後在所在位置<b>點一下就放好</b>（跟病媒防治一樣，不會跳視窗），編號自動編 <b>G01、G02…</b>；名稱先用種類（例：時鐘、玻璃），「其它」先叫「其它易碎品」，之後點標記在右邊改名稱（例：觀察窗玻璃、塑膠籃）。可以連續放，放完按「■ 停止放置」。點標記也可以改種類。</p><p>點標記可以填材質、數量、位置說明、加參考照片（可 Ctrl+V 貼上）。</p><p><b>檢查頻率</b>${gN(2)}：預設<b>每個月一次</b>，右邊面板可改成每 2、3、4、6、12 個月；個別項目也可以單獨設定。</p><p>「📗 匯出易碎品清單（Excel）」含最近檢查日、下次檢查日與檢查紀錄。</p>`),
-    gStep(15,'🔶 易碎品：定期檢查', gC(gR(gB('📝 開始易碎品檢查',{dk:1,hl:1,n:1}))+gR(`<span class="gx-s" style="flex:1">G01 燈罩</span>${gN(2)}${gB('✅ 完整',{ok:1})}${gB('❌ 破損',{rd:1,hl:1})}${gB('❓ 遺失')}`)+gR(gB('＋ 建立缺失',{dk:1,hl:1,n:3}))) + gC(gR(`<img src="${fragIcon('clock')}" alt="" style="width:22px;height:22px"><span class="gx-tag" style="background:#f59e0b;color:#3b2500;border-color:#fff">G01</span><span class="gx-s">正常</span><img src="${fragIcon('camera')}" alt="" style="width:22px;height:22px"><span class="gx-tag" style="background:#f59e0b;color:#3b2500;box-shadow:0 0 0 2px #b42318">G02 !</span><span class="gx-s">到期未檢查</span>`)+gR(`<img src="${fragIcon('glass')}" alt="" style="width:22px;height:22px"><span class="gx-tag" style="background:#b42318;color:#fff">G03</span><span class="gx-s">破損</span>`),'編號標籤的顏色'),
+    gStep(16,'🔶 易碎品：定期檢查', gC(gR(gB('📝 開始易碎品檢查',{dk:1,hl:1,n:1}))+gR(`<span class="gx-s" style="flex:1">G01 燈罩</span>${gN(2)}${gB('✅ 完整',{ok:1})}${gB('❌ 破損',{rd:1,hl:1})}${gB('❓ 遺失')}`)+gR(gB('＋ 建立缺失',{dk:1,hl:1,n:3}))) + gC(gR(`<img src="${fragIcon('clock')}" alt="" style="width:22px;height:22px"><span class="gx-tag" style="background:#f59e0b;color:#3b2500;border-color:#fff">G01</span><span class="gx-s">正常</span><img src="${fragIcon('camera')}" alt="" style="width:22px;height:22px"><span class="gx-tag" style="background:#f59e0b;color:#3b2500;box-shadow:0 0 0 2px #b42318">G02 !</span><span class="gx-s">到期未檢查</span>`)+gR(`<img src="${fragIcon('glass')}" alt="" style="width:22px;height:22px"><span class="gx-tag" style="background:#b42318;color:#fff">G03</span><span class="gx-s">破損</span>`),'編號標籤的顏色'),
       `<p>按「📝 開始易碎品檢查」${gN(1)}，逐項選${gN(2)}：✅ 完整、❌ 破損、❓ 遺失、⊘ 不適用；沒問題的可以按「其餘全部 ✅ 完整」。</p><p>儲存後，破損或遺失的項目按「＋ 建立缺失」${gN(3)}，自動帶入區域與描述，接到缺失追蹤；破損要確認碎片有沒有污染產品。</p><p>圖示旁的<b>編號標籤</b>會提醒你：<b>橘框</b>＝7 天內要檢查、<b>紅框＋!</b>＝到期沒檢查、<b>整顆紅</b>＝上次檢查破損或遺失。</p>`),
-    gStep(16,'➡️ 動線與設施', gC(gR(`${gIn('物流（原料） ▾',1)}${gN(1)}${gB('✏️ 畫箭頭',{hl:1,n:2})}`)+gR(`<span class="gx-s" style="color:#e46c0a;font-weight:800">──➜ 人流</span><span class="gx-s" style="color:#ff0000;font-weight:800">──➜ 原料</span><span class="gx-s" style="color:#c00000;font-weight:800">╌╌➜ 成品</span><span class="gx-s" style="color:#7f0000;font-weight:800">┄┄➜ 廢棄物</span>`)+gR(`<span class="gx-s" style="color:#0070c0;font-weight:800">──➜ 氣流</span><span class="gx-s" style="color:#a6a6a6;font-weight:800">──➜ 水流</span>`)) + gC(gR(`<span class="gx-sw" style="background:#0d0d0d"></span><span class="gx-s">門</span><span class="gx-sw" style="background:#00b050"></span><span class="gx-s">冷氣</span><span class="gx-sw" style="background:#7030a0"></span><span class="gx-s">抽風口</span><span class="gx-sw" style="background:#ff77ff"></span><span class="gx-s">水源</span><span class="gx-sw" style="background:#984807"></span><span class="gx-s">水溝</span>`)+gR(`${gN(3)}<span class="gx-s">點圖例＝隱藏／顯示</span>`),'設施標記（粗線）'),
+    gStep(17,'➡️ 動線與設施', gC(gR(`${gIn('物流（原料） ▾',1)}${gN(1)}${gB('✏️ 畫箭頭',{hl:1,n:2})}`)+gR(`<span class="gx-s" style="color:#e46c0a;font-weight:800">──➜ 人流</span><span class="gx-s" style="color:#ff0000;font-weight:800">──➜ 原料</span><span class="gx-s" style="color:#c00000;font-weight:800">╌╌➜ 成品</span><span class="gx-s" style="color:#7f0000;font-weight:800">┄┄➜ 廢棄物</span>`)+gR(`<span class="gx-s" style="color:#0070c0;font-weight:800">──➜ 氣流</span><span class="gx-s" style="color:#a6a6a6;font-weight:800">──➜ 水流</span>`)) + gC(gR(`<span class="gx-sw" style="background:#0d0d0d"></span><span class="gx-s">門</span><span class="gx-sw" style="background:#00b050"></span><span class="gx-s">冷氣</span><span class="gx-sw" style="background:#7030a0"></span><span class="gx-s">抽風口</span><span class="gx-sw" style="background:#ff77ff"></span><span class="gx-s">水源</span><span class="gx-sw" style="background:#984807"></span><span class="gx-s">水溝</span>`)+gR(`${gN(3)}<span class="gx-s">點圖例＝隱藏／顯示</span>`),'設施標記（粗線）'),
       `<p>編輯模式先選<b>種類</b>${gN(1)}，按「✏️ 畫箭頭」${gN(2)}：從起點開始，一個轉彎點點一下，最後一點會變成箭頭；在最後一點<b>再點一下</b>或按「完成這條」結束，可以接著畫下一條。</p><p>物流分三種：<b>原料實線、成品虛線、廢棄物點線</b>，起點標「原／成／廢」。畫反了，點箭頭按「⇄ 反轉方向」。</p><p>門、冷氣、抽風口、水源供應處、水溝／排水孔選好後按「✏️ 畫標記」，在平面圖上<b>拖曳</b>畫一段粗線：<b>直的門上下拖、橫的門左右拖</b>，接近水平或垂直會自動拉直。已經畫好的，點一下按「↻ 轉 90°」（或鍵盤 <b>R</b>）就能橫的變直的。</p><p>檢視模式點上方圖例${gN(3)}可以只看某幾種（例如只看人流），匯出圖片也只會有顯示中的。</p>`),
-    gStep(17,'🐭 病媒防治', gC(gR(`${gIn('鼠板站（黏鼠板） ▾',1)}${gN(1)}${gB('放置',{hl:1,n:2})}`)+gR(`<img src="${pestIcon('light')}" alt="" style="width:22px;height:22px"><span class="gx-s">捕蟲燈 L01</span><img src="${pestIcon('board')}" alt="" style="width:22px;height:22px"><span class="gx-s">鼠板站 B01</span><img src="${pestIcon('bait')}" alt="" style="width:22px;height:22px"><span class="gx-s">鼠餌站 R01</span>`)) + gC(gR(gB('📗 匯出病媒防治設施清單（Excel）',{hl:1,n:3}))+gR(gB('＋ 在這裡建立缺失（病媒防治）',{dk:1,hl:1,n:4}))),
+    gStep(18,'🐭 病媒防治', gC(gR(`${gIn('鼠板站（黏鼠板） ▾',1)}${gN(1)}${gB('放置',{hl:1,n:2})}`)+gR(`<img src="${pestIcon('light')}" alt="" style="width:22px;height:22px"><span class="gx-s">捕蟲燈 L01</span><img src="${pestIcon('board')}" alt="" style="width:22px;height:22px"><span class="gx-s">鼠板站 B01</span><img src="${pestIcon('bait')}" alt="" style="width:22px;height:22px"><span class="gx-s">鼠餌站 R01</span>`)) + gC(gR(gB('📗 匯出病媒防治設施清單（Excel）',{hl:1,n:3}))+gR(gB('＋ 在這裡建立缺失（病媒防治）',{dk:1,hl:1,n:4}))),
       `<p>編輯模式先選<b>設施種類</b>${gN(1)}，按「放置」${gN(2)}後在平面圖上點一下；可以連續放，放完按「■ 停止放置」。</p><p>圖示：<b>紫色的蟲＝捕蟲燈</b>、<b>黏鼠板＝鼠板站</b>、<b>老鼠＝鼠餌站</b>；編號自動編 L01／B01／R01，點圖示可以改編號、寫位置說明。</p><p>「📗 匯出設施清單」${gN(3)}給病媒防治廠商或稽核用；現場發現蟲鼠問題，點圖示按「＋ 建立缺失」${gN(4)}，類別預設 05 病媒防治。</p><p class="muted small">這幾張圖會露出工廠動線與設施位置，傳給外面的人前請先確認可以外流。</p>`)
   ]},
   trash: { t:'最近刪除使用說明', steps:() => [
@@ -2454,7 +2464,7 @@ function renderMap(){
     </div>
     ${MV.layer==='defect'?`<div id="mStatsBox">${mapStatsHTML()}</div>`:''}` : `<div class="card empty" style="padding:30px">還沒有廠區地圖。請按「＋ 新增地圖（上傳平面圖）」上傳工廠平面圖（JPG、PNG）。<br><span class="small muted">同事已經做好地圖的話，可以請他「匯出地圖設定」給你，再按「匯入地圖設定」。</span></div>`}
     ${mapGuideHTML()}`;
-  hydrate($('#mSide'));
+  hydrate($('#mSide')); requestAnimationFrame(lcDrawAll);
   if(m){ phGet(m.img).then(u=>{ const im = $('#mapImg'); if(im){ if(mapHRaw()==='fit') im.onload = () => mapFitHeight(true); im.src = u || ''; } if(!u) say('平面圖找不到，請在編輯模式按「換圖片」重新上傳。'); }); (MV.layer==='defect'?mapBind:layerBind)(); mapGripBind(); mapSplitBind(); mapScaleUpd();
     const im2 = $('#mapImg'); if(im2) im2.addEventListener('load', () => { mapScaleUpd(); if(mapZoomMode()==='screen') mapFitScreen(true); mapKeepScroll(keep); });
     mapKeepScroll(keep);
@@ -2585,7 +2595,7 @@ function mapSideHTML(){
     ${as.length ? `<ul class="mini">${as.map(a=>{ const s = mapStats(recsForArea(a)); return `<li class="click" onclick="MV.sel={t:'area',id:'${a.id}'};renderMap()"><span>${esc(a.name)}</span><span class="small ${s.over?'bad':s.open?'':'muted'}">${s.open?'未結案 '+s.open:'共 '+s.total+' 件'}${s.over?'・逾期 '+s.over:''}</span></li>`; }).join('')}</ul>`
       : `<div class="muted small">這張地圖還沒有區域。請切到「✏️ 編輯模式」，按「▭ 新增區域」，在平面圖上拖曳畫出範圍。</div>`}`;
 }
-function mapSide(){ if(MV.layer!=='defect'){ lySide(); return; } const s = $('#mSide'); const sb = $('#mStatsBox'); if(sb) sb.innerHTML = mapStatsHTML(); if(s){ REP = repeatSet(); STREAK = streakAlerts(); s.innerHTML = mapSideHTML(); hydrate(s); if(MV.sel && MV.mode==='view' && window.innerWidth<900) s.scrollIntoView({behavior:'smooth', block:'start'}); } document.querySelectorAll('.marea,.mpin').forEach(e=>e.classList.toggle('sel', !!MV.sel && ((MV.sel.t==='area'&&e.dataset.aid===MV.sel.id)||(MV.sel.t==='loc'&&e.dataset.lid===MV.sel.id)))); }
+function mapSide(){ if(MV.layer!=='defect'){ lySide(); return; } const s = $('#mSide'); const sb = $('#mStatsBox'); if(sb){ sb.innerHTML = mapStatsHTML(); lcDrawAll(); } if(s){ REP = repeatSet(); STREAK = streakAlerts(); s.innerHTML = mapSideHTML(); hydrate(s); if(MV.sel && MV.mode==='view' && window.innerWidth<900) s.scrollIntoView({behavior:'smooth', block:'start'}); } document.querySelectorAll('.marea,.mpin').forEach(e=>e.classList.toggle('sel', !!MV.sel && ((MV.sel.t==='area'&&e.dataset.aid===MV.sel.id)||(MV.sel.t==='loc'&&e.dataset.lid===MV.sel.id)))); }
 
 /* 平面圖上的拖曳：畫區域、放位置、移動、改大小、檢視模式拖曳平移 */
 function mapBind(){
@@ -3264,11 +3274,18 @@ function mapStatsHTML(){
   const types = [...tm.entries()].sort((a,b)=>b[1].length-a[1].length).slice(0,8).map(([k,rs])=>[k, rs.length, '', mstReg(k, rs)]);
   const months = []; { const d = new Date(); for(let i=5;i>=0;i--){ const x = new Date(d.getFullYear(), d.getMonth()-i, 1); months.push(x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')); } }
   const mAll = [...new Map(as.flatMap(a=>recsForArea(a)).map(r=>[r.id,r])).values()];
+  /* 區域分布圓餅＋各區域（點某一區時改成各位置）最近 6 個月曲線 */
+  const units = selA ? [...locs.map(l=>({name:(l.code+' '+l.name).trim(), all:recsForLoc(l)})), {name:'未指定位置', all:[...new Map(as.flatMap(a=>recsForArea(a)).map(r=>[r.id,r])).values()].filter(r=>!(r.locId && locs.some(l=>l.id===r.locId)))}]
+    : as.map(a=>({name:a.name, all:recsForArea(a)}));
+  const dnItems = units.map(u=>({name:u.name, rs:u.all.filter(inP)})), dnCM = colorMap(dnItems.filter(x=>x.rs.length).sort((a,b)=>b.rs.length-a.rs.length).slice(0,5).map(x=>x.name));
+  const lcUnits = units.map(u=>({u, n:u.all.filter(r=>months.some(m=>(r.foundDate||'').startsWith(m))).length})).filter(x=>x.n).sort((a,b)=>b.n-a.n).slice(0,5);
+  const lcSeries = lcUnits.map(({u}) => { const rs = months.map(m=>u.all.filter(r=>(r.foundDate||'').startsWith(m))); return {name:u.name, rs, vals:rs.map(a=>a.length)}; });
+  const unitWord = selA ? '位置' : '區域';
   const trend = months.map(m=>{ const rs = mAll.filter(r=>(r.foundDate||'').startsWith(m)), nm = m.slice(0,4)+' 年 '+(+m.slice(5))+' 月'; return [+m.slice(5)+' 月', rs.length, '', mstReg(nm+'（發現日期）', rs)]; });
   const hot = locs.map(l=>{ const rs = recsForLoc(l).filter(inP), o = rs.filter(r=>!r.closed).length, v = rs.filter(isOverdue).length, p = rs.filter(r=>rep.has(r.id)).length;
     return {l, a:areaById(l.areaId), score:o*2+v*3+p*2+rs.length, n:rs.length, o, v, p}; }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,5);
   const per = [['all','全部期間'],['m1','本月'],['m3','最近三個月'],['m6','最近六個月'],['custom','自訂']];
-  return `<details class="card mstats" ${MST.open?'open':''} ontoggle="MST.open=this.open;try{localStorage.setItem('qaHygieneTracker_v1_mapStat',this.open?'1':'0')}catch(e){}">
+  return `<details class="card mstats" ${MST.open?'open':''} ontoggle="MST.open=this.open;try{localStorage.setItem('qaHygieneTracker_v1_mapStat',this.open?'1':'0')}catch(e){};if(this.open)lcDrawAll()">
     <summary><b>📊 地圖統計</b><span class="muted small">（${selA?`<b style="color:var(--ink)">${esc(selA.name)}</b>`:esc((MAPD.maps.find(m=>m.id===MV.mapId)||{}).name||'')+'・全部區域'}）</span>${selA?`<button class="lite" style="margin-left:auto" onclick="event.preventDefault();MV.sel=null;renderMap()">看全部區域</button>`:''}</summary>
     <div class="row" style="margin:10px 0">${per.map(([k,t])=>`<button class="${MST.per===k?'primary':''}" onclick="MST.per='${k}';renderMap()">${t}</button>`).join('')}
       ${MST.per==='custom'?`<input type="date" value="${esc(MST.from)}" onchange="MST.from=this.value;renderMap()" style="width:auto"> ～ <input type="date" value="${esc(MST.to)}" onchange="MST.to=this.value;renderMap()" style="width:auto">`:''}</div>
@@ -3280,7 +3297,8 @@ function mapStatsHTML(){
       <div><div class="st-sec">高風險位置排行</div>${hot.length ? `<ol class="mhot">${hot.map(x=>`<li class="click" onclick="MV.sel={t:'loc',id:'${x.l.id}'};renderMap();document.getElementById('mapView').scrollIntoView({behavior:'smooth'})"><b>${esc((x.l.code+' '+x.l.name).trim())}</b><span class="muted small">${esc(x.a?x.a.name:'')}</span><span class="small">共 ${x.n}・未結 ${x.o}${x.v?'・<b class="bad">逾期 '+x.v+'</b>':''}${x.p?'・🔁 重複 '+x.p:''}</span></li>`).join('')}</ol>` : '<div class="muted small">目前沒有需要優先注意的位置。</div>'}
         <div class="muted small" style="margin-top:4px">排序依：未結案、逾期、重複發生與件數加權。</div></div>
     </div>
-    <div class="muted small" style="margin-top:8px">💡 數字卡和長條都可以點，會列出那幾件案件；點案件可以直接打開。
+    <div class="lcgrid" style="margin-top:14px">${pieHTML('dnMap', `各${unitWord}缺失分布（前 5 名）`, paint(dnItems, dnCM), MST_SCOPE, '其它'+unitWord)}${lineChartHTML('lcMap', `各${unitWord}每月件數（最近 6 個月，前 5 名）`, months.map(m=>+m.slice(5)+'月'), paint(lcSeries, dnCM), {scopes:months.map(m=>`${MST_SCOPE.split('・').slice(0,-1).join('・')}・${m.slice(0,4)} 年 ${+m.slice(5)} 月`)})}</div>
+    <div class="muted small" style="margin-top:8px">💡 數字卡、長條、圓餅、圓點都可以點，會列出那幾件案件；點案件可以直接打開。
     </div>
   </details>`;
 }
@@ -4459,12 +4477,16 @@ function statSideHTML(){
 
 /* ---------- 統計頁折線圖：每月趨勢（一張圖一個量；顏色依固定順序；線尾直接標名稱；滑過看數字、點圓點看案件） ---------- */
 const LC_COL = ['#2a78d6','#eb6834','#1baf7a','#eda100','#e87ba4','#6250d6'];
+const lcCol = (x, i) => x.c || (x.other ? '#9aa3b2' : LC_COL[i%LC_COL.length]);
+/* 依名稱固定顏色：圓餅圖和曲線圖同一個項目同一個顏色 */
+function colorMap(names){ const m = new Map(); names.forEach((n,i)=>m.set(n, LC_COL[i%LC_COL.length])); return m; }
+function paint(series, cm){ const used = new Set(cm.values()); let k = 0; series.forEach(x => { if(x.other){ x.c = '#9aa3b2'; return; } if(cm.has(x.name)) x.c = cm.get(x.name); else { while(used.has(LC_COL[k%LC_COL.length]) && k < 12) k++; x.c = LC_COL[k%LC_COL.length]; used.add(x.c); } }); return series; }
 const LC = {};
 function lcNice(m){ if(m<=4) return 4; const p = Math.pow(10, Math.floor(Math.log10(m))), f = m/p; return (f<=1?1:f<=2?2:f<=5?5:10)*p; }
-function lineChartHTML(id, title, months, series){
-  LC[id] = {title, months, series, hl:-1};
+function lineChartHTML(id, title, months, series, opt){
+  LC[id] = {title, months, series, hl:-1, scopes:(opt&&opt.scopes)||null};
   if(!series.length || series.every(x=>x.vals.every(v=>!v))) return `<div class="lcbox"><div class="st-sec">${title}</div><div class="muted small">這一年還沒有資料。</div></div>`;
-  const legend = `<div class="lcleg">${series.map((x,si)=>`<button type="button" data-hl="${si}" onclick="lcFocus('${id}',${si})" title="點一下只看這條線，再點一次恢復"><i style="background:${LC_COL[si%LC_COL.length]}"></i>${esc(x.name)}</button>`).join('')}</div>`;
+  const legend = `<div class="lcleg">${series.map((x,si)=>`<button type="button" data-hl="${si}" onclick="lcFocus('${id}',${si})" title="點一下只看這條線，再點一次恢復"><i style="background:${lcCol(x,si)}"></i>${esc(x.name)}</button>`).join('')}</div>`;
   const table = `<details class="lctab"><summary>看數字表格</summary><div class="gwrap"><table class="st-table"><thead><tr><th></th>${months.map(m=>`<th>${m}</th>`).join('')}<th>合計</th></tr></thead><tbody>${series.map(x=>`<tr><td>${esc(x.name)}</td>${x.vals.map(v=>`<td>${v==null?'':v}</td>`).join('')}<td><b>${x.vals.reduce((a,v)=>a+(v||0),0)}</b></td></tr>`).join('')}</tbody></table></div></details>`;
   return `<div class="lcbox" data-lc="${id}"><div class="st-sec">${title}</div>${legend}<div class="lcplot"></div>${table}</div>`;
 }
@@ -4477,7 +4499,7 @@ function lcDraw(box){
   const ticks = [0, mx/4, mx/2, mx*3/4, mx].filter(v=>Number.isInteger(v)), every = pw/(n-1) < 30 ? 2 : 1;
   let g = ticks.map(v=>`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" class="lcg"/><text x="${L-6}" y="${Y(v)+4}" class="lcy">${v}</text>`).join('');
   g += months.map((m,i)=> i%every ? '' : `<text x="${X(i)}" y="${H-6}" class="lcx">${m}</text>`).join('');
-  const lines = series.map((x,si)=>{ const col = LC_COL[si%LC_COL.length]; let d = '', on = false;
+  const lines = series.map((x,si)=>{ const col = lcCol(x,si); let d = '', on = false;
     x.vals.forEach((v,i)=>{ if(v==null){ on = false; return; } d += (on?'L':'M') + X(i).toFixed(1) + ',' + Y(v).toFixed(1); on = true; });
     const dots = x.vals.map((v,i)=> v==null ? '' : `<circle cx="${X(i)}" cy="${Y(v)}" r="4" fill="${col}" class="lcd"/><circle cx="${X(i)}" cy="${Y(v)}" r="11" class="lch" data-s="${si}" data-i="${i}"/>`).join('');
     return `<g class="lcs ${c.hl>=0 && c.hl!==si ? 'dim' : ''}" data-s="${si}"><path d="${d}" stroke="${col}" class="lcl"/>${dots}</g>`; }).join('');
@@ -4502,7 +4524,7 @@ document.addEventListener('pointermove', e => {
   const cross = box.querySelector('.lccross'), svg = box.querySelector('.lcsvg'), cx = hit.tagName==='rect' ? +hit.getAttribute('x') + +hit.getAttribute('width')/2 : +hit.getAttribute('cx');
   cross.setAttribute('x1', cx); cross.setAttribute('x2', cx); cross.setAttribute('visibility','visible');
   let t = tip; if(!t){ t = document.createElement('div'); t.id = 'lcTip'; t.className = 'lctip'; document.body.appendChild(t); }
-  t.innerHTML = `<b>${c.months[i]}</b>${c.series.map((x,si)=>c.hl>=0&&c.hl!==si?'':`<div><i style="background:${LC_COL[si%LC_COL.length]}"></i>${esc(x.name)}<span>${x.vals[i]==null?'—':x.vals[i]+' 件'}</span></div>`).join('')}<div class="muted">點圓點看案件</div>`;
+  t.innerHTML = `<b>${c.months[i]}</b>${c.series.map((x,si)=>c.hl>=0&&c.hl!==si?'':`<div><i style="background:${lcCol(x,si)}"></i>${esc(x.name)}<span>${x.vals[i]==null?'—':x.vals[i]+' 件'}</span></div>`).join('')}<div class="muted">點圓點看案件</div>`;
   t.hidden = false; const r = t.getBoundingClientRect();
   t.style.left = Math.min(innerWidth - r.width - 8, e.clientX + 14) + 'px'; t.style.top = Math.max(8, e.clientY - r.height - 10) + 'px';
 }, {passive:true});
@@ -4511,7 +4533,33 @@ document.addEventListener('click', e => {
   const box = h.closest('.lcbox'), c = LC[box.dataset.lc], x = c.series[+h.dataset.s], i = +h.dataset.i; const tip = $('#lcTip'); if(tip) tip.hidden = true;
   const rs = (x.rs[i]||[]).slice().sort((a,b)=>(b.foundDate||'').localeCompare(a.foundDate||''));
   if(!rs.length){ flash('這個月沒有案件'); return; }
-  caseListModal(`${esc(c.title)}：${esc(x.name)}`, `${statY} 年 ${c.months[i]}`, rs);
+  caseListModal(`${esc(c.title)}：${esc(x.name)}`, c.scopes ? c.scopes[i] : `${statY} 年 ${c.months[i]}`, rs);
+});
+/* ---------- 圓餅圖（甜甜圈）：前 5 名各一塊，其餘合成「其它」；點一塊或右邊清單看案件 ---------- */
+const DN = {};
+function pieHTML(id, title, items, scope, other){
+  items = items.filter(x=>x.rs.length).sort((a,b)=>b.rs.length-a.rs.length);
+  if(items.length > 6){ const rest = items.slice(5); items = items.slice(0,5).concat([{name:`${other||'其它'}（${rest.length} 個）`, rs:[...new Map(rest.flatMap(x=>x.rs).map(r=>[r.id,r])).values()], other:true}]); }
+  DN[id] = {title, items, scope};
+  const total = items.reduce((a,x)=>a+x.rs.length, 0);
+  if(!total) return `<div class="dnbox"><div class="st-sec">${title}</div><div class="muted small">這段期間沒有資料。</div></div>`;
+  const col = (x,k) => lcCol(x,k);
+  const R = 70, W = 30, C = 90, gap = items.length>1 ? 0.012 : 0;
+  let a0 = -Math.PI/2, arcs = '';
+  items.forEach((x,k) => { const f = x.rs.length/total, a1 = a0 + f*Math.PI*2;
+    const s0 = a0 + gap, s1 = a1 - gap, big = (s1-s0) > Math.PI ? 1 : 0, pt = a => `${(C+R*Math.cos(a)).toFixed(2)},${(C+R*Math.sin(a)).toFixed(2)}`;
+    arcs += items.length===1 ? `<circle cx="${C}" cy="${C}" r="${R}" class="dns" data-k="${k}" style="stroke:${col(x,k)}"><title>${esc(x.name)}：${x.rs.length} 件（100%）</title></circle>`
+      : `<path d="M${pt(s0)} A${R},${R} 0 ${big} 1 ${pt(s1)}" class="dns" data-k="${k}" style="stroke:${col(x,k)}"><title>${esc(x.name)}：${x.rs.length} 件（${Math.round(f*100)}%）</title></path>`;
+    a0 = a1; });
+  return `<div class="dnbox" data-dn="${id}"><div class="st-sec">${title}</div><div class="dnwrap">
+    <svg viewBox="0 0 180 180" class="dnsvg" role="img" aria-label="${esc(title)}圓餅圖">${arcs}<text x="${C}" y="${C-4}" class="dnt">${total}</text><text x="${C}" y="${C+16}" class="dnu">件</text></svg>
+    <div class="dnleg">${items.map((x,k)=>`<button type="button" data-k="${k}" title="點一下看案件"><i style="background:${col(x,k)}"></i><span class="dnn">${esc(x.name)}</span><b>${x.rs.length}</b><span class="dnp">${Math.round(x.rs.length/total*100)}%</span></button>`).join('')}</div></div></div>`;
+}
+document.addEventListener('click', e => {
+  const t = e.target.closest && e.target.closest('.dnbox[data-dn] [data-k]'); if(!t) return;
+  const box = t.closest('.dnbox'), d = DN[box.dataset.dn]; if(!d) return; const x = d.items[+t.dataset.k]; if(!x) return;
+  const rs = x.rs.slice().sort((a,b)=>(a.closed?1:0)-(b.closed?1:0) || (b.foundDate||'').localeCompare(a.foundDate||''));
+  caseListModal(`${esc(d.title)}：${esc(x.name)}`, d.scope, rs);
 });
 function statTrendHTML(){
   const y = String(statY), months = Array.from({length:12}, (_,i)=>(i+1)+'月'), now = today().slice(0,7);
@@ -4525,11 +4573,15 @@ function statTrendHTML(){
   const top = (keyOf, other) => { const cnt = new Map(); Y.forEach(r=>keyOf(r).forEach(k=>cnt.set(k,(cnt.get(k)||0)+1)));
     const ks = [...cnt.entries()].sort((a,b)=>b[1]-a[1]).map(x=>x[0]), main = ks.slice(0,5), rest = new Set(ks.slice(5));
     const out = main.map(k => mk(k, i => Y.filter(r=>(r.foundDate||'').startsWith(ym(i)) && keyOf(r).includes(k))));
-    if(rest.size) out.push(mk(other+'（'+rest.size+' 個）', i => Y.filter(r=>(r.foundDate||'').startsWith(ym(i)) && keyOf(r).some(k=>rest.has(k)))));
+    if(rest.size) out.push(Object.assign(mk(other+'（'+rest.size+' 個）', i => Y.filter(r=>(r.foundDate||'').startsWith(ym(i)) && keyOf(r).some(k=>rest.has(k)))), {other:true}));
     return out; };
   const dept = top(deptsOf, '其它單位'), type = top(r => [r.defType ? typeName(r.defType) : '未選類別'], '其它類別');
+  const areaKey = r => [(r.area||'').trim() || '未填區域'], area = top(areaKey, '其它區域');
+  const am = new Map(); Y.forEach(r => { const k = areaKey(r)[0]; if(!am.has(k)) am.set(k, []); am.get(k).push(r); });
   return `<div class="card lccard"><div class="phd"><b>📈 每月趨勢</b><span class="muted small">${y} 年・依發現日期（結案依結案日期）・滑過看數字、點圓點看案件</span></div>
-    <div class="lcgrid">${lineChartHTML('lcTotal','每月缺失總數', months, total)}${lineChartHTML('lcDept','各負責單位每月件數（前 5 名）', months, dept)}${lineChartHTML('lcType','各缺失類別每月件數（前 5 名）', months, type)}</div></div>`;
+    <div class="lcgrid">${lineChartHTML('lcTotal','每月缺失總數', months, total)}${lineChartHTML('lcDept','各負責單位每月件數（前 5 名）', months, dept)}${lineChartHTML('lcType','各缺失類別每月件數（前 5 名）', months, type)}</div></div>
+    <div class="card lccard"><div class="phd"><b>📍 缺失區域分析</b><span class="muted small">${y} 年・依發現日期・點圓餅或清單、圓點都可以看案件</span></div>
+    <div class="lcgrid">${pieHTML('dnArea', '缺失區域分布（前 5 名）', paint([...am.entries()].map(([name,rs])=>({name, rs})), colorMap(area.filter(x=>!x.other).map(x=>x.name))), y+' 年', '其它區域')}${lineChartHTML('lcArea','各缺失區域每月件數（前 5 名）', months, paint(area, colorMap(area.filter(x=>!x.other).map(x=>x.name))))}</div></div>`;
 }
 
 async function showStats(){
