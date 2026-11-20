@@ -541,6 +541,15 @@ button.pnew{font-size:13.5px;padding:6px 12px;border:1px solid var(--brand)}
 .seg{display:inline-flex;gap:2px;background:#f3ece0;border:1px solid var(--line);border-radius:999px;padding:4px}
 .seg button{border:0;background:none;border-radius:999px;padding:6px 18px;font-weight:700;color:var(--muted)}
 .seg button.on,.seg button.on:hover{background:var(--brand);color:#fffdf8}
+/* 統計期間列：年度／每季／每月 ＋ ◀ 年 季(月) ▶ 一排 */
+.pbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#fffdf8;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.pseg{display:inline-flex;border:1px solid #c9bda6;border-radius:8px;overflow:hidden}
+.pseg button{border:0;border-left:1px solid #c9bda6;background:#fff;border-radius:0;padding:8px 16px;font-size:15px;color:var(--ink);min-height:40px}
+.pseg button:first-child{border-left:0}.pseg button.on,.pseg button.on:hover{background:#16213a;color:#fff;font-weight:700}
+.pbar .pnav{display:inline-flex;align-items:center;gap:8px}
+.pbar .parr{width:40px;min-height:40px;padding:0;border:1px solid #c9bda6;border-radius:8px;background:#fff;font-size:14px;color:var(--ink)}
+.pbar .parr:hover{background:var(--brand-soft)}
+.pbar select{width:auto;min-height:40px;font-size:15px;padding:6px 10px;border-radius:8px;background-color:#fff;border:1px solid #c9bda6}
 .chartfig{margin:0}
 .donut{display:flex;justify-content:center}
 .dleg{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12.5px;color:var(--muted);margin-top:6px}
@@ -1079,8 +1088,8 @@ const GUIDES = {
       `<p>按「下載備份」${gN(1)}會存成<b>一個檔案</b>（Casevoras_完整備份_日期.json），建議存到雲端硬碟。裡面有全部資料：</p><p>✔ 案件與照片（含「最近刪除」）<br>✔ 常用選項<br>✔ 廠區地圖所有圖層（缺失區域、清潔分區、易碎品、動線、病媒防治、平面圖與參考照片）<br>✔ 稽核紀錄、易碎品檢查紀錄<br>✔ 畫面設定（風險顏色、磁鐵、地圖高度…）</p><p>換電腦時用「從備份還原」${gN(2)}，<b>會取代目前的資料</b>（常用選項是合併）。網址版和 claude.ai 版的資料分開存，要各自下載備份。</p>`)
   ]},
   stats: { t:'統計分析使用說明', steps:() => [
-    gStep(1,'選期間', gC(gR(`${gN(1)}<span class="gx-seg"><i>年度</i><i>每季</i><i class="on">每月</i></span>`)+gR(`${gN(2)}${gIn('2026 年 ▾',1)}${gIn('10 月 ▾',1)}`)),
-      `<p>先選「年度／每季／每月」${gN(1)}，再選年份、月份${gN(2)}，下面的數字和表格都會跟著換。</p>`),
+    gStep(1,'選期間', gC(gR(`${gN(1)}<span class="gx-seg"><i>年度</i><i>每季</i><i class="on">每月</i></span>`)+gR(`${gN(2)}${gIn('◀',1)}${gIn('2026 年 ▾',1)}${gIn('10 月 ▾',1)}${gIn('▶',1)}`)),
+      `<p>先選「年度／每季／每月」${gN(1)}，再選年份、季或月份${gN(2)}，下面的數字和表格都會跟著換。</p><p>按 <b>◀ ▶</b> 可以直接跳到上一期／下一期（例：第 1 季按 ◀ 會到去年第 4 季，年份自動換）。</p>`),
     gStep(2,'看四個數字、點開案件', gC(gR(`<span class="gx-k">59<small>新增</small></span><span class="gx-k ok">26<small>結案</small></span><span class="gx-k b">32<small>尚未結案</small></span>${gN(1)}<span class="gx-k rd hl">1<small>逾期</small></span>`)),
       `<p>新增＝結案＋尚未結案＋逾期。</p><p>點任一格${gN(1)}，會列出是哪幾件；再點案件就能直接打開處理。</p>`),
     gStep(3,'右側圖表', gC(`<div class="gx-donut"></div>`,'處理狀態') + gC(gR(`<span class="gx-s" style="width:60px">生產課</span><span class="gx-bar" style="width:70%"></span>`)+gR(`${gN(1)}<span class="gx-s hl" style="width:54px">尚未指定</span><span class="gx-bar" style="width:20%"></span>`),'負責單位件數'),
@@ -4469,6 +4478,8 @@ let statView='month', statY=null, statM=null, statQ=null;
 const pad2 = n => String(n).padStart(2,'0');
 const lastDay = (y,m) => new Date(y,m,0).getDate();
 function stInit(){ if(statY===null){ const t=today(); statY=+t.slice(0,4); statM=+t.slice(5,7); statQ=Math.ceil(statM/3); } }
+/* ◀ ▶：往前／往後一期（跨年會自動換年份） */
+function statStep(k){ const q = shiftPeriod(statView, statY, stA(), k); statY = q.y; if(statView==='month') statM = q.a; else if(statView==='quarter') statQ = q.a; renderStats(); }
 function stA(){ return statView==='month'?statM:statView==='quarter'?statQ:0; }
 /* 跟上期比的百分比：缺失變多＝紅 ▲、變少＝綠 ▼；good=true（結案、完成率）顏色相反 */
 function pctTxt(n, pn){ if(pn==null) return ''; if(n===pn) return '＝ 持平'; if(!pn) return '▲ 新增'; const p = Math.round(Math.abs(n-pn)/pn*100); return (n>pn?'▲ +':'▼ −') + (p||'<1') + '%'; }
@@ -4846,12 +4857,14 @@ function renderStats(){
     <div class="dgrid">
     <div class="card">
       <div class="phd"><b>統計報表</b></div>
-      <div class="seg" style="margin-bottom:10px">${vt('year','年度')}${vt('quarter','每季')}${vt('month','每月')}</div>
-      <div class="row" style="margin-bottom:6px">
-        <select style="width:auto" onchange="setStat('y',this.value)">${yOpts.map(y=>`<option value="${y}" ${y===statY?'selected':''}>${y} 年</option>`).join('')}</select>
-        ${statView==='month'?`<select style="width:auto" onchange="setStat('m',this.value)">${[1,2,3,4,5,6,7,8,9,10,11,12].map(m=>`<option value="${m}" ${m===statM?'selected':''}>${m} 月</option>`).join('')}</select>`:''}
-        ${statView==='quarter'?`<select style="width:auto" onchange="setStat('q',this.value)">${[1,2,3,4].map(q=>`<option value="${q}" ${q===statQ?'selected':''}>第 ${q} 季</option>`).join('')}</select>`:''}
-      </div>
+      <div class="pbar"><div class="pseg" role="group" aria-label="統計期間">${vt('year','年度')}${vt('quarter','每季')}${vt('month','每月')}</div>
+      <div class="pnav">
+        <button class="parr" onclick="statStep(-1)" title="上一${statView==='month'?'個月':statView==='quarter'?'季':'年'}" aria-label="上一期">◀</button>
+        <select aria-label="年份" onchange="setStat('y',this.value)">${yOpts.map(y=>`<option value="${y}" ${y===statY?'selected':''}>${y} 年</option>`).join('')}</select>
+        ${statView==='month'?`<select aria-label="月" onchange="setStat('m',this.value)">${[1,2,3,4,5,6,7,8,9,10,11,12].map(m=>`<option value="${m}" ${m===statM?'selected':''}>${m} 月</option>`).join('')}</select>`:''}
+        ${statView==='quarter'?`<select aria-label="季" onchange="setStat('q',this.value)">${[1,2,3,4].map(q=>`<option value="${q}" ${q===statQ?'selected':''}>第 ${q} 季</option>`).join('')}</select>`:''}
+        <button class="parr" onclick="statStep(1)" title="下一${statView==='month'?'個月':statView==='quarter'?'季':'年'}" aria-label="下一期">▶</button>
+      </div></div>
       <h3 class="st-title" style="margin:6px 0">${esc(rg.label)}</h3>
       <div id="statBody">${statHTML(statView,statY,stA())}</div>
     </div>
