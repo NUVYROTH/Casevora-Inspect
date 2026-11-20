@@ -564,7 +564,7 @@ button.pnew{font-size:13.5px;padding:6px 12px;border:1px solid var(--brand)}
 .dnleg.cmp button{grid-template-columns:14px minmax(0,1fr) auto 36px 66px}.dnleg .dnc{text-align:right}.dncmp{font-size:11.5px;color:var(--muted);margin-top:4px}
 .mkpi .kchg{display:block;margin-top:3px}.mkpi .kchg .chg{font-size:11.5px}
 input.lsearch{background:#f3ece0;border-color:var(--line)}
-.lfilter{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0 6px}
+.lfilter{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0 6px}
 .lfilter select{background:#f3ece0;border-color:var(--line)}
 .lcount{font-size:13px;color:var(--muted);margin:2px 0 8px}
 @media(max-width:600px){ .lfilter{grid-template-columns:1fr 1fr} }
@@ -683,6 +683,7 @@ let listSearch = '';
 let listYear = '';   // '' = 全部
 let listMonth = '';  // '' = 全部
 let listType = '';   // '' = 全部缺失類別
+let listDept = '';   // '' = 全部負責單位
 let listPage = 1;
 const PAGE_SIZES = [20,30,50,100];
 let pageSize = 20;
@@ -1039,6 +1040,10 @@ async function showList(){
           <option value="">全部月份</option>
           ${Array.from({length:12},(_,i)=>String(i+1).padStart(2,'0')).map(m=>`<option value="${m}" ${listMonth===m?'selected':''}>${parseInt(m,10)} 月</option>`).join('')}
         </select>
+        <select aria-label="負責單位" onchange="listDept=this.value;listPage=1;showList()">
+          <option value="">全部負責單位</option>
+          ${deptOptions().map(d=>`<option value="${esc(d)}" ${listDept===d?'selected':''}>${esc(d)}</option>`).join('')}
+        </select>
       </div>
       <div id="tableBox"></div>
     </div>
@@ -1081,7 +1086,7 @@ const GUIDES = {
     gStep(5,'結案確認', gC(gR(gIn('結案確認人員 品管人員'))+gR(`<span class="gx-ck">✓</span><span class="gx-s">已確認改善完成、符合結案條件</span>`)+gR(gB('確認結案',{ok:1,hl:1,n:1})),'5 結案確認（品管）'),
       `<p>結案條件都符合後，由品管人員填姓名、勾選確認，按「確認結案」${gN(1)}。結案後資料鎖定，需要修改可以「撤銷結案」。</p><p>結案後還是可以補兩欄，選好就自動存：<b>細部位置（廠區地圖）</b>、<b>負責單位</b>（例：改成生產課／打漿組）。</p>`),
     gStep(6,'查找案件', gC(gR(`${gN(1)}${gTag('未結案','dk')}${gTag('逾期')}${gTag('已結案')}${gTag('全部')}`)+gR(`${gN(2)}${gIn('🔍 10/26／包裝區／作業員 A／編號',1)}`)+gR(`${gIn('全部類別 ▾')}${gIn('2026 年 ▾')}${gIn('10 月 ▾')}`)),
-      `<p>用分頁${gN(1)}看未結案、逾期、待結案確認、已結案。</p><p>搜尋欄${gN(2)}可以打<b>日期（例：10/26）、缺失區域、負責人員、編號</b>；也能依類別、年份、月份篩選。</p>`),
+      `<p>用分頁${gN(1)}看未結案、逾期、待結案確認、已結案。</p><p>搜尋欄${gN(2)}可以打<b>日期（例：10/26）、缺失區域、負責人員、編號</b>；也能依類別、年份、月份、<b>負責單位</b>篩選。</p><p>「全部負責單位」下拉選單會列出常用選項和案件裡出現過的單位；一件寫兩個單位（打漿組、蒸煮組）選哪一個都找得到，「生產課／打漿組」選「生產課」或「打漿組」都找得到。</p>`),
     gStep(7,'報表與匯出', gC(gR(`${gB('匯出報表（Excel）',{hl:1,n:1})}`)+gR(`${gB('📸 改善前後報告',{n:2})}`)+gR(`${gB('📗 改善通知單 Excel',{hl:1,n:3})}`)),
       `<p>「匯出報表」${gN(1)}：選年月、狀態，公司表單或完整資料。</p><p>「改善前後報告」${gN(2)}會下載一個網頁檔，用瀏覽器打開後列印或存成 PDF；「改善通知單 Excel」${gN(3)}照公司通知單格式含照片。有勾選案件時只做勾選的。</p>`),
     gStep(8,'備份（每兩週到一個月）', gC(gR(`${gB('下載備份',{dk:1,hl:1,n:1})}${gB('從備份還原',{n:2})}`)) + `<div class="gx-warn">⚠ 清除瀏覽資料、無痕視窗 → 資料會不見</div>`,
@@ -1257,6 +1262,18 @@ function flowHTML(){
 function setSide(v){ document.querySelectorAll('#side button[data-v]').forEach(b=>b.classList.toggle('on', b.dataset.v===v)); document.body.classList.toggle('wide', v==='map'); }
 function tab(k, t, n){ return `<button class="${listFilter===k?'on':''}" onclick="listFilter='${k}';listPage=1;showList()">${t}（${n}）</button>`; }
 
+/* 負責單位篩選：選項＝常用選項的單位＋案件裡出現過的單位（「、」拆開）；「生產課／打漿組」選生產課或打漿組都找得到 */
+function deptOptions(){
+  const seen = new Map(), add = d => { d = String(d||'').trim(); if(d && d!=='其它' && !seen.has(nkey(d))) seen.set(nkey(d), d); };
+  OPTS.dept.forEach(add);
+  const rest = []; live().forEach(r=>deptsOf(r).forEach(d=>{ if(d!=='尚未指定' && d!=='其它' && !seen.has(nkey(d))){ seen.set(nkey(d), d); rest.push(d); } }));
+  const out = [...OPTS.dept.filter(d=>d && d!=='其它'), ...rest.sort((a,b)=>a.localeCompare(b,'zh-Hant'))];
+  if(live().some(r=>r.ownerDept==='其它')) out.push('其它');
+  if(live().some(r=>!String(r.ownerDept||'').trim())) out.push('尚未指定');
+  if(listDept && !out.includes(listDept)) out.push(listDept);
+  return out;
+}
+function deptMatch(r, d){ const k = nkey(d); return deptsOf(r).some(x => nkey(x)===k || nkey(x).split('/').includes(k)); }
 /* 年份、月份（依發現日期） */
 function inPeriod(rs){
   return rs.filter(r => {
@@ -1264,6 +1281,7 @@ function inPeriod(rs){
     if(listYear && d.slice(0,4)!==listYear) return false;
     if(listMonth && d.slice(5,7)!==listMonth) return false;
     if(listType && r.defType!==listType) return false;
+    if(listDept && !deptMatch(r, listDept)) return false;
     return true;
   });
 }
@@ -2095,7 +2113,7 @@ async function reopen(){
 function rangeLabel(){
   const tabName = {open:'未結案',over:'逾期',ready:'待結案確認',closed:'已結案',all:'全部'}[listFilter];
   const ym = (listYear?listYear+' 年':'全部年份') + (listMonth?' '+parseInt(listMonth,10)+' 月':'');
-  return ym + '｜' + tabName + (listType?'｜'+typeName(listType):'') + (listSearch.trim()?'｜搜尋「'+listSearch.trim()+'」':'');
+  return ym + '｜' + tabName + (listType?'｜'+typeName(listType):'') + (listDept?'｜'+listDept:'') + (listSearch.trim()?'｜搜尋「'+listSearch.trim()+'」':'');
 }
 async function beforeAfterReport(){
   const picked = listSel.size ? records.filter(r=>listSel.has(r.id) && !r.deleted) : filteredRecords();
