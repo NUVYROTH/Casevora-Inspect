@@ -1155,7 +1155,7 @@ const GUIDES = {
     gStep(18,'➡️ 動線與設施', gC(gR(`${gIn('物流（原料） ▾',1)}${gN(1)}${gB('✏️ 畫箭頭',{hl:1,n:2})}`)+gR(`<span class="gx-s" style="color:#e46c0a;font-weight:800">──➜ 人流</span><span class="gx-s" style="color:#ff0000;font-weight:800">──➜ 原料</span><span class="gx-s" style="color:#c00000;font-weight:800">╌╌➜ 成品</span><span class="gx-s" style="color:#7f0000;font-weight:800">┄┄➜ 廢棄物</span>`)+gR(`<span class="gx-s" style="color:#0070c0;font-weight:800">──➜ 氣流</span><span class="gx-s" style="color:#a6a6a6;font-weight:800">──➜ 水流</span>`)) + gC(gR(`<span class="gx-sw" style="background:#0d0d0d"></span><span class="gx-s">門</span><span class="gx-sw" style="background:#00b050"></span><span class="gx-s">冷氣</span><span class="gx-sw" style="background:#7030a0"></span><span class="gx-s">抽風口</span><span class="gx-sw" style="background:#ff77ff"></span><span class="gx-s">水源</span><span class="gx-sw" style="background:#984807"></span><span class="gx-s">水溝</span>`)+gR(`${gN(3)}<span class="gx-s">點圖例＝隱藏／顯示</span>`),'設施標記（粗線）'),
       `<p>編輯模式先選<b>種類</b>${gN(1)}，按「✏️ 畫箭頭」${gN(2)}：從起點開始，一個轉彎點點一下，最後一點會變成箭頭；在最後一點<b>再點一下</b>或按「完成這條」結束，可以接著畫下一條。</p><p>物流分三種：<b>原料實線、成品虛線、廢棄物點線</b>，起點標「原／成／廢」。畫反了，點箭頭按「⇄ 反轉方向」。</p><p>門、冷氣、抽風口、水源供應處、水溝／排水孔選好後按「✏️ 畫標記」，在平面圖上<b>拖曳</b>畫一段粗線：<b>直的門上下拖、橫的門左右拖</b>，接近水平或垂直會自動拉直。已經畫好的，點一下按「↻ 轉 90°」（或鍵盤 <b>R</b>）就能橫的變直的。</p><p>檢視模式點上方圖例${gN(3)}可以只看某幾種（例如只看人流），匯出圖片也只會有顯示中的。</p>`),
     gStep(19,'🐭 病媒防治', gC(gR(`${gIn('鼠板站（黏鼠板） ▾',1)}${gN(1)}${gB('放置',{hl:1,n:2})}`)+gR(`<img src="${pestIcon('light')}" alt="" style="width:22px;height:22px"><span class="gx-s">捕蟲燈 L01</span><img src="${pestIcon('board')}" alt="" style="width:22px;height:22px"><span class="gx-s">鼠板站 B01</span><img src="${pestIcon('bait')}" alt="" style="width:22px;height:22px"><span class="gx-s">鼠餌站 R01</span>`)) + gC(gR(gB('📗 匯出病媒防治設施清單（Excel）',{hl:1,n:3}))+gR(gB('＋ 在這裡建立缺失（病媒防治）',{dk:1,hl:1,n:4}))),
-      `<p>編輯模式先選<b>設施種類</b>${gN(1)}，按「放置」${gN(2)}後在平面圖上點一下；可以連續放，放完按「■ 停止放置」。</p><p>不在這三種的選<b>「其它（自己打字）」</b>：旁邊先打<b>名稱</b>（例：誘蚊燈）、選<b>圖示</b>（蟑螂、蒼蠅、蚊子、螞蟻、鳥、噴藥、捕鼠籠、黏蟲紙、？，或用上面三種的圖），之後放的每一個都<b>固定</b>是這個名稱和圖示。編號<b>依圖示各自從 01 算</b>：蚊子 M01、M02…，蟑螂 C01…，蒼蠅 F01…，螞蟻 A01…，鳥 W01…，噴藥 S01…，捕鼠籠 K01…，黏蟲紙 G01…，？ O01…（用捕蟲燈／鼠板站／鼠餌站的圖則是 OL、OB、OR）。放好後換圖示，編號也會自動換成新圖示的下一號（自己改過編號的就照你打的）。</p><p>打過的名稱會<b>記住</b>，下次在種類選單「自己打過的」直接選；不要了按「✕ 移除」。放好後點圖示，右邊也可以再改名稱、換圖示（檢視、編輯模式都可以；移動、刪除要在編輯模式）。圖例和匯出圖片會列出你取的名稱。</p><p>圖示：<b>紫色的蟲＝捕蟲燈</b>、<b>黏鼠板＝鼠板站</b>、<b>老鼠＝鼠餌站</b>；編號自動編 L01／B01／R01，點圖示可以改編號、寫位置說明。</p><p>「📗 匯出設施清單」${gN(3)}給病媒防治廠商或稽核用；現場發現蟲鼠問題，點圖示按「＋ 建立缺失」${gN(4)}，類別預設 05 病媒防治。</p><p class="muted small">這幾張圖會露出工廠動線與設施位置，傳給外面的人前請先確認可以外流。</p>`)
+      `<p>編輯模式先選<b>設施種類</b>${gN(1)}，按「放置」${gN(2)}後在平面圖上點一下；可以連續放，放完按「■ 停止放置」。</p><p>不在這三種的選<b>「其它（自己打字）」</b>：旁邊先打<b>名稱</b>（例：誘蚊燈）、選<b>圖示</b>（蟑螂、蒼蠅、蚊子、螞蟻、鳥、噴藥、捕鼠籠、黏蟲紙、？，或用上面三種的圖），之後放的每一個都<b>固定</b>是這個名稱和圖示。編號<b>依圖示各自從 01 算</b>：蚊子 M01、M02…，蟑螂 C01…，蒼蠅 F01…，螞蟻 A01…，鳥 W01…，噴藥 S01…，捕鼠籠 K01…，黏蟲紙 G01…，？ O01…（用捕蟲燈／鼠板站／鼠餌站的圖則是 OL、OB、OR）。放好後換圖示，編號也會自動換成新圖示的下一號（自己改過編號的就照你打的）。</p><p>打過的名稱會<b>記住</b>，下次在種類選單「自己打過的」直接選；不要了按「✕ 移除」。放好後點圖示，右邊也可以再改名稱、換圖示（檢視、編輯模式都可以；移動、刪除要在編輯模式）。右邊的數量統計、圖例、匯出圖片都會用<b>你選的圖示＋名稱</b>各自一格（例：🧴 噴藥 4）；「📗 匯出病媒防治設施清單」第一欄也會放每一個設施的圖示。</p><p>圖示：<b>紫色的蟲＝捕蟲燈</b>、<b>黏鼠板＝鼠板站</b>、<b>老鼠＝鼠餌站</b>；編號自動編 L01／B01／R01，點圖示可以改編號、寫位置說明。</p><p>「📗 匯出設施清單」${gN(3)}給病媒防治廠商或稽核用；現場發現蟲鼠問題，點圖示按「＋ 建立缺失」${gN(4)}，類別預設 05 病媒防治。</p><p class="muted small">這幾張圖會露出工廠動線與設施位置，傳給外面的人前請先確認可以外流。</p>`)
   ]},
   trash: { t:'最近刪除使用說明', steps:() => [
     gStep(1,'刪除的案件會先放這裡', gC(gR(`<span class="gx-s" style="flex:1">QA-20261026-001 包裝區</span>${gB('編輯')}${gB('刪除',{rd:1,hl:1,n:1})}`),'缺失清單'),
@@ -4009,7 +4009,7 @@ function layerSideHTML(){
   if(L==='frag') return fragPanelHTML(ed);
   if(L==='pest'){ const ps = lyList('pest').sort((x,y)=>(x.code||'').localeCompare(y.code||'',undefined,{numeric:true}));
     return `<div class="phd"><b>🐭 病媒防治設施</b><span class="muted small">點圖示看說明</span></div>
-      <div class="lycnt">${Object.entries(PK).filter(([k])=>k!=='other' || ps.some(o=>o.kind==='other')).map(([k,v])=>`<div><img class="lyico" src="${pestIcon(k==='other'?'dot':k)}" alt=""><b>${ps.filter(o=>o.kind===k).length}</b>${k==='other'?'其它':v.t.replace(/（.*）/,'')}</div>`).join('')}</div>
+      <div class="lycnt">${pestGroups(ps).map(x=>`<div><img class="lyico" src="${pestIcon(x.k)}" alt=""><b>${x.n}</b>${esc(x.t)}</div>`).join('')}</div>
       <button id="pkXls" style="width:100%;margin:0 0 10px" onclick="pestExport()" ${ps.length?'':'disabled'}>📗 匯出病媒防治設施清單（Excel）</button>
       ${ps.length ? `<ul class="mini">${ps.map(o=>`<li class="click" onclick="MV.sel={t:'pest',id:'${o.id}'};lySide()"><span><img class="lyico" src="${pestIconOf(o)}" alt=""> <b>${esc(o.code)}</b> ${esc(pestKindName(o))}</span><span class="small muted">${esc(o.note||'')}</span></li>`).join('')}</ul>`
         : `<div class="muted small">還沒有病媒防治設施。${ed?'在上方選種類（捕蟲燈、鼠板站、鼠餌站，或「其它」自己打字、選圖示），按「放置」後在平面圖上點一下。':'切到「✏️ 編輯模式」就可以開始放。'}</div>`}`; }
@@ -4139,6 +4139,10 @@ async function fragCheckDelete(id){ if(!(await ask('確定刪除這筆易碎品�
 
 /* ---- 病媒防治設施 ---- */
 /* 圖例：三種固定＋地圖上用到的「其它」（依名稱＋圖示，各列一次） */
+/* 數量：三種固定＋每一種「其它」（名稱＋圖示）各自一格 */
+function pestGroups(ps){ const out = Object.entries(PK).filter(([k])=>k!=='other').map(([k,v])=>({k, t:v.t.replace(/（.*）/,''), n:ps.filter(o=>o.kind===k).length})), m = new Map();
+  ps.filter(o=>o.kind==='other').forEach(o => { const k = pestIcoKey(o), t = o.name||'其它病媒設施', id = k+'|'+t; if(!m.has(id)){ m.set(id, {k, t, n:0}); out.push(m.get(id)); } m.get(id).n++; });
+  return out; }
 function pestLegend(all){ const ps = lyList('pest'), out = Object.entries(PK).filter(([k])=>k!=='other' && (all || !ps.length || ps.some(o=>o.kind===k))).map(([k,v])=>({k, t:v.t})), seen = new Set();
   ps.filter(o=>o.kind==='other').forEach(o => { const k = pestIcoKey(o), t = o.name||'其它病媒設施', id = k+'|'+t; if(!seen.has(id)){ seen.add(id); out.push({k, t}); } });
   return out; }
@@ -4159,15 +4163,20 @@ function pestDefect(id){ const o = lyGet('pest', id); if(!o) return; const a = a
 async function pestExport(){
   const m = lyMap(), ps = lyList('pest').sort((x,y)=>(x.code||'').localeCompare(y.code||'',undefined,{numeric:true}));
   if(!ps.length) return;
-  const cell = xlCell, last = xlCol(4); let rows = '', rn = 1; const merges = [];
+  const cell = xlCell, last = xlCol(5); let rows = '', rn = 1; const merges = [], anchors = [], media = [];
+  /* 圖示轉成小 PNG 放進 Excel（每種只轉一次） */
+  const icoPng = {}; for(const k of new Set(ps.map(pestIcoKey))){ try{ const im = new Image(); im.src = pestIcon(k); await im.decode(); const c = document.createElement('canvas'); c.width = c.height = 64; c.getContext('2d').drawImage(im,0,0,64,64); icoPng[k] = dataUrlBytes(c.toDataURL('image/png')); }catch(e){} }
   const line = (txt, sty, h) => { rows += `<row r="${rn}"${h?` ht="${h}" customHeight="1"`:''}>${cell(0,rn,txt,sty)}</row>`; merges.push(`A${rn}:${last}${rn}`); rn++; };
   line(`病媒防治設施清單｜${m.name}`, 3, 26);
-  line(`匯出日期：${fmtDate(today())}　${Object.entries(PK).filter(([k])=>k!=='other' || ps.some(o=>o.kind==='other')).map(([k,v])=>(k==='other'?'其它':v.t)+' '+ps.filter(o=>o.kind===k).length+' 個').join('　')}`, 0, 20); rn++;
-  const hr = rn; rows += `<row r="${rn}" ht="22" customHeight="1">${['編號','種類','缺失區域','清潔分區','位置說明'].map((h,i)=>cell(i,rn,h,4)).join('')}</row>`; rn++;
-  ps.forEach(o => { const a = areaAtMap(o), z = zoneAt(o); rows += `<row r="${rn}">${[o.code, pestKindName(o), a?a.name:'', z?ZK[z.kind].t+(z.name?'（'+z.name+'）':''):'', o.note].map((x,i)=>cell(i,rn,x,2)).join('')}</row>`; rn++; });
-  const widths = [10,18,16,18,34];
-  const sheet = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><sheetViews><sheetView workbookViewId="0"/></sheetViews><cols>${widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join('')}</cols><sheetData>${rows}</sheetData><mergeCells count="${merges.length}">${merges.map(x=>`<mergeCell ref="${x}"/>`).join('')}</mergeCells><pageMargins left="0.4" right="0.4" top="0.4" bottom="0.4" header="0.2" footer="0.2"/><pageSetup orientation="portrait" paperSize="9" fitToWidth="1" fitToHeight="0"/></worksheet>`;
-  try{ await download(xlsxPack('病媒防治設施', sheet, `$${hr}:$${hr}`), `Casevoras_病媒防治設施清單_${m.name}_${today()}.xlsx`.replace(/[\\/:*?"<>|\s]+/g,'_'), 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); flash('已匯出病媒防治設施清單'); }
+  line(`匯出日期：${fmtDate(today())}　${pestGroups(ps).filter(x=>x.n || PK[x.k]).map(x=>x.t+' '+x.n+' 個').join('　')}`, 0, 20); rn++;
+  const hr = rn; rows += `<row r="${rn}" ht="22" customHeight="1">${['圖示','編號','種類','缺失區域','清潔分區','位置說明'].map((h,i)=>cell(i,rn,h,4)).join('')}</row>`; rn++;
+  ps.forEach(o => { const a = areaAtMap(o), z = zoneAt(o), b = icoPng[pestIcoKey(o)];
+    if(b){ media.push(b); const id = media.length, sz = 22;
+      anchors.push(`<xdr:oneCellAnchor><xdr:from><xdr:col>0</xdr:col><xdr:colOff>${14*9525}</xdr:colOff><xdr:row>${rn-1}</xdr:row><xdr:rowOff>${3*9525}</xdr:rowOff></xdr:from><xdr:ext cx="${sz*9525}" cy="${sz*9525}"/><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="${id+1}" name="icon${id}"/><xdr:cNvPicPr><a:picLocks noChangeAspect="1"/></xdr:cNvPicPr></xdr:nvPicPr><xdr:blipFill><a:blip r:embed="rImg${id}"/><a:stretch><a:fillRect/></a:stretch></xdr:blipFill><xdr:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${sz*9525}" cy="${sz*9525}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></xdr:spPr></xdr:pic><xdr:clientData/></xdr:oneCellAnchor>`); }
+    rows += `<row r="${rn}" ht="22" customHeight="1">${['', o.code, pestKindName(o), a?a.name:'', z?ZK[z.kind].t+(z.name?'（'+z.name+'）':''):'', o.note].map((x,i)=>cell(i,rn,x,10)).join('')}</row>`; rn++; });
+  const widths = [7,10,18,16,18,34];
+  const sheet = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><sheetViews><sheetView workbookViewId="0"/></sheetViews><cols>${widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join('')}</cols><sheetData>${rows}</sheetData><mergeCells count="${merges.length}">${merges.map(x=>`<mergeCell ref="${x}"/>`).join('')}</mergeCells><pageMargins left="0.4" right="0.4" top="0.4" bottom="0.4" header="0.2" footer="0.2"/><pageSetup orientation="portrait" paperSize="9" fitToWidth="1" fitToHeight="0"/>${media.length?'<drawing r:id="rId1"/>':''}</worksheet>`;
+  try{ await download(xlsxPack('病媒防治設施', sheet, `$${hr}:$${hr}`, anchors, media), `Casevoras_病媒防治設施清單_${m.name}_${today()}.xlsx`.replace(/[\\/:*?"<>|\s]+/g,'_'), 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); flash('已匯出病媒防治設施清單'); }
   catch(e){ say('Excel 產生失敗，請重試。'); }
 }
 
