@@ -1129,7 +1129,7 @@ const GUIDES = {
     gStep(6,'放位置、參考照片', gC(gR(`${gB('📍 新增位置',{hl:1,n:1})}`)+gR(`${gTag('P01','dk')}${gTag('P03','rd')}<span class="gx-s">打漿機／地面及排水溝</span>`)) + gC(gR(`<span class="gx-ph"></span><span class="gx-ph b"></span>${gB('＋ 加參考照片',{hl:1,n:2})}`)+`<div class="gx-dash">📋 點這裡，再按 Ctrl+V 貼上</div>`,'📷 參考照片（正常狀態）'),
       `<p>按「📍 新增位置」${gN(1)}，在區域框裡點一下，輸入<b>位置編號</b>（例：P03、輸送帶），名稱可以之後在右邊補。</p><p><b>舊案件補位置</b>：打開缺失單，在「細部位置（廠區地圖）」選位置；<b>已結案的也可以補</b>（只改位置，選了就自動存）。缺失區域名稱跟地圖不一樣時（例：打漿區2樓），先選「對應到地圖區域」再選位置。已結案的<b>負責單位</b>也可以改得更細（例：生產課／打漿組），改完自動存。</p><p>編輯模式點區域或位置，「＋ 加參考照片」${gN(2)}放正常、清潔時的樣子；也可以點虛線框按 <b>Ctrl+V</b> 貼上。</p>`),
     gStep(7,'看缺失、新增缺失、匯出', gC(gR(`<span class="gx-k">3<small>累計</small></span><span class="gx-k b">2<small>未結案</small></span><span class="gx-k rd">1<small>逾期</small></span>`)+gR(gB('＋ 在「打漿區」新增缺失',{dk:1,hl:1,n:1}))+gR(gB('📗 匯出這個區域（Excel）',{hl:1,n:2})),'🏭 打漿區'),
-      `<p>檢視模式點區域或位置，右邊會出現件數與歷史缺失。</p><p>「＋ 新增缺失」${gN(1)}自動帶入區域、位置、負責單位；「📗 匯出這個區域」${gN(2)}依類別由多到少，含改善前後照片。</p>`),
+      `<p>檢視模式點區域或位置，右邊會出現件數與歷史缺失。</p><p>「＋ 新增缺失」${gN(1)}自動帶入區域、位置、負責單位；「📗 匯出這個區域」${gN(2)}依類別由多到少，含改善前後照片。</p><p>從地圖（右邊歷史缺失、地圖統計跳出的清單）點進缺失單後，左上角會變成<b>「← 回廠區地圖」</b>，按下去回到剛剛那個區域和畫面位置；存檔、結案後也會自動回來。從統計分析點進去的則是「← 回統計分析」。</p>`),
     gStep(8,'現場稽核', gC(gR(`${gB('＋ 新增稽核重點',{n:1})}${gB('載入範例')}`)+gR(gB('📋 開始稽核',{ok:1,hl:1,n:2}))) + gC(gR(`<span class="gx-s" style="flex:1">排水溝清潔暢通</span>${gN(3)}${gB('✅ 合格',{ok:1})}${gB('❌ 不合格',{rd:1,hl:1})}`)),
       `<p>點地圖上的區域，右邊「稽核重點」按「＋ 新增稽核重點」${gN(1)}寫清楚<b>查核標準</b>（或載入範例 8 項）；<b>檢視、編輯模式都可以</b>新增、編輯、刪除。</p><p>右邊的「細部位置」「稽核紀錄」「稽核重點」「參考照片」標題都可以<b>點一下收合</b>，開／關會記住。</p><p>到現場按「📋 開始稽核」${gN(2)}，每項選${gN(3)}：✅ 合格、❌ 不合格（可「＋ 建立缺失」）、👁 觀察事項、⊘ 不適用。稽核頁上方有<b>📖 怎麼用</b>（可收合）和這一區的<b>參考照片</b>；對應到位置的項目旁邊也有那個位置的參考照片，點一下看大圖。</p><p>不合格、觀察事項的說明以「<b>現場稽核發現</b>」開頭；按 <b>📸 開相機拍照</b>直接用手機相機拍，或 🖼 從相簿選；拍好的照片點一下看大圖、按 ✕ 刪掉。</p>`),
     gStep(9,'風險顏色、連續發生警示、地圖統計', gC(gR(`${gB('🎨 風險顏色（開）',{dk:1,hl:1,n:1})}`)+gR(`<span class="gx-sw" style="background:#b42318"></span><span class="gx-s">重大／逾期／重複</span><span class="gx-sw" style="background:#d97706"></span><span class="gx-s">未結案</span><span class="gx-sw" style="background:#167a3e"></span><span class="gx-s">都結案</span>`)) + gC(gR(`${gN(2)}${gTag('年度','dk')}${gTag('每季')}${gTag('每月')}${gTag('自訂')}`),'📊 地圖統計'),
@@ -1365,7 +1365,32 @@ async function listDelete(){
 /* =========================================================
    單筆紀錄頁
    ========================================================= */
+/* 從哪裡打開缺失單：廠區地圖／統計分析／稽核紀錄 → 「← 回…」回到剛剛的畫面（同一個區域、同樣捲到的位置） */
+let RET = null, NO_SIDE_SCROLL = false;
+function retCapture(){
+  const v = (document.querySelector('#side button.on')||{}).dataset?.v || '';
+  if($('#auList') && AUD && AUD.id) return {to:'audit', id:AUD.id, y:scrollY};
+  if(v==='map'){ const pv = $('#mapView'); return {to:'map', mapId:MV.mapId, sel:MV.sel ? {...MV.sel} : null, layer:MV.layer, mode:MV.mode, y:scrollY, sl:pv?pv.scrollLeft:0, st:pv?pv.scrollTop:0}; }
+  if(v==='stats') return {to:'stats', y:scrollY};
+  if(v==='') return RET;   /* 已經在缺失單裡（例：重新打開）→ 保留原本的返回位置 */
+  return null;
+}
+const retLabel = () => RET ? ({map:'← 回廠區地圖', stats:'← 回統計分析', audit:'← 回稽核紀錄'})[RET.to] : '← 返回清單';
+async function goBack(){
+  const R0 = RET; if(!R0){ showList(); return; }
+  if(dirty && !(await ask('有尚未儲存的修改，確定要離開嗎？'))) return;
+  cur = null; dirty = false; RET = null;
+  if(R0.to==='audit'){ auditView(R0.id); }
+  else if(R0.to==='stats'){ setSide('stats'); renderStats(); }
+  else { setSide('map'); if(MAPD.maps.find(m=>m.id===R0.mapId)) MV.mapId = R0.mapId; MV.layer = R0.layer || 'defect'; MV.mode = R0.mode || MV.mode; MV.tool = ''; MV.poly = null;
+    MV.sel = R0.sel && (R0.sel.t==='area' ? areaById(R0.sel.id) : locById(R0.sel.id)) ? R0.sel : null; NO_SIDE_SCROLL = true; try{ renderMap(); } finally { NO_SIDE_SCROLL = false; }
+    const pv = $('#mapView'); if(pv){ pv.scrollLeft = R0.sl||0; pv.scrollTop = R0.st||0; } }
+  requestAnimationFrame(() => window.scrollTo(0, R0.y||0));
+}
+/* 存檔、結案、刪除後：從地圖／統計來的就回去，否則回清單 */
+function backOrList(){ if(RET){ dirty = false; goBack(); } else showList(); }
 function openRecord(id, preset){
+  RET = retCapture();
   AUDIT_LINK = null;
   const r = id ? records.find(x=>x.id===id) : blankRecord();
   cur = JSON.parse(JSON.stringify(r));
@@ -1403,7 +1428,7 @@ function renderDetail(){
   $('#app').innerHTML = `
     ${crumbHTML('缺失清單 / '+(cur.id||'新增'))}
     <div class="row" style="margin-bottom:12px">
-      <button onclick="showList()">← 返回清單</button>
+      <button onclick="goBack()">${retLabel()}</button>
       <h2 style="margin:0 8px;font-size:18px">${isNew?'新增衛生缺失｜編號 '+esc(genId()):esc(r.id)}</h2>
       <span id="stBadge"></span>
       <span class="spacer"></span>
@@ -1544,7 +1569,7 @@ function renderDetail(){
 
     <div class="savebar"><div class="in">
       <button class="primary lockable" onclick="saveRecord()">儲存</button>
-      <button onclick="showList()">返回清單</button>
+      <button onclick="goBack()">${retLabel().replace('← ','')}</button>
       <span id="dirtyMark"></span>
       <span class="spacer"></span>
       <span class="muted small" id="savedAt">${r.updatedAt?'最後儲存：'+esc(r.updatedAt):'尚未儲存'}</span>
@@ -2054,7 +2079,7 @@ function saveRecord(silent){
   try{ const used = (localStorage.getItem(KEY)||'').length + (localStorage.getItem(KEY_T)||'').length;
     if(used > 4000000 && !window.__warned){ window.__warned = true; say('提醒：本機儲存空間已用約 80% 以上。請盡快按「下載備份」，並考慮減少照片。'); } }catch(e){}
   storageWarn();
-  if(isNew && !silent){ showList(); flash('已儲存 '+r.id); return true; }
+  if(isNew && !silent){ backOrList(); flash('已儲存 '+r.id); return true; }
   renderDetail();
   if(!silent) flash('已儲存');
   return true;
@@ -2065,7 +2090,7 @@ async function deleteRecord(){
   if(!rec) return;
   rec.deleted = true; rec.deletedAt = today();
   if(!persistAll()){ rec.deleted = false; delete rec.deletedAt; return; }
-  dirty = false; showList(); flash('已移到「最近刪除」');
+  dirty = false; backOrList(); flash('已移到「最近刪除」');
 }
 function flash(t){
   const d = document.createElement('div');
@@ -2108,7 +2133,7 @@ async function doClose(){
   if(!$('#clConfirm').checked){ say('請勾選品管人員確認聲明。'); return; }
   if(!(await ask('確定要結案嗎？結案後內容會鎖定'))) return;
   Object.assign(cur, {closed:true, closedBy:by, closedDate:date, closeNote:$('#clNote').value.trim(), closeBasis:closeBasisUI});
-  const cid=cur.id; if(saveRecord(true)){ showList(); flash('已結案 '+cid); } else cur.closed=false;
+  const cid=cur.id; if(saveRecord(true)){ backOrList(); flash('已結案 '+cid); } else cur.closed=false;
 }
 async function reopen(){
   if(!(await ask('確定撤銷結案？撤銷後此紀錄將回到追蹤狀態，可再修改。'))) return;
@@ -2644,7 +2669,7 @@ function mapSideHTML(){
     ${as.length ? `<ul class="mini">${as.map(a=>{ const s = mapStats(recsForArea(a)); return `<li class="click" onclick="MV.sel={t:'area',id:'${a.id}'};renderMap()"><span>${esc(a.name)}</span><span class="small ${s.over?'bad':s.open?'':'muted'}">${s.open?'未結案 '+s.open:'共 '+s.total+' 件'}${s.over?'・逾期 '+s.over:''}</span></li>`; }).join('')}</ul>`
       : `<div class="muted small">這張地圖還沒有區域。請切到「✏️ 編輯模式」，按「▭ 新增區域」，在平面圖上拖曳畫出範圍。</div>`}`;
 }
-function mapSide(){ if(MV.layer!=='defect'){ lySide(); return; } const s = $('#mSide'); const sb = $('#mStatsBox'); if(sb){ sb.innerHTML = mapStatsHTML(); lcDrawAll(); } if(s){ REP = repeatSet(); STREAK = streakAlerts(); s.innerHTML = mapSideHTML(); hydrate(s); if(MV.sel && MV.mode==='view' && window.innerWidth<900) s.scrollIntoView({behavior:'smooth', block:'start'}); } document.querySelectorAll('.marea,.mpin').forEach(e=>e.classList.toggle('sel', !!MV.sel && ((MV.sel.t==='area'&&e.dataset.aid===MV.sel.id)||(MV.sel.t==='loc'&&e.dataset.lid===MV.sel.id)))); }
+function mapSide(){ if(MV.layer!=='defect'){ lySide(); return; } const s = $('#mSide'); const sb = $('#mStatsBox'); if(sb){ sb.innerHTML = mapStatsHTML(); lcDrawAll(); } if(s){ REP = repeatSet(); STREAK = streakAlerts(); s.innerHTML = mapSideHTML(); hydrate(s); if(MV.sel && MV.mode==='view' && window.innerWidth<900 && !NO_SIDE_SCROLL) s.scrollIntoView({behavior:'smooth', block:'start'}); } document.querySelectorAll('.marea,.mpin').forEach(e=>e.classList.toggle('sel', !!MV.sel && ((MV.sel.t==='area'&&e.dataset.aid===MV.sel.id)||(MV.sel.t==='loc'&&e.dataset.lid===MV.sel.id)))); }
 
 /* 平面圖上的拖曳：畫區域、放位置、移動、改大小、檢視模式拖曳平移 */
 function mapBind(){
@@ -3756,7 +3781,7 @@ function lyOverlay(m){
   return `${zbody?`<svg class="lysvg lyzs ${lyZoneMul()?'mul':''}" viewBox="0 0 1000 ${VH.toFixed(1)}" preserveAspectRatio="none">${zbody}</svg>`:''}<svg class="lysvg" viewBox="0 0 1000 ${VH.toFixed(1)}" preserveAspectRatio="none"><defs>${defs}</defs>${body}</svg>${html}`;
 }
 function lyRedraw(){ const ov = $('#lyOv'), m = lyMap(); if(ov && m) ov.innerHTML = lyOverlay(m); const c = $('#lyCnt'); if(c) c.textContent = MV.poly ? MV.poly.pts.length : 0; }
-function lySide(){ const s = $('#mSide'); if(s){ s.innerHTML = layerSideHTML(); hydrate(s); if(MV.sel && MV.mode==='view' && window.innerWidth<900) s.scrollIntoView({behavior:'smooth', block:'start'}); } lyRedraw(); }
+function lySide(){ const s = $('#mSide'); if(s){ s.innerHTML = layerSideHTML(); hydrate(s); if(MV.sel && MV.mode==='view' && window.innerWidth<900 && !NO_SIDE_SCROLL) s.scrollIntoView({behavior:'smooth', block:'start'}); } lyRedraw(); }
 
 /* ---- 平面圖上的操作：畫分區、畫箭頭、畫標記、放易碎品、拖曳移動、改角 ---- */
 function layerBind(){
