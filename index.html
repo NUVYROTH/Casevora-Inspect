@@ -609,6 +609,7 @@ main:has(.split){max-width:1320px}
 .st-extra .l{font-weight:700}
 .st-note{font-size:12px;color:var(--muted);margin:2px 0 10px}
 .glist .gdesc{min-width:200px;max-width:340px;white-space:normal}
+.pkico{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:6px;margin:4px 0 6px}.pkico button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:11px;color:var(--ink);min-height:0}.pkico button img{width:26px;height:26px}.pkico button.on{border-color:#16213a;box-shadow:0 0 0 2px #16213a;font-weight:700}
 .st-sec{margin:18px 0 6px;font-size:16px;font-weight:700;border-left:4px solid var(--brand);padding-left:8px;break-after:avoid}
 /* 右側面板可收合的段落 */
 .msec>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px;user-select:none}.msec>summary::-webkit-details-marker{display:none}
@@ -1154,7 +1155,7 @@ const GUIDES = {
     gStep(18,'➡️ 動線與設施', gC(gR(`${gIn('物流（原料） ▾',1)}${gN(1)}${gB('✏️ 畫箭頭',{hl:1,n:2})}`)+gR(`<span class="gx-s" style="color:#e46c0a;font-weight:800">──➜ 人流</span><span class="gx-s" style="color:#ff0000;font-weight:800">──➜ 原料</span><span class="gx-s" style="color:#c00000;font-weight:800">╌╌➜ 成品</span><span class="gx-s" style="color:#7f0000;font-weight:800">┄┄➜ 廢棄物</span>`)+gR(`<span class="gx-s" style="color:#0070c0;font-weight:800">──➜ 氣流</span><span class="gx-s" style="color:#a6a6a6;font-weight:800">──➜ 水流</span>`)) + gC(gR(`<span class="gx-sw" style="background:#0d0d0d"></span><span class="gx-s">門</span><span class="gx-sw" style="background:#00b050"></span><span class="gx-s">冷氣</span><span class="gx-sw" style="background:#7030a0"></span><span class="gx-s">抽風口</span><span class="gx-sw" style="background:#ff77ff"></span><span class="gx-s">水源</span><span class="gx-sw" style="background:#984807"></span><span class="gx-s">水溝</span>`)+gR(`${gN(3)}<span class="gx-s">點圖例＝隱藏／顯示</span>`),'設施標記（粗線）'),
       `<p>編輯模式先選<b>種類</b>${gN(1)}，按「✏️ 畫箭頭」${gN(2)}：從起點開始，一個轉彎點點一下，最後一點會變成箭頭；在最後一點<b>再點一下</b>或按「完成這條」結束，可以接著畫下一條。</p><p>物流分三種：<b>原料實線、成品虛線、廢棄物點線</b>，起點標「原／成／廢」。畫反了，點箭頭按「⇄ 反轉方向」。</p><p>門、冷氣、抽風口、水源供應處、水溝／排水孔選好後按「✏️ 畫標記」，在平面圖上<b>拖曳</b>畫一段粗線：<b>直的門上下拖、橫的門左右拖</b>，接近水平或垂直會自動拉直。已經畫好的，點一下按「↻ 轉 90°」（或鍵盤 <b>R</b>）就能橫的變直的。</p><p>檢視模式點上方圖例${gN(3)}可以只看某幾種（例如只看人流），匯出圖片也只會有顯示中的。</p>`),
     gStep(19,'🐭 病媒防治', gC(gR(`${gIn('鼠板站（黏鼠板） ▾',1)}${gN(1)}${gB('放置',{hl:1,n:2})}`)+gR(`<img src="${pestIcon('light')}" alt="" style="width:22px;height:22px"><span class="gx-s">捕蟲燈 L01</span><img src="${pestIcon('board')}" alt="" style="width:22px;height:22px"><span class="gx-s">鼠板站 B01</span><img src="${pestIcon('bait')}" alt="" style="width:22px;height:22px"><span class="gx-s">鼠餌站 R01</span>`)) + gC(gR(gB('📗 匯出病媒防治設施清單（Excel）',{hl:1,n:3}))+gR(gB('＋ 在這裡建立缺失（病媒防治）',{dk:1,hl:1,n:4}))),
-      `<p>編輯模式先選<b>設施種類</b>${gN(1)}，按「放置」${gN(2)}後在平面圖上點一下；可以連續放，放完按「■ 停止放置」。</p><p>圖示：<b>紫色的蟲＝捕蟲燈</b>、<b>黏鼠板＝鼠板站</b>、<b>老鼠＝鼠餌站</b>；編號自動編 L01／B01／R01，點圖示可以改編號、寫位置說明。</p><p>「📗 匯出設施清單」${gN(3)}給病媒防治廠商或稽核用；現場發現蟲鼠問題，點圖示按「＋ 建立缺失」${gN(4)}，類別預設 05 病媒防治。</p><p class="muted small">這幾張圖會露出工廠動線與設施位置，傳給外面的人前請先確認可以外流。</p>`)
+      `<p>編輯模式先選<b>設施種類</b>${gN(1)}，按「放置」${gN(2)}後在平面圖上點一下；可以連續放，放完按「■ 停止放置」。</p><p>不在這三種的選<b>「其它（自己打字）」</b>：上方可以先選<b>圖示</b>（蟑螂、蒼蠅、蚊子、螞蟻、鳥、噴藥、捕鼠籠、黏蟲紙、？，或用上面三種的圖），放好後點圖示，在右邊改<b>名稱</b>（例：誘蚊燈、防鳥網）、換圖示；編號自動編 O01、O02…，圖例和匯出圖片會列出你取的名稱。</p><p>圖示：<b>紫色的蟲＝捕蟲燈</b>、<b>黏鼠板＝鼠板站</b>、<b>老鼠＝鼠餌站</b>；編號自動編 L01／B01／R01，點圖示可以改編號、寫位置說明。</p><p>「📗 匯出設施清單」${gN(3)}給病媒防治廠商或稽核用；現場發現蟲鼠問題，點圖示按「＋ 建立缺失」${gN(4)}，類別預設 05 病媒防治。</p><p class="muted small">這幾張圖會露出工廠動線與設施位置，傳給外面的人前請先確認可以外流。</p>`)
   ]},
   trash: { t:'最近刪除使用說明', steps:() => [
     gStep(1,'刪除的案件會先放這裡', gC(gR(`<span class="gx-s" style="flex:1">QA-20261026-001 包裝區</span>${gB('編輯')}${gB('刪除',{rd:1,hl:1,n:1})}`),'缺失清單'),
@@ -3634,10 +3635,29 @@ const LAYER_NAME = { defect:'廠區地圖', zone:'清潔分區圖', frag:'易碎
 const PK = {
   light:{t:'捕蟲燈', p:'L', svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#7c3aed" stroke="#fff" stroke-width="1"/><g stroke="#fff" stroke-width="1.4" stroke-linecap="round" fill="none"><path d="M8.6 11L5.4 9.4M8.3 14H4.8M8.6 17l-3 1.7M15.4 11l3.2-1.6M15.7 14h3.5M15.4 17l3 1.7M10.9 5.8L9.5 3.9M13.1 5.8l1.4-1.9"/></g><ellipse cx="12" cy="13.6" rx="3.7" ry="5.1" fill="#fff"/><circle cx="12" cy="7.4" r="2.2" fill="#fff"/><path d="M12 9.6v9" stroke="#7c3aed" stroke-width="1"/></svg>'},
   board:{t:'鼠板站（黏鼠板）', p:'B', svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#a16207" stroke="#fff" stroke-width="1"/><rect x="4.6" y="7" width="14.8" height="10" rx="1.6" fill="#fde68a" stroke="#fff" stroke-width="1.2"/><g fill="#a16207"><circle cx="8.3" cy="10" r="1.05"/><circle cx="12" cy="10" r="1.05"/><circle cx="15.7" cy="10" r="1.05"/><circle cx="8.3" cy="14" r="1.05"/><circle cx="12" cy="14" r="1.05"/><circle cx="15.7" cy="14" r="1.05"/></g></svg>'},
-  bait:{t:'鼠餌站', p:'R', svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#334155" stroke="#fff" stroke-width="1"/><ellipse cx="13.6" cy="13.6" rx="5.2" ry="3.7" fill="#fff"/><path d="M9.8 11.1L4.4 14.3l5.4 1.7z" fill="#fff"/><circle cx="10.7" cy="10.3" r="2.1" fill="#fff"/><circle cx="10.7" cy="10.3" r="1" fill="#f9a8d4"/><circle cx="7.5" cy="13.5" r=".75" fill="#334155"/><path d="M18.6 14.2c2.2.3 2.6 2.2 1 3.3" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/></svg>'}
+  bait:{t:'鼠餌站', p:'R', svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#334155" stroke="#fff" stroke-width="1"/><ellipse cx="13.6" cy="13.6" rx="5.2" ry="3.7" fill="#fff"/><path d="M9.8 11.1L4.4 14.3l5.4 1.7z" fill="#fff"/><circle cx="10.7" cy="10.3" r="2.1" fill="#fff"/><circle cx="10.7" cy="10.3" r="1" fill="#f9a8d4"/><circle cx="7.5" cy="13.5" r=".75" fill="#334155"/><path d="M18.6 14.2c2.2.3 2.6 2.2 1 3.3" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/></svg>'},
+  other:{t:'其它（自己打字）', p:'O', svg:''}
 };
-const pestIcon = k => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent((PK[k]||PK.light).svg);
-const pestLabel = o => (o.code+' '+((PK[o.kind]||{}).t||'')).trim();
+/* 「其它」病媒設施可以選的圖示（也可以選上面三種的圖） */
+const PI = {
+  roach:{t:'蟑螂', svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#7c2d12" stroke="#fff" stroke-width="1"/><g stroke="#fff" stroke-width="1.2" stroke-linecap="round" fill="none"><path d="M10.6 6.6C9.6 4.6 8 3.8 6.6 3.6M13.4 6.6c1-2 2.6-2.8 4-3M8.4 10.4l-3-1.2M8 13.4H4.8M8.4 16.4l-2.8 1.8M15.6 10.4l3-1.2M16 13.4h3.2M15.6 16.4l2.8 1.8"/></g><ellipse cx="12" cy="13.6" rx="4" ry="6" fill="#fff"/><path d="M12 8.4v11" stroke="#7c2d12" stroke-width="1"/><ellipse cx="12" cy="7.6" rx="2.4" ry="1.7" fill="#fff"/></svg>'},
+  fly:{t:'蒼蠅', svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#0f766e" stroke="#fff" stroke-width="1"/><ellipse cx="8.2" cy="10.2" rx="3.6" ry="2.2" fill="#fff" fill-opacity=".75" transform="rotate(-30 8.2 10.2)"/><ellipse cx="15.8" cy="10.2" rx="3.6" ry="2.2" fill="#fff" fill-opacity=".75" transform="rotate(30 15.8 10.2)"/><ellipse cx="12" cy="14" rx="2.6" ry="4.2" fill="#fff"/><circle cx="12" cy="8.6" r="2" fill="#fff"/><g stroke="#fff" stroke-width="1.1" stroke-linecap="round"><path d="M9.6 14.6l-2.8 1.6M9.8 17l-2.2 2M14.4 14.6l2.8 1.6M14.2 17l2.2 2"/></g></svg>'},
+  mosq:{t:'蚊子', svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#be185d" stroke="#fff" stroke-width="1"/><g stroke="#fff" stroke-width="1.1" stroke-linecap="round" fill="none"><path d="M11 9.4L6.4 5.4M11.2 12.4l-5 1.2-1.6 3.6M11.6 14l-3 4.8M12.8 14l3 4.8M13.2 12.4l5 1.2 1.6 3.6M12.6 8.6l2-4.4"/></g><ellipse cx="9" cy="10.6" rx="3" ry="1.3" fill="#fff" fill-opacity=".7" transform="rotate(25 9 10.6)"/><ellipse cx="15.4" cy="10.6" rx="3" ry="1.3" fill="#fff" fill-opacity=".7" transform="rotate(-25 15.4 10.6)"/><ellipse cx="12.2" cy="13.4" rx="1.3" ry="3.6" fill="#fff"/><circle cx="12" cy="8.8" r="1.4" fill="#fff"/></svg>'},
+  ant:{t:'螞蟻', svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#b91c1c" stroke="#fff" stroke-width="1"/><g stroke="#fff" stroke-width="1.1" stroke-linecap="round" fill="none"><path d="M10.6 11.2L7 9.4M10.8 12.6H6.6M10.6 14L7.2 16.4M13.4 11.2L17 9.4M13.2 12.6h4.2M13.4 14l3.4 2.4M11 5.6L9.6 3.6M13 5.6l1.4-2"/></g><circle cx="12" cy="7" r="2" fill="#fff"/><ellipse cx="12" cy="12" rx="1.7" ry="2.3" fill="#fff"/><ellipse cx="12" cy="17" rx="2.6" ry="3" fill="#fff"/></svg>'},
+  bird:{t:'鳥', svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#0369a1" stroke="#fff" stroke-width="1"/><path d="M4.6 10.8c2.4-.6 4.4 0 5.8 1.6l1.2-3.2c.8-1.8 2.6-2.6 4.4-2l2.4.8-2 1.2c.6 3.8-1.4 7.4-5.6 8.4-2.6.6-4.8-.4-6-2.2l3.2-.4c-1.4-1-2.6-2.4-3.4-4.2z" fill="#fff"/><circle cx="15.6" cy="8.6" r=".7" fill="#0369a1"/></svg>'},
+  spray:{t:'噴藥', svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#15803d" stroke="#fff" stroke-width="1"/><rect x="8.4" y="10.4" width="7.2" height="9" rx="1.6" fill="#fff"/><path d="M10 10.4V8.2h4v2.2" fill="#fff"/><path d="M10.4 8.2V6h4.8l1.4 1.2" stroke="#fff" stroke-width="1.3" fill="none" stroke-linejoin="round"/><g fill="#fff"><circle cx="18.4" cy="5.4" r=".8"/><circle cx="19.2" cy="7.8" r=".8"/><circle cx="17.6" cy="3.6" r=".6"/></g><path d="M10 14h4" stroke="#15803d" stroke-width="1.2"/></svg>'},
+  cage:{t:'捕鼠籠', svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#475569" stroke="#fff" stroke-width="1"/><rect x="4.8" y="7.4" width="14.4" height="10.2" rx="1.2" fill="none" stroke="#fff" stroke-width="1.4"/><g stroke="#fff" stroke-width="1.1"><path d="M8.4 7.4v10.2M12 7.4v10.2M15.6 7.4v10.2"/></g><path d="M4 17.6h16" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>'},
+  glue:{t:'黏蟲紙', svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#ca8a04" stroke="#fff" stroke-width="1"/><rect x="6" y="4.6" width="12" height="14.8" rx="1" fill="#fef08a" stroke="#fff" stroke-width="1.2"/><g fill="#78350f"><ellipse cx="9.6" cy="9" rx="1.1" ry=".7"/><ellipse cx="14.2" cy="8" rx="1.1" ry=".7"/><ellipse cx="12" cy="12.4" rx="1.1" ry=".7"/><ellipse cx="9.2" cy="15.6" rx="1.1" ry=".7"/><ellipse cx="14.6" cy="15.2" rx="1.1" ry=".7"/></g></svg>'},
+  dot:{t:'一般標記（？）', svg:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#6b7280" stroke="#fff" stroke-width="1"/><text x="12" y="16.6" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#fff">?</text></svg>'}
+};
+PK.other.svg = PI.dot.svg;
+const pestIcoKey = o => o && o.kind==='other' ? (PI[o.ico] ? o.ico : (PK[o.ico] && o.ico!=='other' ? o.ico : 'dot')) : (o ? o.kind : 'light');
+const pestIcon = k => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(((PI[k]||PK[k]||PK.light).svg));
+const pestIconOf = o => pestIcon(pestIcoKey(o));
+const pestKindName = o => o.kind==='other' ? (o.name||'其它病媒設施') : ((PK[o.kind]||{}).t||'');
+const pestLabel = o => (o.code+' '+pestKindName(o)).trim();
+/* 「其它」可選的圖示清單：內建三種＋九種 */
+const PICK = [['light',PK.light.t],['board',PK.board.t],['bait',PK.bait.t], ...Object.entries(PI).map(([k,v])=>[k,v.t])];
 function pestNextCode(k){ const P = PK[k].p, n = Math.max(0, ...(MAPD.pests||[]).filter(o=>o.kind===k).map(o=>parseInt(String(o.code||'').replace(/\D/g,''),10)||0)) + 1; return P+String(n).padStart(2,'0'); }
 const ZK = { general:{t:'一般作業區', c:'#c4bb7c'}, semi:{t:'準清潔區', c:'#b9cde5'}, clean:{t:'清潔區', c:'#e6b9b8'} };
 const FK = { people:{t:'人流', c:'#e46c0a'}, raw:{t:'物流（原料）', c:'#ff0000', tag:'原'}, prod:{t:'物流（成品）', c:'#c00000', dash:'dash', tag:'成'}, waste:{t:'物流（廢棄物）', c:'#7f0000', dash:'dot', tag:'廢'}, air:{t:'氣流', c:'#0070c0'}, water:{t:'水流', c:'#a6a6a6'} };
@@ -3719,7 +3739,8 @@ function lyToolsHTML(){
   if(L==='frag') return `<select aria-label="易碎品種類" onchange="MV.ftk=this.value;renderMap()">${Object.entries(FT).map(([k,v])=>`<option value="${k}" ${MV.ftk===k?'selected':''}>${v.t}</option>`).join('')}<option value="other" ${MV.ftk==='other'?'selected':''}>其它（自己打字）</option></select>
     <button class="${MV.tool==='frag'?'primary':''}" onclick="MV.tool=MV.tool==='frag'?'':'frag';MV.sel=null;renderMap()">${MV.tool==='frag'?'■ 停止放置':(FT[MV.ftk]?`<img class="lyico" src="${fragIcon(MV.ftk)}" alt=""> 放置${FT[MV.ftk].t}`:'🔶 放置易碎品')}</button>`;
   if(L==='pest') return `<select aria-label="設施種類" onchange="MV.pk=this.value;renderMap()">${Object.entries(PK).map(([k,v])=>`<option value="${k}" ${MV.pk===k?'selected':''}>${v.t}</option>`).join('')}</select>
-    <button class="${MV.tool==='pest'?'primary':''}" onclick="MV.tool=MV.tool==='pest'?'':'pest';MV.sel=null;renderMap()">${MV.tool==='pest'?'■ 停止放置':`<img class="lyico" src="${pestIcon(MV.pk)}" alt=""> 放置${PK[MV.pk].t.replace(/（.*）/,'')}`}</button>`;
+    ${MV.pk==='other'?`<select aria-label="圖示" onchange="MV.pki=this.value;renderMap()">${PICK.map(([k,t])=>`<option value="${k}" ${(MV.pki||'dot')===k?'selected':''}>圖示：${t}</option>`).join('')}</select>`:''}
+    <button class="${MV.tool==='pest'?'primary':''}" onclick="MV.tool=MV.tool==='pest'?'':'pest';MV.sel=null;renderMap()">${MV.tool==='pest'?'■ 停止放置':`<img class="lyico" src="${MV.pk==='other'?pestIcon(MV.pki||'dot'):pestIcon(MV.pk)}" alt=""> 放置${MV.pk==='other'?'其它':PK[MV.pk].t.replace(/（.*）/,'')}`}</button>`;
   return '';
 }
 function lyDrawToggle(){ if(MV.tool==='fline'||MV.tool==='mark'){ MV.tool = ''; MV.poly = null; } else { MV.tool = FK[MV.fk] ? 'fline' : 'mark'; MV.poly = MV.tool==='fline' ? {pts:[]} : null; MV.sel = null; } renderMap(); }
@@ -3743,7 +3764,7 @@ function lyLegendHTML(){
   const L = MV.layer, zs = `${Object.entries(ZK).map(([k,v])=>`<span><i style="background:${lyColor(k)}"></i>${v.t}</span>`).join('')}`;
   if(L==='zone') return `<div class="mlegend">${zs}</div>`;
   if(L==='frag') return `<div class="mlegend">${Object.entries(FT).map(([k,v])=>`<span><img class="lyico" src="${fragIcon(k)}" alt="">${v.t}</span>`).join('')}<span><span class="lyico lyico-o">◆</span>其它</span></div><div class="mlegend"><span class="small">編號標籤顏色：</span><span><i class="lyfr" style="background:#f59e0b"></i>正常</span><span><i class="lyfr" style="background:#f59e0b;box-shadow:0 0 0 2px #d97706"></i>7 天內要檢查</span><span><i class="lyfr" style="background:#f59e0b;box-shadow:0 0 0 2px #b42318"></i>到期未檢查</span><span><i class="lyfr" style="background:#b42318"></i>破損／遺失</span>${MV_ZBG?zs:''}</div>`;
-  if(L==='pest') return `<div class="mlegend">${Object.entries(PK).map(([k,v])=>`<span><img class="lyico" src="${pestIcon(k)}" alt="">${v.t}</span>`).join('')}${MV_ZBG?zs:''}</div>`;
+  if(L==='pest') return `<div class="mlegend">${pestLegend().map(x=>`<span><img class="lyico" src="${pestIcon(x.k)}" alt="">${esc(x.t)}</span>`).join('')}${MV_ZBG?zs:''}</div>`;
   if(L==='flow') return `<div class="mlegend lyleg">${Object.entries(FK).map(([k,v])=>`<button class="${MV_HIDE.has(k)?'off':''}" onclick="lyToggle('${k}')" title="點一下隱藏／顯示"><b style="color:${lyColor(k)}">${v.dash==='dot'?'┄┄➜':v.dash?'╌╌➜':'──➜'}</b>${v.t}</button>`).join('')}${Object.entries(MK).map(([k,v])=>`<button class="${MV_HIDE.has(k)?'off':''}" onclick="lyToggle('${k}')" title="點一下隱藏／顯示"><i class="lybar" style="background:${lyColor(k)}"></i>${v.t}</button>`).join('')}${MV_ZBG?zs:''}</div>`;
   return '';
 }
@@ -3767,7 +3788,7 @@ function lyOverlay(m){
   }
   if(MV.poly && MV.poly.pts.length && (MV.tool==='zpoly'||MV.tool==='fline')){ body += `<polyline class="lytmp" points="${lyPts(MV.poly.pts, VH)}"/>`; html += MV.poly.pts.map((q,i)=>`<i class="mdot ${i===0?'first':''}" style="left:${q[0]*100}%;top:${q[1]*100}%"></i>`).join(''); }
   if(MV.tmp) body += `<polyline class="lm-tmp" points="${lyPts(MV.tmp, VH)}" style="stroke:${lyColor(MV.fk)}"/>`;
-  if(L==='pest') lyList('pest').forEach(o => { html += `<div class="mpest ${isSel('pest',o.id)?'sel':''}" data-lo="pest:${o.id}" style="left:${o.x*100}%;top:${o.y*100}%" title="${esc(pestLabel(o))}${o.note?'｜'+esc(o.note):''}"><img src="${pestIcon(o.kind)}" alt="${esc((PK[o.kind]||{}).t||'')}" draggable="false"><b>${esc(o.code||'')}</b></div>`; });
+  if(L==='pest') lyList('pest').forEach(o => { html += `<div class="mpest ${isSel('pest',o.id)?'sel':''}" data-lo="pest:${o.id}" style="left:${o.x*100}%;top:${o.y*100}%" title="${esc(pestLabel(o))}${o.note?'｜'+esc(o.note):''}"><img src="${pestIconOf(o)}" alt="${esc(pestKindName(o))}" draggable="false"><b>${esc(o.code||'')}</b></div>`; });
   if(L==='frag') lyList('frag').forEach(f => { const st = fragState(f), u = fragIcon(fragType(f));
     html += u ? `<div class="mfrag fi fs-${st.k} ${isSel('frag',f.id)?'sel':''}" data-lo="frag:${f.id}" style="left:${f.x*100}%;top:${f.y*100}%" title="${esc(fragLabel(f))}｜${esc(st.t)}"><img src="${u}" alt="" draggable="false"><b>${esc(f.code||'')}</b></div>`
       : `<div class="mfrag fs-${st.k} ${isSel('frag',f.id)?'sel':''}" data-lo="frag:${f.id}" style="left:${f.x*100}%;top:${f.y*100}%" title="${esc(fragLabel(f))}｜${esc(st.t)}">◆ ${esc(f.code||'')}</div>`; });
@@ -3848,7 +3869,7 @@ function layerBind(){
       const len = Math.hypot(p.x-d.s.x, p.y-d.s.y), pts = len<0.01 ? [[clamp01(p.x-0.015),p.y],[clamp01(p.x+0.015),p.y]] : [[d.s.x,d.s.y],[p.x,p.y]];
       lyAdd('mark', {kind:MV.fk, note:'', pts}, false); return;
     }
-    if(d.k==='pest'){ if(d.moved) return; lyAdd('pest', {kind:MV.pk, code:pestNextCode(MV.pk), note:'', x:p.x, y:p.y}, false); return; }
+    if(d.k==='pest'){ if(d.moved) return; lyAdd('pest', Object.assign({kind:MV.pk, code:pestNextCode(MV.pk), note:'', x:p.x, y:p.y}, MV.pk==='other' ? {name:'其它病媒設施', ico:MV.pki||'dot'} : {}), false); return; }
     if(d.k==='place'){
       /* 跟病媒一樣：點一下就放好，名稱先用種類，之後在右邊改 */
       if(d.moved) return;
@@ -3940,10 +3961,12 @@ function layerSideHTML(){
     : `<div class="small">${esc(o.note||'')}</div>`}`; }
   if(o && sel.t==='frag') return fragSideHTML(o, ed, close);
   if(o && sel.t==='pest'){ const a = areaAtMap(o), z = zoneAt(o);
-    return `<div class="phd"><b><img class="lyico" src="${pestIcon(o.kind)}" alt=""> ${esc(pestLabel(o))}</b>${close}</div>
+    return `<div class="phd"><b><img class="lyico" src="${pestIconOf(o)}" alt=""> ${esc(pestLabel(o))}</b>${close}</div>
     <div class="small muted" style="margin:0 0 8px">${a?'缺失區域：'+esc(a.name)+'　':''}${z?'清潔分區：'+esc(ZK[z.kind].t)+(z.name?'（'+esc(z.name)+'）':''):''}</div>
     ${ed ? `<div class="grid1">
-      <label class="f">種類</label><select id="lpKind">${Object.entries(PK).map(([k,v])=>`<option value="${k}" ${o.kind===k?'selected':''}>${v.t}</option>`).join('')}</select>
+      <label class="f">種類</label><select id="lpKind" onchange="document.getElementById('lpOther').hidden=this.value!=='other'">${Object.entries(PK).map(([k,v])=>`<option value="${k}" ${o.kind===k?'selected':''}>${v.t}</option>`).join('')}</select>
+      <div id="lpOther" ${o.kind==='other'?'':'hidden'}><label class="f">名稱</label><input type="text" id="lpName" value="${esc(o.kind==='other'?(o.name||''):'')}" placeholder="例：誘蚊燈、防鳥網、驅蠅風簾">
+        <label class="f">圖示（點一個選）</label><div class="pkico" role="radiogroup" aria-label="圖示">${PICK.map(([k,t])=>`<button type="button" class="${pestIcoKey(Object.assign({}, o, {kind:'other'}))===k?'on':''}" data-k="${k}" title="${esc(t)}" onclick="this.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===this))"><img src="${pestIcon(k)}" alt=""><span>${esc(t.replace(/（.*）/,''))}</span></button>`).join('')}</div></div>
       <label class="f">編號</label><input type="text" id="lpCode" value="${esc(o.code||'')}">
       <label class="f">位置說明（選填）</label><input type="text" id="lpNote" value="${esc(o.note||'')}" placeholder="例：包裝區入口右側牆面">
       <div class="row"><button class="primary" onclick="pestSave('${o.id}')">儲存</button><button class="danger" onclick="lyDel('pest','${o.id}')">刪除</button></div></div>`
@@ -3970,10 +3993,10 @@ function layerSideHTML(){
   if(L==='frag') return fragPanelHTML(ed);
   if(L==='pest'){ const ps = lyList('pest').sort((x,y)=>(x.code||'').localeCompare(y.code||'',undefined,{numeric:true}));
     return `<div class="phd"><b>🐭 病媒防治設施</b><span class="muted small">點圖示看說明</span></div>
-      <div class="lycnt">${Object.entries(PK).map(([k,v])=>`<div><img class="lyico" src="${pestIcon(k)}" alt=""><b>${ps.filter(o=>o.kind===k).length}</b>${v.t.replace(/（.*）/,'')}</div>`).join('')}</div>
+      <div class="lycnt">${Object.entries(PK).filter(([k])=>k!=='other' || ps.some(o=>o.kind==='other')).map(([k,v])=>`<div><img class="lyico" src="${pestIcon(k==='other'?'dot':k)}" alt=""><b>${ps.filter(o=>o.kind===k).length}</b>${k==='other'?'其它':v.t.replace(/（.*）/,'')}</div>`).join('')}</div>
       <button id="pkXls" style="width:100%;margin:0 0 10px" onclick="pestExport()" ${ps.length?'':'disabled'}>📗 匯出病媒防治設施清單（Excel）</button>
-      ${ps.length ? `<ul class="mini">${ps.map(o=>`<li class="click" onclick="MV.sel={t:'pest',id:'${o.id}'};lySide()"><span><img class="lyico" src="${pestIcon(o.kind)}" alt=""> <b>${esc(o.code)}</b> ${esc((PK[o.kind]||{}).t||'')}</span><span class="small muted">${esc(o.note||'')}</span></li>`).join('')}</ul>`
-        : `<div class="muted small">還沒有病媒防治設施。${ed?'在上方選種類（捕蟲燈、鼠板站、鼠餌站），按「放置」後在平面圖上點一下。':'切到「✏️ 編輯模式」就可以開始放。'}</div>`}`; }
+      ${ps.length ? `<ul class="mini">${ps.map(o=>`<li class="click" onclick="MV.sel={t:'pest',id:'${o.id}'};lySide()"><span><img class="lyico" src="${pestIconOf(o)}" alt=""> <b>${esc(o.code)}</b> ${esc(pestKindName(o))}</span><span class="small muted">${esc(o.note||'')}</span></li>`).join('')}</ul>`
+        : `<div class="muted small">還沒有病媒防治設施。${ed?'在上方選種類（捕蟲燈、鼠板站、鼠餌站，或「其它」自己打字、選圖示），按「放置」後在平面圖上點一下。':'切到「✏️ 編輯模式」就可以開始放。'}</div>`}`; }
   return '';
 }
 function lyZoneSave(id){ const z = lyGet('zone', id); z.kind = $('#lzKind').value; z.name = $('#lzName').value.trim(); z.desc = $('#lzDesc').value.trim(); saveMap(); renderMap(); flash('已儲存分區'); }
@@ -4099,11 +4122,18 @@ async function fragCheckBack(){ if(dirty && !(await ask('檢查還沒儲存，�
 async function fragCheckDelete(id){ if(!(await ask('確定刪除這筆易碎品檢查紀錄？'))) return; FRAGCHK = FRAGCHK.filter(x=>x.id!==id); saveFragChk(); dirty = false; FCK = null; MV.layer = 'frag'; showMap(); flash('已刪除'); }
 
 /* ---- 病媒防治設施 ---- */
+/* 圖例：三種固定＋地圖上用到的「其它」（依名稱＋圖示，各列一次） */
+function pestLegend(all){ const ps = lyList('pest'), out = Object.entries(PK).filter(([k])=>k!=='other' && (all || !ps.length || ps.some(o=>o.kind===k))).map(([k,v])=>({k, t:v.t})), seen = new Set();
+  ps.filter(o=>o.kind==='other').forEach(o => { const k = pestIcoKey(o), t = o.name||'其它病媒設施', id = k+'|'+t; if(!seen.has(id)){ seen.add(id); out.push({k, t}); } });
+  return out; }
 function pestSave(id){
   const o = lyGet('pest', id), code = $('#lpCode').value.trim();
   if(!code){ say('編號不能空白。'); return; }
   if((MAPD.pests||[]).some(x=>x.id!==id && x.code===code)){ say('已經有編號「'+code+'」了。'); return; }
-  Object.assign(o, {kind:$('#lpKind').value, code, note:$('#lpNote').value.trim()}); saveMap(); renderMap(); flash('已儲存');
+  const kind = $('#lpKind').value;
+  Object.assign(o, {kind, code, note:$('#lpNote').value.trim()});
+  if(kind==='other'){ o.name = $('#lpName').value.trim() || '其它病媒設施'; const b = document.querySelector('.pkico button.on'); o.ico = b ? b.dataset.k : (o.ico||'dot'); } else { delete o.name; delete o.ico; }
+  saveMap(); renderMap(); flash('已儲存');
 }
 function pestDefect(id){ const o = lyGet('pest', id); if(!o) return; const a = areaAtMap(o, o.mapId);
   openRecord(null, {area:a?a.name:'', areaId:a?a.id:'', ownerDept:a?(a.unit||''):'', defType:'05', rawDesc:`${pestLabel(o)}${o.note?'（'+o.note+'）':''}：`}); }
@@ -4113,9 +4143,9 @@ async function pestExport(){
   const cell = xlCell, last = xlCol(4); let rows = '', rn = 1; const merges = [];
   const line = (txt, sty, h) => { rows += `<row r="${rn}"${h?` ht="${h}" customHeight="1"`:''}>${cell(0,rn,txt,sty)}</row>`; merges.push(`A${rn}:${last}${rn}`); rn++; };
   line(`病媒防治設施清單｜${m.name}`, 3, 26);
-  line(`匯出日期：${fmtDate(today())}　${Object.entries(PK).map(([k,v])=>v.t+' '+ps.filter(o=>o.kind===k).length+' 個').join('　')}`, 0, 20); rn++;
+  line(`匯出日期：${fmtDate(today())}　${Object.entries(PK).filter(([k])=>k!=='other' || ps.some(o=>o.kind==='other')).map(([k,v])=>(k==='other'?'其它':v.t)+' '+ps.filter(o=>o.kind===k).length+' 個').join('　')}`, 0, 20); rn++;
   const hr = rn; rows += `<row r="${rn}" ht="22" customHeight="1">${['編號','種類','缺失區域','清潔分區','位置說明'].map((h,i)=>cell(i,rn,h,4)).join('')}</row>`; rn++;
-  ps.forEach(o => { const a = areaAtMap(o), z = zoneAt(o); rows += `<row r="${rn}">${[o.code, (PK[o.kind]||{}).t, a?a.name:'', z?ZK[z.kind].t+(z.name?'（'+z.name+'）':''):'', o.note].map((x,i)=>cell(i,rn,x,2)).join('')}</row>`; rn++; });
+  ps.forEach(o => { const a = areaAtMap(o), z = zoneAt(o); rows += `<row r="${rn}">${[o.code, pestKindName(o), a?a.name:'', z?ZK[z.kind].t+(z.name?'（'+z.name+'）':''):'', o.note].map((x,i)=>cell(i,rn,x,2)).join('')}</row>`; rn++; });
   const widths = [10,18,16,18,34];
   const sheet = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><sheetViews><sheetView workbookViewId="0"/></sheetViews><cols>${widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join('')}</cols><sheetData>${rows}</sheetData><mergeCells count="${merges.length}">${merges.map(x=>`<mergeCell ref="${x}"/>`).join('')}</mergeCells><pageMargins left="0.4" right="0.4" top="0.4" bottom="0.4" header="0.2" footer="0.2"/><pageSetup orientation="portrait" paperSize="9" fitToWidth="1" fitToHeight="0"/></worksheet>`;
   try{ await download(xlsxPack('病媒防治設施', sheet, `$${hr}:$${hr}`), `Casevoras_病媒防治設施清單_${m.name}_${today()}.xlsx`.replace(/[\\/:*?"<>|\s]+/g,'_'), 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); flash('已匯出病媒防治設施清單'); }
@@ -4153,7 +4183,7 @@ function lyLegendItems(){
   const L = MV.layer, out = [], zs = lyList('zone');
   if(L==='frag'){ const fs = lyList('frag'); Object.entries(FT).forEach(([k,v]) => { if(fs.some(f=>fragType(f)===k)) out.push({type:'icon', t:v.t, k:'ft_'+k}); });
     Object.entries(FST).forEach(([k,v]) => out.push({type:'frag', t:'標籤：'+v.t, c:v.c, ring:v.ring})); }
-  if(L==='pest'){ const ps = lyList('pest'); Object.entries(PK).forEach(([k,v]) => { if(!ps.length || ps.some(o=>o.kind===k)) out.push({type:'icon', t:v.t, k}); }); }
+  if(L==='pest') pestLegend().forEach(x => out.push({type:'icon', t:x.t, k:x.k}));
   if(L==='flow'){ const fs = lyList('flow'), ms = lyList('mark');
     Object.entries(FK).forEach(([k,v]) => { if(!MV_HIDE.has(k) && fs.some(o=>o.kind===k)) out.push({type:'line', t:v.t, c:lyColor(k), dash:v.dash}); });
     Object.entries(MK).forEach(([k,v]) => { if(!MV_HIDE.has(k) && ms.some(o=>o.kind===k)) out.push({type:'bar', t:v.t, c:lyColor(k)}); }); }
@@ -4168,7 +4198,7 @@ async function layerExportImage(){
   const W = Math.round(img.naturalWidth*k), H = Math.round(img.naturalHeight*k), u1 = W/1600, s = W/1000, L = MV.layer;
   const F = '"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif';
   const X = x => x*W, Y = y => y*H;
-  const ICON = {}; for(const [k, u] of [...Object.keys(PK).map(k=>[k, pestIcon(k)]), ...Object.keys(FT).map(k=>['ft_'+k, fragIcon(k)])]){ const im = new Image(); im.src = u; try{ await im.decode(); ICON[k] = im; }catch(e){} }
+  const ICON = {}; for(const [k, u] of [...[...Object.keys(PK), ...Object.keys(PI)].map(k=>[k, pestIcon(k)]), ...Object.keys(FT).map(k=>['ft_'+k, fragIcon(k)])]){ const im = new Image(); im.src = u; try{ await im.decode(); ICON[k] = im; }catch(e){} }
   /* 圖例先排版，算出下方要留多高 */
   const items = lyLegendItems(), mc = document.createElement('canvas').getContext('2d'); mc.font = `${Math.round(24*u1)}px ${F}`;
   const v = 1.5*u1, SW = 40*v, GAP = 28*v, LH = 34*v, lines = [[]]; let lx = 24*u1;   /* v：圖例放大 1.5 倍，印出來也看得清楚 */
@@ -4217,7 +4247,7 @@ async function layerExportImage(){
   /* 圖示＋編號這一整組的中間對準位置，跟畫面上完全一樣（比例照畫面：圖示 36、字 11、內距 4、重疊 3） */
   if(L==='pest') lyList('pest').forEach(o => { const e = 62*u1/36, sz = 36*e, cx = X(o.x), cy = Y(o.y), fs = Math.round(11*e), pad = 4*e, ov = 3*e;
     g.font = `800 ${fs}px ${F}`; const t = o.code||'', tw = g.measureText(t).width, lw = tw + pad*2 + 2*e, left = cx - (sz - ov + lw)/2, h = fs*1.45, x = left + sz - ov, y = cy-h/2;
-    if(ICON[o.kind]) g.drawImage(ICON[o.kind], left, cy-sz/2, sz, sz);
+    const ik = ICON[pestIcoKey(o)]; if(ik) g.drawImage(ik, left, cy-sz/2, sz, sz);
     rr(x, y, lw, h, 4*e); g.fillStyle = 'rgba(255,253,248,.95)'; g.fill(); g.lineWidth = 1*e; g.strokeStyle = '#16213a'; g.stroke();
     g.fillStyle = '#16213a'; g.textBaseline = 'middle'; g.fillText(t, x+pad+e, y+h/2+0.5); });
   if(L==='frag') lyList('frag').forEach(f => { const st = fragState(f).k, im = ICON['ft_'+fragType(f)];
