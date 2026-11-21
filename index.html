@@ -609,6 +609,13 @@ main:has(.split){max-width:1320px}
 .st-extra .l{font-weight:700}
 .st-note{font-size:12px;color:var(--muted);margin:2px 0 10px}
 .st-sec{margin:18px 0 6px;font-size:16px;font-weight:700;border-left:4px solid var(--brand);padding-left:8px;break-after:avoid}
+/* 右側面板可收合的段落 */
+.msec>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px;user-select:none}.msec>summary::-webkit-details-marker{display:none}
+.msec>summary::after{content:'▸ 展開';margin-left:auto;font-size:12px;font-weight:600;color:var(--muted)}.msec[open]>summary::after{content:'▾ 收合'}
+.msec>summary:hover{color:var(--brand)}
+.aguide{background:#fffdf8;border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin-top:10px}.aguide>summary{cursor:pointer;font-weight:700}.aguide ol{margin:8px 0 2px;padding-left:22px;line-height:1.8;font-size:14px}
+.aref{margin-top:10px}.aref>summary{cursor:pointer;font-weight:700}.arow .refs{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:6px 0 2px}.arow .refs img{width:56px;height:56px;object-fit:cover;border-radius:6px;border:1px solid var(--line);cursor:zoom-in}
+.arow .photos img{cursor:zoom-in}
 .st-bar{display:grid;grid-template-columns:minmax(80px,170px) 1fr 44px 70px;gap:8px;align-items:center;margin:4px 0;font-size:14px}
 .st-bar .b{background:#efe7d8;border-radius:4px;height:16px}
 .st-bar .b i{display:block;height:16px;background:var(--brand);border-radius:4px;min-width:2px}
@@ -1124,7 +1131,7 @@ const GUIDES = {
     gStep(7,'看缺失、新增缺失、匯出', gC(gR(`<span class="gx-k">3<small>累計</small></span><span class="gx-k b">2<small>未結案</small></span><span class="gx-k rd">1<small>逾期</small></span>`)+gR(gB('＋ 在「打漿區」新增缺失',{dk:1,hl:1,n:1}))+gR(gB('📗 匯出這個區域（Excel）',{hl:1,n:2})),'🏭 打漿區'),
       `<p>檢視模式點區域或位置，右邊會出現件數與歷史缺失。</p><p>「＋ 新增缺失」${gN(1)}自動帶入區域、位置、負責單位；「📗 匯出這個區域」${gN(2)}依類別由多到少，含改善前後照片。</p>`),
     gStep(8,'現場稽核', gC(gR(`${gB('＋ 新增稽核重點',{n:1})}${gB('載入範例')}`)+gR(gB('📋 開始稽核',{ok:1,hl:1,n:2}))) + gC(gR(`<span class="gx-s" style="flex:1">排水溝清潔暢通</span>${gN(3)}${gB('✅ 合格',{ok:1})}${gB('❌ 不合格',{rd:1,hl:1})}`)),
-      `<p>編輯模式「＋ 新增稽核重點」${gN(1)}寫清楚<b>查核標準</b>（或載入範例 8 項）。</p><p>到現場按「📋 開始稽核」${gN(2)}，每項選${gN(3)}：✅ 合格、❌ 不合格（可「＋ 建立缺失」）、👁 觀察事項、⊘ 不適用。</p>`),
+      `<p>點地圖上的區域，右邊「稽核重點」按「＋ 新增稽核重點」${gN(1)}寫清楚<b>查核標準</b>（或載入範例 8 項）；<b>檢視、編輯模式都可以</b>新增、編輯、刪除。</p><p>右邊的「細部位置」「稽核紀錄」「稽核重點」「參考照片」標題都可以<b>點一下收合</b>，開／關會記住。</p><p>到現場按「📋 開始稽核」${gN(2)}，每項選${gN(3)}：✅ 合格、❌ 不合格（可「＋ 建立缺失」）、👁 觀察事項、⊘ 不適用。稽核頁上方有<b>📖 怎麼用</b>（可收合）和這一區的<b>參考照片</b>；對應到位置的項目旁邊也有那個位置的參考照片，點一下看大圖。</p><p>不合格、觀察事項的說明以「<b>現場稽核發現</b>」開頭；按 <b>📸 開相機拍照</b>直接用手機相機拍，或 🖼 從相簿選；拍好的照片點一下看大圖、按 ✕ 刪掉。</p>`),
     gStep(9,'風險顏色、連續發生警示、地圖統計', gC(gR(`${gB('🎨 風險顏色（開）',{dk:1,hl:1,n:1})}`)+gR(`<span class="gx-sw" style="background:#b42318"></span><span class="gx-s">重大／逾期／重複</span><span class="gx-sw" style="background:#d97706"></span><span class="gx-s">未結案</span><span class="gx-sw" style="background:#167a3e"></span><span class="gx-s">都結案</span>`)) + gC(gR(`${gN(2)}${gTag('年度','dk')}${gTag('每季')}${gTag('每月')}${gTag('自訂')}`),'📊 地圖統計'),
       `<p>檢視模式依缺失狀況自動上色${gN(1)}：紅＝重大、逾期或<b>重複發生</b>；黃＝有未結案；綠＝都結案；灰＝沒紀錄。</p><p><b>⚠ 連續發生警示</b>：同一位置同一類缺失<b>連續 3 個月</b>都發生，位置標記會閃動並加 ⚠，右邊面板會提醒檢討根本原因。</p><p>地圖下方「📊 地圖統計」${gN(2)}選期間（年度、每季、每月，按 ◀ ▶ 跳上一期／下一期；或全部期間、最近三個月、最近六個月、自訂）；<b>點某個區域時，統計會變成那一區各位置的分布</b>，按「看全部區域」回到全廠。</p><p class="muted small">地圖統計的數字卡和長條都可以點開看案件，見第 10 步。</p>`),
     gStep(10,'📊 地圖統計：點開看案件', gC(gR(`<span class="gx-k">8<small>缺失總數</small></span>${gN(1)}<span class="gx-k b" style="box-shadow:0 0 0 2px var(--gold)">2<small>未結案</small></span><span class="gx-k rd">2<small>逾期</small></span>`)+gR(`<span class="gx-s" style="width:52px">包裝區</span><span style="flex:1;height:8px;border-radius:4px;background:#16213a;max-width:120px"></span><span class="gx-s">7</span>${gN(2)}`),'📊 地圖統計') + gC(gR(`<span class="gx-s" style="flex:1"><b>QA-001</b>　包裝區　待改善（逾期）</span>${gN(3)}`)+gR(`<span class="gx-s" style="flex:1"><b>QA-002</b>　包裝區　待改善</span>`)+gR(`<span style="flex:1"></span>${gB('關閉',{dk:1})}`),'未結案　一樓・全部區域・全部期間 2 件'),
@@ -2364,7 +2371,7 @@ async function download(content, name, type){
 
 /* ---------- 備份 / 還原 ---------- */
 /* 畫面設定（風險顏色、磁鐵、圖層、地圖高度、隱藏的圖例、說明展開…）：只帶設定，不含資料 */
-const PREF_KEYS = ['mapH','mapZ','mapRisk','mapLock','mapStat','mapLayer','mapZbg','mapHide','mapSnap','mapSW'];
+const PREF_KEYS = ['mapH','mapZ','mapRisk','mapLock','mapStat','mapLayer','mapZbg','mapHide','mapSnap','mapSW','mapSec','audGuide'];
 function prefsGet(){ const o = {}; try{ for(let i=0;i<localStorage.length;i++){ const k = localStorage.key(i); if(!k.startsWith(KEY+'_')) continue; const n = k.slice(KEY.length+1); if(PREF_KEYS.includes(n) || n.startsWith('guide_')) o[n] = localStorage.getItem(k); } }catch(e){} return o; }
 function prefsSet(o){ if(!o || typeof o!=='object') return; try{ Object.entries(o).forEach(([n,v])=>{ if((PREF_KEYS.includes(n) || /^guide_\w+$/.test(n)) && typeof v==='string') localStorage.setItem(KEY+'_'+n, v); }); }catch(e){} }
 async function backup(){
@@ -2587,6 +2594,11 @@ function mapRecTable(rs){
       <div class="mr-f">${esc(r.defType?typeName(r.defType):'未選類別')}${r.deadline?`・期限 ${fmtDate(r.deadline)}`:''}</div></div>`; }).join('')}</div>`;
 }
 function mapStatHTML(s){ return `<div class="mstat"><div><b>${s.total}</b>累計缺失</div><div class="o"><b>${s.open}</b>未結案</div><div class="v"><b>${s.over}</b>逾期</div></div>`; }
+/* 右側面板段落收合（記住開／關） */
+const KEY_MSEC = 'qaHygieneTracker_v1_mapSec';
+function secOpen(k){ try{ return (JSON.parse(localStorage.getItem(KEY_MSEC)||'{}')||{})[k] !== false; }catch(e){ return true; } }
+function secTog(k, on){ try{ const o = JSON.parse(localStorage.getItem(KEY_MSEC)||'{}')||{}; o[k] = on; localStorage.setItem(KEY_MSEC, JSON.stringify(o)); }catch(e){} }
+const msec = (k, title, body) => `<details class="msec" ${secOpen(k)?'open':''} ontoggle="secTog('${k}',this.open)"><summary class="st-sec">${title}</summary>${body}</details>`;
 function mapSideHTML(){
   const sel = MV.sel, ed = MV.mode==='edit';
   if(sel && sel.t==='area'){
@@ -2606,8 +2618,7 @@ function mapSideHTML(){
       <button class="primary" style="width:100%;margin:6px 0 6px" onclick="mapNewDefect('${a.id}','')">＋ 在「${esc(a.name)}」新增缺失</button>
       <button id="maXls" style="width:100%;margin:0 0 10px" onclick="mapAreaExport('${a.id}','')">📗 匯出這個區域（Excel，含照片）</button>
       ${auditSideHTML(a)}
-      <div class="st-sec">細部位置（${locs.length}）</div>
-      ${locs.length ? `<ul class="mini">${locs.map(l=>{ const s = mapStats(recsForLoc(l)); return `<li class="click" onclick="MV.sel={t:'loc',id:'${l.id}'};renderMap()"><span><b>${esc(l.code)}</b> ${esc(l.name)}</span><span class="small ${s.open?'bad':'muted'}">${s.open?'未結案 '+s.open:'共 '+s.total+' 件'}</span></li>`; }).join('')}</ul>` : `<div class="muted small">還沒有位置。${ed?'按上方「📍 新增位置」，在區域框裡點一下。':'切到「編輯模式」可以新增位置。'}</div>`}
+      ${msec('locs', `細部位置（${locs.length}）`, `${locs.length ? `<ul class="mini">${locs.map(l=>{ const s = mapStats(recsForLoc(l)); return `<li class="click" onclick="MV.sel={t:'loc',id:'${l.id}'};renderMap()"><span><b>${esc(l.code)}</b> ${esc(l.name)}</span><span class="small ${s.open?'bad':'muted'}">${s.open?'未結案 '+s.open:'共 '+s.total+' 件'}</span></li>`; }).join('')}</ul>` : `<div class="muted small">還沒有位置。${ed?'按上方「📍 新增位置」，在區域框裡點一下。':'切到「編輯模式」可以新增位置。'}</div>`}`)}
       ${auditItemsHTML(a, ed)}
       ${refPhotosHTML('area', a, ed)}
       <div class="st-sec">歷史缺失</div>${mapRecTable(recsForArea(a))}`;
@@ -2993,18 +3004,17 @@ const AUDIT_SAMPLE = [
   ['設備周邊無積水異物','設備周邊地面無積水、異物及不必要物品','目視','每日','中',0]];
 function auditItemsHTML(a, ed){
   const its = itemsOf(a.id), locName = id => { const l = locById(id); return l ? (l.code+' '+l.name).trim() : ''; };
-  return `<div class="st-sec">稽核重點（${its.length}）</div>
+  return msec('items', `稽核重點（${its.length}）`, `
     ${its.length ? `<ul class="aitems">${its.map(t=>`<li><div><b>${esc(t.name)}</b>${t.req?'<span class="areq">必查</span>':''}${t.locId?`<span class="mr-loc">${esc(locById(t.locId)?.code||'')}</span>`:''}
       <div class="small muted">標準：${esc(t.std||'—')}${t.freq?'｜'+esc(t.freq):''}${t.imp?'｜重要度 '+esc(t.imp):''}${t.locId?'｜'+esc(locName(t.locId)):''}</div></div>
-      ${ed?`<span class="aibtn"><button onclick="auditItemEdit('${a.id}','${t.id}')">編輯</button><button class="danger" onclick="auditItemDel('${t.id}')">刪除</button></span>`:''}</li>`).join('')}</ul>`
-      : `<div class="muted small">還沒有稽核重點。${ed?'':'切到「編輯模式」可以新增。'}</div>`}
-    ${ed?`<div class="row" style="margin:6px 0 10px"><button onclick="auditItemEdit('${a.id}','')">＋ 新增稽核重點</button>${its.length?'':`<button onclick="auditSample('${a.id}')">載入範例（8 項）</button>`}</div>`:''}`;
+      <span class="aibtn"><button onclick="auditItemEdit('${a.id}','${t.id}')">編輯</button><button class="danger" onclick="auditItemDel('${t.id}')">刪除</button></span></li>`).join('')}</ul>`
+      : `<div class="muted small">還沒有稽核重點。</div>`}
+    <div class="row" style="margin:6px 0 10px"><button onclick="auditItemEdit('${a.id}','')">＋ 新增稽核重點</button>${its.length?'':`<button onclick="auditSample('${a.id}')">載入範例（8 項）</button>`}</div>`);
 }
 function auditSideHTML(a){
   const au = auditsOf(a.id);
   return `${itemsOf(a.id).length?`<button class="primary" style="width:100%;margin:0 0 10px;background:#167a3e;border-color:#167a3e" onclick="auditStart('${a.id}')">📋 開始稽核</button>`:''}
-    <div class="st-sec">稽核紀錄（${au.length}）</div>
-    ${au.length ? `<ul class="mini">${au.slice(0,8).map(x=>`<li class="click" onclick="auditView('${x.id}')"><span>${auditSummary(x)}</span><span class="small muted">看</span></li>`).join('')}</ul>` : '<div class="muted small">還沒有稽核紀錄。</div>'}`;
+    ${msec('audits', `稽核紀錄（${au.length}）`, au.length ? `<ul class="mini">${au.slice(0,8).map(x=>`<li class="click" onclick="auditView('${x.id}')"><span>${auditSummary(x)}</span><span class="small muted">看</span></li>`).join('')}</ul>` : '<div class="muted small">還沒有稽核紀錄。</div>')}`;
 }
 async function auditSample(aid){
   if(!(await ask('載入 8 項範例稽核重點（以打漿區為例）？載入後可以自己修改或刪除。'))) return;
@@ -3065,7 +3075,13 @@ function renderAudit(done){
         <div><label class="f req">稽核日期</label><input type="date" id="auDate" value="${esc(AUD.date)}" max="${today()}" ${done?'disabled':''}></div>
         <div><label class="f">稽核人員</label>${done?`<div style="padding:8px 0">${esc(AUD.auditor||'—')}</div>`:combo('people', AUD.auditor, 'id="auBy"', '例：品管人員')}</div>
       </div>
+      ${done?'':`<details class="aguide" ${(()=>{ try{ return localStorage.getItem('qaHygieneTracker_v1_audGuide')==='0'?'':'open'; }catch(e){ return 'open'; } })()} ontoggle="try{localStorage.setItem('qaHygieneTracker_v1_audGuide',this.open?'1':'0')}catch(e){}"><summary>📖 現場稽核怎麼用（點這裡展開／收合）</summary><ol>
+        <li>確認<b>稽核日期</b>、選<b>稽核人員</b>。</li>
+        <li>每一項對照「標準」和下方<b>參考照片</b>（正常時的樣子），按 ✅ 合格、❌ 不合格、👁 觀察事項或 ⊘ 不適用；標「必查」的一定要填。</li>
+        <li>不合格、觀察事項：寫說明（以「現場稽核發現」開頭），按 <b>📸 開相機拍照</b> 現場拍，或 🖼 從相簿選。</li>
+        <li>按 <b>💾 儲存稽核紀錄</b>；有不合格的，在紀錄裡按「＋ 建立缺失」接到缺失追蹤。</li></ol></details>`}
       <div class="notice info small" style="white-space:pre-line;margin-top:10px">${AR_RULE}</div>
+      ${(()=>{ const ps = (a && a.photos) || []; return ps.length ? `<details class="aref" open><summary>📷 ${esc(name)} 參考照片（正常狀態，${ps.length} 張）</summary><div class="photos" style="margin-top:6px">${ps.map((p,j)=>`<div class="ph"><img src="${phSync(p)}" ${isRef(p)?`data-ph="${p}"`:''} alt="參考照片${j+1}" style="cursor:zoom-in" onclick="lightbox(areaById('${a.id}').photos,${j},'${esc(name)} 參考照片')"></div>`).join('')}</div></details>` : ''; })()}
       <div id="auList">${AUD.results.map((r,i)=>auditRowHTML(r,i,done)).join('')}</div>
       ${done?'':`<div class="row" style="margin-top:14px"><button class="primary" onclick="auditSave()">💾 儲存稽核紀錄</button><button onclick="auditBack()">取消</button><span class="muted small" id="auCount"></span></div>`}
     </div>`;
@@ -3081,16 +3097,18 @@ function auditRowHTML(r, i, done){
   return `<div class="arow ${r.result?'r-'+r.result:''}" id="ar${i}">
     <div class="ar-h"><b>${i+1}. ${esc(r.name)}</b>${r.req?'<span class="areq">必查</span>':''}${l?`<span class="mr-loc">${esc(l.code||l.name)}</span>`:''}</div>
     <div class="small muted">標準：${esc(r.std||'—')}</div>
+    ${l && (l.photos||[]).length ? `<div class="refs"><span class="small muted">📷 ${esc(l.code||l.name)} 參考：</span>${l.photos.map((p,j)=>`<img src="${phSync(p)}" ${isRef(p)?`data-ph="${p}"`:''} alt="參考照片${j+1}" title="點一下看大圖" onclick="lightbox(locById('${l.id}').photos,${j},'${esc((l.code+' '+l.name).trim())} 參考照片')">`).join('')}</div>` : ''}
     ${done ? `<div class="ar-res"><b class="${AR[r.result]?.c||'muted'}">${AR[r.result]?AR[r.result].i+' '+AR[r.result].t:'（未填）'}</b>${r.note?`　${esc(r.note)}`:''}</div>`
       : `<div class="ar-btns">${Object.entries(AR).map(([k,v])=>`<button class="${r.result===k?'on '+v.c:''}" onclick="auditSet(${i},'${k}')">${v.i} ${v.t}</button>`).join('')}</div>`}
-    ${(!done && (r.result==='fail'||r.result==='obs')) ? `<textarea rows="2" placeholder="${r.result==='fail'?'不合格說明：看到什麼、在哪裡、多少（勿寫人名）':'觀察說明'}" oninput="AUD.results[${i}].note=this.value;dirty=true">${esc(r.note)}</textarea>
-      <div class="row" style="margin-top:4px"><button onclick="this.nextElementSibling.click()">📷 加照片</button><input type="file" accept="image/*" multiple hidden onchange="auditPhotos(${i},this)"><span class="small muted">${r.photos.length?r.photos.length+' 張':''}</span></div>` : ''}
-    ${r.photos.length ? `<div class="photos">${r.photos.map(p=>`<div class="ph"><img src="${phSync(p)}" ${isRef(p)?`data-ph="${p}"`:''} alt=""></div>`).join('')}</div>` : ''}
+    ${(!done && (r.result==='fail'||r.result==='obs')) ? `<textarea rows="2" placeholder="${r.result==='fail'?'現場稽核發現：（看到什麼、在哪裡、多少，例：排水溝末端有殘渣堆積、積水約 30 公分）勿寫人名':'現場稽核發現：（目前還符合，但有輕微異常或潛在風險，例：排水溝蓋板邊緣有少量殘渣，下次稽核再確認）'}" oninput="AUD.results[${i}].note=this.value;dirty=true">${esc(r.note)}</textarea>
+      <div class="row" style="margin-top:4px"><button onclick="this.nextElementSibling.click()">📸 開相機拍照</button><input type="file" accept="image/*" capture="environment" hidden onchange="auditPhotos(${i},this)"><button onclick="this.nextElementSibling.click()">🖼 從相簿選</button><input type="file" accept="image/*" multiple hidden onchange="auditPhotos(${i},this)"><span class="small muted">${r.photos.length?r.photos.length+' 張':'（電腦上「開相機」會改成選檔案）'}</span></div>` : ''}
+    ${r.photos.length ? `<div class="photos">${r.photos.map((p,j)=>`<div class="ph"><img src="${phSync(p)}" ${isRef(p)?`data-ph="${p}"`:''} alt="稽核照片${j+1}" title="點一下看大圖" onclick="lightbox(AUD.results[${i}].photos,${j},'${i+1}. ${esc(r.name).replace(/'/g,'')}')">${done?'':`<button class="x" title="刪除這張" onclick="auditPhotoDel(${i},${j})">✕</button>`}</div>`).join('')}</div>` : ''}
     ${done && r.result==='fail' ? (r.defectId && records.some(x=>x.id===r.defectId&&!x.deleted) ? `<div class="small" style="margin-top:4px">已建立缺失：<a href="#" onclick="openRecord('${esc(r.defectId)}');return false">${esc(r.defectId)}</a></div>` : `<button class="primary" style="margin-top:6px" onclick="auditDefect(${i})">＋ 建立缺失</button>`) : ''}
   </div>`;
 }
 function auditSet(i, k){ AUD.results[i].result = AUD.results[i].result===k ? '' : k; dirty = true; $('#ar'+i).outerHTML = auditRowHTML(AUD.results[i], i, false); hydrate($('#ar'+i)); auditCountUpd(); }
 function auditCountUpd(){ const c = auditCount(AUD), n = AUD.results.filter(r=>!r.result).length, e = $('#auCount'); if(e) e.textContent = `✅${c.pass} ❌${c.fail} 👁${c.obs} ⊘${c.na}${n?`　尚未填 ${n} 項`:''}`; }
+function auditPhotoDel(i, j){ AUD.results[i].photos.splice(j,1); dirty = true; $('#ar'+i).outerHTML = auditRowHTML(AUD.results[i], i, false); hydrate($('#ar'+i)); }
 /* 照片：壓縮後放照片資料庫 */
 function auditPhotos(i, input){
   const files = [...input.files].filter(f=>/^image\//.test(f.type)); input.value = '';
@@ -3534,10 +3552,10 @@ async function mapAnaWord(){
 /* 參考照片：區域、位置的正常狀態照片（跟缺失照片分開） */
 function refPhotosHTML(kind, obj, ed){
   const ps = obj.photos || [];
-  return `<div class="st-sec">📷 參考照片（正常狀態）</div>
-    ${ps.length ? `<div class="photos">${ps.map((p,i)=>`<div class="ph"><img src="${phSync(p)}" ${isRef(p)?`data-ph="${p}"`:''} alt="參考照片${i+1}" onclick="showImg(this.src)" style="cursor:zoom-in">${ed?`<button class="x" onclick="refPhotoDel('${kind}','${obj.id}',${i})">✕</button>`:''}</div>`).join('')}</div>` : `<div class="muted small">還沒有參考照片。${ed?'':'切到「編輯模式」可以上傳。'}</div>`}
+  return msec('ref_'+kind, `📷 參考照片（正常狀態）${ps.length?'（'+ps.length+'）':''}`, `
+    ${ps.length ? `<div class="photos">${ps.map((p,i)=>`<div class="ph"><img src="${phSync(p)}" ${isRef(p)?`data-ph="${p}"`:''} alt="參考照片${i+1}" onclick="lightbox(refObj('${kind}','${obj.id}').photos,${i},'參考照片（正常狀態）')" style="cursor:zoom-in">${ed?`<button class="x" onclick="refPhotoDel('${kind}','${obj.id}',${i})">✕</button>`:''}</div>`).join('')}</div>` : `<div class="muted small">還沒有參考照片。${ed?'':'切到「編輯模式」可以上傳。'}</div>`}
     ${ed?`<div class="row" style="margin:6px 0 4px"><button onclick="this.nextElementSibling.click()">＋ 加參考照片</button><input type="file" accept="image/*" multiple hidden onchange="refPhotoAdd('${kind}','${obj.id}',this)"><span class="small muted">放這裡正常、清潔時的樣子，方便對照</span></div>
-      <div class="pzone" tabindex="0" data-ref="${kind}:${obj.id}" role="button" aria-label="貼上或拖曳參考照片" style="margin-bottom:10px">📋 點這裡，再按 <b>Ctrl+V</b> 貼上參考照片（也可以拖進來）</div>`:''}`;
+      <div class="pzone" tabindex="0" data-ref="${kind}:${obj.id}" role="button" aria-label="貼上或拖曳參考照片" style="margin-bottom:10px">📋 點這裡，再按 <b>Ctrl+V</b> 貼上參考照片（也可以拖進來）</div>`:''}`);
 }
 function refObj(kind, id){ return kind==='area' ? areaById(id) : kind==='frag' ? lyGet('frag', id) : locById(id); }
 function refPhotoAdd(kind, id, input){ const files = [...input.files]; input.value = ''; refPhotoFiles(kind, id, files); }
