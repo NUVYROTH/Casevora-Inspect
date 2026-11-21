@@ -1155,7 +1155,7 @@ const GUIDES = {
     gStep(18,'➡️ 動線與設施', gC(gR(`${gIn('物流（原料） ▾',1)}${gN(1)}${gB('✏️ 畫箭頭',{hl:1,n:2})}`)+gR(`<span class="gx-s" style="color:#e46c0a;font-weight:800">──➜ 人流</span><span class="gx-s" style="color:#ff0000;font-weight:800">──➜ 原料</span><span class="gx-s" style="color:#c00000;font-weight:800">╌╌➜ 成品</span><span class="gx-s" style="color:#7f0000;font-weight:800">┄┄➜ 廢棄物</span>`)+gR(`<span class="gx-s" style="color:#0070c0;font-weight:800">──➜ 氣流</span><span class="gx-s" style="color:#a6a6a6;font-weight:800">──➜ 水流</span>`)) + gC(gR(`<span class="gx-sw" style="background:#0d0d0d"></span><span class="gx-s">門</span><span class="gx-sw" style="background:#00b050"></span><span class="gx-s">冷氣</span><span class="gx-sw" style="background:#7030a0"></span><span class="gx-s">抽風口</span><span class="gx-sw" style="background:#ff77ff"></span><span class="gx-s">水源</span><span class="gx-sw" style="background:#984807"></span><span class="gx-s">水溝</span>`)+gR(`${gN(3)}<span class="gx-s">點圖例＝隱藏／顯示</span>`),'設施標記（粗線）'),
       `<p>編輯模式先選<b>種類</b>${gN(1)}，按「✏️ 畫箭頭」${gN(2)}：從起點開始，一個轉彎點點一下，最後一點會變成箭頭；在最後一點<b>再點一下</b>或按「完成這條」結束，可以接著畫下一條。</p><p>物流分三種：<b>原料實線、成品虛線、廢棄物點線</b>，起點標「原／成／廢」。畫反了，點箭頭按「⇄ 反轉方向」。</p><p>門、冷氣、抽風口、水源供應處、水溝／排水孔選好後按「✏️ 畫標記」，在平面圖上<b>拖曳</b>畫一段粗線：<b>直的門上下拖、橫的門左右拖</b>，接近水平或垂直會自動拉直。已經畫好的，點一下按「↻ 轉 90°」（或鍵盤 <b>R</b>）就能橫的變直的。</p><p>檢視模式點上方圖例${gN(3)}可以只看某幾種（例如只看人流），匯出圖片也只會有顯示中的。</p>`),
     gStep(19,'🐭 病媒防治', gC(gR(`${gIn('鼠板站（黏鼠板） ▾',1)}${gN(1)}${gB('放置',{hl:1,n:2})}`)+gR(`<img src="${pestIcon('light')}" alt="" style="width:22px;height:22px"><span class="gx-s">捕蟲燈 L01</span><img src="${pestIcon('board')}" alt="" style="width:22px;height:22px"><span class="gx-s">鼠板站 B01</span><img src="${pestIcon('bait')}" alt="" style="width:22px;height:22px"><span class="gx-s">鼠餌站 R01</span>`)) + gC(gR(gB('📗 匯出病媒防治設施清單（Excel）',{hl:1,n:3}))+gR(gB('＋ 在這裡建立缺失（病媒防治）',{dk:1,hl:1,n:4}))),
-      `<p>編輯模式先選<b>設施種類</b>${gN(1)}，按「放置」${gN(2)}後在平面圖上點一下；可以連續放，放完按「■ 停止放置」。</p><p>不在這三種的選<b>「其它（自己打字）」</b>：旁邊先打<b>名稱</b>（例：誘蚊燈）、選<b>圖示</b>（蟑螂、蒼蠅、蚊子、螞蟻、鳥、噴藥、捕鼠籠、黏蟲紙、？，或用上面三種的圖），之後放的每一個都<b>固定</b>是這個名稱和圖示，編號自動編 O01、O02…。</p><p>打過的名稱會<b>記住</b>，下次在種類選單「自己打過的」直接選；不要了按「✕ 移除」。放好後點圖示，右邊也可以再改名稱、換圖示（檢視、編輯模式都可以；移動、刪除要在編輯模式）。圖例和匯出圖片會列出你取的名稱。</p><p>圖示：<b>紫色的蟲＝捕蟲燈</b>、<b>黏鼠板＝鼠板站</b>、<b>老鼠＝鼠餌站</b>；編號自動編 L01／B01／R01，點圖示可以改編號、寫位置說明。</p><p>「📗 匯出設施清單」${gN(3)}給病媒防治廠商或稽核用；現場發現蟲鼠問題，點圖示按「＋ 建立缺失」${gN(4)}，類別預設 05 病媒防治。</p><p class="muted small">這幾張圖會露出工廠動線與設施位置，傳給外面的人前請先確認可以外流。</p>`)
+      `<p>編輯模式先選<b>設施種類</b>${gN(1)}，按「放置」${gN(2)}後在平面圖上點一下；可以連續放，放完按「■ 停止放置」。</p><p>不在這三種的選<b>「其它（自己打字）」</b>：旁邊先打<b>名稱</b>（例：誘蚊燈）、選<b>圖示</b>（蟑螂、蒼蠅、蚊子、螞蟻、鳥、噴藥、捕鼠籠、黏蟲紙、？，或用上面三種的圖），之後放的每一個都<b>固定</b>是這個名稱和圖示。編號<b>依圖示各自從 01 算</b>：蚊子 M01、M02…，蟑螂 C01…，蒼蠅 F01…，螞蟻 A01…，鳥 W01…，噴藥 S01…，捕鼠籠 K01…，黏蟲紙 G01…，？ O01…（用捕蟲燈／鼠板站／鼠餌站的圖則是 OL、OB、OR）。放好後換圖示，編號也會自動換成新圖示的下一號（自己改過編號的就照你打的）。</p><p>打過的名稱會<b>記住</b>，下次在種類選單「自己打過的」直接選；不要了按「✕ 移除」。放好後點圖示，右邊也可以再改名稱、換圖示（檢視、編輯模式都可以；移動、刪除要在編輯模式）。圖例和匯出圖片會列出你取的名稱。</p><p>圖示：<b>紫色的蟲＝捕蟲燈</b>、<b>黏鼠板＝鼠板站</b>、<b>老鼠＝鼠餌站</b>；編號自動編 L01／B01／R01，點圖示可以改編號、寫位置說明。</p><p>「📗 匯出設施清單」${gN(3)}給病媒防治廠商或稽核用；現場發現蟲鼠問題，點圖示按「＋ 建立缺失」${gN(4)}，類別預設 05 病媒防治。</p><p class="muted small">這幾張圖會露出工廠動線與設施位置，傳給外面的人前請先確認可以外流。</p>`)
   ]},
   trash: { t:'最近刪除使用說明', steps:() => [
     gStep(1,'刪除的案件會先放這裡', gC(gR(`<span class="gx-s" style="flex:1">QA-20261026-001 包裝區</span>${gB('編輯')}${gB('刪除',{rd:1,hl:1,n:1})}`),'缺失清單'),
@@ -2449,7 +2449,7 @@ function restore(input){
 const KEY_M = 'qaHygieneTracker_v1_map';
 function loadMap(){ let o = {}; try{ o = JSON.parse(localStorage.getItem(KEY_M)||'{}') || {}; }catch(e){}
   const A = k => Array.isArray(o[k]) ? o[k] : [];
-  return { maps:A('maps'), areas:A('areas'), locs:A('locs'), items:A('items'), zones:A('zones'), flows:A('flows'), marks:A('marks'), frags:A('frags'), pests:A('pests'), fragCfg:o.fragCfg||{}, colors:o.colors||{}, zoneAlpha:o.zoneAlpha, zoneMul:o.zoneMul, pestCustom:A('pestCustom') }; }
+  return { maps:A('maps'), areas:A('areas'), locs:A('locs'), items:A('items'), zones:A('zones'), flows:A('flows'), marks:A('marks'), frags:A('frags'), pests:A('pests'), fragCfg:o.fragCfg||{}, colors:o.colors||{}, zoneAlpha:o.zoneAlpha, zoneMul:o.zoneMul, pestCustom:A('pestCustom'), pestCodeV:o.pestCodeV }; }
 let MAPD = loadMap();
 function saveMap(){ try{ localStorage.setItem(KEY_M, JSON.stringify(MAPD)); return true; }catch(e){ say('廠區地圖存不進去，瀏覽器的儲存空間可能已滿。'); return false; } }
 const mapUid = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
@@ -2470,7 +2470,7 @@ function addAreaOpt(name){ if(name && !optFind('area', name)){ OPTS.area.push(na
 
 async function showMap(focus){
   if(dirty && !(await ask('有尚未儲存的修改，確定要離開嗎？'))) return;
-  cur = null; dirty = false; setSide('map');
+  cur = null; dirty = false; setSide('map'); pestRecodeOld();
   if(!MAPD.maps.find(m=>m.id===MV.mapId)) MV.mapId = MAPD.maps[0] ? MAPD.maps[0].id : '';
   MV.tool = ''; MV.sel = null; MV.poly = null;
   if(focus){ MV.layer = 'defect'; lyLS('mapLayer','defect'); const a = areaById(focus.areaId); if(a){ MV.mapId = a.mapId; MV.sel = focus.locId && locById(focus.locId) ? {t:'loc', id:focus.locId} : {t:'area', id:a.id}; } }
@@ -2995,7 +2995,7 @@ function mapImport(input){
 async function mapApply(map, images){
   const okPts = o => o && o.id && o.mapId && Array.isArray(o.pts) && o.pts.length>=2;
   const next = { maps:(map.maps||[]).filter(m=>m && m.id && m.img), areas:(map.areas||[]).filter(a=>a && a.id && typeof a.x==='number'), locs:(map.locs||[]).filter(l=>l && l.id && typeof l.x==='number'), items:(map.items||[]).filter(t=>t && t.id && t.areaId && t.name),
-    zones:(map.zones||[]).filter(okPts), flows:(map.flows||[]).filter(okPts), marks:(map.marks||[]).filter(okPts), frags:(map.frags||[]).filter(f=>f && f.id && f.mapId && typeof f.x==='number'), pests:(map.pests||[]).filter(f=>f && f.id && f.mapId && typeof f.x==='number'), fragCfg:map.fragCfg||{}, colors:map.colors||{}, zoneAlpha:map.zoneAlpha, zoneMul:map.zoneMul, pestCustom:(Array.isArray(map.pestCustom)?map.pestCustom:[]).filter(x=>x && x.name) };
+    zones:(map.zones||[]).filter(okPts), flows:(map.flows||[]).filter(okPts), marks:(map.marks||[]).filter(okPts), frags:(map.frags||[]).filter(f=>f && f.id && f.mapId && typeof f.x==='number'), pests:(map.pests||[]).filter(f=>f && f.id && f.mapId && typeof f.x==='number'), fragCfg:map.fragCfg||{}, colors:map.colors||{}, zoneAlpha:map.zoneAlpha, zoneMul:map.zoneMul, pestCustom:(Array.isArray(map.pestCustom)?map.pestCustom:[]).filter(x=>x && x.name), pestCodeV:map.pestCodeV };
   try{ const ids = [...next.maps.map(m=>m.img), ...next.areas.flatMap(a=>a.photos||[]), ...next.locs.flatMap(l=>l.photos||[]), ...next.frags.flatMap(f=>f.photos||[])]; for(const id of ids){ const u = images && images[id]; if(u && typeof u==='string' && u.startsWith('data:image/')) await phPut(id, u); } }
   catch(e){ say('平面圖存不進去，瀏覽器的儲存空間可能已滿，地圖沒有變動。'); return false; }
   const old = MAPD; MAPD = next; if(!saveMap()){ MAPD = old; return false; }
@@ -3666,7 +3666,14 @@ function pestPick(v){ if(v.startsWith('c:')){ const c = pestCustoms()[+v.slice(2
 async function pestForget(){ const n = (MV.pkn||'').trim(); if(!n) return; if(!(await ask(`從種類選單移除「${n}」？（地圖上已經放的不會被刪）`))) return;
   MAPD.pestCustom = (MAPD.pestCustom||[]).filter(c=>nkey(c.name)!==nkey(n)); (MAPD.pests||[]).filter(o=>o.kind==='other' && nkey(o.name)===nkey(n)).forEach(o=>o.name='其它病媒設施'); saveMap(); MV.pkn = ''; renderMap(); }
 const PICK = [['light',PK.light.t],['board',PK.board.t],['bait',PK.bait.t], ...Object.entries(PI).map(([k,v])=>[k,v.t])];
-function pestNextCode(k){ const P = PK[k].p, n = Math.max(0, ...(MAPD.pests||[]).filter(o=>o.kind===k).map(o=>parseInt(String(o.code||'').replace(/\D/g,''),10)||0)) + 1; return P+String(n).padStart(2,'0'); }
+/* 編號字首：三種固定設施 L／B／R；「其它」依圖示各自一組，換一個圖就從 01 重新算 */
+const PI_PRE = {roach:'C', fly:'F', mosq:'M', ant:'A', bird:'W', spray:'S', cage:'K', glue:'G', dot:'O', light:'OL', board:'OB', bait:'OR'};
+const pestPre = (k, ico) => k==='other' ? (PI_PRE[ico] || 'O') : PK[k].p;
+function pestNextCode(k, ico){ const P = pestPre(k, ico), re = new RegExp('^'+P+'(\\d+)$'), n = Math.max(0, ...(MAPD.pests||[]).map(o=>{ const m = String(o.code||'').match(re); return m ? +m[1] : 0; })) + 1; return P+String(n).padStart(2,'0'); }
+/* 舊資料：「其它」用 O 開頭但不是「？」圖示的，改成依圖示編號（只做一次） */
+function pestRecodeOld(){ if(MAPD.pestCodeV===2) return; let ch = false;
+  (MAPD.pests||[]).filter(o=>o.kind==='other' && /^O\d+$/.test(o.code||'') && o.ico && o.ico!=='dot').sort((a,b)=>(a.code||'').localeCompare(b.code||'',undefined,{numeric:true})).forEach(o=>{ o.code = pestNextCode('other', o.ico); ch = true; });
+  MAPD.pestCodeV = 2; saveMap(); }
 const ZK = { general:{t:'一般作業區', c:'#c4bb7c'}, semi:{t:'準清潔區', c:'#b9cde5'}, clean:{t:'清潔區', c:'#e6b9b8'} };
 const FK = { people:{t:'人流', c:'#e46c0a'}, raw:{t:'物流（原料）', c:'#ff0000', tag:'原'}, prod:{t:'物流（成品）', c:'#c00000', dash:'dash', tag:'成'}, waste:{t:'物流（廢棄物）', c:'#7f0000', dash:'dot', tag:'廢'}, air:{t:'氣流', c:'#0070c0'}, water:{t:'水流', c:'#a6a6a6'} };
 const MK = { door:{t:'門', c:'#0d0d0d'}, ac:{t:'冷氣', c:'#00b050'}, exhaust:{t:'抽風口', c:'#7030a0'}, watersrc:{t:'水源供應處', c:'#ff77ff'}, drain:{t:'水溝／排水孔', c:'#984807'} };
@@ -3760,7 +3767,7 @@ function lyTipHTML(){
   if(T==='zrect') return `選好上方「分區種類」（目前：<b>${ZK[MV.zk].t}</b>），在平面圖上「按住拖曳」畫出範圍。`;
   if(T==='fline') return `畫「<b>${FK[MV.fk].t}</b>」：從起點開始「一個轉彎點一下」，最後一點會變成箭頭；在最後一點<b>再點一下</b>或按「完成」結束。已點 <span id="lyCnt">${n}</span> 點　<button class="primary" onclick="lyPolyFinish()">✔ 完成這條</button> <button onclick="lyUndo()">↶ 退一步</button> <button onclick="lyDrawToggle()">■ 停止畫</button>`;
   if(T==='mark') return `畫「<b>${MK[MV.fk].t}</b>」：在平面圖上「按住拖曳」畫一段粗線（例如門口那一段牆）：<b>直的門就上下拖、橫的門就左右拖</b>，接近水平或垂直會自動拉直（按住 Alt 不拉直）；只點一下會放一小段橫的，點選後按「↻ 轉 90°」或 R 變直的。可以連續畫，畫完按「■ 停止畫」。`;
-  if(T==='pest') return `在平面圖上「點一下」放「<b>${MV.pk==='other'?esc(MV.pkn||'其它病媒設施'):PK[MV.pk].t}</b>」，編號自動編 ${PK[MV.pk].p}01、${PK[MV.pk].p}02…；可以連續放，放完按「■ 停止放置」。換種類請改上方的下拉選單。`;
+  if(T==='pest') return `在平面圖上「點一下」放「<b>${MV.pk==='other'?esc(MV.pkn||'其它病媒設施'):PK[MV.pk].t}</b>」，編號自動編 ${pestPre(MV.pk, MV.pki||'dot')}01、${pestPre(MV.pk, MV.pki||'dot')}02…；可以連續放，放完按「■ 停止放置」。換種類請改上方的下拉選單。`;
   if(T==='frag') return `在「<b>${FT[MV.ftk]?FT[MV.ftk].t:'其它'}</b>」所在的位置「點一下」就放好，編號自動編 G01、G02…；名稱先用「${FT[MV.ftk]?(FT[MV.ftk].name||FT[MV.ftk].t):'其它易碎品'}」，之後在右邊改。可以連續放，放完按「■ 停止放置」；換種類請改上方的下拉選單。`;
   if(MV.mode==='edit') return (MV.layer==='zone' ? (MV_LOCK?'🔒 分區已鎖定：分區不會被拖動。':'編輯模式：拖曳可移動分區；點選後拖白色方塊改角、拖「＋」加角，右邊可改種類或刪除。')
     : MV.layer==='pest' ? '編輯模式：拖曳可移動設施；點選後在右邊改編號、位置說明、「其它」的名稱和圖示，或刪除。不在三種裡的選「其它（自己打字）」，先打名稱、選圖示再放。'
@@ -3878,7 +3885,7 @@ function layerBind(){
       const len = Math.hypot(p.x-d.s.x, p.y-d.s.y), pts = len<0.01 ? [[clamp01(p.x-0.015),p.y],[clamp01(p.x+0.015),p.y]] : [[d.s.x,d.s.y],[p.x,p.y]];
       lyAdd('mark', {kind:MV.fk, note:'', pts}, false); return;
     }
-    if(d.k==='pest'){ if(d.moved) return; lyAdd('pest', Object.assign({kind:MV.pk, code:pestNextCode(MV.pk), note:'', x:p.x, y:p.y}, MV.pk==='other' ? (pestRemember(MV.pkn, MV.pki||'dot'), {name:(MV.pkn||'').trim()||'其它病媒設施', ico:MV.pki||'dot'}) : {}), false); return; }
+    if(d.k==='pest'){ if(d.moved) return; lyAdd('pest', Object.assign({kind:MV.pk, code:pestNextCode(MV.pk, MV.pki||'dot'), note:'', x:p.x, y:p.y}, MV.pk==='other' ? (pestRemember(MV.pkn, MV.pki||'dot'), {name:(MV.pkn||'').trim()||'其它病媒設施', ico:MV.pki||'dot'}) : {}), false); return; }
     if(d.k==='place'){
       /* 跟病媒一樣：點一下就放好，名稱先用種類，之後在右邊改 */
       if(d.moved) return;
@@ -4139,10 +4146,13 @@ function pestSave(id){
   const o = lyGet('pest', id), code = $('#lpCode').value.trim();
   if(!code){ say('編號不能空白。'); return; }
   if((MAPD.pests||[]).some(x=>x.id!==id && x.code===code)){ say('已經有編號「'+code+'」了。'); return; }
-  const kind = $('#lpKind').value;
+  const kind = $('#lpKind').value, b = document.querySelector('.pkico button.on'), ico = kind==='other' ? (b ? b.dataset.k : (o.ico||'dot')) : '';
+  const was = pestPre(o.kind, o.ico||'dot'), now = pestPre(kind, ico||'dot'), keep = code!==o.code;   /* 自己改過編號就照你打的 */
   Object.assign(o, {kind, code, note:$('#lpNote').value.trim()});
-  if(kind==='other'){ o.name = $('#lpName').value.trim() || '其它病媒設施'; const b = document.querySelector('.pkico button.on'); o.ico = b ? b.dataset.k : (o.ico||'dot'); pestRemember(o.name, o.ico); } else { delete o.name; delete o.ico; }
-  saveMap(); renderMap(); flash('已儲存');
+  if(kind==='other'){ o.name = $('#lpName').value.trim() || '其它病媒設施'; o.ico = ico; pestRemember(o.name, o.ico); } else { delete o.name; delete o.ico; }
+  let msg = '已儲存';
+  if(was!==now && !keep){ o.code = ''; o.code = pestNextCode(kind, ico); msg = '已儲存，換了圖示，編號改成 '+o.code; }
+  saveMap(); renderMap(); flash(msg);
 }
 function pestDefect(id){ const o = lyGet('pest', id); if(!o) return; const a = areaAtMap(o, o.mapId);
   openRecord(null, {area:a?a.name:'', areaId:a?a.id:'', ownerDept:a?(a.unit||''):'', defType:'05', rawDesc:`${pestLabel(o)}${o.note?'（'+o.note+'）':''}：`}); }
@@ -4405,7 +4415,7 @@ function mapKeyPaste(){
   MAP_LASTPASTE = {m: MAP_MOUSE ? {x:MAP_MOUSE.x, y:MAP_MOUSE.y} : {x:-1, y:-1}, at:{x:cx+dx, y:cy+dy}};
   o.id = mapUid(c.t.slice(0,2)); o.mapId = MV.mapId;
   if(c.t==='frag') o.code = fragNextCode();
-  if(c.t==='pest') o.code = pestNextCode(o.kind);
+  if(c.t==='pest') o.code = pestNextCode(o.kind, o.ico);
   MAPD[LY_ARR[c.t]] = MAPD[LY_ARR[c.t]] || []; MAPD[LY_ARR[c.t]].push(o);
   if(!saveMap()){ MAPD[LY_ARR[c.t]].pop(); return; }
   MAP_UNDO.push({k:'add', t:c.t, id:o.id}); if(MAP_UNDO.length>30) MAP_UNDO.shift();
