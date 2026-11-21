@@ -3760,10 +3760,10 @@ function lyTipHTML(){
   if(T==='zrect') return `選好上方「分區種類」（目前：<b>${ZK[MV.zk].t}</b>），在平面圖上「按住拖曳」畫出範圍。`;
   if(T==='fline') return `畫「<b>${FK[MV.fk].t}</b>」：從起點開始「一個轉彎點一下」，最後一點會變成箭頭；在最後一點<b>再點一下</b>或按「完成」結束。已點 <span id="lyCnt">${n}</span> 點　<button class="primary" onclick="lyPolyFinish()">✔ 完成這條</button> <button onclick="lyUndo()">↶ 退一步</button> <button onclick="lyDrawToggle()">■ 停止畫</button>`;
   if(T==='mark') return `畫「<b>${MK[MV.fk].t}</b>」：在平面圖上「按住拖曳」畫一段粗線（例如門口那一段牆）：<b>直的門就上下拖、橫的門就左右拖</b>，接近水平或垂直會自動拉直（按住 Alt 不拉直）；只點一下會放一小段橫的，點選後按「↻ 轉 90°」或 R 變直的。可以連續畫，畫完按「■ 停止畫」。`;
-  if(T==='pest') return `在平面圖上「點一下」放「<b>${PK[MV.pk].t}</b>」，編號自動編 ${PK[MV.pk].p}01、${PK[MV.pk].p}02…；可以連續放，放完按「■ 停止放置」。換種類請改上方的下拉選單。`;
+  if(T==='pest') return `在平面圖上「點一下」放「<b>${MV.pk==='other'?esc(MV.pkn||'其它病媒設施'):PK[MV.pk].t}</b>」，編號自動編 ${PK[MV.pk].p}01、${PK[MV.pk].p}02…；可以連續放，放完按「■ 停止放置」。換種類請改上方的下拉選單。`;
   if(T==='frag') return `在「<b>${FT[MV.ftk]?FT[MV.ftk].t:'其它'}</b>」所在的位置「點一下」就放好，編號自動編 G01、G02…；名稱先用「${FT[MV.ftk]?(FT[MV.ftk].name||FT[MV.ftk].t):'其它易碎品'}」，之後在右邊改。可以連續放，放完按「■ 停止放置」；換種類請改上方的下拉選單。`;
   if(MV.mode==='edit') return (MV.layer==='zone' ? (MV_LOCK?'🔒 分區已鎖定：分區不會被拖動。':'編輯模式：拖曳可移動分區；點選後拖白色方塊改角、拖「＋」加角，右邊可改種類或刪除。')
-    : MV.layer==='pest' ? '編輯模式：拖曳可移動捕蟲燈、鼠板站、鼠餌站；點選後在右邊改編號、位置說明或刪除。'
+    : MV.layer==='pest' ? '編輯模式：拖曳可移動設施；點選後在右邊改編號、位置說明、「其它」的名稱和圖示，或刪除。不在三種裡的選「其它（自己打字）」，先打名稱、選圖示再放。'
     : MV.layer==='flow' ? '編輯模式：拖曳可移動箭頭或標記；點選後拖白色方塊改轉彎點、拖「＋」多加轉彎點，右邊可改種類、反轉方向或刪除。'
     : '編輯模式：拖曳可移動易碎品標記；點選後在右邊修改名稱、材質、數量與檢查頻率。') + '　⌨️ 快捷鍵：Delete 刪除、Ctrl+C／Ctrl+V 複製貼上、Ctrl+Z 復原、Esc 取消。';
   if(MV.layer==='pest') return '檢視模式：點圖示看說明；發現蟲鼠問題可以在右邊直接「＋ 建立缺失」。';
