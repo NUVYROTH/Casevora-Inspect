@@ -1397,6 +1397,9 @@ function openRecord(id, preset){
   const r = id ? records.find(x=>x.id===id) : blankRecord();
   cur = JSON.parse(JSON.stringify(r));
   cur = Object.assign(blankRecord(), migrate(cur), preset||{});
+  /* 新增時：沒指定負責單位就依缺失區域帶入；改善執行單位／執行人沒填就先帶負責單位／負責人（都可以自己改） */
+  if(!cur.closed){ if(!cur.ownerDept && cur.area){ const d = areaDeptDefault(cur.area); if(d) cur.ownerDept = d; }
+    if(!cur.improveDept && cur.ownerDept) cur.improveDept = cur.ownerDept; if(!cur.improveNote && cur.ownerNote) cur.improveNote = cur.ownerNote; }
   dirty = false; showDlErr = false; closeBasisUI = 'pass';
   renderDetail();
   window.scrollTo(0,0);
@@ -1668,8 +1671,12 @@ function onField(e){
   const el = e.target; const f = el.dataset && el.dataset.f;
   if(!f || !cur) return;
   if(f==='ownerDept' && cur.closed){ cur.ownerDept = el.value; clearTimeout(OWNER_T); if(e.type==='change') ownerPatch(); else OWNER_T = setTimeout(ownerPatch, 600); return; }
-  const oldFound = cur.foundDate;
+  const oldFound = cur.foundDate, oldV = cur[f];
   cur[f] = el.type==='checkbox' ? el.checked : el.value;
+  /* 預設帶入：缺失區域 → 負責單位；負責單位 → 改善執行單位；負責人 → 執行人。下面欄位自己改過（跟上面不一樣）就不再跟著變 */
+  if(f==='area'){ const d0 = areaDeptDefault(oldV), d1 = areaDeptDefault(cur.area); if(d1 && (!cur.ownerDept || cur.ownerDept===d0)) followSet('ownerDept', d1); }
+  if(f==='ownerDept') followTo('improveDept', oldV, cur.ownerDept);
+  if(f==='ownerNote') followTo('improveNote', oldV, cur.ownerNote);
   if(f==='foundDate' && cur.foundDate && oldFound && dlIsDefault(cur, oldFound)){
     cur.deadline = addDays(cur.foundDate, dlDays(cur.category));
     document.querySelector('[data-f=deadline]').value = cur.deadline;
@@ -1683,6 +1690,14 @@ function onField(e){
   dirty = true;
   refresh();
 }
+/* 缺失區域的預設負責單位：廠區地圖上這一區設定的負責單位；沒有的話用這一區最近一筆案件的負責單位 */
+function areaDeptDefault(area){ const k = nkey(area); if(!k) return '';
+  const a = areaByName(area); if(a && a.unit) return a.unit;
+  const r = live().filter(x=>x.id!==(cur&&cur.id) && nkey(x.area)===k && x.ownerDept && x.ownerDept!=='其它').sort((x,y)=>(y.foundDate||'').localeCompare(x.foundDate||''))[0];
+  return r ? r.ownerDept : ''; }
+function followSet(f, v){ const old = cur[f]; cur[f] = v; const el = document.querySelector(`[data-f="${f}"]`); if(el){ el.value = v; const box = el.closest('.combo'); if(box) comboSync(box); }
+  if(f==='ownerDept') followTo('improveDept', old, v); }
+function followTo(f, oldSrc, newSrc){ if(!cur[f] || cur[f]===oldSrc) followSet(f, newSrc||''); }
 window.addEventListener('beforeunload', e => { if(dirty){ e.preventDefault(); e.returnValue=''; } });
 
 /* ---------- 照片 ---------- */
