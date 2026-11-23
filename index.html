@@ -1104,7 +1104,7 @@ const GUIDES = {
     gStep(5,'結案確認', gC(gR(gIn('結案確認人員 品管人員'))+gR(`<span class="gx-ck">✓</span><span class="gx-s">已確認改善完成、符合結案條件</span>`)+gR(gB('確認結案',{ok:1,hl:1,n:1})),'5 結案確認（品管）'),
       `<p>結案條件都符合後，由品管人員填姓名、勾選確認，按「確認結案」${gN(1)}。結案後資料鎖定，需要修改可以「撤銷結案」。</p><p>結案後還是可以補兩欄，選好就自動存：<b>細部位置（廠區地圖）</b>、<b>負責單位</b>（例：改成生產課／打漿組）。</p>`),
     gStep(6,'查找案件', gC(gR(`${gN(1)}${gTag('未結案','dk')}${gTag('逾期')}${gTag('已結案')}${gTag('全部')}`)+gR(`${gN(2)}${gIn('🔍 10/26／包裝區／作業員 A／編號',1)}`)+gR(`${gIn('全部類別 ▾')}${gIn('2026 年 ▾')}${gIn('10 月 ▾')}`)),
-      `<p class="muted small">清單上方五張卡（本月新增、未結案、今年結案率、<b>本月結案率</b>（含平均結案天數、比上月同期）、最多的缺失類別）和右邊「處理狀態／缺失類別前 3 名／需要注意」可以快速看全貌；要看<b>比上期幾 %</b>，到「📊 統計分析」。</p><p>用分頁${gN(1)}看未結案、逾期、待結案確認、已結案。</p><p>搜尋欄${gN(2)}可以打<b>日期（例：10/26）、缺失區域、負責人員、編號</b>；也能依類別、年份、月份、<b>負責單位</b>篩選。</p><p>「全部負責單位」下拉選單會列出常用選項和案件裡出現過的單位；一件寫兩個單位（打漿組、蒸煮組）選哪一個都找得到，「生產課／打漿組」選「生產課」或「打漿組」都找得到。</p>`),
+      `<p class="muted small">清單上方五張卡（本月新增、未結案、今年結案率、<b>本月結案率</b>（含平均結案天數）、最多的缺失類別），卡片下面的 <b>▲▼</b> 是跟上一次比：本月新增比<b>上月同期</b>、未結案比<b>上月同一天當時</b>、本月結案率比上月同期、今年結案率比<b>去年同期</b>（紅＝變差、綠＝變好）和右邊「處理狀態／缺失類別前 3 名／需要注意」可以快速看全貌；要看<b>比上期幾 %</b>，到「📊 統計分析」。</p><p>用分頁${gN(1)}看未結案、逾期、待結案確認、已結案。</p><p>搜尋欄${gN(2)}可以打<b>日期（例：10/26）、缺失區域、負責人員、編號</b>；也能依類別、年份、月份、<b>負責單位</b>篩選。</p><p>「全部負責單位」下拉選單會列出常用選項和案件裡出現過的單位；一件寫兩個單位（打漿組、蒸煮組）選哪一個都找得到，「生產課／打漿組」選「生產課」或「打漿組」都找得到。</p>`),
     gStep(7,'報表與匯出', gC(gR(`${gB('匯出報表（Excel）',{hl:1,n:1})}`)+gR(`${gB('📸 改善前後報告',{n:2})}`)+gR(`${gB('📗 改善通知單 Excel',{hl:1,n:3})}`)),
       `<p>「匯出報表」${gN(1)}：選年月、狀態，公司表單或完整資料。</p><p>「改善前後報告」${gN(2)}會下載一個網頁檔，用瀏覽器打開後列印或存成 PDF；「改善通知單 Excel」${gN(3)}照公司通知單格式含照片。有勾選案件時只做勾選的；沒勾選時，依<b>目前的分頁和篩選</b>（例：只選「打漿組」，就是打漿組的報告，可以直接交給該單位）。</p>`),
     gStep(8,'備份（每兩週到一個月）', gC(gR(`${gB('下載備份',{dk:1,hl:1,n:1})}${gB('從備份還原',{n:2})}`)) + `<div class="gx-warn">⚠ 清除瀏覽資料、無痕視窗 → 資料會不見</div>`,
@@ -1209,10 +1209,16 @@ function kpiHTML(){
   const mRate = (st, en) => { const rs = L.filter(r=>(r.foundDate||'')>=st && (r.foundDate||'')<=en), c = rs.filter(r=>r.closed && r.closedDate && r.closedDate<=en).length; return {n:rs.length, c, p: rs.length ? Math.round(c/rs.length*100) : null}; };
   const mNow = mRate(thisM+'-01', t), lmEnd = (()=>{ const e = addDays(lm+'-01', daysBetween(thisM+'-01', t)); const last = lm+'-'+String(lastDay(+lm.slice(0,4), +lm.slice(5,7))).padStart(2,'0'); return e < last ? e : last; })(), mPrev = mRate(lm+'-01', lmEnd);
   const mDays = avg1(L.filter(r=>ym(r.foundDate)===thisM).map(closeDays).filter(d=>d!=null));
+  /* 跟上一次比：本月新增 vs 上月同期；未結案 vs 上月同一天當時；今年結案率 vs 去年同期 */
+  const nLMs = L.filter(r=>(r.foundDate||'')>=lm+'-01' && (r.foundDate||'')<=lmEnd).length;
+  const openAt = d => L.filter(r=>r.foundDate && r.foundDate<=d && !(r.closed && r.closedDate && r.closedDate<=d)).length, openPrev = openAt(lmEnd);
+  const py = String(+yr-1), pyEnd = py+t.slice(4), PY = L.filter(r=>(r.foundDate||'')>=py+'-01-01' && (r.foundDate||'')<=pyEnd), pyRate = PY.length ? Math.round(PY.filter(r=>r.closed && r.closedDate && r.closedDate<=pyEnd).length/PY.length*100) : null;
+  const yRate = Y.length ? Math.round(yClosed/Y.length*100) : null;
+  const cmpLine = (h, lab) => h ? `<br>${lab} ${h}` : '';
   return `<div class="kpis">
-    <div class="kpi"><span class="kic" aria-hidden="true">${KIC.doc}</span><div class="l">本月新增</div><div class="n">${nM}<small>件</small></div><div class="d">上月 ${nLM} 件</div></div>
-    <div class="kpi warn"><span class="kic kw" aria-hidden="true">${KIC.clock}</span><div class="l">未結案</div><div class="n">${open.length}<small>件</small></div><div class="d">${open.length?'其中逾期 '+over.length+' 件':'目前沒有未結案'}</div></div>
-    <div class="kpi ok"><span class="kic kok" aria-hidden="true">${KIC.okc}</span><div class="l">今年結案率</div><div class="n">${Y.length?Math.round(yClosed/Y.length*100)+'<small>%</small>':'—'}</div><div class="d">${Y.length?'今年 '+Y.length+' 件中結案 '+yClosed+' 件':'今年還沒有案件'}</div></div>
+    <div class="kpi"><span class="kic" aria-hidden="true">${KIC.doc}</span><div class="l">本月新增</div><div class="n">${nM}<small>件</small></div><div class="d">上月全月 ${nLM} 件${cmpLine(chgHTML(nM, nLMs), `比上月同期（${nLMs} 件）`)}</div></div>
+    <div class="kpi warn"><span class="kic kw" aria-hidden="true">${KIC.clock}</span><div class="l">未結案</div><div class="n">${open.length}<small>件</small></div><div class="d">${open.length?'其中逾期 '+over.length+' 件':'目前沒有未結案'}${cmpLine(chgHTML(open.length, openPrev), `比上月同一天（${openPrev} 件）`)}</div></div>
+    <div class="kpi ok"><span class="kic kok" aria-hidden="true">${KIC.okc}</span><div class="l">今年結案率</div><div class="n">${Y.length?Math.round(yClosed/Y.length*100)+'<small>%</small>':'—'}</div><div class="d">${Y.length?'今年 '+Y.length+' 件中結案 '+yClosed+' 件':'今年還沒有案件'}${yRate!=null && pyRate!=null ? cmpLine(ptHTML(yRate, pyRate), `比去年同期（${pyRate}%）`) : ''}</div></div>
     <div class="kpi ok"><span class="kic kok" aria-hidden="true">${KIC.okc}</span><div class="l">本月結案率</div><div class="n">${mNow.p==null?'—':mNow.p+'<small>%</small>'}</div><div class="d">${mNow.n?`本月 ${mNow.n} 件中結案 ${mNow.c} 件${mDays!=null?`・平均 ${mDays} 天`:''}`:'本月還沒有案件'}${mNow.p!=null && mPrev.p!=null?`<br>比上月同期 ${ptHTML(mNow.p, mPrev.p)}`:''}</div></div>
     <div class="kpi info"><span class="kic kin" aria-hidden="true">${KIC.tag}</span><div class="l">最多的缺失類別</div><div class="n nt">${top?esc(typeName(top[0])):'—'}</div><div class="d">${top?'今年 '+top[1]+' 件':'今年還沒有案件'}</div></div>
   </div>`;
