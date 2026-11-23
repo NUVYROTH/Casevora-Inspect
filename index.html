@@ -1090,7 +1090,7 @@ const gStep = (n, t, mock, body) => `<div class="mg-step"><div class="gx">${mock
 const GUIDES = {
   record: { t:'缺失單使用說明（新增／編輯衛生缺失）', steps:() => [...GUIDES.list.steps().slice(0,5),
     gStep(6,'返回、存檔', gC(gR(`${gB('← 回廠區地圖',{hl:1,n:1})}`)+gR(`${gB('儲存',{dk:1,n:2})}${gB('返回清單')}`)),
-      `<p>左上角的返回按鈕${gN(1)}會依你從哪裡點進來而不同：清單、廠區地圖、統計分析或稽核紀錄；存檔、結案後也會回到原本的畫面。</p><p>改完記得按最下面的「儲存」${gN(2)}；還沒存就離開會先問你。</p><p class="muted small">結案後「結案天數」會自動算（發現日期到結案日期，不含六日），統計分析頁可以看各負責單位、各區域的平均天數。</p>`)
+      `<p>左上角的返回按鈕${gN(1)}會依你從哪裡點進來而不同：清單、廠區地圖、統計分析或稽核紀錄；存檔、結案後也會回到原本的畫面。</p><p>改完記得按最下面的「儲存」${gN(2)}；還沒存就離開會先問你。</p><p class="muted small">複查通過後會自動算「改善天數」（發現日期到複查通過日，不含六日），統計分析頁可以看各負責單位、各區域的平均天數。</p>`)
   ]},
   list: { t:'缺失清單使用說明', steps:() => [
     gStep(1,'新增衛生缺失', gC(gR(`<b style="flex:1">缺失清單</b>${gB('＋ 新增衛生缺失',{dk:1,hl:1,n:1})}`)) + gC(gR(`${gIn('發現日期 2026/10/26')}${gIn('缺失區域 ▾',1)}`)+gR(gIn('缺失描述：包裝區地面積水…'))+gR(`${gIn('缺失類別 ▾')}${gN(2)}${gIn('缺失等級 ▾',1)}`)),
@@ -1104,7 +1104,7 @@ const GUIDES = {
     gStep(5,'結案確認', gC(gR(gIn('結案確認人員 品管人員'))+gR(`<span class="gx-ck">✓</span><span class="gx-s">已確認改善完成、符合結案條件</span>`)+gR(gB('確認結案',{ok:1,hl:1,n:1})),'5 結案確認（品管）'),
       `<p>結案條件都符合後，由品管人員填姓名、勾選確認，按「確認結案」${gN(1)}。結案後資料鎖定，需要修改可以「撤銷結案」。</p><p>結案後還是可以補兩欄，選好就自動存：<b>細部位置（廠區地圖）</b>、<b>負責單位</b>（例：改成生產課／打漿組）。</p>`),
     gStep(6,'查找案件', gC(gR(`${gN(1)}${gTag('未結案','dk')}${gTag('逾期')}${gTag('已結案')}${gTag('全部')}`)+gR(`${gN(2)}${gIn('🔍 10/26／包裝區／作業員 A／編號',1)}`)+gR(`${gIn('全部類別 ▾')}${gIn('2026 年 ▾')}${gIn('10 月 ▾')}`)),
-      `<p class="muted small">清單上方五張卡（本月新增、未結案、今年結案率、<b>本月結案率</b>（含平均結案天數）、最多的缺失類別），卡片下面的 <b>▲▼</b> 是跟上一次比：本月新增比<b>上月同期</b>、未結案比<b>上月同一天當時</b>、本月結案率比上月同期、今年結案率比<b>去年同期</b>（紅＝變差、綠＝變好）和右邊「處理狀態／缺失類別前 3 名／需要注意」可以快速看全貌；要看<b>比上期幾 %</b>，到「📊 統計分析」。</p><p>用分頁${gN(1)}看未結案、逾期、待結案確認、已結案。</p><p>搜尋欄${gN(2)}可以打<b>日期（例：10/26）、缺失區域、負責人員、編號</b>；也能依類別、年份、月份、<b>負責單位</b>篩選。</p><p>「全部負責單位」下拉選單會列出常用選項和案件裡出現過的單位；一件寫兩個單位（打漿組、蒸煮組）選哪一個都找得到，「生產課／打漿組」選「生產課」或「打漿組」都找得到。</p>`),
+      `<p class="muted small">清單上方五張卡（本月新增、未結案、今年結案率、<b>本月結案率</b>（含到複查通過的平均天數）、最多的缺失類別），卡片下面的 <b>▲▼</b> 是跟上一次比：本月新增比<b>上月同期</b>、未結案比<b>上月同一天當時</b>、本月結案率比上月同期、今年結案率比<b>去年同期</b>（紅＝變差、綠＝變好）和右邊「處理狀態／缺失類別前 3 名／需要注意」可以快速看全貌；要看<b>比上期幾 %</b>，到「📊 統計分析」。</p><p>用分頁${gN(1)}看未結案、逾期、待結案確認、已結案。</p><p>搜尋欄${gN(2)}可以打<b>日期（例：10/26）、缺失區域、負責人員、編號</b>；也能依類別、年份、月份、<b>負責單位</b>篩選。</p><p>「全部負責單位」下拉選單會列出常用選項和案件裡出現過的單位；一件寫兩個單位（打漿組、蒸煮組）選哪一個都找得到，「生產課／打漿組」選「生產課」或「打漿組」都找得到。</p>`),
     gStep(7,'報表與匯出', gC(gR(`${gB('匯出報表（Excel）',{hl:1,n:1})}`)+gR(`${gB('📸 改善前後報告',{n:2})}`)+gR(`${gB('📗 改善通知單 Excel',{hl:1,n:3})}`)),
       `<p>「匯出報表」${gN(1)}：選年月、狀態，公司表單或完整資料。</p><p>「改善前後報告」${gN(2)}會下載一個網頁檔，用瀏覽器打開後列印或存成 PDF；「改善通知單 Excel」${gN(3)}照公司通知單格式含照片。有勾選案件時只做勾選的；沒勾選時，依<b>目前的分頁和篩選</b>（例：只選「打漿組」，就是打漿組的報告，可以直接交給該單位）。</p>`),
     gStep(8,'備份（每兩週到一個月）', gC(gR(`${gB('下載備份',{dk:1,hl:1,n:1})}${gB('從備份還原',{n:2})}`)) + `<div class="gx-warn">⚠ 清除瀏覽資料、無痕視窗 → 資料會不見</div>`,
@@ -1125,8 +1125,8 @@ const GUIDES = {
       `<p>統計頁最下面「📍 缺失區域分析」看上方選的年份（依發現日期）：</p><p><b>圓餅圖</b>${gN(1)}：今年各缺失區域佔多少，右邊列出件數、佔比和<b>比去年同期 ▲▼ %</b>；前 5 名各一塊，其餘合成灰色的「其它區域」。<b>點一塊或右邊清單</b>就列出那個區域的案件。</p><p><b>曲線圖</b>${gN(2)}：各缺失區域每個月幾件，看哪一區最近變多或變少；滑過看數字、點圓點看那個月的案件、點圖例只看一條線。</p><p>要看<b>各區域的年、季、月分析、跟上期比、下載 Excel／Word</b>，按右上角「🗺️ 到廠區地圖看各區細部分析」（見廠區地圖使用說明第 12 步）。</p><p class="muted small">同一個區域在圓餅圖和曲線圖是同一個顏色。區域名稱寫法不同（例：1F倉儲區、1樓倉儲區）會被當成兩區，可以到「常用選項」合併。</p>`),
     gStep(7,'▲▼ 跟上期比幾 %（給主管看）', gC(gR(`<span class="gx-k">59<small>新增<br><b style="color:#b42318">▲ +20%</b></small></span>${gN(1)}<span class="gx-k ok">26<small>結案<br><b style="color:#167a3e">▲ +8%</b></small></span>`)+gR(`<span class="gx-s" style="width:54px">包裝區</span><span class="gx-bar" style="width:55%"></span><b style="color:#b42318;font-size:11px">▲ +35%</b>${gN(2)}`)+gR(`<span class="gx-s" style="width:54px">冷藏庫</span><span class="gx-bar" style="width:25%"></span><b style="color:#167a3e;font-size:11px">▼ −40%</b>`)),
       `<p>統計頁的數字、長條、表格、圓餅圖、折線圖旁邊都有 <b>▲▼ 百分比</b>，主管一眼就知道變多還是變少：</p><p><b style="color:#b42318">紅色＝變差</b>（缺失、逾期、尚未結案變多，或結案變少）；<b style="color:#167a3e">綠色＝變好</b>。滑鼠移上去看上期是幾件。上期是 0 件時顯示「新增」；結案率用「百分點」（例：60% → 65% ＝ ▲ +5 個百分點）。</p><p><b>跟誰比？</b>四個數字${gN(1)}、區域長條${gN(2)}、類別和等級表：跟<b>上月／上季／去年</b>比；本期還沒過完時，上期<b>只算到同一天</b>（例：11/1～11/19 比 10/1～10/19），不會拿半個月比整個月。右邊三張卡、📈 每月趨勢、📍 缺失區域分析：比<b>去年同期</b>。舊的趨勢圖下方一排是「比前一期」；新折線圖滑過某個月，數字旁的 % 是比前一個月。</p><p class="muted small">Word 報表也會帶出這些百分比。</p>`),
-    gStep(8,'⏱ 結案率與結案天數（不含六日）', gC(`<div style="font-size:11px;width:100%"><div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:2px;background:#f3ece0;padding:3px 4px;border-radius:4px;font-weight:700"><span>負責單位</span><span>一般</span><span>限期改善</span><span>重大</span></div><div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:2px;padding:3px 4px"><span>打漿組</span><span>2 天<br><b style="color:#167a3e">▼ −20%</b></span><span>12 天<br><b style="color:#b42318">▲ +9%</b></span><span>1 天</span></div></div>${gN(1)}`,'⏱ 各負責單位平均結案天數'),
-      `<p>統計頁「⏱ 結案率與結案天數」${gN(1)}看本期發現、已結案的案件：</p><p><b>結案率</b>＝本期發現的案件中已結案的比例；<b>結案天數</b>＝發現日期到結案日期，<b>只算週一～週五</b>（週五發現、下週一結案＝1 天；國定假日沒有另外扣）。</p><p>上面一張表是全部的結案率、平均天數（一般缺失、限期改善、重大缺失分開）；下面是<b>各負責單位</b>、<b>各缺失區域</b>的平均天數，每一格寫幾天、幾件，下面的 ▲▼ % 是比上期：天數<b style="color:#b42318">變多＝紅（變慢）</b>、<b style="color:#167a3e">變少＝綠（變快）</b>。</p><p>「下載 Word 報表」會把這幾張表一起放進月報／季報／年報。缺失清單上方的<b>本月結案率</b>卡片也會顯示本月平均天數和比上月同期。</p>`)
+    gStep(8,'⏱ 結案率與改善天數（不含六日）', gC(`<div style="font-size:11px;width:100%"><div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:2px;background:#f3ece0;padding:3px 4px;border-radius:4px;font-weight:700"><span>負責單位</span><span>一般</span><span>限期改善</span><span>重大</span></div><div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:2px;padding:3px 4px"><span>打漿組</span><span>2 天<br><b style="color:#167a3e">▼ −20%</b></span><span>12 天<br><b style="color:#b42318">▲ +9%</b></span><span>1 天</span></div></div>${gN(1)}`,'⏱ 各負責單位平均天數'),
+      `<p>統計頁「⏱ 結案率與改善天數」${gN(1)}：</p><p><b>結案率</b>＝本期發現的案件中已結案的比例；<b>天數</b>＝發現日期到<b>複查通過日</b>（沒有複查紀錄、以其它依據結案的用結案日），<b>只算週一～週五</b>（週五發現、下週一複查通過＝1 天；國定假日沒有另外扣）。只算本期發現、已複查通過的案件。</p><p>上面一張表是全部的結案率、平均天數（一般缺失、限期改善、重大缺失分開）；下面是<b>各負責單位</b>、<b>各缺失區域</b>的平均天數，每一格寫幾天、幾件，下面的 ▲▼ % 是比上期：天數<b style="color:#b42318">變多＝紅（變慢）</b>、<b style="color:#167a3e">變少＝綠（變快）</b>。</p><p>「下載 Word 報表」會把這幾張表一起放進月報／季報／年報。缺失清單上方的<b>本月結案率</b>卡片也會顯示本月平均天數和比上月同期。</p>`)
   ]},
   map: { t:'廠區地圖使用說明', steps:() => [
     gStep(1,'上傳平面圖', gC(gR(`<b style="flex:1">廠區地圖</b>${gB('＋ 新增地圖（上傳平面圖）',{dk:1,hl:1,n:1})}`)) + gC(gR(`${gIn('一樓 ▾')}<span style="flex:1"></span>${gB('適應畫面',{hl:1})}${gB('⤢ 整張顯示',{hl:1,n:2})}`)),
@@ -4727,7 +4727,8 @@ function workDays(a, b){
   const [y,m,d] = a.split('-').map(Number), [y2,m2,d2] = b.split('-').map(Number), t = new Date(y,m-1,d), e = new Date(y2,m2-1,d2);
   let n = 0; while(t < e){ t.setDate(t.getDate()+1); const w = t.getDay(); if(w!==0 && w!==6) n++; } return n;
 }
-const closeDays = r => r.closed && r.closedDate ? workDays(r.foundDate, r.closedDate) : null;
+/* 結案天數算到「第一次複查通過日」；沒有複查紀錄、以其它依據結案的，用結案日 */
+const closeDays = r => { const d = doneDate(r); return d ? workDays(r.foundDate, d) : null; };
 const avg1 = a => a.length ? Math.round(a.reduce((x,y)=>x+y,0)/a.length*10)/10 : null;
 /* 天數比上期：天數變多＝紅（變慢）、變少＝綠（變快） */
 function dayChg(n, pn){ if(n==null || pn==null) return ''; if(n===pn) return '<span class="chg chg-eq">＝ 持平</span>';
@@ -4738,15 +4739,15 @@ const CAT3 = [['general','一般缺失'],['schedule','限期改善'],['major','�
 function closeStats(range){
   const t = today(), L = range.end < t ? range.end : t;
   const cs = live().filter(r => r.foundDate && r.foundDate>=range.start && r.foundDate<=range.end);
-  const done = cs.filter(r => r.closed && r.closedDate && r.closedDate<=L);
-  const grp = keyOf => { const m = new Map(); done.forEach(r => { const d = closeDays(r); if(d==null) return; keyOf(r).forEach(k => { if(!m.has(k)) m.set(k, {all:[], general:[], schedule:[], major:[]}); const g = m.get(k); g.all.push(d); if(g[r.category]) g[r.category].push(d); }); }); return m; };
-  const all = {all:[], general:[], schedule:[], major:[]}; done.forEach(r => { const d = closeDays(r); if(d==null) return; all.all.push(d); if(all[r.category]) all[r.category].push(d); });
+  const done = cs.filter(r => r.closed && r.closedDate && r.closedDate<=L), passed = cs.filter(r => { const d = doneDate(r); return d && d<=L; });
+  const grp = keyOf => { const m = new Map(); passed.forEach(r => { const d = closeDays(r); if(d==null) return; keyOf(r).forEach(k => { if(!m.has(k)) m.set(k, {all:[], general:[], schedule:[], major:[]}); const g = m.get(k); g.all.push(d); if(g[r.category]) g[r.category].push(d); }); }); return m; };
+  const all = {all:[], general:[], schedule:[], major:[]}; passed.forEach(r => { const d = closeDays(r); if(d==null) return; all.all.push(d); if(all[r.category]) all[r.category].push(d); });
   return {n:cs.length, closed:done.length, rate: cs.length ? Math.round(done.length/cs.length*100) : null, all,
     dept: grp(deptsOf), area: grp(r => [(r.area||'').trim() || '未填區域'])};
 }
 function closeTblHTML(title, cur, prev, pw){
   const keys = [...cur.keys()].sort((a,b)=>cur.get(b).all.length-cur.get(a).all.length);
-  if(!keys.length) return `<div class="st-sec">${title}</div><div class="muted small">這段期間還沒有結案的案件。</div>`;
+  if(!keys.length) return `<div class="st-sec">${title}</div><div class="muted small">這段期間還沒有複查通過的案件。</div>`;
   const cell = (g, pg) => { const v = avg1(g), pv = pg && pg.length ? avg1(pg) : null; return g.length ? `<b>${v}</b> 天<span class="muted small">（${g.length} 件）</span><br>${dayChg(v, pv)}` : '<span class="muted">—</span>'; };
   return `<div class="st-sec">${title}</div><div class="st-scroll"><table class="st-table ctbl"><thead><tr><th>${title.includes('單位')?'負責單位':'缺失區域'}</th>${CAT3.map(([,n])=>`<th>${n}</th>`).join('')}<th>全部平均</th></tr></thead><tbody>
     ${keys.map(k => { const g = cur.get(k), p = prev.get(k); return `<tr><td><b>${esc(k)}</b></td>${CAT3.map(([c])=>`<td>${cell(g[c], p&&p[c])}</td>`).join('')}<td>${cell(g.all, p&&p.all)}</td></tr>`; }).join('')}
@@ -4754,15 +4755,15 @@ function closeTblHTML(title, cur, prev, pw){
 }
 function closeSecHTML(c, p, pw, pr){
   const row = (name, g, pg) => { const v = avg1(g), pv = avg1(pg); return `<tr><td>${name}</td><td>${v==null?'—':`<b>${v}</b> 天（${g.length} 件）`}</td><td>${pv==null?'—':pv+' 天（'+pg.length+' 件）'}</td><td>${dayChg(v, pv)||'—'}</td></tr>`; };
-  return `<div class="st-sec">⏱ 結案率與結案天數（工作天，不含六日）</div>
-    <div class="st-note">結案天數＝發現日期到結案日期，只算週一～週五（例：週五發現、下週一結案＝1 天；國定假日沒有另外扣）。只算本期發現、而且已結案的案件；跟 ${esc(pw)}（${fmtDate(pr.start)}～${fmtDate(pr.end)}）比，天數<b style="color:var(--bad)">變多＝紅（變慢）</b>、<b style="color:var(--ok)">變少＝綠（變快）</b>。</div>
+  return `<div class="st-sec">⏱ 結案率與改善天數（工作天，不含六日）</div>
+    <div class="st-note">天數＝發現日期到<b>複查通過日</b>（沒有複查紀錄、以其它依據結案的用結案日），只算週一～週五（例：週五發現、下週一複查通過＝1 天；國定假日沒有另外扣）。只算本期發現、而且已複查通過的案件；跟 ${esc(pw)}（${fmtDate(pr.start)}～${fmtDate(pr.end)}）比，天數<b style="color:var(--bad)">變多＝紅（變慢）</b>、<b style="color:var(--ok)">變少＝綠（變快）</b>。</div>
     <div class="st-scroll"><table class="st-table ctbl"><thead><tr><th>項目</th><th>本期</th><th>${esc(pw)}</th><th>比${esc(pw)}</th></tr></thead><tbody>
       <tr><td><b>結案率</b></td><td>${c.rate==null?'—':`<b>${c.rate}%</b>（${c.n} 件中結案 ${c.closed} 件）`}</td><td>${p.rate==null?'—':p.rate+'%（'+p.n+' 件中結案 '+p.closed+' 件）'}</td><td>${ptHTML(c.rate, p.rate)||'—'}</td></tr>
-      ${row('<b>平均結案天數（全部）</b>', c.all.all, p.all.all)}
+      ${row('<b>平均天數（到複查通過，全部）</b>', c.all.all, p.all.all)}
       ${CAT3.map(([k,n])=>row(n+' 平均', c.all[k], p.all[k])).join('')}
     </tbody></table></div>
-    ${closeTblHTML('各負責單位平均結案天數', c.dept, p.dept, pw)}
-    ${closeTblHTML('各缺失區域平均結案天數', c.area, p.area, pw)}`;
+    ${closeTblHTML('各負責單位平均天數（到複查通過）', c.dept, p.dept, pw)}
+    ${closeTblHTML('各缺失區域平均天數（到複查通過）', c.area, p.area, pw)}`;
 }
 function periodRange(view,y,a){
   if(view==='month') return {start:`${y}-${pad2(a)}-01`, end:`${y}-${pad2(a)}-${pad2(lastDay(y,a))}`, label:`${y} 年 ${a} 月`, short:`${a}月`, y, a};
