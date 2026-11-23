@@ -827,7 +827,10 @@ function optList(a){ if(!Array.isArray(a)) return []; const seen = new Set(), ou
   a.map(nclean).forEach(x=>{ const k = nkey(x); if(x && x!=='其它' && !seen.has(k)){ seen.add(k); out.push(x); } }); return out; }
 function optFind(kind, v){ const k = nkey(v); return k ? OPTS[kind].find(x=>nkey(x)===k) : undefined; }
 function loadOpts(){ let o = {}; try{ o = JSON.parse(localStorage.getItem(KEY_O)||'{}') || {}; }catch(e){}
-  return { area:optList(o.area), people:optList(o.people), dept: Array.isArray(o.dept) ? optList(o.dept) : ['生產課','儲運'] }; }
+  return { area:optList(o.area), people:optList(o.people), dept: Array.isArray(o.dept) ? optList(o.dept) : ['生產課','儲運'], holidays:holList(o.holidays) }; }
+/* 公司休假日：[{d:'2026-01-01', n:'元旦'}]，算改善天數時不算 */
+function holList(a){ if(!Array.isArray(a)) return []; const m = new Map(); a.forEach(x => { if(x && /^\d{4}-\d{2}-\d{2}$/.test(x.d||'')) m.set(x.d, {d:x.d, n:String(x.n||'').slice(0,30)}); }); return [...m.values()].sort((x,y)=>x.d.localeCompare(y.d)); }
+const holSet = () => new Set((OPTS.holidays||[]).map(x=>x.d));
 let OPTS = loadOpts();
 function saveOpts(){ try{ localStorage.setItem(KEY_O, JSON.stringify(OPTS)); return true; }catch(e){ say('常用選項存不進去，瀏覽器的儲存空間可能已滿。'); return false; } }
 /* 下拉選常用；選「其它（自己打字）」才出現輸入框。值仍存在原本的欄位（data-f 或 id） */
@@ -1126,7 +1129,7 @@ const GUIDES = {
     gStep(7,'▲▼ 跟上期比幾 %（給主管看）', gC(gR(`<span class="gx-k">59<small>新增<br><b style="color:#b42318">▲ +20%</b></small></span>${gN(1)}<span class="gx-k ok">26<small>結案<br><b style="color:#167a3e">▲ +8%</b></small></span>`)+gR(`<span class="gx-s" style="width:54px">包裝區</span><span class="gx-bar" style="width:55%"></span><b style="color:#b42318;font-size:11px">▲ +35%</b>${gN(2)}`)+gR(`<span class="gx-s" style="width:54px">冷藏庫</span><span class="gx-bar" style="width:25%"></span><b style="color:#167a3e;font-size:11px">▼ −40%</b>`)),
       `<p>統計頁的數字、長條、表格、圓餅圖、折線圖旁邊都有 <b>▲▼ 百分比</b>，主管一眼就知道變多還是變少：</p><p><b style="color:#b42318">紅色＝變差</b>（缺失、逾期、尚未結案變多，或結案變少）；<b style="color:#167a3e">綠色＝變好</b>。滑鼠移上去看上期是幾件。上期是 0 件時顯示「新增」；結案率用「百分點」（例：60% → 65% ＝ ▲ +5 個百分點）。</p><p><b>跟誰比？</b>四個數字${gN(1)}、區域長條${gN(2)}、類別和等級表：跟<b>上月／上季／去年</b>比；本期還沒過完時，上期<b>只算到同一天</b>（例：11/1～11/19 比 10/1～10/19），不會拿半個月比整個月。右邊三張卡、📈 每月趨勢、📍 缺失區域分析：比<b>去年同期</b>。舊的趨勢圖下方一排是「比前一期」；新折線圖滑過某個月，數字旁的 % 是比前一個月。</p><p class="muted small">Word 報表也會帶出這些百分比。</p>`),
     gStep(8,'⏱ 結案率與改善天數（不含六日）', gC(`<div style="font-size:11px;width:100%"><div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:2px;background:#f3ece0;padding:3px 4px;border-radius:4px;font-weight:700"><span>負責單位</span><span>一般</span><span>限期改善</span><span>重大</span></div><div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:2px;padding:3px 4px"><span>打漿組</span><span>2 天<br><b style="color:#167a3e">▼ −20%</b></span><span>12 天<br><b style="color:#b42318">▲ +9%</b></span><span>1 天</span></div></div>${gN(1)}`,'⏱ 各負責單位平均天數'),
-      `<p>統計頁「⏱ 結案率與改善天數」${gN(1)}：</p><p><b>結案率</b>＝本期發現的案件中已結案的比例；<b>天數</b>＝發現日期到<b>複查通過日</b>（沒有複查紀錄、以其它依據結案的用結案日），<b>只算週一～週五</b>（週五發現、下週一複查通過＝1 天；國定假日沒有另外扣）。只算本期發現、已複查通過的案件。</p><p>上面一張表是全部的結案率、平均天數（一般缺失、限期改善、重大缺失分開）；下面是<b>各負責單位</b>、<b>各缺失區域</b>的平均天數，每一格寫幾天、幾件，下面的 ▲▼ % 是比上期：天數<b style="color:#b42318">變多＝紅（變慢）</b>、<b style="color:#167a3e">變少＝綠（變快）</b>。</p><p>「下載 Word 報表」會把這幾張表一起放進月報／季報／年報。缺失清單上方的<b>本月結案率</b>卡片也會顯示本月平均天數和比上月同期。</p>`)
+      `<p>統計頁「⏱ 結案率與改善天數」${gN(1)}：</p><p><b>結案率</b>＝本期發現的案件中已結案的比例；<b>天數</b>＝發現日期到<b>複查通過日</b>（沒有複查紀錄、以其它依據結案的用結案日），<b>只算週一～週五</b>，也不算你在「常用選項」設定的<b>公司休假日</b>（週五發現、下週一複查通過＝1 天）。只算本期發現、已複查通過的案件。</p><p>上面一張表是全部的結案率、平均天數（一般缺失、限期改善、重大缺失分開）；下面是<b>各負責單位</b>、<b>各缺失區域</b>的平均天數，每一格寫幾天、幾件，下面的 ▲▼ % 是比上期：天數<b style="color:#b42318">變多＝紅（變慢）</b>、<b style="color:#167a3e">變少＝綠（變快）</b>。</p><p>「下載 Word 報表」會把這幾張表一起放進月報／季報／年報。缺失清單上方的<b>本月結案率</b>卡片也會顯示本月平均天數和比上月同期。</p>`)
   ]},
   map: { t:'廠區地圖使用說明', steps:() => [
     gStep(1,'上傳平面圖', gC(gR(`<b style="flex:1">廠區地圖</b>${gB('＋ 新增地圖（上傳平面圖）',{dk:1,hl:1,n:1})}`)) + gC(gR(`${gIn('一樓 ▾')}<span style="flex:1"></span>${gB('適應畫面',{hl:1})}${gB('⤢ 整張顯示',{hl:1,n:2})}`)),
@@ -1184,7 +1187,9 @@ const GUIDES = {
     gStep(3,'填表時怎麼用', gC(gR(`${gN(1)}${gIn('其它（自己打字） ▾',1)}`)+gR(`${gIn('支援組')}${gB('＋加入常用',{hl:1,n:2})}`),'負責單位'),
       `<p>填缺失單時直接從下拉選；不在清單上的，選「其它（自己打字）」${gN(1)}輸入。</p><p>打完按「＋加入常用」${gN(2)}，下次就能直接選。</p>`),
     gStep(4,'給同事用同一份清單', gC(gR(`${gB('下載備份',{dk:1,hl:1,n:1})}`)+gR(`${gB('從備份還原',{hl:1,n:2})}`)),
-      `<p>常用選項只存在這台電腦的這個瀏覽器。「下載備份」${gN(1)}會一起存；同事「從備份還原」${gN(2)}時會<b>合併</b>進他的清單。</p><p class="muted small">⚠ 還原會取代對方的案件資料，只適合新電腦。</p>`)
+      `<p>常用選項只存在這台電腦的這個瀏覽器。「下載備份」${gN(1)}會一起存；同事「從備份還原」${gN(2)}時會<b>合併</b>進他的清單。</p><p class="muted small">⚠ 還原會取代對方的案件資料，只適合新電腦。</p>`),
+    gStep(5,'📅 公司休假日', gC(gR(`${gIn('從 2027/02/05',1)}${gIn('到 2027/02/13',1)}`)+gR(`${gIn('春節連假')}${gB('新增',{dk:1,hl:1,n:1})}`),'📅 公司休假日'),
+      `<p>統計分析的「改善天數」不算六日；國定假日、連假、颱風假、公司停工也不想算的話，在「📅 公司休假日」選<b>從～到</b>、打名稱，按「新增」${gN(1)}（只有一天時「到」可以不填；六日會自動略過）。</p><p>加好後統計頁的天數會自動重算。休假日跟常用選項一起存在「下載備份」裡；從備份還原時會合併。</p>`)
   ]}
 };
 const GUIDE_KEY = 'qaHygieneTracker_v1_guide_';
@@ -2470,7 +2475,7 @@ function restore(input){
       (Array.isArray(data.tombs)?data.tombs:[]).forEach(t=>{ if(t && t.id && !have.has(t.id)) tombs.push(t); });
       if(!persistAll()){ records = old; tombs = oldT; return; }
       /* 常用選項：跟目前的合併，不會刪掉現有的 */
-      if(data.opts){ Object.keys(OPT_KINDS).forEach(k=>{ OPTS[k] = optList([...OPTS[k], ...optList(data.opts[k])]); }); saveOpts(); }
+      if(data.opts){ Object.keys(OPT_KINDS).forEach(k=>{ OPTS[k] = optList([...OPTS[k], ...optList(data.opts[k])]); }); OPTS.holidays = holList([...(OPTS.holidays||[]), ...holList(data.opts.holidays)]); saveOpts(); }
       /* 備份裡有廠區地圖時，一起還原（取代目前的地圖） */
       if(data.map && Array.isArray(data.map.maps) && data.map.maps.length) await mapApply(data.map, data.mapImages);
       if(Array.isArray(data.audits)) await auditsRestore(data.audits);
@@ -4558,9 +4563,27 @@ function renderOpts(){
     </div>
     <div class="notice info small">把常用的區域、人員、單位加進來，填缺失單時就能用下拉選單直接選；不常用的請在下拉選「其它（自己打字）」。<br>
       常用選項只存在此裝置此瀏覽器，「下載備份」會一起備份。刪除選項不會改到已經存好的案件。人員名稱不會送給 AI。</div>
-    <div class="ogrid">${Object.keys(OPT_KINDS).map(optCard).join('')}</div>
+    <div class="ogrid">${Object.keys(OPT_KINDS).map(optCard).join('')}${holCard()}</div>
     ${guideBox('opts')}`;
 }
+function holCard(){
+  const H = OPTS.holidays||[], ys = [...new Set(H.map(x=>x.d.slice(0,4)))].sort().reverse();
+  return `<div class="card"><h2>📅 公司休假日</h2><div class="muted small">用在：統計分析的「改善天數」，這些日子跟六日一樣不算（例：國定假日、連假、颱風假、公司停工）。</div>
+    ${H.length ? ys.map(y=>`<div class="st-sec" style="margin-top:10px">${y} 年（${H.filter(x=>x.d.startsWith(y)).length} 天）</div><ul class="optl">${H.filter(x=>x.d.startsWith(y)).sort((a,b)=>b.d.localeCompare(a.d)).map(x=>`<li><span>${fmtDate(x.d)}（${'日一二三四五六'[new Date(x.d+'T00:00').getDay()]}）${x.n?'　'+esc(x.n):''}</span><button class="danger" onclick="holDel('${x.d}')">刪除</button></li>`).join('')}</ul>`).join('') : '<div class="muted small" style="margin:10px 0">還沒有設定休假日。</div>'}
+    <div class="grid" style="grid-template-columns:1fr 1fr;gap:6px;margin-top:8px"><div><label class="f">從</label><input type="date" id="hoF"></div><div><label class="f">到（只有一天可以不填）</label><input type="date" id="hoT"></div></div>
+    <div class="oadd" style="margin-top:6px"><input type="text" id="hoN" placeholder="名稱（例：春節連假、颱風假）" onkeydown="if(event.key==='Enter')holAdd()"><button class="primary" onclick="holAdd()">新增</button></div>
+    <div class="muted small" style="margin-top:4px">連假選「從～到」一次加好；六日不用加。</div></div>`;
+}
+function holAdd(){
+  const f = $('#hoF').value, t = $('#hoT').value || f, n = $('#hoN').value.trim();
+  if(!f){ say('請選休假日期。'); return; } if(t < f){ say('「到」不能比「從」早。'); return; }
+  if(daysBetween(f, t) > 60){ say('一次最多加 60 天。'); return; }
+  const add = []; for(let d = f; d <= t; d = addDays(d,1)){ const w = new Date(d+'T00:00').getDay(); if(w!==0 && w!==6) add.push({d, n}); }
+  if(!add.length){ say('選的日子都是六日，本來就不算，不用加。'); return; }
+  const old = OPTS.holidays; OPTS.holidays = holList([...(OPTS.holidays||[]), ...add]); if(!saveOpts()){ OPTS.holidays = old; return; }
+  renderOpts(); flash(`已加入 ${add.length} 天休假日`);
+}
+async function holDel(d){ if(!(await ask(`刪除休假日 ${fmtDate(d)}？`))) return; OPTS.holidays = (OPTS.holidays||[]).filter(x=>x.d!==d); saveOpts(); renderOpts(); }
 function optCard(k){
   const L = OPTS[k];
   return `<div class="card"><h2>${OPT_KINDS[k]}</h2><div class="muted small">用在：${OPT_USE[k]}</div>
@@ -4721,11 +4744,12 @@ function prevRangeSame(view, y, a){
   if(t>=rg.start && t<rg.end){ const e = addDays(pr.start, daysBetween(rg.start,t)); if(e<pr.end){ pr.end = e; pr.same = true; } }
   return pr;
 }
-/* 工作天：發現日期隔天起算到結案日期，只算週一～週五（不含六日；國定假日沒有另外扣） */
+/* 工作天：發現日期隔天起算，只算週一～週五，也不算常用選項裡的「公司休假日」 */
 function workDays(a, b){
   if(!a || !b || b < a) return null;
   const [y,m,d] = a.split('-').map(Number), [y2,m2,d2] = b.split('-').map(Number), t = new Date(y,m-1,d), e = new Date(y2,m2-1,d2);
-  let n = 0; while(t < e){ t.setDate(t.getDate()+1); const w = t.getDay(); if(w!==0 && w!==6) n++; } return n;
+  const H = holSet(), ymd = x => x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');
+  let n = 0; while(t < e){ t.setDate(t.getDate()+1); const w = t.getDay(); if(w!==0 && w!==6 && !H.has(ymd(t))) n++; } return n;
 }
 /* 結案天數算到「第一次複查通過日」；沒有複查紀錄、以其它依據結案的，用結案日 */
 const closeDays = r => { const d = doneDate(r); return d ? workDays(r.foundDate, d) : null; };
@@ -4756,7 +4780,7 @@ function closeTblHTML(title, cur, prev, pw){
 function closeSecHTML(c, p, pw, pr){
   const row = (name, g, pg) => { const v = avg1(g), pv = avg1(pg); return `<tr><td>${name}</td><td>${v==null?'—':`<b>${v}</b> 天（${g.length} 件）`}</td><td>${pv==null?'—':pv+' 天（'+pg.length+' 件）'}</td><td>${dayChg(v, pv)||'—'}</td></tr>`; };
   return `<div class="st-sec">⏱ 結案率與改善天數（工作天，不含六日）</div>
-    <div class="st-note">天數＝發現日期到<b>複查通過日</b>（沒有複查紀錄、以其它依據結案的用結案日），只算週一～週五（例：週五發現、下週一複查通過＝1 天；國定假日沒有另外扣）。只算本期發現、而且已複查通過的案件；跟 ${esc(pw)}（${fmtDate(pr.start)}～${fmtDate(pr.end)}）比，天數<b style="color:var(--bad)">變多＝紅（變慢）</b>、<b style="color:var(--ok)">變少＝綠（變快）</b>。</div>
+    <div class="st-note">天數＝發現日期到<b>複查通過日</b>（沒有複查紀錄、以其它依據結案的用結案日），只算週一～週五，也不算「常用選項」裡的<b>公司休假日</b>（例：週五發現、下週一複查通過＝1 天）${(OPTS.holidays||[]).length?`；已設定 ${OPTS.holidays.length} 天休假日`:'；還沒設定休假日'}。只算本期發現、而且已複查通過的案件；跟 ${esc(pw)}（${fmtDate(pr.start)}～${fmtDate(pr.end)}）比，天數<b style="color:var(--bad)">變多＝紅（變慢）</b>、<b style="color:var(--ok)">變少＝綠（變快）</b>。</div>
     <div class="st-scroll"><table class="st-table ctbl"><thead><tr><th>項目</th><th>本期</th><th>${esc(pw)}</th><th>比${esc(pw)}</th></tr></thead><tbody>
       <tr><td><b>結案率</b></td><td>${c.rate==null?'—':`<b>${c.rate}%</b>（${c.n} 件中結案 ${c.closed} 件）`}</td><td>${p.rate==null?'—':p.rate+'%（'+p.n+' 件中結案 '+p.closed+' 件）'}</td><td>${ptHTML(c.rate, p.rate)||'—'}</td></tr>
       ${row('<b>平均天數（到複查通過，全部）</b>', c.all.all, p.all.all)}
