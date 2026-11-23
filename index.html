@@ -610,6 +610,10 @@ main:has(.split){max-width:1320px}
 .st-note{font-size:12px;color:var(--muted);margin:2px 0 10px}
 .glist .gdesc{min-width:200px;max-width:340px;white-space:normal}
 .pkico{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:6px;margin:4px 0 6px}.pkico button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:11px;color:var(--ink);min-height:0}.pkico button img{width:26px;height:26px}.pkico button.on{border-color:#16213a;box-shadow:0 0 0 2px #16213a;font-weight:700}
+.aiph{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 2px}.aiph>div{flex:1 1 200px;border:1px solid var(--line);border-radius:8px;padding:6px 8px;background:#fff}.aiph b{font-size:12.5px}.aiph .ok{color:var(--ok)}.aiph .ng{color:var(--bad)}
+.aiph .ths{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}.aiph .ths .ph{position:relative}.aiph .ths .ph .x{position:absolute;top:-7px;right:-7px;width:24px;height:24px;min-height:0;padding:0;border-radius:50%;font-size:12px;line-height:1;background:#fff;border:1px solid var(--line)}.aiph .ths img{width:64px;height:64px;object-fit:cover;border-radius:6px;border:1px solid var(--line);cursor:zoom-in}
+.aitems .aith{display:flex;gap:4px;margin-top:4px;align-items:center}.aitems .aith img{width:34px;height:34px;object-fit:cover;border-radius:4px;border:2px solid #fff;cursor:zoom-in}.aitems .aith img.ok{outline:2px solid var(--ok)}.aitems .aith img.ng{outline:2px solid var(--bad)}
+.aflt{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px;align-items:center}.aflt button{padding:5px 10px;font-size:13px;min-height:0}.aflt button.on{background:#16213a;color:#fff;border-color:#16213a}.arow.hide{display:none}.agrp{margin:14px 0 2px;font-weight:700;color:var(--ink);border-left:4px solid var(--gold);padding-left:8px}
 .st-sec{margin:18px 0 6px;font-size:16px;font-weight:700;border-left:4px solid var(--brand);padding-left:8px;break-after:avoid}
 /* 右側面板可收合的段落 */
 .msec>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px;user-select:none}.msec>summary::-webkit-details-marker{display:none}
@@ -1133,7 +1137,7 @@ const GUIDES = {
     gStep(7,'看缺失、新增缺失、匯出', gC(gR(`<span class="gx-k">3<small>累計</small></span><span class="gx-k b">2<small>未結案</small></span><span class="gx-k rd">1<small>逾期</small></span>`)+gR(gB('＋ 在「打漿區」新增缺失',{dk:1,hl:1,n:1}))+gR(gB('📗 匯出這個區域（Excel）',{hl:1,n:2})),'🏭 打漿區'),
       `<p>檢視模式點區域或位置，右邊會出現件數與歷史缺失。</p><p>「＋ 新增缺失」${gN(1)}自動帶入區域、位置、負責單位；「📗 匯出這個區域」${gN(2)}依類別由多到少，含改善前後照片。</p><p>從地圖（右邊歷史缺失、地圖統計跳出的清單）點進缺失單後，左上角會變成<b>「← 回廠區地圖」</b>，按下去回到剛剛那個區域和畫面位置；存檔、結案後也會自動回來。從統計分析點進去的則是「← 回統計分析」。</p>`),
     gStep(8,'現場稽核', gC(gR(`${gB('＋ 新增稽核重點',{n:1})}${gB('載入範例')}`)+gR(gB('📋 開始稽核',{ok:1,hl:1,n:2}))) + gC(gR(`<span class="gx-s" style="flex:1">排水溝清潔暢通</span>${gN(3)}${gB('✅ 合格',{ok:1})}${gB('❌ 不合格',{rd:1,hl:1})}`)),
-      `<p>點地圖上的區域，右邊「稽核重點」按「＋ 新增稽核重點」${gN(1)}寫清楚<b>查核標準</b>（或載入範例 8 項）；<b>檢視、編輯模式都可以</b>新增、編輯、刪除。</p><p>右邊的「細部位置」「稽核紀錄」「稽核重點」「參考照片」標題都可以<b>點一下收合</b>，開／關會記住。</p><p>到現場按「📋 開始稽核」${gN(2)}，每項選${gN(3)}：✅ 合格、❌ 不合格（可「＋ 建立缺失」）、👁 觀察事項、⊘ 不適用。稽核頁上方有<b>📖 怎麼用</b>（可收合）和這一區的<b>參考照片</b>；對應到位置的項目旁邊也有那個位置的參考照片，點一下看大圖。</p><p>不合格、觀察事項的說明以「<b>現場稽核發現</b>」開頭；按 <b>📸 開相機拍照</b>直接用手機相機拍，或 🖼 從相簿選；拍好的照片點一下看大圖、按 ✕ 刪掉。</p>`),
+      `<p>點地圖上的區域，右邊「稽核重點」按「＋ 新增稽核重點」${gN(1)}寫清楚<b>查核標準</b>（或載入範例 8 項）；<b>檢視、編輯模式都可以</b>新增、編輯、刪除。</p><p>每一項稽核重點可以放照片給稽核人員對照：<b>✅ 應有的樣子</b>（正常、清潔時）和 <b>❌ 不合格範例</b>（髒污、不符合時），各最多 3 張，可以直接 📸 拍照；右邊清單會顯示小圖。「<b>📗 匯出稽核重點（含圖片）</b>」可以選只匯出這一區，或這張地圖全部區域，做成一份有照片的稽核標準表。</p><p><b>區域很大、稽核點很多時</b>：建議先在區域裡放好「細部位置」（例：P01 洗手台、P02 輸送帶），稽核重點選「對應位置」；開始稽核時上方會出現位置按鈕，可以<b>照位置一段一段稽核</b>，按鈕上會顯示還沒填幾項。</p><p>右邊的「細部位置」「稽核紀錄」「稽核重點」「參考照片」標題都可以<b>點一下收合</b>，開／關會記住。</p><p>到現場按「📋 開始稽核」${gN(2)}，每項選${gN(3)}：✅ 合格、❌ 不合格（可「＋ 建立缺失」）、👁 觀察事項、⊘ 不適用。稽核頁上方有<b>📖 怎麼用</b>（可收合）和這一區的<b>參考照片</b>；對應到位置的項目旁邊也有那個位置的參考照片，點一下看大圖。</p><p>不合格、觀察事項的說明以「<b>現場稽核發現</b>」開頭；按 <b>📸 開相機拍照</b>直接用手機相機拍，或 🖼 從相簿選；拍好的照片點一下看大圖、按 ✕ 刪掉。</p>`),
     gStep(9,'風險顏色、連續發生警示、地圖統計', gC(gR(`${gB('🎨 風險顏色（開）',{dk:1,hl:1,n:1})}`)+gR(`<span class="gx-sw" style="background:#b42318"></span><span class="gx-s">重大／逾期／重複</span><span class="gx-sw" style="background:#d97706"></span><span class="gx-s">未結案</span><span class="gx-sw" style="background:#167a3e"></span><span class="gx-s">都結案</span>`)) + gC(gR(`${gN(2)}${gTag('年度','dk')}${gTag('每季')}${gTag('每月')}${gTag('自訂')}`),'📊 地圖統計'),
       `<p>檢視模式依缺失狀況自動上色${gN(1)}：紅＝重大、逾期或<b>重複發生</b>；黃＝有未結案；綠＝都結案；灰＝沒紀錄。</p><p><b>⚠ 連續發生警示</b>：同一位置同一類缺失<b>連續 3 個月</b>都發生，位置標記會閃動並加 ⚠，右邊面板會提醒檢討根本原因。</p><p>地圖下方「📊 地圖統計」${gN(2)}選期間（年度、每季、每月，按 ◀ ▶ 跳上一期／下一期；或全部期間、最近三個月、最近六個月、自訂）；<b>點某個區域時，統計會變成那一區各位置的分布</b>，按「看全部區域」回到全廠。</p><p class="muted small">地圖統計的數字卡和長條都可以點開看案件，見第 10 步。</p>`),
     gStep(10,'📊 地圖統計：點開看案件', gC(gR(`<span class="gx-k">8<small>缺失總數</small></span>${gN(1)}<span class="gx-k b" style="box-shadow:0 0 0 2px var(--gold)">2<small>未結案</small></span><span class="gx-k rd">2<small>逾期</small></span>`)+gR(`<span class="gx-s" style="width:52px">包裝區</span><span style="flex:1;height:8px;border-radius:4px;background:#16213a;max-width:120px"></span><span class="gx-s">7</span>${gN(2)}`),'📊 地圖統計') + gC(gR(`<span class="gx-s" style="flex:1"><b>QA-001</b>　包裝區　待改善（逾期）</span>${gN(3)}`)+gR(`<span class="gx-s" style="flex:1"><b>QA-002</b>　包裝區　待改善</span>`)+gR(`<span style="flex:1"></span>${gB('關閉',{dk:1})}`),'未結案　一樓・全部區域・全部期間 2 件'),
@@ -3011,7 +3015,7 @@ async function mapApply(map, images){
   const okPts = o => o && o.id && o.mapId && Array.isArray(o.pts) && o.pts.length>=2;
   const next = { maps:(map.maps||[]).filter(m=>m && m.id && m.img), areas:(map.areas||[]).filter(a=>a && a.id && typeof a.x==='number'), locs:(map.locs||[]).filter(l=>l && l.id && typeof l.x==='number'), items:(map.items||[]).filter(t=>t && t.id && t.areaId && t.name),
     zones:(map.zones||[]).filter(okPts), flows:(map.flows||[]).filter(okPts), marks:(map.marks||[]).filter(okPts), frags:(map.frags||[]).filter(f=>f && f.id && f.mapId && typeof f.x==='number'), pests:(map.pests||[]).filter(f=>f && f.id && f.mapId && typeof f.x==='number'), fragCfg:map.fragCfg||{}, colors:map.colors||{}, zoneAlpha:map.zoneAlpha, zoneMul:map.zoneMul, pestCustom:(Array.isArray(map.pestCustom)?map.pestCustom:[]).filter(x=>x && x.name), pestCodeV:map.pestCodeV };
-  try{ const ids = [...next.maps.map(m=>m.img), ...next.areas.flatMap(a=>a.photos||[]), ...next.locs.flatMap(l=>l.photos||[]), ...next.frags.flatMap(f=>f.photos||[])]; for(const id of ids){ const u = images && images[id]; if(u && typeof u==='string' && u.startsWith('data:image/')) await phPut(id, u); } }
+  try{ const ids = [...next.maps.map(m=>m.img), ...next.areas.flatMap(a=>a.photos||[]), ...next.locs.flatMap(l=>l.photos||[]), ...next.frags.flatMap(f=>f.photos||[]), ...next.items.flatMap(t=>(t.okPhotos||[]).concat(t.ngPhotos||[]))]; for(const id of ids){ const u = images && images[id]; if(u && typeof u==='string' && u.startsWith('data:image/')) await phPut(id, u); } }
   catch(e){ say('平面圖存不進去，瀏覽器的儲存空間可能已滿，地圖沒有變動。'); return false; }
   const old = MAPD; MAPD = next; if(!saveMap()){ MAPD = old; return false; }
   next.areas.forEach(a=>addAreaOpt(a.name));
@@ -3048,10 +3052,11 @@ function auditItemsHTML(a, ed){
   const its = itemsOf(a.id), locName = id => { const l = locById(id); return l ? (l.code+' '+l.name).trim() : ''; };
   return msec('items', `稽核重點（${its.length}）`, `
     ${its.length ? `<ul class="aitems">${its.map(t=>`<li><div><b>${esc(t.name)}</b>${t.req?'<span class="areq">必查</span>':''}${t.locId?`<span class="mr-loc">${esc(locById(t.locId)?.code||'')}</span>`:''}
-      <div class="small muted">標準：${esc(t.std||'—')}${t.freq?'｜'+esc(t.freq):''}${t.imp?'｜重要度 '+esc(t.imp):''}${t.locId?'｜'+esc(locName(t.locId)):''}</div></div>
+      <div class="small muted">標準：${esc(t.std||'—')}${t.freq?'｜'+esc(t.freq):''}${t.imp?'｜重要度 '+esc(t.imp):''}${t.locId?'｜'+esc(locName(t.locId)):''}</div>
+      ${(t.okPhotos||[]).length || (t.ngPhotos||[]).length ? `<div class="aith">${(t.okPhotos||[]).slice(0,2).map((p,j)=>`<img class="ok" src="${phSync(p)}" ${isRef(p)?`data-ph="${p}"`:''} alt="應有的樣子" title="✅ 應有的樣子（點一下看大圖）" onclick="lightbox(aiGet('${t.id}').okPhotos,${j},'✅ 應有的樣子｜${esc(t.name).replace(/'/g,'')}')">`).join('')}${(t.ngPhotos||[]).slice(0,2).map((p,j)=>`<img class="ng" src="${phSync(p)}" ${isRef(p)?`data-ph="${p}"`:''} alt="不合格範例" title="❌ 不合格範例（點一下看大圖）" onclick="lightbox(aiGet('${t.id}').ngPhotos,${j},'❌ 不合格範例｜${esc(t.name).replace(/'/g,'')}')">`).join('')}<span class="small muted">✅${(t.okPhotos||[]).length} ❌${(t.ngPhotos||[]).length}</span></div>` : ''}</div>
       <span class="aibtn"><button onclick="auditItemEdit('${a.id}','${t.id}')">編輯</button><button class="danger" onclick="auditItemDel('${t.id}')">刪除</button></span></li>`).join('')}</ul>`
       : `<div class="muted small">還沒有稽核重點。</div>`}
-    <div class="row" style="margin:6px 0 10px"><button onclick="auditItemEdit('${a.id}','')">＋ 新增稽核重點</button>${its.length?'':`<button onclick="auditSample('${a.id}')">載入範例（8 項）</button>`}</div>`);
+    <div class="row" style="margin:6px 0 10px"><button onclick="auditItemEdit('${a.id}','')">＋ 新增稽核重點</button>${its.length?'':`<button onclick="auditSample('${a.id}')">載入範例（8 項）</button>`}${(MAPD.items||[]).length?`<button id="aiXls" onclick="auditItemsExport('${a.id}')">📗 匯出稽核重點（含圖片）</button>`:''}</div>`);
 }
 function auditSideHTML(a){
   const au = auditsOf(a.id);
@@ -3068,7 +3073,7 @@ function auditItemEdit(aid, id){
   const t = id ? (MAPD.items||[]).find(x=>x.id===id) : {name:'', std:'', method:'', freq:'每日', imp:'中', req:false, locId:''};
   const ls = mapAreaLocs(aid);
   const m = document.createElement('div'); m.className = 'modal';
-  m.innerHTML = `<div class="box" role="dialog" aria-modal="true" style="max-width:520px"><div class="msg"><b>${id?'編輯':'新增'}稽核重點</b></div>
+  m.innerHTML = `<div class="box" role="dialog" aria-modal="true" style="max-width:560px;max-height:92vh;overflow:auto"><div class="msg"><b>${id?'編輯':'新增'}稽核重點</b></div>
     <div class="grid1">
       <label class="f req">稽核項目</label><input type="text" id="aiN" placeholder="例：排水溝清潔暢通">
       <label class="f">查核標準（怎樣算合格）</label><textarea id="aiS" rows="2" placeholder="例：排水溝無殘渣堆積、無積水、無異味"></textarea>
@@ -3077,18 +3082,70 @@ function auditItemEdit(aid, id){
         <div><label class="f">重要程度</label><select id="aiI"><option>高</option><option>中</option><option>低</option></select></div></div>
       <label class="f">對應位置</label><select id="aiL"><option value="">整個區域</option>${ls.map(l=>`<option value="${l.id}">${esc((l.code+' '+l.name).trim())}</option>`).join('')}</select>
       <label class="check"><input type="checkbox" id="aiR"> 必查項目（稽核時一定要填）</label>
+      <div class="aiph" id="aiPh"></div>
+      <div class="muted small">照片給稽核人員對照用：<b class="ok" style="color:var(--ok)">✅ 應有的樣子</b>（正常、清潔時）、<b style="color:var(--bad)">❌ 不合格範例</b>（髒污、不符合時）；各最多 3 張。</div>
     </div>
     <div class="row" style="margin-top:12px"><button id="aiNo">取消</button><button class="primary" id="aiOk">儲存</button></div></div>`;
   document.body.appendChild(m);
   $('#aiN').value = t.name; $('#aiS').value = t.std||''; $('#aiM').value = t.method||''; $('#aiF').value = t.freq||''; $('#aiI').value = t.imp||'中'; $('#aiL').value = t.locId||''; $('#aiR').checked = !!t.req;
+  const PHS = {okPhotos:(t.okPhotos||[]).slice(), ngPhotos:(t.ngPhotos||[]).slice()};
+  const drawPh = () => { $('#aiPh').innerHTML = [['okPhotos','ok','✅ 應有的樣子'],['ngPhotos','ng','❌ 不合格範例']].map(([f,c,lb])=>`<div><b class="${c}">${lb}</b>
+      <div class="ths">${PHS[f].map((p,j)=>`<div class="ph"><img src="${phSync(p)}" ${isRef(p)?`data-ph="${p}"`:''} alt="" data-f="${f}" data-j="${j}"><button type="button" class="x" data-del="${f}:${j}" title="刪除這張">✕</button></div>`).join('')}</div>
+      ${PHS[f].length<3?`<div class="row" style="margin-top:4px"><button type="button" data-cam="${f}">📸 拍照</button><input type="file" accept="image/*" capture="environment" hidden data-in="${f}"><button type="button" data-pick="${f}">🖼 選照片</button><input type="file" accept="image/*" multiple hidden data-in="${f}"></div>`:''}</div>`).join(''); hydrate($('#aiPh')); };
+  drawPh();
+  $('#aiPh').onclick = e => { const t2 = e.target;
+    if(t2.dataset.del){ const [f,j] = t2.dataset.del.split(':'); PHS[f].splice(+j,1); drawPh(); return; }
+    if(t2.dataset.cam || t2.dataset.pick){ t2.nextElementSibling.click(); return; }
+    if(t2.tagName==='IMG' && t2.dataset.f) lightbox(PHS[t2.dataset.f], +t2.dataset.j, t2.dataset.f==='okPhotos'?'✅ 應有的樣子':'❌ 不合格範例'); };
+  $('#aiPh').onchange = async e => { const inp = e.target, f = inp.dataset.in; if(!f) return; const files = [...inp.files].filter(x=>/^image\//.test(x.type)); inp.value = '';
+    for(const file of files){ if(PHS[f].length>=3){ say('每一種最多 3 張。'); break; } const id = await auditImg(file); if(id) PHS[f].push(id); } drawPh(); };
   $('#aiNo').onclick = () => m.remove();
   $('#aiOk').onclick = () => {
     const name = $('#aiN').value.trim(); if(!name){ say('請填稽核項目。'); return; }
-    Object.assign(t, {name, std:$('#aiS').value.trim(), method:$('#aiM').value.trim(), freq:$('#aiF').value.trim(), imp:$('#aiI').value, locId:$('#aiL').value, req:$('#aiR').checked});
+    Object.assign(t, {name, std:$('#aiS').value.trim(), method:$('#aiM').value.trim(), freq:$('#aiF').value.trim(), imp:$('#aiI').value, locId:$('#aiL').value, req:$('#aiR').checked, okPhotos:PHS.okPhotos, ngPhotos:PHS.ngPhotos});
     if(!id){ t.id = mapUid('it'); t.areaId = aid; MAPD.items = MAPD.items || []; MAPD.items.push(t); }
     saveMap(); m.remove(); renderMap(); flash('已儲存稽核重點');
   };
   $('#aiN').focus();
+}
+const aiGet = id => (MAPD.items||[]).find(x=>x.id===id) || {};
+/* 照片壓縮後放照片資料庫，回傳編號 */
+function auditImg(file){ return new Promise(ok => { const fr = new FileReader(); fr.onload = () => { const img = new Image(); img.onload = async () => {
+  const k = Math.min(1, 900/Math.max(img.width,img.height)), c = document.createElement('canvas'); c.width = Math.round(img.width*k); c.height = Math.round(img.height*k); c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+  const id = phNewId(); try{ await phPut(id, c.toDataURL('image/jpeg',0.7)); ok(id); }catch(e){ say('照片存不進去，瀏覽器的儲存空間可能已滿。'); ok(''); } }; img.onerror = () => ok(''); img.src = fr.result; }; fr.readAsDataURL(file); }); }
+/* 匯出稽核重點（含應有的樣子、不合格範例照片）：這個區域或這張地圖全部區域 */
+async function auditItemsExport(aid){
+  const a0 = areaById(aid), mapAs = mapAreas(), withItems = mapAs.filter(a=>itemsOf(a.id).length);
+  let as = [a0];
+  if(withItems.length>1){ const one = await dialog(`要匯出哪些稽核重點？`, `只匯出「${a0?a0.name:''}」`, `這張地圖全部區域（${withItems.length} 區）`); as = one ? [a0] : withItems; }
+  as = as.filter(a=>a && itemsOf(a.id).length); if(!as.length){ say('這個區域還沒有稽核重點。'); return; }
+  const btn = $('#aiXls'); if(btn){ btn.disabled = true; btn.textContent = '產生中…'; }
+  try{
+    const m = MAPD.maps.find(x=>x.id===MV.mapId) || {}, cell = xlCell, N = 10, last = xlCol(N-1); let rows = '', rn = 1; const merges = [], anchors = [], media = [];
+    const line = (txt, sty, h) => { rows += `<row r="${rn}"${h?` ht="${h}" customHeight="1"`:''}>${cell(0,rn,txt,sty)}</row>`; merges.push(`A${rn}:${last}${rn}`); rn++; };
+    line(`稽核重點｜${m.name||''}${as.length===1?'・'+as[0].name:'・全部區域'}`, 3, 26);
+    line(`匯出日期：${fmtDate(today())}　共 ${as.reduce((n,a)=>n+itemsOf(a.id).length,0)} 項　✅＝應有的樣子（正常、清潔時）　❌＝不合格範例（髒污、不符合時）`, 0, 20); rn++;
+    const hr = rn; rows += `<row r="${rn}" ht="22" customHeight="1">${['區域','位置','稽核項目','查核標準','查核方式','查核頻率','重要程度','必查','✅ 應有的樣子','❌ 不合格範例'].map((h,i)=>cell(i,rn,h,4)).join('')}</row>`; rn++;
+    const IMGW = 110, IMGH = 82, GAP = 6;
+    const place = async (arr, col, tag) => { let n = 0;
+      for(const p of (arr||[]).slice(0,3)){ const u = isRef(p) ? await phGet(p) : p, b = u && dataUrlBytes(u); if(!b) continue;
+        let w = IMGW, h = IMGH; try{ const im = new Image(); im.src = u; await im.decode(); const k = Math.min(IMGW/im.naturalWidth, IMGH/im.naturalHeight); w = Math.round(im.naturalWidth*k); h = Math.round(im.naturalHeight*k); }catch(e){}
+        media.push(b); const id = media.length, x = 4 + n*(IMGW+GAP), y = 4;
+        anchors.push(`<xdr:oneCellAnchor><xdr:from><xdr:col>${col}</xdr:col><xdr:colOff>${x*9525}</xdr:colOff><xdr:row>${rn-1}</xdr:row><xdr:rowOff>${y*9525}</xdr:rowOff></xdr:from><xdr:ext cx="${w*9525}" cy="${h*9525}"/><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="${id+1}" name="${tag}${id}"/><xdr:cNvPicPr><a:picLocks noChangeAspect="1"/></xdr:cNvPicPr></xdr:nvPicPr><xdr:blipFill><a:blip r:embed="rImg${id}"/><a:stretch><a:fillRect/></a:stretch></xdr:blipFill><xdr:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${w*9525}" cy="${h*9525}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></xdr:spPr></xdr:pic><xdr:clientData/></xdr:oneCellAnchor>`);
+        n++; }
+      return n; };
+    for(const a of as){
+      const its = itemsOf(a.id).slice().sort((x,y)=>(locById(x.locId)?.code||'').localeCompare(locById(y.locId)?.code||'',undefined,{numeric:true}));
+      for(const t of its){ const l = locById(t.locId);
+        const n1 = await place(t.okPhotos, 8, '應有'), n2 = await place(t.ngPhotos, 9, '不合格'), hasPh = n1 || n2;
+        rows += `<row r="${rn}" ht="${hasPh?Math.round((IMGH+10)*0.75):34}" customHeight="1">${[a.name, l?(l.code+' '+l.name).trim():'整個區域', t.name, t.std||'', t.method||'', t.freq||'', t.imp||'', t.req?'必查':'', n1?'':'（無照片）', n2?'':'（無照片）'].map((v,i)=>cell(i,rn,v,i===3?2:10)).join('')}</row>`; rn++; }
+    }
+    const widths = [12,14,20,34,14,10,9,7,52,52];
+    const sheet = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><sheetViews><sheetView workbookViewId="0"><pane ySplit="${hr}" topLeftCell="A${hr+1}" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><cols>${widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join('')}</cols><sheetData>${rows}</sheetData><mergeCells count="${merges.length}">${merges.map(x=>`<mergeCell ref="${x}"/>`).join('')}</mergeCells><pageMargins left="0.4" right="0.4" top="0.5" bottom="0.5" header="0.3" footer="0.3"/><pageSetup orientation="landscape" paperSize="9" fitToWidth="1" fitToHeight="0"/>${media.length?'<drawing r:id="rId1"/>':''}</worksheet>`;
+    await download(xlsxPack('稽核重點', sheet, `$${hr}:$${hr}`, anchors, media), `Casevoras_稽核重點_${m.name||''}_${as.length===1?as[0].name:'全部區域'}_${today()}.xlsx`.replace(/[\/:*?"<>|\s]+/g,'_'), 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    flash('已匯出稽核重點');
+  }catch(e){ say('Excel 產生失敗，請重試。'); }
+  if(btn){ btn.disabled = false; btn.textContent = '📗 匯出稽核重點（含圖片）'; }
 }
 async function auditItemDel(id){
   const t = (MAPD.items||[]).find(x=>x.id===id); if(!t) return;
@@ -3097,14 +3154,15 @@ async function auditItemDel(id){
 }
 
 /* 稽核模式：逐項勾選結果、寫說明、拍照，儲存成一筆稽核紀錄 */
-let AUD = null;
+let AUD = null, AUD_F = null;
+function auditFilter(k){ AUD_F = k; renderAudit(!!(AUD && AUD.id)); }
 function auditStart(aid){
   const a = areaById(aid); if(!a) return;
   const its = itemsOf(aid).slice().sort((x,y)=>(locById(x.locId)?.code||'').localeCompare(locById(y.locId)?.code||'',undefined,{numeric:true}));
   AUD = {id:'', areaId:aid, date:today(), auditor:'', createdAt:'', results:its.map(t=>({itemId:t.id, name:t.name, std:t.std, locId:t.locId||'', req:!!t.req, result:'', note:'', photos:[], defectId:''}))};
-  cur = null; dirty = false; renderAudit(false);
+  AUD_F = null; cur = null; dirty = false; renderAudit(false);
 }
-function auditView(id){ const au = AUDITS.find(x=>x.id===id); if(!au) return; AUD = JSON.parse(JSON.stringify(au)); cur = null; dirty = false; renderAudit(true); }
+function auditView(id){ const au = AUDITS.find(x=>x.id===id); if(!au) return; if(!AUD || AUD.id!==id) AUD_F = null; AUD = JSON.parse(JSON.stringify(au)); cur = null; dirty = false; renderAudit(true); }
 function renderAudit(done){
   const a = areaById(AUD.areaId), name = a ? a.name : '（區域已刪除）';
   setSide('map');
@@ -3124,6 +3182,8 @@ function renderAudit(done){
         <li>按 <b>💾 儲存稽核紀錄</b>；有不合格的，在紀錄裡按「＋ 建立缺失」接到缺失追蹤。</li></ol></details>`}
       <div class="notice info small" style="white-space:pre-line;margin-top:10px">${AR_RULE}</div>
       ${(()=>{ const ps = (a && a.photos) || []; return ps.length ? `<details class="aref" open><summary>📷 ${esc(name)} 參考照片（正常狀態，${ps.length} 張）</summary><div class="photos" style="margin-top:6px">${ps.map((p,j)=>`<div class="ph"><img src="${phSync(p)}" ${isRef(p)?`data-ph="${p}"`:''} alt="參考照片${j+1}" style="cursor:zoom-in" onclick="lightbox(areaById('${a.id}').photos,${j},'${esc(name)} 參考照片')"></div>`).join('')}</div></details>` : ''; })()}
+      ${(()=>{ const ls = [...new Set(AUD.results.map(r=>r.locId||''))]; if(ls.length<2) return ''; const cnt = k => AUD.results.filter(r=>(r.locId||'')===k).length, left = k => AUD.results.filter(r=>(r.locId||'')===k && !r.result).length;
+        return `<div class="aflt"><span class="small muted">區域很大時，可以照位置一段一段稽核：</span><button class="${AUD_F==null?'on':''}" onclick="auditFilter(null)">全部（${AUD.results.length}）</button>${ls.map(k=>{ const l = locById(k); return `<button class="${AUD_F===k?'on':''}" onclick="auditFilter('${k}')">${k?esc(l?(l.code+' '+l.name).trim():'位置'):'整個區域'}（${cnt(k)}${!done&&left(k)?'・未填 '+left(k):''}）</button>`; }).join('')}</div>`; })()}
       <div id="auList">${AUD.results.map((r,i)=>auditRowHTML(r,i,done)).join('')}</div>
       ${done?'':`<div class="row" style="margin-top:14px"><button class="primary" onclick="auditSave()">💾 儲存稽核紀錄</button><button onclick="auditBack()">取消</button><span class="muted small" id="auCount"></span></div>`}
     </div>`;
@@ -3136,9 +3196,10 @@ function renderAudit(done){
 }
 function auditRowHTML(r, i, done){
   const l = locById(r.locId);
-  return `<div class="arow ${r.result?'r-'+r.result:''}" id="ar${i}">
+  return `<div class="arow ${r.result?'r-'+r.result:''} ${AUD_F!=null && (r.locId||'')!==AUD_F ? 'hide' : ''}" id="ar${i}" data-loc="${esc(r.locId||'')}">
     <div class="ar-h"><b>${i+1}. ${esc(r.name)}</b>${r.req?'<span class="areq">必查</span>':''}${l?`<span class="mr-loc">${esc(l.code||l.name)}</span>`:''}</div>
     <div class="small muted">標準：${esc(r.std||'—')}</div>
+    ${(()=>{ const t = aiGet(r.itemId), ok = t.okPhotos||[], ng = t.ngPhotos||[]; return ok.length||ng.length ? `<div class="refs">${ok.length?`<span class="small" style="color:var(--ok)"><b>✅ 應有的樣子：</b></span>${ok.map((p,j)=>`<img src="${phSync(p)}" ${isRef(p)?`data-ph="${p}"`:''} alt="應有的樣子" title="點一下看大圖" onclick="lightbox(aiGet('${t.id}').okPhotos,${j},'✅ 應有的樣子｜${esc(r.name).replace(/'/g,'')}')">`).join('')}`:''}${ng.length?`<span class="small" style="color:var(--bad);margin-left:6px"><b>❌ 不合格範例：</b></span>${ng.map((p,j)=>`<img src="${phSync(p)}" ${isRef(p)?`data-ph="${p}"`:''} alt="不合格範例" title="點一下看大圖" onclick="lightbox(aiGet('${t.id}').ngPhotos,${j},'❌ 不合格範例｜${esc(r.name).replace(/'/g,'')}')">`).join('')}`:''}</div>` : ''; })()}
     ${l && (l.photos||[]).length ? `<div class="refs"><span class="small muted">📷 ${esc(l.code||l.name)} 參考：</span>${l.photos.map((p,j)=>`<img src="${phSync(p)}" ${isRef(p)?`data-ph="${p}"`:''} alt="參考照片${j+1}" title="點一下看大圖" onclick="lightbox(locById('${l.id}').photos,${j},'${esc((l.code+' '+l.name).trim())} 參考照片')">`).join('')}</div>` : ''}
     ${done ? `<div class="ar-res"><b class="${AR[r.result]?.c||'muted'}">${AR[r.result]?AR[r.result].i+' '+AR[r.result].t:'（未填）'}</b>${r.note?`　${esc(r.note)}`:''}</div>`
       : `<div class="ar-btns">${Object.entries(AR).map(([k,v])=>`<button class="${r.result===k?'on '+v.c:''}" onclick="auditSet(${i},'${k}')">${v.i} ${v.t}</button>`).join('')}</div>`}
@@ -3640,7 +3701,7 @@ function lbRec(field, i){ if(cur) lightbox(cur[field], i, PH_LABEL[field]); }
 function lbCase(id, field){ const r = records.find(x=>x.id===id); if(r) lightbox(r[field], 0, `${id}　${PH_LABEL[field]}`); }
 function showImg(src){ const m = document.createElement('div'); m.className = 'modal'; m.innerHTML = `<img src="${src}" alt="" style="max-width:96vw;max-height:90vh;border-radius:8px;box-shadow:0 8px 30px rgba(0,0,0,.4)">`; m.onclick = () => m.remove(); document.body.appendChild(m); }
 /* 地圖設定／備份用：平面圖＋所有參考照片的編號 */
-function mapImageIds(){ return [...MAPD.maps.map(m=>m.img), ...MAPD.areas.flatMap(a=>a.photos||[]), ...MAPD.locs.flatMap(l=>l.photos||[]), ...(MAPD.frags||[]).flatMap(f=>f.photos||[])].filter(Boolean); }
+function mapImageIds(){ return [...MAPD.maps.map(m=>m.img), ...MAPD.areas.flatMap(a=>a.photos||[]), ...MAPD.locs.flatMap(l=>l.photos||[]), ...(MAPD.frags||[]).flatMap(f=>f.photos||[]), ...(MAPD.items||[]).flatMap(t=>(t.okPhotos||[]).concat(t.ngPhotos||[]))].filter(Boolean); }
 
 /* ---------- 廠區地圖圖層：清潔分區、易碎品、動線與設施（跟缺失分開畫，共用同一張平面圖） ---------- */
 /* 資料都放在 MAPD（跟著地圖設定與備份）；易碎品檢查紀錄放 KEY_FC（跟著備份）；座標一樣用 0～1 的比例 */
