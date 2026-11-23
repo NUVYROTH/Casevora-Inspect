@@ -67,7 +67,7 @@ body.wide main{max-width:none}
 .ptitle{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;flex:1}
 .ptitle h1{font-size:22px;margin:0}
 .ptitle span{color:var(--muted);font-size:13px}
-.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:14px}@media(max-width:1300px) and (min-width:901px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;position:relative;overflow:hidden;min-width:0}
 .kpi:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--gold)}
 .kpi.warn:before{background:var(--bad)}
@@ -614,6 +614,7 @@ main:has(.split){max-width:1320px}
 .aiph .ths{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}.aiph .ths .ph{position:relative}.aiph .ths .ph .x{position:absolute;top:-7px;right:-7px;width:24px;height:24px;min-height:0;padding:0;border-radius:50%;font-size:12px;line-height:1;background:#fff;border:1px solid var(--line)}.aiph .ths img{width:64px;height:64px;object-fit:cover;border-radius:6px;border:1px solid var(--line);cursor:zoom-in}
 .aitems .aith{display:flex;gap:4px;margin-top:4px;align-items:center}.aitems .aith img{width:34px;height:34px;object-fit:cover;border-radius:4px;border:2px solid #fff;cursor:zoom-in}.aitems .aith img.ok{outline:2px solid var(--ok)}.aitems .aith img.ng{outline:2px solid var(--bad)}
 .aflt{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px;align-items:center}.aflt button{padding:5px 10px;font-size:13px;min-height:0}.aflt button.on{background:#16213a;color:#fff;border-color:#16213a}.arow.hide{display:none}.agrp{margin:14px 0 2px;font-weight:700;color:var(--ink);border-left:4px solid var(--gold);padding-left:8px}
+.ctbl td{vertical-align:top;line-height:1.5;min-width:84px}.ctbl td:first-child{min-width:96px}.ctbl .chg{font-size:11.5px}
 .st-sec{margin:18px 0 6px;font-size:16px;font-weight:700;border-left:4px solid var(--brand);padding-left:8px;break-after:avoid}
 /* 右側面板可收合的段落 */
 .msec>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px;user-select:none}.msec>summary::-webkit-details-marker{display:none}
@@ -1087,6 +1088,10 @@ const gC = (inner, title) => `<div class="gx-c">${title?`<div class="gx-t">${tit
 const gR = inner => `<div class="gx-row">${inner}</div>`;
 const gStep = (n, t, mock, body) => `<div class="mg-step"><div class="gx">${mock}</div><div class="mg-txt"><div class="mg-h"><span class="no">${n}</span>${t}</div>${body}</div></div>`;
 const GUIDES = {
+  record: { t:'缺失單使用說明（新增／編輯衛生缺失）', steps:() => [...GUIDES.list.steps().slice(0,5),
+    gStep(6,'返回、存檔', gC(gR(`${gB('← 回廠區地圖',{hl:1,n:1})}`)+gR(`${gB('儲存',{dk:1,n:2})}${gB('返回清單')}`)),
+      `<p>左上角的返回按鈕${gN(1)}會依你從哪裡點進來而不同：清單、廠區地圖、統計分析或稽核紀錄；存檔、結案後也會回到原本的畫面。</p><p>改完記得按最下面的「儲存」${gN(2)}；還沒存就離開會先問你。</p><p class="muted small">結案後「結案天數」會自動算（發現日期到結案日期，不含六日），統計分析頁可以看各負責單位、各區域的平均天數。</p>`)
+  ]},
   list: { t:'缺失清單使用說明', steps:() => [
     gStep(1,'新增衛生缺失', gC(gR(`<b style="flex:1">缺失清單</b>${gB('＋ 新增衛生缺失',{dk:1,hl:1,n:1})}`)) + gC(gR(`${gIn('發現日期 2026/10/26')}${gIn('缺失區域 ▾',1)}`)+gR(gIn('缺失描述：包裝區地面積水…'))+gR(`${gIn('缺失類別 ▾')}${gN(2)}${gIn('缺失等級 ▾',1)}`)),
       `<p>按右上角「＋ 新增衛生缺失」${gN(1)}，填發現日期、缺失區域、缺失描述、缺失類別。</p><p><b>缺失等級</b>${gN(2)}由品管／品保人員選；打 * 的都要填才能儲存。區域、人員可以用「常用選項」的下拉選。</p>`),
@@ -1099,7 +1104,7 @@ const GUIDES = {
     gStep(5,'結案確認', gC(gR(gIn('結案確認人員 品管人員'))+gR(`<span class="gx-ck">✓</span><span class="gx-s">已確認改善完成、符合結案條件</span>`)+gR(gB('確認結案',{ok:1,hl:1,n:1})),'5 結案確認（品管）'),
       `<p>結案條件都符合後，由品管人員填姓名、勾選確認，按「確認結案」${gN(1)}。結案後資料鎖定，需要修改可以「撤銷結案」。</p><p>結案後還是可以補兩欄，選好就自動存：<b>細部位置（廠區地圖）</b>、<b>負責單位</b>（例：改成生產課／打漿組）。</p>`),
     gStep(6,'查找案件', gC(gR(`${gN(1)}${gTag('未結案','dk')}${gTag('逾期')}${gTag('已結案')}${gTag('全部')}`)+gR(`${gN(2)}${gIn('🔍 10/26／包裝區／作業員 A／編號',1)}`)+gR(`${gIn('全部類別 ▾')}${gIn('2026 年 ▾')}${gIn('10 月 ▾')}`)),
-      `<p class="muted small">清單上方四張卡（本月新增、未結案、今年結案率、最多的缺失類別）和右邊「處理狀態／缺失類別前 3 名／需要注意」可以快速看全貌；要看<b>比上期幾 %</b>，到「📊 統計分析」。</p><p>用分頁${gN(1)}看未結案、逾期、待結案確認、已結案。</p><p>搜尋欄${gN(2)}可以打<b>日期（例：10/26）、缺失區域、負責人員、編號</b>；也能依類別、年份、月份、<b>負責單位</b>篩選。</p><p>「全部負責單位」下拉選單會列出常用選項和案件裡出現過的單位；一件寫兩個單位（打漿組、蒸煮組）選哪一個都找得到，「生產課／打漿組」選「生產課」或「打漿組」都找得到。</p>`),
+      `<p class="muted small">清單上方五張卡（本月新增、未結案、今年結案率、<b>本月結案率</b>（含平均結案天數、比上月同期）、最多的缺失類別）和右邊「處理狀態／缺失類別前 3 名／需要注意」可以快速看全貌；要看<b>比上期幾 %</b>，到「📊 統計分析」。</p><p>用分頁${gN(1)}看未結案、逾期、待結案確認、已結案。</p><p>搜尋欄${gN(2)}可以打<b>日期（例：10/26）、缺失區域、負責人員、編號</b>；也能依類別、年份、月份、<b>負責單位</b>篩選。</p><p>「全部負責單位」下拉選單會列出常用選項和案件裡出現過的單位；一件寫兩個單位（打漿組、蒸煮組）選哪一個都找得到，「生產課／打漿組」選「生產課」或「打漿組」都找得到。</p>`),
     gStep(7,'報表與匯出', gC(gR(`${gB('匯出報表（Excel）',{hl:1,n:1})}`)+gR(`${gB('📸 改善前後報告',{n:2})}`)+gR(`${gB('📗 改善通知單 Excel',{hl:1,n:3})}`)),
       `<p>「匯出報表」${gN(1)}：選年月、狀態，公司表單或完整資料。</p><p>「改善前後報告」${gN(2)}會下載一個網頁檔，用瀏覽器打開後列印或存成 PDF；「改善通知單 Excel」${gN(3)}照公司通知單格式含照片。有勾選案件時只做勾選的；沒勾選時，依<b>目前的分頁和篩選</b>（例：只選「打漿組」，就是打漿組的報告，可以直接交給該單位）。</p>`),
     gStep(8,'備份（每兩週到一個月）', gC(gR(`${gB('下載備份',{dk:1,hl:1,n:1})}${gB('從備份還原',{n:2})}`)) + `<div class="gx-warn">⚠ 清除瀏覽資料、無痕視窗 → 資料會不見</div>`,
@@ -1119,7 +1124,9 @@ const GUIDES = {
     gStep(6,'📍 缺失區域分析（圓餅圖、曲線圖）', gC(gR(`<svg viewBox="0 0 120 120" style="width:84px;height:84px;flex:none"><circle cx="60" cy="60" r="44" fill="none" stroke="#2a78d6" stroke-width="20" stroke-dasharray="96 400" transform="rotate(-90 60 60)"/><circle cx="60" cy="60" r="44" fill="none" stroke="#eb6834" stroke-width="20" stroke-dasharray="0 98 64 400" transform="rotate(-90 60 60)"/><circle cx="60" cy="60" r="44" fill="none" stroke="#1baf7a" stroke-width="20" stroke-dasharray="0 164 44 400" transform="rotate(-90 60 60)"/><circle cx="60" cy="60" r="44" fill="none" stroke="#9aa3b2" stroke-width="20" stroke-dasharray="0 210 66 400" transform="rotate(-90 60 60)"/><text x="60" y="66" text-anchor="middle" font-size="20" font-weight="800" fill="#16213a">90</text></svg><span style="display:flex;flex-direction:column;gap:3px;font-size:11px;flex:1"><span><i style="display:inline-block;width:9px;height:9px;background:#2a78d6;border-radius:2px"></i> 包裝區　<b>28</b>　31%</span><span><i style="display:inline-block;width:9px;height:9px;background:#eb6834;border-radius:2px"></i> 打漿區　<b>19</b>　21%</span><span><i style="display:inline-block;width:9px;height:9px;background:#1baf7a;border-radius:2px"></i> 緩衝區　<b>12</b>　13%</span><span><i style="display:inline-block;width:9px;height:9px;background:#9aa3b2;border-radius:2px"></i> 其它區域</span></span>${gN(1)}`),'缺失區域分布') + gC(`<svg viewBox="0 0 200 60" style="width:100%;height:auto;display:block"><line x1="6" x2="196" y1="54" y2="54" stroke="#c9bda6"/><polyline points="6,40 44,30 82,20 120,34 158,26 196,10" fill="none" stroke="#2a78d6" stroke-width="2"/><polyline points="6,46 44,42 82,36 120,30 158,40 196,38" fill="none" stroke="#eb6834" stroke-width="2"/><polyline points="6,50 44,48 82,44 120,46 158,36 196,44" fill="none" stroke="#1baf7a" stroke-width="2"/></svg>`+gR(`<span class="gx-s">${gN(2)}各缺失區域每月件數</span>`)),
       `<p>統計頁最下面「📍 缺失區域分析」看上方選的年份（依發現日期）：</p><p><b>圓餅圖</b>${gN(1)}：今年各缺失區域佔多少，右邊列出件數、佔比和<b>比去年同期 ▲▼ %</b>；前 5 名各一塊，其餘合成灰色的「其它區域」。<b>點一塊或右邊清單</b>就列出那個區域的案件。</p><p><b>曲線圖</b>${gN(2)}：各缺失區域每個月幾件，看哪一區最近變多或變少；滑過看數字、點圓點看那個月的案件、點圖例只看一條線。</p><p>要看<b>各區域的年、季、月分析、跟上期比、下載 Excel／Word</b>，按右上角「🗺️ 到廠區地圖看各區細部分析」（見廠區地圖使用說明第 12 步）。</p><p class="muted small">同一個區域在圓餅圖和曲線圖是同一個顏色。區域名稱寫法不同（例：1F倉儲區、1樓倉儲區）會被當成兩區，可以到「常用選項」合併。</p>`),
     gStep(7,'▲▼ 跟上期比幾 %（給主管看）', gC(gR(`<span class="gx-k">59<small>新增<br><b style="color:#b42318">▲ +20%</b></small></span>${gN(1)}<span class="gx-k ok">26<small>結案<br><b style="color:#167a3e">▲ +8%</b></small></span>`)+gR(`<span class="gx-s" style="width:54px">包裝區</span><span class="gx-bar" style="width:55%"></span><b style="color:#b42318;font-size:11px">▲ +35%</b>${gN(2)}`)+gR(`<span class="gx-s" style="width:54px">冷藏庫</span><span class="gx-bar" style="width:25%"></span><b style="color:#167a3e;font-size:11px">▼ −40%</b>`)),
-      `<p>統計頁的數字、長條、表格、圓餅圖、折線圖旁邊都有 <b>▲▼ 百分比</b>，主管一眼就知道變多還是變少：</p><p><b style="color:#b42318">紅色＝變差</b>（缺失、逾期、尚未結案變多，或結案變少）；<b style="color:#167a3e">綠色＝變好</b>。滑鼠移上去看上期是幾件。上期是 0 件時顯示「新增」；結案率用「百分點」（例：60% → 65% ＝ ▲ +5 個百分點）。</p><p><b>跟誰比？</b>四個數字${gN(1)}、區域長條${gN(2)}、類別和等級表：跟<b>上月／上季／去年</b>比；本期還沒過完時，上期<b>只算到同一天</b>（例：11/1～11/19 比 10/1～10/19），不會拿半個月比整個月。右邊三張卡、📈 每月趨勢、📍 缺失區域分析：比<b>去年同期</b>。舊的趨勢圖下方一排是「比前一期」；新折線圖滑過某個月，數字旁的 % 是比前一個月。</p><p class="muted small">Word 報表也會帶出這些百分比。</p>`)
+      `<p>統計頁的數字、長條、表格、圓餅圖、折線圖旁邊都有 <b>▲▼ 百分比</b>，主管一眼就知道變多還是變少：</p><p><b style="color:#b42318">紅色＝變差</b>（缺失、逾期、尚未結案變多，或結案變少）；<b style="color:#167a3e">綠色＝變好</b>。滑鼠移上去看上期是幾件。上期是 0 件時顯示「新增」；結案率用「百分點」（例：60% → 65% ＝ ▲ +5 個百分點）。</p><p><b>跟誰比？</b>四個數字${gN(1)}、區域長條${gN(2)}、類別和等級表：跟<b>上月／上季／去年</b>比；本期還沒過完時，上期<b>只算到同一天</b>（例：11/1～11/19 比 10/1～10/19），不會拿半個月比整個月。右邊三張卡、📈 每月趨勢、📍 缺失區域分析：比<b>去年同期</b>。舊的趨勢圖下方一排是「比前一期」；新折線圖滑過某個月，數字旁的 % 是比前一個月。</p><p class="muted small">Word 報表也會帶出這些百分比。</p>`),
+    gStep(8,'⏱ 結案率與結案天數（不含六日）', gC(`<div style="font-size:11px;width:100%"><div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:2px;background:#f3ece0;padding:3px 4px;border-radius:4px;font-weight:700"><span>負責單位</span><span>一般</span><span>限期改善</span><span>重大</span></div><div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:2px;padding:3px 4px"><span>打漿組</span><span>2 天<br><b style="color:#167a3e">▼ −20%</b></span><span>12 天<br><b style="color:#b42318">▲ +9%</b></span><span>1 天</span></div></div>${gN(1)}`,'⏱ 各負責單位平均結案天數'),
+      `<p>統計頁「⏱ 結案率與結案天數」${gN(1)}看本期發現、已結案的案件：</p><p><b>結案率</b>＝本期發現的案件中已結案的比例；<b>結案天數</b>＝發現日期到結案日期，<b>只算週一～週五</b>（週五發現、下週一結案＝1 天；國定假日沒有另外扣）。</p><p>上面一張表是全部的結案率、平均天數（一般缺失、限期改善、重大缺失分開）；下面是<b>各負責單位</b>、<b>各缺失區域</b>的平均天數，每一格寫幾天、幾件，下面的 ▲▼ % 是比上期：天數<b style="color:#b42318">變多＝紅（變慢）</b>、<b style="color:#167a3e">變少＝綠（變快）</b>。</p><p>「下載 Word 報表」會把這幾張表一起放進月報／季報／年報。缺失清單上方的<b>本月結案率</b>卡片也會顯示本月平均天數和比上月同期。</p>`)
   ]},
   map: { t:'廠區地圖使用說明', steps:() => [
     gStep(1,'上傳平面圖', gC(gR(`<b style="flex:1">廠區地圖</b>${gB('＋ 新增地圖（上傳平面圖）',{dk:1,hl:1,n:1})}`)) + gC(gR(`${gIn('一樓 ▾')}<span style="flex:1"></span>${gB('適應畫面',{hl:1})}${gB('⤢ 整張顯示',{hl:1,n:2})}`)),
@@ -1198,10 +1205,15 @@ function kpiHTML(){
   const Y = L.filter(r=>(r.foundDate||'').startsWith(yr)), yClosed = Y.filter(r=>r.closed).length;
   const tc = new Map(); Y.forEach(r=>{ if(r.defType) tc.set(r.defType,(tc.get(r.defType)||0)+1); });
   const top = [...tc.entries()].sort((a,b)=>b[1]-a[1])[0];
+  /* 本月結案率：本月發現的案件中已結案的比例；跟上月同一天為止比 */
+  const mRate = (st, en) => { const rs = L.filter(r=>(r.foundDate||'')>=st && (r.foundDate||'')<=en), c = rs.filter(r=>r.closed && r.closedDate && r.closedDate<=en).length; return {n:rs.length, c, p: rs.length ? Math.round(c/rs.length*100) : null}; };
+  const mNow = mRate(thisM+'-01', t), lmEnd = (()=>{ const e = addDays(lm+'-01', daysBetween(thisM+'-01', t)); const last = lm+'-'+String(lastDay(+lm.slice(0,4), +lm.slice(5,7))).padStart(2,'0'); return e < last ? e : last; })(), mPrev = mRate(lm+'-01', lmEnd);
+  const mDays = avg1(L.filter(r=>ym(r.foundDate)===thisM).map(closeDays).filter(d=>d!=null));
   return `<div class="kpis">
     <div class="kpi"><span class="kic" aria-hidden="true">${KIC.doc}</span><div class="l">本月新增</div><div class="n">${nM}<small>件</small></div><div class="d">上月 ${nLM} 件</div></div>
     <div class="kpi warn"><span class="kic kw" aria-hidden="true">${KIC.clock}</span><div class="l">未結案</div><div class="n">${open.length}<small>件</small></div><div class="d">${open.length?'其中逾期 '+over.length+' 件':'目前沒有未結案'}</div></div>
     <div class="kpi ok"><span class="kic kok" aria-hidden="true">${KIC.okc}</span><div class="l">今年結案率</div><div class="n">${Y.length?Math.round(yClosed/Y.length*100)+'<small>%</small>':'—'}</div><div class="d">${Y.length?'今年 '+Y.length+' 件中結案 '+yClosed+' 件':'今年還沒有案件'}</div></div>
+    <div class="kpi ok"><span class="kic kok" aria-hidden="true">${KIC.okc}</span><div class="l">本月結案率</div><div class="n">${mNow.p==null?'—':mNow.p+'<small>%</small>'}</div><div class="d">${mNow.n?`本月 ${mNow.n} 件中結案 ${mNow.c} 件${mDays!=null?`・平均 ${mDays} 天`:''}`:'本月還沒有案件'}${mNow.p!=null && mPrev.p!=null?`<br>比上月同期 ${ptHTML(mNow.p, mPrev.p)}`:''}</div></div>
     <div class="kpi info"><span class="kic kin" aria-hidden="true">${KIC.tag}</span><div class="l">最多的缺失類別</div><div class="n nt">${top?esc(typeName(top[0])):'—'}</div><div class="d">${top?'今年 '+top[1]+' 件':'今年還沒有案件'}</div></div>
   </div>`;
 }
@@ -1575,6 +1587,8 @@ function renderDetail(){
       <h2><span class="no">5</span>品管人員結案確認</h2>
       <div id="closeArea"></div>
     </div>
+
+    ${guideBox('record')}
 
     <div class="savebar"><div class="in">
       <button class="primary lockable" onclick="saveRecord()">儲存</button>
@@ -2417,7 +2431,7 @@ async function download(content, name, type){
 
 /* ---------- 備份 / 還原 ---------- */
 /* 畫面設定（風險顏色、磁鐵、圖層、地圖高度、隱藏的圖例、說明展開…）：只帶設定，不含資料 */
-const PREF_KEYS = ['mapH','mapZ','mapRisk','mapLock','mapStat','mapLayer','mapZbg','mapHide','mapSnap','mapSW','mapSec','audGuide'];
+const PREF_KEYS = ['mapH','mapZ','mapRisk','mapLock','mapStat','mapLayer','mapZbg','mapHide','mapSnap','mapSW','mapSec','audGuide','fcGuide'];
 function prefsGet(){ const o = {}; try{ for(let i=0;i<localStorage.length;i++){ const k = localStorage.key(i); if(!k.startsWith(KEY+'_')) continue; const n = k.slice(KEY.length+1); if(PREF_KEYS.includes(n) || n.startsWith('guide_')) o[n] = localStorage.getItem(k); } }catch(e){} return o; }
 function prefsSet(o){ if(!o || typeof o!=='object') return; try{ Object.entries(o).forEach(([n,v])=>{ if((PREF_KEYS.includes(n) || /^guide_\w+$/.test(n)) && typeof v==='string') localStorage.setItem(KEY+'_'+n, v); }); }catch(e){} }
 async function backup(){
@@ -4179,6 +4193,11 @@ function renderFragCheck(done){
         <div><label class="f req">檢查日期</label><input type="date" id="fcDate" value="${esc(FCK.date)}" max="${today()}" ${done?'disabled':''}></div>
         <div><label class="f">檢查人員</label>${done?`<div style="padding:8px 0">${esc(FCK.inspector||'—')}</div>`:combo('people', FCK.inspector, 'id="fcBy"', '例：品管人員')}</div>
       </div>
+      ${done?'':`<details class="aguide" ${(()=>{ try{ return localStorage.getItem('qaHygieneTracker_v1_fcGuide')==='0'?'':'open'; }catch(e){ return 'open'; } })()} ontoggle="try{localStorage.setItem('qaHygieneTracker_v1_fcGuide',this.open?'1':'0')}catch(e){}"><summary>📖 易碎品檢查怎麼用（點這裡展開／收合）</summary><ol>
+        <li>確認<b>檢查日期</b>、選<b>檢查人員</b>。</li>
+        <li>每一項選 ✅ 完整、❌ 破損、❓ 遺失或 ⊘ 不適用；都沒問題可以按「其餘全部 ✅ 完整」。</li>
+        <li>破損、遺失的寫說明、加照片。</li>
+        <li>按儲存；破損或遺失的在紀錄裡按「＋ 建立缺失」接到缺失追蹤，並確認碎片有沒有污染產品。</li></ol></details>`}
       <div class="notice info small" style="margin-top:10px">✅ <b>完整</b>：沒有裂痕、缺角、鬆動　❌ <b>破損</b>：有裂痕、缺角或碎片　❓ <b>遺失</b>：找不到　⊘ <b>不適用</b>：本次已拆除或停用</div>
       <div id="fcList">${FCK.results.map((r,i)=>fragRowHTML(r,i,done)).join('')}</div>
       ${done?'':`<div class="row" style="margin-top:14px"><button class="primary" onclick="fragCheckSave()">💾 儲存檢查紀錄</button><button onclick="fragCheckAll()">其餘全部 ✅ 完整</button><button onclick="fragCheckBack()">取消</button><span class="muted small" id="fcCount"></span></div>`}
@@ -4696,6 +4715,49 @@ function prevRangeSame(view, y, a){
   if(t>=rg.start && t<rg.end){ const e = addDays(pr.start, daysBetween(rg.start,t)); if(e<pr.end){ pr.end = e; pr.same = true; } }
   return pr;
 }
+/* 工作天：發現日期隔天起算到結案日期，只算週一～週五（不含六日；國定假日沒有另外扣） */
+function workDays(a, b){
+  if(!a || !b || b < a) return null;
+  const [y,m,d] = a.split('-').map(Number), [y2,m2,d2] = b.split('-').map(Number), t = new Date(y,m-1,d), e = new Date(y2,m2-1,d2);
+  let n = 0; while(t < e){ t.setDate(t.getDate()+1); const w = t.getDay(); if(w!==0 && w!==6) n++; } return n;
+}
+const closeDays = r => r.closed && r.closedDate ? workDays(r.foundDate, r.closedDate) : null;
+const avg1 = a => a.length ? Math.round(a.reduce((x,y)=>x+y,0)/a.length*10)/10 : null;
+/* 天數比上期：天數變多＝紅（變慢）、變少＝綠（變快） */
+function dayChg(n, pn){ if(n==null || pn==null) return ''; if(n===pn) return '<span class="chg chg-eq">＝ 持平</span>';
+  const up = n > pn, t = pn===0 ? `${up?'▲ +':'▼ −'}${Math.round(Math.abs(n-pn)*10)/10} 天` : `${up?'▲ +':'▼ −'}${Math.round(Math.abs(n-pn)/pn*100)||'<1'}%`;
+  return `<span class="chg ${up?'chg-bad':'chg-good'}" title="上期平均 ${pn} 天 → 本期 ${n} 天">${t}</span>`; }
+/* 一段期間（依發現日期）的結案率與結案天數；L＝算到哪一天為止 */
+const CAT3 = [['general','一般缺失'],['schedule','限期改善'],['major','重大缺失']];
+function closeStats(range){
+  const t = today(), L = range.end < t ? range.end : t;
+  const cs = live().filter(r => r.foundDate && r.foundDate>=range.start && r.foundDate<=range.end);
+  const done = cs.filter(r => r.closed && r.closedDate && r.closedDate<=L);
+  const grp = keyOf => { const m = new Map(); done.forEach(r => { const d = closeDays(r); if(d==null) return; keyOf(r).forEach(k => { if(!m.has(k)) m.set(k, {all:[], general:[], schedule:[], major:[]}); const g = m.get(k); g.all.push(d); if(g[r.category]) g[r.category].push(d); }); }); return m; };
+  const all = {all:[], general:[], schedule:[], major:[]}; done.forEach(r => { const d = closeDays(r); if(d==null) return; all.all.push(d); if(all[r.category]) all[r.category].push(d); });
+  return {n:cs.length, closed:done.length, rate: cs.length ? Math.round(done.length/cs.length*100) : null, all,
+    dept: grp(deptsOf), area: grp(r => [(r.area||'').trim() || '未填區域'])};
+}
+function closeTblHTML(title, cur, prev, pw){
+  const keys = [...cur.keys()].sort((a,b)=>cur.get(b).all.length-cur.get(a).all.length);
+  if(!keys.length) return `<div class="st-sec">${title}</div><div class="muted small">這段期間還沒有結案的案件。</div>`;
+  const cell = (g, pg) => { const v = avg1(g), pv = pg && pg.length ? avg1(pg) : null; return g.length ? `<b>${v}</b> 天<span class="muted small">（${g.length} 件）</span><br>${dayChg(v, pv)}` : '<span class="muted">—</span>'; };
+  return `<div class="st-sec">${title}</div><div class="st-scroll"><table class="st-table ctbl"><thead><tr><th>${title.includes('單位')?'負責單位':'缺失區域'}</th>${CAT3.map(([,n])=>`<th>${n}</th>`).join('')}<th>全部平均</th></tr></thead><tbody>
+    ${keys.map(k => { const g = cur.get(k), p = prev.get(k); return `<tr><td><b>${esc(k)}</b></td>${CAT3.map(([c])=>`<td>${cell(g[c], p&&p[c])}</td>`).join('')}<td>${cell(g.all, p&&p.all)}</td></tr>`; }).join('')}
+    </tbody></table></div>`;
+}
+function closeSecHTML(c, p, pw, pr){
+  const row = (name, g, pg) => { const v = avg1(g), pv = avg1(pg); return `<tr><td>${name}</td><td>${v==null?'—':`<b>${v}</b> 天（${g.length} 件）`}</td><td>${pv==null?'—':pv+' 天（'+pg.length+' 件）'}</td><td>${dayChg(v, pv)||'—'}</td></tr>`; };
+  return `<div class="st-sec">⏱ 結案率與結案天數（工作天，不含六日）</div>
+    <div class="st-note">結案天數＝發現日期到結案日期，只算週一～週五（例：週五發現、下週一結案＝1 天；國定假日沒有另外扣）。只算本期發現、而且已結案的案件；跟 ${esc(pw)}（${fmtDate(pr.start)}～${fmtDate(pr.end)}）比，天數<b style="color:var(--bad)">變多＝紅（變慢）</b>、<b style="color:var(--ok)">變少＝綠（變快）</b>。</div>
+    <div class="st-scroll"><table class="st-table ctbl"><thead><tr><th>項目</th><th>本期</th><th>${esc(pw)}</th><th>比${esc(pw)}</th></tr></thead><tbody>
+      <tr><td><b>結案率</b></td><td>${c.rate==null?'—':`<b>${c.rate}%</b>（${c.n} 件中結案 ${c.closed} 件）`}</td><td>${p.rate==null?'—':p.rate+'%（'+p.n+' 件中結案 '+p.closed+' 件）'}</td><td>${ptHTML(c.rate, p.rate)||'—'}</td></tr>
+      ${row('<b>平均結案天數（全部）</b>', c.all.all, p.all.all)}
+      ${CAT3.map(([k,n])=>row(n+' 平均', c.all[k], p.all[k])).join('')}
+    </tbody></table></div>
+    ${closeTblHTML('各負責單位平均結案天數', c.dept, p.dept, pw)}
+    ${closeTblHTML('各缺失區域平均結案天數', c.area, p.area, pw)}`;
+}
 function periodRange(view,y,a){
   if(view==='month') return {start:`${y}-${pad2(a)}-01`, end:`${y}-${pad2(a)}-${pad2(lastDay(y,a))}`, label:`${y} 年 ${a} 月`, short:`${a}月`, y, a};
   if(view==='quarter'){ const m1=(a-1)*3+1, m3=a*3; return {start:`${y}-${pad2(m1)}-01`, end:`${y}-${pad2(m3)}-${pad2(lastDay(y,m3))}`, label:`${y} 年第 ${a} 季（${m1}～${m3} 月）`, short:`${y} Q${a}`, y, a}; }
@@ -4806,6 +4868,8 @@ function statHTML(view,y,a){
       <div class="box"><div class="n">${c.cross.length}</div><div class="l">跨月逾期（不含在上面四項）</div><div class="st-note" style="margin:0">前期新增、尚未完成且已過期限的案件（累計）</div></div>
       <div class="box del"><div class="n">${c.del}</div><div class="l">刪除件數（不立案）</div><div class="st-note" style="margin:0">本期發現日期、已刪除未列入新增的案件。新增 ${c.total} ＋ 刪除 ${c.del} ＝ ${c.total+c.del}</div></div>
     </div>
+
+    ${closeSecHTML(closeStats(rg), closeStats(pr), pw, pr)}
 
     <div class="st-sec">跨月逾期明細（需追蹤）</div>
     ${c.cross.length?`<div class="st-scroll"><table class="st-table"><thead><tr><th>編號</th><th>發現日期</th><th>缺失區域</th><th>負責單位／人員</th><th>改善期限</th><th>已逾期</th></tr></thead><tbody>
