@@ -1157,7 +1157,7 @@ const GUIDES = {
     gStep(12,'📋 各區域分析：年、季、月與下載', gC(gR(`${gN(1)}${gTag('年度','dk')}${gTag('每季')}${gTag('每月')}<span class="gx-s">◀ 2026 年 ▾ ▶</span>`)+gR(`<div style="font-size:11px;width:100%"><div style="display:grid;grid-template-columns:2fr 1fr 1.3fr 1fr;gap:2px;background:#f3ece0;padding:3px 4px;border-radius:4px;font-weight:700"><span>區域</span><span>件數</span><span>跟上期比</span><span>結案率</span></div><div style="display:grid;grid-template-columns:2fr 1fr 1.3fr 1fr;gap:2px;padding:3px 4px"><span>包裝區</span><b>26</b><b style="color:#b42318">▲ +11（+73%）</b><span>65%</span></div><div style="display:grid;grid-template-columns:2fr 1fr 1.3fr 1fr;gap:2px;padding:3px 4px"><span>出貨平台</span><b>4</b><b style="color:#167a3e">▼ −6（−60%）</b><span>25%</span></div></div>${gN(2)}`),'📊 地圖統計') + gC(gR(`${gB('📗 下載區域分析（Excel）',{hl:1,n:3})}`)+gR(`${gB('📄 下載區域分析（Word）',{dk:1,hl:1,n:4})}`)),
       `<p>「📊 地圖統計」選<b>年度、每季或每月</b>${gN(1)}，再選年份、第幾季或幾月；按 <b>◀ ▶</b> 可以直接跳上一期／下一期（跨年會自動換年份）。整個統計（數字卡、長條、圓餅圖、折線圖）都跟著換。右邊另一組可以選全部期間、最近三個月、最近六個月或自訂日期。折線圖選年看 12 個月、選季看 3 個月、選月看每週。</p><p><b>📋 各區域分析表</b>${gN(2)}：每一區的件數、<b>跟上期比</b>（▲ 紅色＝變多、▼ 綠色＝變少，括號是<b>幾 %</b>）、未結案、逾期、結案率、重複發生、最多的類別。上期＝選月比上個月、選季比上一季、選年比<b>去年同期</b>；這個月／這一季還沒過完時，上期只算到同一天。</p><p><b>▲▼ 百分比</b>也會出現在「缺失總數」「重複發生」數字卡、各區域與類型長條、圓餅圖清單、折線圖圖例（跟上期比）；「缺失趨勢」長條和折線圖滑過的數字是跟<b>前一個月（選月時前一週）</b>比。未結案、逾期不比百分比，因為越早的案件有越多時間結案，比起來不公平。數字可以點開看案件；點地圖上某一區，表格就變成那一區各位置。</p><p><b>📗 Excel</b>${gN(3)}：四段——各區域總表、區域 × 月份（或週）、區域 × 缺失類別、各區域的位置明細，可以自己排序、畫圖。</p><p><b>📄 Word</b>${gN(4)}：一頁摘要（哪幾區變多、變少）＋總表＋<b>圓餅圖、折線圖</b>＋各表格，可以直接列印交報告。</p><p class="muted small">統計分析頁的「📍 缺失區域分析」也有「🗺️ 到廠區地圖看各區細部分析」按鈕可以直接過來。</p>`),
     gStep(13,'給同事用同一張地圖', gC(gR(`${gB('匯出地圖設定',{hl:1,n:1})}${gB('匯入地圖設定',{hl:1,n:2})}`)) + `<div class="gx-s" style="text-align:center">含平面圖・區域・位置・稽核重點・參考照片<br>＋清潔分區・易碎品・動線・病媒防治・顏色設定<br>不含案件，不會蓋掉同事的案件</div>`,
-      `<p>按「匯出地圖設定」${gN(1)}存成檔案給同事，同事按「匯入地圖設定」${gN(2)}就有同一張地圖。</p><p>「匯出地圖設定」包含<b>所有圖層</b>（清潔分區、易碎品、動線、病媒防治）和顏色設定；只有地圖，不含案件、稽核紀錄、易碎品檢查紀錄。</p><p>要放進報告或貼公告時，按上方<b>「🖼 匯出平面圖（圖片）」</b>，會把目前這一層存成清晰的 PNG，四周留白、附圖例（缺失層依目前風險顏色開／關）。</p><p class="muted small">要連案件一起帶走，請用缺失清單的「下載備份」。平面圖屬公司內部資料，不會上傳也不會送給 AI；匯出的圖片傳給別人前請先確認可以外流。</p>`),
+      `<p>按「匯出地圖設定」${gN(1)}存成檔案給同事，同事按「匯入地圖設定」${gN(2)}就有同一張地圖。</p><p>「匯出地圖設定」包含<b>所有圖層</b>（清潔分區、易碎品、動線、病媒防治）和顏色設定；只有地圖，不含案件、稽核紀錄、易碎品檢查紀錄。</p><p>要放進報告或貼公告時，按上方<b>「🖼 匯出平面圖（圖片）」</b>，會把目前這一層存成清晰的 PNG：平面圖多的空白會自動裁掉、放大到約佔 8～9 成寬（四周留一點白，邊緣的標記不會被切掉），附圖例（缺失層依目前風險顏色開／關）。</p><p class="muted small">要連案件一起帶走，請用缺失清單的「下載備份」。平面圖屬公司內部資料，不會上傳也不會送給 AI；匯出的圖片傳給別人前請先確認可以外流。</p>`),
     gStep(14,'切換圖層（缺失以外的圖）', gC(gR(`${gN(1)}<span class="gx-seg" style="flex-wrap:wrap"><i class="on">🔍 缺失</i><i>🧼 清潔分區</i><i>🔶 易碎品</i><i>➡️ 動線與設施</i><i>🐭 病媒防治</i></span>`)+gR(`${gB('🧼 疊清潔分區（開）',{dk:1,hl:1,n:2})}${gB('🖼 匯出平面圖（圖片）',{hl:1,n:3})}`)),
       `<p>地圖上方有一排圖層${gN(1)}，每一層<b>分開畫、分開看</b>，不會跟缺失混在一起；平面圖只要上傳一次，五層共用。</p><p>易碎品、動線、病媒這三層可以按「🧼 疊清潔分區」${gN(2)}，把分區淡淡地墊在底下對照。</p><p>在哪一層按「🖼 匯出平面圖（圖片）」${gN(3)}，就匯出<b>那一層</b>的清晰 PNG，下方附圖例。</p>`),
     gStep(15,'🧼 清潔分區', gC(gR(`${gIn('準清潔區 ▾',1)}${gN(1)}${gB('▭ 畫分區（拖曳）',{hl:1,n:2})}${gB('⬠ 多邊形分區',{hl:1})}`)+gR(`<span class="gx-sw" style="background:#c4bb7c"></span><span class="gx-s">一般作業區</span><span class="gx-sw" style="background:#b9cde5"></span><span class="gx-s">準清潔區</span><span class="gx-sw" style="background:#e6b9b8"></span><span class="gx-s">清潔區</span>`)) + gC(gR(`${gIn('包裝區 ▾')}${gIn('準清潔區 ▾')}`)+gR(gB('複製成清潔分區',{hl:1,n:3})),'📋 從缺失區域複製範圍'),
@@ -3337,6 +3337,26 @@ let MV_RISK = true; try{ MV_RISK = localStorage.getItem('qaHygieneTracker_v1_map
 function mapRiskToggle(){ MV_RISK = !MV_RISK; try{ localStorage.setItem('qaHygieneTracker_v1_mapRisk', MV_RISK?'1':'0'); }catch(e){} renderMap(); }
 function areaColor(a, rep){ return MV_RISK && MV.mode==='view' ? RISK[riskOf(recsForArea(a), a.id, rep)].c : (a.color||'#b8955a'); }
 /* 匯出畫好的平面圖（PNG）：平面圖＋區域＋位置標記，依目前的顯示方式（風險顏色開／關），放大繪製讓文字清晰 */
+/* 匯出平面圖：把平面圖四周多的空白裁掉、放大，讓圖面約佔 8～9 成（不貼邊）；標題列、圖例不變 */
+function exportTrim(c, HEAD, FOOT){
+  const PW = c.width, BH = c.height - HEAD - FOOT; if(BH <= 10) return c;
+  const d = c.getContext('2d').getImageData(0, HEAD, PW, BH).data;
+  let x0 = PW, y0 = BH, x1 = -1, y1 = -1;
+  for(let y = 0; y < BH; y += 2){ const row = y*PW*4;
+    for(let x = 0; x < PW; x += 2){ const i = row + x*4; if(d[i] < 235 || d[i+1] < 235 || d[i+2] < 235){ if(x<x0) x0 = x; if(x>x1) x1 = x; if(y<y0) y0 = y; if(y>y1) y1 = y; } } }
+  if(x1 < 0) return c;
+  x0 = Math.max(0, x0-2); y0 = Math.max(0, y0-2); x1 = Math.min(PW-1, x1+2); y1 = Math.min(BH-1, y1+2);
+  const bw = x1-x0+1, bh = y1-y0+1, pad = Math.round(PW*0.06);           /* 左右各留 6%：圖面約佔 88% 寬 */
+  let sc = (PW - 2*pad)/bw; const maxH = BH*1.6; if(bh*sc + 2*pad > maxH) sc = Math.max(1, (maxH - 2*pad)/bh);   /* 很高的圖不要拉得太長 */
+  if(sc < 1) sc = 1;
+  const nh = Math.round(bh*sc + 2*pad), o = document.createElement('canvas'); o.width = PW; o.height = HEAD + nh + FOOT;
+  const g = o.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, o.width, o.height);
+  g.drawImage(c, 0, 0, PW, HEAD, 0, 0, PW, HEAD);
+  g.imageSmoothingQuality = 'high'; const dw = bw*sc, dh = bh*sc;
+  g.drawImage(c, x0, HEAD + y0, bw, bh, Math.round((PW-dw)/2), HEAD + pad, dw, dh);
+  g.drawImage(c, 0, c.height - FOOT, PW, FOOT, 0, HEAD + nh, PW, FOOT);
+  return o;
+}
 async function mapExportImage(){
   if(MV.layer && MV.layer!=='defect') return layerExportImage();
   const m = MAPD.maps.find(x=>x.id===MV.mapId); if(!m) return;
@@ -3403,7 +3423,7 @@ async function mapExportImage(){
   g.font = `${Math.round(21*u1)}px ${F}`; let fx = Math.round(24*u1); const fy = H + 2*M + HEAD + FOOT/2;
   if(risk){ Object.values(RISK).forEach(v => { g.fillStyle = v.c; g.fillRect(fx, fy-10*u1, 20*u1, 20*u1); fx += 28*u1; g.fillStyle = '#16213a'; const t = v.t.replace(/^.：/,''); g.fillText(t, fx, fy); fx += g.measureText(t).width + 34*u1; }); }
   else { g.fillStyle = '#5d6779'; g.fillText('區域旁紅色數字＝未結案件數；紅色位置標記＝有未結案缺失；⚠＝連續 3 個月發生', fx, fy); }
-  const blob = await new Promise(r => c.toBlob(r, 'image/png'));
+  const out = exportTrim(c, HEAD, FOOT), blob = await new Promise(r => out.toBlob(r, 'image/png'));
   if(!blob){ say('圖片產生失敗，請重試。'); return; }
   await download(blob, `Casevoras_廠區地圖_${m.name}_${today()}.png`.replace(/[\\/:*?"<>|\s]+/g,'_'), 'image/png');
   flash('已匯出平面圖');
@@ -4403,7 +4423,7 @@ async function layerExportImage(){
       if(it.type==='frag'){ g.save(); rr(x, cy-10*v, SW, 20*v, 5*v); g.fillStyle = it.c; g.fill(); g.lineWidth = (it.ring?3:2)*u1; g.strokeStyle = it.ring||'#fff'; g.stroke(); g.restore(); }
       g.font = `${Math.round(16*v)}px ${F}`; g.fillStyle = '#16213a'; g.fillText(it.t, x + SW + 8*v, cy);
     }); });
-  const blob = await new Promise(r => c.toBlob(r, 'image/png'));
+  const out = exportTrim(c, HEAD, FOOT), blob = await new Promise(r => out.toBlob(r, 'image/png'));
   if(!blob){ say('圖片產生失敗，請重試。'); return; }
   await download(blob, `Casevoras_${LAYER_NAME[L]}_${m.name}_${today()}.png`.replace(/[\\/:*?"<>|\s]+/g,'_'), 'image/png');
   flash('已匯出'+LAYER_NAME[L]);
