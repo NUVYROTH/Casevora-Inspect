@@ -1154,7 +1154,7 @@ const GUIDES = {
     gStep(7,'看缺失、新增缺失、匯出', gC(gR(`<span class="gx-k">3<small>累計</small></span><span class="gx-k b">2<small>未結案</small></span><span class="gx-k rd">1<small>逾期</small></span>`)+gR(gB('＋ 在「打漿區」新增缺失',{dk:1,hl:1,n:1}))+gR(gB('📗 匯出這個區域（Excel）',{hl:1,n:2})),'🏭 打漿區'),
       `<p>檢視模式點區域或位置，右邊會出現件數與歷史缺失。</p><p>「＋ 新增缺失」${gN(1)}自動帶入區域、位置、負責單位；「📗 匯出這個區域」${gN(2)}依類別由多到少，含改善前後照片。</p><p>從地圖（右邊歷史缺失、地圖統計跳出的清單）點進缺失單後，左上角會變成<b>「← 回廠區地圖」</b>，按下去回到剛剛那個區域和畫面位置；存檔、結案後也會自動回來。從統計分析點進去的則是「← 回統計分析」。</p>`),
     gStep(8,'現場稽核', gC(gR(`${gB('＋ 新增稽核重點',{n:1})}${gB('載入範例')}`)+gR(gB('📋 開始稽核',{ok:1,hl:1,n:2}))) + gC(gR(`<span class="gx-s" style="flex:1">排水溝清潔暢通</span>${gN(3)}${gB('✅ 合格',{ok:1})}${gB('❌ 不合格',{rd:1,hl:1})}`)),
-      `<p>點地圖上的區域，右邊「稽核重點」按「＋ 新增稽核重點」${gN(1)}寫清楚<b>查核標準</b>（或載入範例 8 項）；<b>檢視、編輯模式都可以</b>新增、編輯、刪除。</p><p>每一項稽核重點可以放照片給稽核人員對照：<b>✅ 應有的樣子</b>（正常、清潔時）和 <b>❌ 不合格範例</b>（髒污、不符合時），各最多 3 張，可以直接 📸 拍照；右邊清單會顯示小圖。「<b>📗 匯出稽核重點（含圖片）</b>」可以選只匯出這一區，或這張地圖全部區域，做成一份有照片的稽核標準表。</p><p><b>區域很大、稽核點很多時</b>：建議先在區域裡放好「細部位置」（例：P01 洗手台、P02 輸送帶），稽核重點選「對應位置」；開始稽核時上方會出現位置按鈕，可以<b>照位置一段一段稽核</b>，按鈕上會顯示還沒填幾項。</p><p>右邊的「細部位置」「稽核紀錄」「稽核重點」「參考照片」標題都可以<b>點一下收合</b>，開／關會記住。</p><p>到現場按「📋 開始稽核」${gN(2)}，每項選${gN(3)}：✅ 合格、❌ 不合格（可「＋ 建立缺失」）、👁 觀察事項、⊘ 不適用。稽核頁上方有<b>📖 怎麼用</b>（可收合）和這一區的<b>參考照片</b>；對應到位置的項目旁邊也有那個位置的參考照片，點一下看大圖。</p><p>不合格、觀察事項的說明以「<b>現場稽核發現</b>」開頭；按 <b>📸 開相機拍照</b>直接用手機相機拍，或 🖼 從相簿選；拍好的照片點一下看大圖、按 ✕ 刪掉。</p>`),
+      `<p>點地圖上的區域，右邊「稽核重點」按「＋ 新增稽核重點」${gN(1)}寫清楚<b>查核標準</b>（或載入範例 8 項）；<b>檢視、編輯模式都可以</b>新增、編輯、刪除。</p><p>每一項稽核重點可以放照片給稽核人員對照：<b>✅ 應有的樣子</b>（正常、清潔時）和 <b>❌ 不合格範例</b>（髒污、不符合時），各最多 3 張，可以直接 📸 拍照；右邊清單會顯示小圖。「<b>🖨 列印稽核表（Word，含區域圖）</b>」：點地圖上的區域（例：打漿區）再按，會下載這一區的稽核表——上面是<b>只有這一區的放大圖</b>（位置旁的金色數字＝項次），下面是稽核重點勾選表（□合格 □不合格 □觀察 □不適用、說明欄）、對照照片、簽名欄，橫式 A4，可以直接印出來帶到現場。「<b>📗 匯出稽核重點（含圖片）</b>」可以選只匯出這一區，或這張地圖全部區域，做成一份有照片的稽核標準表。</p><p><b>區域很大、稽核點很多時</b>：建議先在區域裡放好「細部位置」（例：P01 洗手台、P02 輸送帶），稽核重點選「對應位置」；開始稽核時上方會出現位置按鈕，可以<b>照位置一段一段稽核</b>，按鈕上會顯示還沒填幾項。</p><p>右邊的「細部位置」「稽核紀錄」「稽核重點」「參考照片」標題都可以<b>點一下收合</b>，開／關會記住。</p><p>到現場按「📋 開始稽核」${gN(2)}，每項選${gN(3)}：✅ 合格、❌ 不合格（可「＋ 建立缺失」）、👁 觀察事項、⊘ 不適用。稽核頁上方有<b>📖 怎麼用</b>（可收合）和這一區的<b>參考照片</b>；對應到位置的項目旁邊也有那個位置的參考照片，點一下看大圖。</p><p>不合格、觀察事項的說明以「<b>現場稽核發現</b>」開頭；按 <b>📸 開相機拍照</b>直接用手機相機拍，或 🖼 從相簿選；拍好的照片點一下看大圖、按 ✕ 刪掉。</p>`),
     gStep(9,'風險顏色、連續發生警示、地圖統計', gC(gR(`${gB('🎨 風險顏色（開）',{dk:1,hl:1,n:1})}`)+gR(`<span class="gx-sw" style="background:#b42318"></span><span class="gx-s">重大／逾期／重複</span><span class="gx-sw" style="background:#d97706"></span><span class="gx-s">未結案</span><span class="gx-sw" style="background:#167a3e"></span><span class="gx-s">都結案</span>`)) + gC(gR(`${gN(2)}${gTag('年度','dk')}${gTag('每季')}${gTag('每月')}${gTag('自訂')}`),'📊 地圖統計'),
       `<p><b>🔢 地圖上的數字</b>：檢視模式上方可以選數字代表什麼——<b>本月件數</b>（預設，這個月發現幾件）、<b>地圖統計期間</b>（跟下方地圖統計選的月／季／年一樣）或<b>未結案件數</b>。區域名稱旁、位置右上角的紅色數字就是件數；0 件不顯示。「🖼 匯出平面圖」也會照你選的數字畫。</p><p>檢視模式依缺失狀況自動上色${gN(1)}：紅＝重大、逾期或<b>重複發生</b>；黃＝有未結案；綠＝都結案；灰＝沒紀錄。</p><p><b>⚠ 連續發生警示</b>：同一位置同一類缺失<b>連續 3 個月</b>都發生，位置標記會閃動並加 ⚠，右邊面板會提醒檢討根本原因。</p><p>地圖下方「📊 地圖統計」${gN(2)}選期間（年度、每季、每月，按 ◀ ▶ 跳上一期／下一期；或全部期間、最近三個月、最近六個月、自訂）；<b>點某個區域時，統計會變成那一區各位置的分布</b>，按「看全部區域」回到全廠。</p><p class="muted small">地圖統計的數字卡和長條都可以點開看案件，見第 10 步。</p>`),
     gStep(10,'📊 地圖統計：點開看案件', gC(gR(`<span class="gx-k">8<small>缺失總數</small></span>${gN(1)}<span class="gx-k b" style="box-shadow:0 0 0 2px var(--gold)">2<small>未結案</small></span><span class="gx-k rd">2<small>逾期</small></span>`)+gR(`<span class="gx-s" style="width:52px">包裝區</span><span style="flex:1;height:8px;border-radius:4px;background:#16213a;max-width:120px"></span><span class="gx-s">7</span>${gN(2)}`),'📊 地圖統計') + gC(gR(`<span class="gx-s" style="flex:1"><b>QA-001</b>　包裝區　待改善（逾期）</span>${gN(3)}`)+gR(`<span class="gx-s" style="flex:1"><b>QA-002</b>　包裝區　待改善</span>`)+gR(`<span style="flex:1"></span>${gB('關閉',{dk:1})}`),'未結案　一樓・全部區域・全部期間 2 件'),
@@ -3089,7 +3089,7 @@ function auditItemsHTML(a, ed){
       ${(t.okPhotos||[]).length || (t.ngPhotos||[]).length ? `<div class="aith">${(t.okPhotos||[]).slice(0,2).map((p,j)=>`<img class="ok" src="${phSync(p)}" ${isRef(p)?`data-ph="${p}"`:''} alt="應有的樣子" title="✅ 應有的樣子（點一下看大圖）" onclick="lightbox(aiGet('${t.id}').okPhotos,${j},'✅ 應有的樣子｜${esc(t.name).replace(/'/g,'')}')">`).join('')}${(t.ngPhotos||[]).slice(0,2).map((p,j)=>`<img class="ng" src="${phSync(p)}" ${isRef(p)?`data-ph="${p}"`:''} alt="不合格範例" title="❌ 不合格範例（點一下看大圖）" onclick="lightbox(aiGet('${t.id}').ngPhotos,${j},'❌ 不合格範例｜${esc(t.name).replace(/'/g,'')}')">`).join('')}<span class="small muted">✅${(t.okPhotos||[]).length} ❌${(t.ngPhotos||[]).length}</span></div>` : ''}</div>
       <span class="aibtn"><button onclick="auditItemEdit('${a.id}','${t.id}')">編輯</button><button class="danger" onclick="auditItemDel('${t.id}')">刪除</button></span></li>`).join('')}</ul>`
       : `<div class="muted small">還沒有稽核重點。</div>`}
-    <div class="row" style="margin:6px 0 10px"><button onclick="auditItemEdit('${a.id}','')">＋ 新增稽核重點</button>${its.length?'':`<button onclick="auditSample('${a.id}')">載入範例（8 項）</button>`}${(MAPD.items||[]).length?`<button id="aiXls" onclick="auditItemsExport('${a.id}')">📗 匯出稽核重點（含圖片）</button>`:''}</div>`);
+    <div class="row" style="margin:6px 0 10px"><button onclick="auditItemEdit('${a.id}','')">＋ 新增稽核重點</button>${its.length?'':`<button onclick="auditSample('${a.id}')">載入範例（8 項）</button>`}${its.length?`<button id="aiDoc" class="primary" onclick="auditSheetWord('${a.id}')">🖨 列印稽核表（Word，含區域圖）</button>`:''}${(MAPD.items||[]).length?`<button id="aiXls" onclick="auditItemsExport('${a.id}')">📗 匯出稽核重點（含圖片）</button>`:''}</div>`);
 }
 function auditSideHTML(a){
   const au = auditsOf(a.id);
@@ -3147,6 +3147,78 @@ function auditImg(file){ return new Promise(ok => { const fr = new FileReader();
   const k = Math.min(1, 900/Math.max(img.width,img.height)), c = document.createElement('canvas'); c.width = Math.round(img.width*k); c.height = Math.round(img.height*k); c.getContext('2d').drawImage(img,0,0,c.width,c.height);
   const id = phNewId(); try{ await phPut(id, c.toDataURL('image/jpeg',0.7)); ok(id); }catch(e){ say('照片存不進去，瀏覽器的儲存空間可能已滿。'); ok(''); } }; img.onerror = () => ok(''); img.src = fr.result; }; fr.readAsDataURL(file); }); }
 /* 匯出稽核重點（含應有的樣子、不合格範例照片）：這個區域或這張地圖全部區域 */
+/* 區域放大圖：只畫這一區（四周留一點），位置標上稽核項次 */
+async function areaCropCanvas(a, its){
+  const m = MAPD.maps.find(x=>x.id===a.mapId); if(!m) return null;
+  const u = await phGet(m.img); if(!u) return null;
+  const img = new Image(); img.src = u; await img.decode();
+  const NW = img.naturalWidth, NH = img.naturalHeight, P = a.pts || [[a.x,a.y],[a.x+a.w,a.y],[a.x+a.w,a.y+a.h],[a.x,a.y+a.h]];
+  let x0 = Math.min(...P.map(p=>p[0]))*NW, x1 = Math.max(...P.map(p=>p[0]))*NW, y0 = Math.min(...P.map(p=>p[1]))*NH, y1 = Math.max(...P.map(p=>p[1]))*NH;
+  const mg = Math.max(x1-x0, y1-y0)*0.08 + 10; x0 = Math.max(0, x0-mg); y0 = Math.max(0, y0-mg); x1 = Math.min(NW, x1+mg); y1 = Math.min(NH, y1+mg);
+  const cw = x1-x0, ch = y1-y0, k = Math.min(5, 2400/cw), W = Math.round(cw*k), H = Math.round(ch*k), u1 = W/1600, F = '"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif';
+  const c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d');
+  g.fillStyle = '#fff'; g.fillRect(0,0,W,H); g.imageSmoothingQuality = 'high'; g.drawImage(img, x0, y0, cw, ch, 0, 0, W, H);
+  const X = x => (x*NW - x0)*k, Y = y => (y*NH - y0)*k;
+  /* 區域外淡化，區域框線 */
+  g.save(); g.beginPath(); g.rect(0,0,W,H); P.forEach(([x,y],i)=> i ? g.lineTo(X(x),Y(y)) : g.moveTo(X(x),Y(y))); g.closePath(); g.fillStyle = 'rgba(255,255,255,.62)'; g.fill('evenodd'); g.restore();
+  g.beginPath(); P.forEach(([x,y],i)=> i ? g.lineTo(X(x),Y(y)) : g.moveTo(X(x),Y(y))); g.closePath(); g.lineWidth = 5*u1; g.strokeStyle = a.color || '#b8955a'; g.stroke();
+  const rr = (x,y,w,h,r) => { g.beginPath(); g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r); g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath(); };
+  /* 區域名稱 */
+  let fs = Math.round(44*u1); g.font = `700 ${fs}px ${F}`; g.textBaseline = 'middle';
+  const lx = X(P[0][0]) + 10*u1, ly = Y(P[0][1]) + 10*u1, tw = g.measureText(a.name).width;
+  rr(lx, ly, tw + 24*u1, fs*1.6, 8*u1); g.fillStyle = 'rgba(255,253,248,.96)'; g.fill(); g.fillStyle = '#16213a'; g.fillText(a.name, lx+12*u1, ly+fs*0.8);
+  /* 位置：名稱＋這個位置的稽核項次 */
+  const num = new Map(); its.forEach((t,i)=>{ if(t.locId){ if(!num.has(t.locId)) num.set(t.locId, []); num.get(t.locId).push(i+1); } });
+  MAPD.locs.filter(l=>l.areaId===a.id).forEach(l => {
+    fs = Math.round(38*u1); g.font = `700 ${fs}px ${F}`;
+    const t = (l.code||l.name||'•'), w0 = g.measureText(t).width, h = fs*1.8, w = Math.max(h, w0 + fs*1.1), x = X(l.x) - w/2, y = Y(l.y) - h/2;
+    rr(x, y, w, h, h/2); g.fillStyle = '#16213a'; g.fill(); g.lineWidth = 3*u1; g.strokeStyle = '#fff'; g.stroke();
+    g.fillStyle = '#fff'; g.textAlign = 'center'; g.fillText(t, X(l.x), Y(l.y)+1); g.textAlign = 'left';
+    const ns = num.get(l.id); if(ns){ const bt = ns.join('、'); g.font = `800 ${Math.round(fs*0.9)}px ${F}`; const bw = g.measureText(bt).width + fs*0.9, bx = x + w - bw*0.2, by = y - h*0.55;
+      rr(bx, by, bw, h*0.85, h*0.42); g.fillStyle = '#b8955a'; g.fill(); g.lineWidth = 2*u1; g.strokeStyle = '#fff'; g.stroke(); g.fillStyle = '#fff'; g.textAlign = 'center'; g.fillText(bt, bx+bw/2, by+h*0.43); g.textAlign = 'left'; }
+  });
+  return c;
+}
+/* 應有的樣子／不合格範例照片拼成一張 */
+async function auditPhotoRow(ok, ng){
+  const load = async p => { const u = isRef(p) ? await phGet(p) : p; if(!u) return null; const im = new Image(); im.src = u; try{ await im.decode(); return im; }catch(e){ return null; } };
+  const A = (await Promise.all((ok||[]).slice(0,3).map(load))).filter(Boolean), B = (await Promise.all((ng||[]).slice(0,3).map(load))).filter(Boolean);
+  if(!A.length && !B.length) return null;
+  const CW = 300, CH = 225, GAP = 14, half = 3*CW + 2*GAP, W = half*2 + 60, H = CH + 70, F = '"Noto Sans TC","Microsoft JhengHei",sans-serif';
+  const c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0,0,W,H); g.textBaseline = 'middle';
+  const side = (ims, x0, label, col) => { g.fillStyle = col; g.font = `700 30px ${F}`; g.fillText(label, x0, 26);
+    if(!ims.length){ g.fillStyle = '#9aa3b2'; g.font = `26px ${F}`; g.fillText('（沒有照片）', x0, 60+CH/2); return; }
+    ims.forEach((im,i) => { const s = Math.min(CW/im.naturalWidth, CH/im.naturalHeight), w = im.naturalWidth*s, h = im.naturalHeight*s, x = x0 + i*(CW+GAP) + (CW-w)/2, y = 56 + (CH-h)/2; g.drawImage(im, x, y, w, h); g.strokeStyle = col; g.lineWidth = 3; g.strokeRect(x, y, w, h); }); };
+  side(A, 0, '✅ 應有的樣子', '#167a3e'); side(B, half + 60, '❌ 不合格範例', '#b42318');
+  return c;
+}
+/* 🖨 列印稽核表（Word）：區域放大圖＋稽核重點勾選表＋對照照片 */
+async function auditSheetWord(aid){
+  const a = areaById(aid); if(!a) return; const its = itemsOf(aid).slice().sort((x,y)=>(locById(x.locId)?.code||'').localeCompare(locById(y.locId)?.code||'',undefined,{numeric:true}));
+  if(!its.length){ say('這個區域還沒有稽核重點。'); return; }
+  const btn = $('#aiDoc'); if(btn){ btn.disabled = true; btn.textContent = '產生中…'; }
+  try{
+    const media = [], toPng = async cv => new Uint8Array(await (await new Promise(r=>cv.toBlob(r,'image/png'))).arrayBuffer()), FULL = 9000000;
+    const m = MAPD.maps.find(x=>x.id===a.mapId) || {};
+    let body = wPara(`${a.name}　稽核表`, {b:1, sz:34, jc:'center', after:40}) + wPara(`${m.name||''}　共 ${its.length} 項　列印日期：${fmtDate(today())}`, {jc:'center', sz:20, color:'5D6779', after:120})
+      + wPara('稽核日期：＿＿＿＿＿＿＿＿　　稽核人員：＿＿＿＿＿＿＿＿　　陪同人員：＿＿＿＿＿＿＿＿', {sz:22, after:160});
+    try{ const cv = await areaCropCanvas(a, its); if(cv){ media.push(await toPng(cv)); const MAXH = 4700000, cx = Math.min(FULL, Math.round(MAXH*cv.width/cv.height)), cy = Math.round(cx*cv.height/cv.width);   /* 跟標題放同一頁 */
+      body += docxImg(media.length, cx, cy) + wPara('圖上位置旁的金色數字＝下表的項次；沒有指定位置的項目寫「整個區域」。', {sz:17, color:'5D6779', jc:'center', after:160}); } }
+    catch(e){ body += wPara('（區域圖無法產生）', {sz:19, color:'5D6779'}); }
+    body += '<w:p><w:r><w:br w:type="page"/></w:r></w:p>' + wPara(`${a.name}　稽核重點`, {b:1, sz:26, after:80, color:'16213A', keep:1});
+    body += wTable([['項次','位置','稽核項目','查核標準（怎樣算合格）','查核方式','頻率','重要度','結果（請勾選）','說明（現場稽核發現）'],
+      ...its.map((t,i)=>{ const l = locById(t.locId); return [String(i+1), l?(l.code+' '+l.name).trim():'整個區域', t.name + (t.req?'（必查）':''), t.std||'', t.method||'', t.freq||'', t.imp||'', '□合格 □不合格 □觀察 □不適用', '']; })], true, 760);
+    const withPh = its.map((t,i)=>({t,i})).filter(x=>(x.t.okPhotos||[]).length || (x.t.ngPhotos||[]).length);
+    if(withPh.length){ body += wPara('對照照片', {b:1, sz:26, before:200, after:80, color:'16213A', keep:1});
+      for(const {t,i} of withPh){ const cv = await auditPhotoRow(t.okPhotos, t.ngPhotos); if(!cv) continue; media.push(await toPng(cv));
+        body += wPara(`${i+1}. ${t.name}`, {b:1, sz:21, before:100, after:40, keep:1}) + docxImg(media.length, FULL, Math.round(FULL*cv.height/cv.width)); } }
+    body += wPara('稽核人員簽名：＿＿＿＿＿＿＿＿＿＿　　　主管確認：＿＿＿＿＿＿＿＿＿＿', {sz:22, before:300});
+    body += wPara('Casevoras 衛生缺失追蹤助手．不合格的項目請回到「開始稽核」登錄並建立缺失', {sz:16, color:'888888', before:120, jc:'center'});
+    await download(docxPack(body, media, true), `Casevoras_稽核表_${m.name||''}_${a.name}_${today()}.docx`.replace(/[\\/:*?"<>|\s]+/g,'_'), 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+    flash('已送出下載：稽核表');
+  }catch(e){ say('稽核表產生失敗，請重試。'); }
+  if(btn){ btn.disabled = false; btn.textContent = '🖨 列印稽核表（Word，含區域圖）'; }
+}
 async function auditItemsExport(aid){
   const a0 = areaById(aid), mapAs = mapAreas(), withItems = mapAs.filter(a=>itemsOf(a.id).length);
   let as = [a0];
@@ -3720,8 +3792,8 @@ async function svgPng(svg, title, legend){
   const blob = await new Promise((ok,no)=>c.toBlob(b=>b?ok(b):no(new Error('圖片產生失敗')),'image/png'));
   return {png:new Uint8Array(await blob.arrayBuffer()), w:c.width, h:c.height};
 }
-function docxPack(body, media){
-  const doc = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"><w:body>${body}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134" w:header="567" w:footer="567" w:gutter="0"/></w:sectPr></w:body></w:document>`;
+function docxPack(body, media, land){
+  const doc = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"><w:body>${body}<w:sectPr>${land?'<w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/><w:pgMar w:top="850" w:right="850" w:bottom="850" w:left="850" w:header="425" w:footer="425" w:gutter="0"/>':'<w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134" w:header="567" w:footer="567" w:gutter="0"/>'}</w:sectPr></w:body></w:document>`;
   return zipStore([
     ['[Content_Types].xml', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="png" ContentType="image/png"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>'],
     ['_rels/.rels', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>'],
@@ -5381,10 +5453,10 @@ function zipStore(files, type='application/vnd.openxmlformats-officedocument.wor
 function wx(t){ return String(t??'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function wRun(t, o={}){ return `<w:r><w:rPr><w:rFonts w:ascii="Microsoft JhengHei" w:hAnsi="Microsoft JhengHei" w:eastAsia="Microsoft JhengHei"/>${o.b?'<w:b/>':''}${o.color?`<w:color w:val="${o.color}"/>`:''}<w:sz w:val="${o.sz||21}"/></w:rPr><w:t xml:space="preserve">${wx(t)}</w:t></w:r>`; }
 function wPara(t, o={}){ return `<w:p><w:pPr>${o.keep?'<w:keepNext/>':''}${o.jc?`<w:jc w:val="${o.jc}"/>`:''}<w:spacing w:before="${o.before||0}" w:after="${o.after??80}"/>${o.shade?`<w:shd w:val="clear" w:color="auto" w:fill="${o.shade}"/>`:''}</w:pPr>${wRun(t,o)}</w:p>`; }
-function wTable(rows, head=true){
+function wTable(rows, head=true, minH){
   const B = ['top','left','bottom','right','insideH','insideV'].map(k=>`<w:${k} w:val="single" w:sz="4" w:color="C9BDA6"/>`).join('');
   return `<w:tbl><w:tblPr><w:tblW w:w="5000" w:type="pct"/><w:tblBorders>${B}</w:tblBorders><w:tblCellMar><w:left w:w="80" w:type="dxa"/><w:right w:w="80" w:type="dxa"/></w:tblCellMar></w:tblPr>`+
-    rows.map((r,i)=>`<w:tr>${r.map(c=>`<w:tc><w:tcPr>${head&&i===0?'<w:shd w:val="clear" w:color="auto" w:fill="F3ECE0"/>':''}<w:vAlign w:val="center"/></w:tcPr>${wPara(c,{b:head&&i===0, sz:19, after:0, jc:'center'})}</w:tc>`).join('')}</w:tr>`).join('')+'</w:tbl>'+wPara('',{after:60});
+    rows.map((r,i)=>`<w:tr>${minH && i>0 ? `<w:trPr><w:cantSplit/><w:trHeight w:val="${minH}"/></w:trPr>` : (head && i===0 ? '<w:trPr><w:tblHeader/></w:trPr>' : '')}${r.map(c=>`<w:tc><w:tcPr>${head&&i===0?'<w:shd w:val="clear" w:color="auto" w:fill="F3ECE0"/>':''}<w:vAlign w:val="center"/></w:tcPr>${wPara(c,{b:head&&i===0, sz:19, after:0, jc:'center'})}</w:tc>`).join('')}</w:tr>`).join('')+'</w:tbl>'+wPara('',{after:60});
 }
 async function dlStatsWord(){
   const box = $('#statBody'), btn = $('#wordBtn'); if(!box) return;
