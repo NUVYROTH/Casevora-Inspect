@@ -1156,7 +1156,7 @@ const GUIDES = {
     gStep(11,'📊 地圖統計：區域分布圓餅圖與趨勢', gC(gR(`<svg viewBox="0 0 120 120" style="width:84px;height:84px;flex:none"><circle cx="60" cy="60" r="44" fill="none" stroke="#2a78d6" stroke-width="20" stroke-dasharray="96 400" transform="rotate(-90 60 60)"/><circle cx="60" cy="60" r="44" fill="none" stroke="#eb6834" stroke-width="20" stroke-dasharray="0 98 64 400" transform="rotate(-90 60 60)"/><circle cx="60" cy="60" r="44" fill="none" stroke="#1baf7a" stroke-width="20" stroke-dasharray="0 164 44 400" transform="rotate(-90 60 60)"/><circle cx="60" cy="60" r="44" fill="none" stroke="#9aa3b2" stroke-width="20" stroke-dasharray="0 210 66 400" transform="rotate(-90 60 60)"/><text x="60" y="66" text-anchor="middle" font-size="20" font-weight="800" fill="#16213a">90</text></svg><span style="display:flex;flex-direction:column;gap:3px;font-size:11px;flex:1"><span><i style="display:inline-block;width:9px;height:9px;background:#2a78d6;border-radius:2px"></i> 包裝區　<b>28</b>　31%</span><span><i style="display:inline-block;width:9px;height:9px;background:#eb6834;border-radius:2px"></i> 打漿區　<b>19</b>　21%</span><span><i style="display:inline-block;width:9px;height:9px;background:#1baf7a;border-radius:2px"></i> 緩衝區　<b>12</b>　13%</span><span><i style="display:inline-block;width:9px;height:9px;background:#9aa3b2;border-radius:2px"></i> 其它區域</span></span>${gN(1)}`),'各區域缺失分布') + gC(`<svg viewBox="0 0 200 60" style="width:100%;height:auto;display:block"><line x1="6" x2="196" y1="54" y2="54" stroke="#c9bda6"/><polyline points="6,40 44,30 82,20 120,34 158,26 196,10" fill="none" stroke="#2a78d6" stroke-width="2"/><polyline points="6,46 44,42 82,36 120,30 158,40 196,38" fill="none" stroke="#eb6834" stroke-width="2"/><polyline points="6,50 44,48 82,44 120,46 158,36 196,44" fill="none" stroke="#1baf7a" stroke-width="2"/></svg>`+gR(`<span class="gx-s">${gN(2)}各區域每月件數（最近 6 個月）</span>`)),
       `<p>地圖下方「📊 地圖統計」最下面有兩張圖，範圍跟著上方選的期間：</p><p><b>圓餅圖</b>${gN(1)}：這張地圖<b>全部區域</b>的缺失各佔多少（每一區一塊、顏色都不一樣；折線圖還是前 5 名＋其它，線太多會看不清楚），清單右邊有<b>比上期 ▲▼ %</b>；<b>點一塊或右邊清單</b>列出那一區的案件。</p><p><b>折線圖</b>${gN(2)}：各區域每個時間點幾件——選年看 12 個月、選季看 3 個月、選月看每週；圖例旁的 ▲▼ % 是合計比上期，滑過某一點是比前一個月（週）。點圓點看那個時間的案件。</p><p><b>點地圖上某個區域</b>時，兩張圖會自動變成<b>那一區各位置</b>的分布和趨勢（沒指定位置的算「未指定位置」）；按「看全部區域」回到全廠。</p>`),
     gStep(12,'📋 各區域分析：年、季、月與下載', gC(gR(`${gN(1)}${gTag('年度','dk')}${gTag('每季')}${gTag('每月')}<span class="gx-s">◀ 2026 年 ▾ ▶</span>`)+gR(`<div style="font-size:11px;width:100%"><div style="display:grid;grid-template-columns:2fr 1fr 1.3fr 1fr;gap:2px;background:#f3ece0;padding:3px 4px;border-radius:4px;font-weight:700"><span>區域</span><span>件數</span><span>跟上期比</span><span>結案率</span></div><div style="display:grid;grid-template-columns:2fr 1fr 1.3fr 1fr;gap:2px;padding:3px 4px"><span>包裝區</span><b>26</b><b style="color:#b42318">▲ +11（+73%）</b><span>65%</span></div><div style="display:grid;grid-template-columns:2fr 1fr 1.3fr 1fr;gap:2px;padding:3px 4px"><span>出貨平台</span><b>4</b><b style="color:#167a3e">▼ −6（−60%）</b><span>25%</span></div></div>${gN(2)}`),'📊 地圖統計') + gC(gR(`${gB('📗 下載區域分析（Excel）',{hl:1,n:3})}`)+gR(`${gB('📄 下載區域分析（Word）',{dk:1,hl:1,n:4})}`)),
-      `<p>「📊 地圖統計」選<b>年度、每季或每月</b>${gN(1)}，再選年份、第幾季或幾月；按 <b>◀ ▶</b> 可以直接跳上一期／下一期（跨年會自動換年份）。整個統計（數字卡、長條、圓餅圖、折線圖）都跟著換。右邊另一組可以選全部期間、最近三個月、最近六個月或自訂日期。折線圖選年看 12 個月、選季看 3 個月、選月看每週。</p><p><b>📋 各區域分析表</b>${gN(2)}：每一區的件數、<b>跟上期比</b>（▲ 紅色＝變多、▼ 綠色＝變少，括號是<b>幾 %</b>）、未結案、逾期、結案率、重複發生、最多的類別。上期＝選月比上個月、選季比上一季、選年比<b>去年同期</b>；這個月／這一季還沒過完時，上期只算到同一天。</p><p><b>▲▼ 百分比</b>也會出現在「缺失總數」「重複發生」數字卡、各區域與類型長條、圓餅圖清單、折線圖圖例（跟上期比）；「缺失趨勢」長條和折線圖滑過的數字是跟<b>前一個月（選月時前一週）</b>比。未結案、逾期不比百分比，因為越早的案件有越多時間結案，比起來不公平。數字可以點開看案件；點地圖上某一區，表格就變成那一區各位置。</p><p><b>📍 各區域位置缺失次數</b>：看全部區域時，下面會把<b>每一區的各位置件數</b>一次列出來（每區一張小卡，多到少、0 件也列出、比上期 ▲▼），不用一區一區點；點一列看案件，按「看地圖」跳到那一區。</p><p><b>📗 Excel</b>${gN(3)}：四段——各區域總表、區域 × 月份（或週）、區域 × 缺失類別、各區域的位置明細，可以自己排序、畫圖。</p><p><b>📄 Word</b>${gN(4)}：一頁摘要（哪幾區變多、變少）＋總表＋<b>圓餅圖、折線圖</b>＋各表格，可以直接列印交報告。</p><p class="muted small">統計分析頁的「📍 缺失區域分析」也有「🗺️ 到廠區地圖看各區細部分析」按鈕可以直接過來。</p>`),
+      `<p>「📊 地圖統計」選<b>年度、每季或每月</b>${gN(1)}，再選年份、第幾季或幾月；按 <b>◀ ▶</b> 可以直接跳上一期／下一期（跨年會自動換年份）。整個統計（數字卡、長條、圓餅圖、折線圖）都跟著換。右邊另一組可以選全部期間、最近三個月、最近六個月或自訂日期。折線圖選年看 12 個月、選季看 3 個月、選月看每週。</p><p><b>📋 各區域分析表</b>${gN(2)}：每一區的件數、<b>跟上期比</b>（▲ 紅色＝變多、▼ 綠色＝變少，括號是<b>幾 %</b>）、未結案、逾期、結案率、重複發生、最多的類別。上期＝選月比上個月、選季比上一季、選年比<b>去年同期</b>；這個月／這一季還沒過完時，上期只算到同一天。</p><p><b>▲▼ 百分比</b>也會出現在「缺失總數」「重複發生」數字卡、各區域與類型長條、圓餅圖清單、折線圖圖例（跟上期比）；「缺失趨勢」長條和折線圖滑過的數字是跟<b>前一個月（選月時前一週）</b>比。未結案、逾期不比百分比，因為越早的案件有越多時間結案，比起來不公平。數字可以點開看案件；點地圖上某一區，表格就變成那一區各位置。</p><p><b>📍 各區域位置缺失次數</b>：看全部區域時，下面會把<b>每一區的各位置件數</b>一次列出來（每區一張小卡，多到少、0 件也列出、比上期 ▲▼），不用一區一區點；點一列看案件，按「看地圖」跳到那一區。</p><p><b>📗 Excel</b>${gN(3)}：四段——各區域總表、區域 × 月份（或週）、區域 × 缺失類別、各區域的位置明細，可以自己排序、畫圖。</p><p><b>📄 Word</b>${gN(4)}：一頁摘要（哪幾區變多、變少）＋總表＋<b>平面圖</b>（每個區域、位置旁用紅色數字寫<b>選的期間（月／季／年）發現幾件缺失</b>）＋<b>圓餅圖、折線圖</b>＋各表格，可以直接列印交報告。</p><p class="muted small">統計分析頁的「📍 缺失區域分析」也有「🗺️ 到廠區地圖看各區細部分析」按鈕可以直接過來。</p>`),
     gStep(13,'給同事用同一張地圖', gC(gR(`${gB('匯出地圖設定',{hl:1,n:1})}${gB('匯入地圖設定',{hl:1,n:2})}`)) + `<div class="gx-s" style="text-align:center">含平面圖・區域・位置・稽核重點・參考照片<br>＋清潔分區・易碎品・動線・病媒防治・顏色設定<br>不含案件，不會蓋掉同事的案件</div>`,
       `<p>按「匯出地圖設定」${gN(1)}存成檔案給同事，同事按「匯入地圖設定」${gN(2)}就有同一張地圖。</p><p>「匯出地圖設定」包含<b>所有圖層</b>（清潔分區、易碎品、動線、病媒防治）和顏色設定；只有地圖，不含案件、稽核紀錄、易碎品檢查紀錄。</p><p>要放進報告或貼公告時，按上方<b>「🖼 匯出平面圖（圖片）」</b>，會把目前這一層存成清晰的 PNG：平面圖多的空白會自動裁掉、放大到約佔 8～9 成寬（四周留一點白，邊緣的標記不會被切掉），附圖例（缺失層依目前風險顏色開／關）。</p><p class="muted small">要連案件一起帶走，請用缺失清單的「下載備份」。平面圖屬公司內部資料，不會上傳也不會送給 AI；匯出的圖片傳給別人前請先確認可以外流。</p>`),
     gStep(14,'切換圖層（缺失以外的圖）', gC(gR(`${gN(1)}<span class="gx-seg" style="flex-wrap:wrap"><i class="on">🔍 缺失</i><i>🧼 清潔分區</i><i>🔶 易碎品</i><i>➡️ 動線與設施</i><i>🐭 病媒防治</i></span>`)+gR(`${gB('🧼 疊清潔分區（開）',{dk:1,hl:1,n:2})}${gB('🖼 匯出平面圖（圖片）',{hl:1,n:3})}`)),
@@ -3358,14 +3358,16 @@ function exportTrim(c, HEAD, FOOT){
   g.drawImage(c, 0, c.height - FOOT, PW, FOOT, 0, HEAD + nh, PW, FOOT);
   return o;
 }
-async function mapExportImage(){
-  if(MV.layer && MV.layer!=='defect') return layerExportImage();
+/* per＝{f,t,label}：給區域分析 Word 用，區域、位置旁寫「這段期間發現幾件」，回傳圖片（不下載） */
+async function mapExportImage(per){
+  if(!per && MV.layer && MV.layer!=='defect') return layerExportImage();
   const m = MAPD.maps.find(x=>x.id===MV.mapId); if(!m) return;
   const u = await phGet(m.img); if(!u){ say('平面圖找不到，請重新上傳。'); return; }
   const img = new Image(); img.src = u; try{ await img.decode(); }catch(e){ say('平面圖讀取失敗。'); return; }
   const k = Math.min(3, Math.max(1, 3200/img.naturalWidth));     /* 放大到約 3200px 寬，線條、文字比較銳利 */
   const W = Math.round(img.naturalWidth*k), H = Math.round(img.naturalHeight*k), u1 = W/1600;  /* u1：字與線條的基本單位 */
-  const risk = MV_RISK && MV.mode==='view', rep = repeatSet(), streak = streakAlerts();
+  const risk = !per && MV_RISK && MV.mode==='view', rep = repeatSet(), streak = streakAlerts();
+  const inPer = r => !!per && !!r.foundDate && r.foundDate>=per.f && r.foundDate<=per.t;
   const HEAD = Math.round(70*u1), FOOT = Math.round(60*u1);
   const c = document.createElement('canvas'); /* 平面圖四周留白，邊緣的標記不會被切掉 */
   const M = Math.round(70*u1), PW = W + 2*M; c.width = PW; c.height = H + 2*M + HEAD + FOOT;
@@ -3374,7 +3376,7 @@ async function mapExportImage(){
   /* 標題列 */
   g.fillStyle = '#16213a'; g.fillRect(0,0,PW,HEAD);
   g.fillStyle = '#fffdf8'; g.font = `700 ${Math.round(30*u1)}px ${F}`; g.textBaseline = 'middle';
-  g.fillText(`Casevoras 廠區地圖｜${m.name}`, Math.round(24*u1), HEAD/2);
+  g.fillText(`Casevoras 廠區地圖｜${m.name}${per?'｜'+per.label+' 缺失件數':''}`, Math.round(24*u1), HEAD/2);
   g.font = `${Math.round(18*u1)}px ${F}`; g.fillStyle = '#d6c08f'; g.textAlign = 'right';
   g.fillText(`匯出日期：${fmtDate(today())}${risk?'　風險顏色':''}`, PW - Math.round(24*u1), HEAD/2); g.textAlign = 'left';
   /* 平面圖 */
@@ -3399,23 +3401,27 @@ async function mapExportImage(){
     const s = mapStats(recsForArea(a)), warn = streak.some(x=>x.aid===a.id);
     const lx = X(a.pts ? a.pts[0][0] : a.x) + 6*u1, ly = Y(a.pts ? a.pts[0][1] : a.y) + 6*u1;
     const fs = Math.round(20*u1); g.font = `700 ${fs}px ${F}`;
-    const txt = a.name + (warn ? ' ⚠' : ''), tw = g.measureText(txt).width, cw = s.open ? fs*1.3 : 0, pad = 7*u1, h = fs*1.55;
+    const bn = per ? recsForArea(a).filter(inPer).length : s.open;
+    const txt = a.name + (warn && !per ? ' ⚠' : ''), tw = g.measureText(txt).width, cw = bn ? fs*1.3*Math.max(1, String(bn).length*0.6) : 0, pad = 7*u1, h = fs*1.55;
     rr(lx, ly, tw + pad*2 + cw, h, 5*u1); g.fillStyle = 'rgba(255,253,248,.95)'; g.fill();
     if(risk){ g.fillStyle = RISK[riskOf(recsForArea(a), a.id, rep)].c; g.fillRect(lx, ly, 5*u1, h); }
     g.fillStyle = '#16213a'; g.textBaseline = 'middle'; g.fillText(txt, lx+pad, ly+h/2);
-    if(s.open){ const cx = lx+pad+tw+cw/2+3*u1; g.beginPath(); g.arc(cx, ly+h/2, fs*0.58, 0, Math.PI*2); g.fillStyle = '#b42318'; g.fill();
-      g.fillStyle = '#fff'; g.font = `700 ${Math.round(fs*0.8)}px ${F}`; g.textAlign = 'center'; g.fillText(String(s.open), cx, ly+h/2+0.5); g.textAlign = 'left'; }
+    if(bn){ const cx = lx+pad+tw+cw/2+3*u1, bw = Math.max(fs*1.16, String(bn).length*fs*0.62+fs*0.5); rr(cx-bw/2, ly+h/2-fs*0.58, bw, fs*1.16, fs*0.58); g.fillStyle = '#b42318'; g.fill();
+      g.fillStyle = '#fff'; g.font = `700 ${Math.round(fs*0.8)}px ${F}`; g.textAlign = 'center'; g.fillText(String(bn), cx, ly+h/2+0.5); g.textAlign = 'left'; }
   });
   /* 位置標記 */
   const ids = new Set(as.map(a=>a.id));
   MAPD.locs.filter(l=>ids.has(l.areaId)).forEach(l => {
-    const rk = risk ? riskOf(recsForLoc(l), '', rep) : (mapStats(recsForLoc(l)).open ? 'red' : '');
+    const pc = per ? recsForLoc(l).filter(inPer).length : 0;
+    const rk = per ? (pc ? 'red' : '') : risk ? riskOf(recsForLoc(l), '', rep) : (mapStats(recsForLoc(l)).open ? 'red' : '');
     const bg = rk ? ({red:'#b42318', yellow:'#d97706', green:'#167a3e', gray:'#9aa3b2'})[rk] : '#16213a';
     const fs = Math.round(18*u1); g.font = `700 ${fs}px ${F}`;
     const t = l.code || l.name || '•', tw = g.measureText(t).width, h = fs*1.9, w = Math.max(h, tw + fs*1.2), x = X(l.x) - w/2, y = Y(l.y) - h/2;
     rr(x, y, w, h, h/2); g.fillStyle = bg; g.fill(); g.lineWidth = 2.5*u1; g.strokeStyle = '#fff'; g.stroke();
     g.fillStyle = '#fff'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(t, X(l.x), Y(l.y)+0.5); g.textAlign = 'left';
-    if(streak.some(x=>x.lid===l.id)){ const bx = x+w, by = y; g.beginPath(); g.arc(bx, by, fs*0.75, 0, Math.PI*2); g.fillStyle = '#fff4e0'; g.fill(); g.strokeStyle = '#f0c27b'; g.lineWidth = 1.5*u1; g.stroke();
+    if(pc){ const bt = String(pc), bw = Math.max(h*0.9, bt.length*fs*0.62+fs*0.55), bx = x + w - bw*0.12, by = y - h*0.38; rr(bx, by, bw, h*0.9, h*0.45); g.fillStyle = '#fff'; g.fill(); g.lineWidth = 2*u1; g.strokeStyle = '#b42318'; g.stroke();
+      g.fillStyle = '#b42318'; g.font = `800 ${Math.round(fs*0.95)}px ${F}`; g.textAlign = 'center'; g.fillText(bt, bx+bw/2, by+h*0.45+0.5); g.textAlign = 'left'; g.font = `700 ${fs}px ${F}`; }
+    if(!per && streak.some(x=>x.lid===l.id)){ const bx = x+w, by = y; g.beginPath(); g.arc(bx, by, fs*0.75, 0, Math.PI*2); g.fillStyle = '#fff4e0'; g.fill(); g.strokeStyle = '#f0c27b'; g.lineWidth = 1.5*u1; g.stroke();
       g.fillStyle = '#b45309'; g.font = `700 ${Math.round(fs*0.95)}px ${F}`; g.textAlign = 'center'; g.fillText('⚠', bx, by+0.5); g.textAlign = 'left'; }
   });
   g.restore();
@@ -3423,8 +3429,10 @@ async function mapExportImage(){
   g.fillStyle = '#f3ece0'; g.fillRect(0, H+2*M+HEAD, PW, FOOT); g.textBaseline = 'middle';
   g.font = `${Math.round(21*u1)}px ${F}`; let fx = Math.round(24*u1); const fy = H + 2*M + HEAD + FOOT/2;
   if(risk){ Object.values(RISK).forEach(v => { g.fillStyle = v.c; g.fillRect(fx, fy-10*u1, 20*u1, 20*u1); fx += 28*u1; g.fillStyle = '#16213a'; const t = v.t.replace(/^.：/,''); g.fillText(t, fx, fy); fx += g.measureText(t).width + 34*u1; }); }
-  else { g.fillStyle = '#5d6779'; g.fillText('區域旁紅色數字＝未結案件數；紅色位置標記＝有未結案缺失；⚠＝連續 3 個月發生', fx, fy); }
-  const out = exportTrim(c, HEAD, FOOT), blob = await new Promise(r => out.toBlob(r, 'image/png'));
+  else { g.fillStyle = '#5d6779'; g.fillText(per ? `區域、位置旁的紅色數字＝${per.label}發現的缺失件數（依發現日期）；紅色位置＝這段期間有缺失` : '區域旁紅色數字＝未結案件數；紅色位置標記＝有未結案缺失；⚠＝連續 3 個月發生', fx, fy); }
+  const out = exportTrim(c, HEAD, FOOT);
+  if(per) return out;
+  const blob = await new Promise(r => out.toBlob(r, 'image/png'));
   if(!blob){ say('圖片產生失敗，請重試。'); return; }
   await download(blob, `Casevoras_廠區地圖_${m.name}_${today()}.png`.replace(/[\\/:*?"<>|\s]+/g,'_'), 'image/png');
   flash('已匯出平面圖');
@@ -3702,6 +3710,11 @@ async function mapAnaWord(){
     body += wPara(sumTxt, {b:1, shade:A.tot.over||up.length?'FDECEA':'E6F5EC', after:120});
     body += S(`一、各${A.unitWord}總表`) + wTable(T.sum.map(r=>r.map(String)));
     const media = []; let id = 0;
+    /* 平面圖：區域、位置旁寫這段期間的缺失件數 */
+    try{ const [pf, pt] = mstRange(), cv = await mapExportImage({f:pf, t:pt, label:A.label});
+      if(cv){ const png = new Uint8Array(await (await new Promise(r=>cv.toBlob(r,'image/png'))).arrayBuffer()); media.push(png); id = media.length;
+        body += S(`平面圖（${A.label}各區域、位置缺失件數）`) + docxImg(id, 6120000, Math.round(6120000*cv.height/cv.width)) + wPara('紅色數字＝這段期間發現的缺失件數（依發現日期）；沒有數字的位置＝這段期間沒有缺失。', {sz:17, color:'5D6779', after:120}); } }
+    catch(e){ body += wPara('（平面圖無法產生）', {sz:19, color:'5D6779'}); }
     const addChart = async (sel, title, legendSel) => { const svg = document.querySelector(sel); if(!svg) return;
       const legend = [...document.querySelectorAll(legendSel)].map(b=>({c:getComputedStyle(b.querySelector('i')).backgroundColor, t:b.innerText.replace(/\s+/g,' ').trim()}));
       const r = await svgPng(svg, title, legend); media.push(r.png); id = media.length; const cx = 5760000, cy = Math.round(cx*r.h/r.w); body += docxImg(id, cx, cy); };
