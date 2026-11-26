@@ -3202,10 +3202,10 @@ async function auditSheetWord(aid){
     const m = MAPD.maps.find(x=>x.id===a.mapId) || {};
     let body = wPara(`${a.name}　稽核表`, {b:1, sz:34, jc:'center', after:40}) + wPara(`${m.name||''}　共 ${its.length} 項　列印日期：${fmtDate(today())}`, {jc:'center', sz:20, color:'5D6779', after:120})
       + wPara('稽核日期：＿＿＿＿＿＿＿＿　　稽核人員：＿＿＿＿＿＿＿＿　　陪同人員：＿＿＿＿＿＿＿＿', {sz:22, after:160});
-    try{ const cv = await areaCropCanvas(a, its); if(cv){ media.push(await toPng(cv)); const MAXH = 4700000, cx = Math.min(FULL, Math.round(MAXH*cv.width/cv.height)), cy = Math.round(cx*cv.height/cv.width);   /* 跟標題放同一頁 */
+    try{ const cv = await areaCropCanvas(a, its); if(cv){ media.push(await toPng(cv)); const MAXH = 4100000, cx = Math.min(FULL, Math.round(MAXH*cv.width/cv.height)), cy = Math.round(cx*cv.height/cv.width);   /* 跟標題放同一頁 */
       body += docxImg(media.length, cx, cy) + wPara('圖上位置旁的金色數字＝下表的項次；沒有指定位置的項目寫「整個區域」。', {sz:17, color:'5D6779', jc:'center', after:160}); } }
     catch(e){ body += wPara('（區域圖無法產生）', {sz:19, color:'5D6779'}); }
-    body += '<w:p><w:r><w:br w:type="page"/></w:r></w:p>' + wPara(`${a.name}　稽核重點`, {b:1, sz:26, after:80, color:'16213A', keep:1});
+    body += wPara(`${a.name}　稽核重點`, {b:1, sz:26, after:80, color:'16213A', keep:1}).replace('<w:pPr>', '<w:pPr><w:pageBreakBefore/>');   /* 換頁但不多一個空段落，避免空白頁 */
     body += wTable([['項次','位置','稽核項目','查核標準（怎樣算合格）','查核方式','頻率','重要度','結果（請勾選）','說明（現場稽核發現）'],
       ...its.map((t,i)=>{ const l = locById(t.locId); return [String(i+1), l?(l.code+' '+l.name).trim():'整個區域', t.name + (t.req?'（必查）':''), t.std||'', t.method||'', t.freq||'', t.imp||'', '□合格 □不合格 □觀察 □不適用', '']; })], true, 760);
     const withPh = its.map((t,i)=>({t,i})).filter(x=>(x.t.okPhotos||[]).length || (x.t.ngPhotos||[]).length);
