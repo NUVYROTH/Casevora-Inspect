@@ -616,7 +616,11 @@ main:has(.split){max-width:1320px}
 .aitems .aith{display:flex;gap:4px;margin-top:4px;align-items:center}.aitems .aith img{width:34px;height:34px;object-fit:cover;border-radius:4px;border:2px solid #fff;cursor:zoom-in}.aitems .aith img.ok{outline:2px solid var(--ok)}.aitems .aith img.ng{outline:2px solid var(--bad)}
 .aflt{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px;align-items:center}.aflt button{padding:5px 10px;font-size:13px;min-height:0}.aflt button.on{background:#16213a;color:#fff;border-color:#16213a}.arow.hide{display:none}.agrp{margin:14px 0 2px;font-weight:700;color:var(--ink);border-left:4px solid var(--gold);padding-left:8px}
 .ctbl td{vertical-align:top;line-height:1.5;min-width:84px}.ctbl td:first-child{min-width:96px}.ctbl .chg{font-size:11.5px}
-.mloc{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px}.mlc{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff}.mlh{display:flex;align-items:center;gap:8px;margin-bottom:6px}.mlh b{font-size:15px}.mlh .small{color:var(--muted)}.mlh button{margin-left:auto;padding:3px 10px;min-height:0;font-size:12px}.mlc .hb{grid-template-columns:minmax(70px,130px) minmax(48px,1fr) auto;margin:5px 0}.mlc .hb.click{cursor:pointer}.mlc .hb.click:hover{background:var(--brand-soft)}
+.mloc{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,560px),1fr));gap:12px}.mlpb{grid-template-columns:minmax(140px,190px) 1fr;gap:12px}.mlpb .dnsolo .dnsvg{max-width:180px}@media(max-width:700px){.mlpb{grid-template-columns:1fr}}.mlc{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff}.mlh{display:flex;align-items:center;gap:8px;margin-bottom:6px}.mlh b{font-size:15px}.mlh .small{color:var(--muted)}.mlh button{margin-left:auto;padding:3px 10px;min-height:0;font-size:12px}.mlc .hb{grid-template-columns:minmax(70px,130px) minmax(48px,1fr) auto;margin:5px 0}.mlc .hb.click{cursor:pointer}.mlc .hb.click:hover{background:var(--brand-soft)}
+.mcharts1 .hb{grid-template-columns:minmax(80px,170px) 1fr auto}.mcharts1 .hb.click{cursor:pointer}.mcharts1 .hb.click:hover{background:var(--brand-soft)}
+.st-pb{display:grid;grid-template-columns:minmax(200px,300px) 1fr;gap:18px;align-items:center;margin:4px 0 6px}.st-pb .dnsolo .dnwrap{display:flex;justify-content:center}.st-pb .dnsolo .dnsvg{width:100%;max-width:260px;height:auto}.st-pb .pbr{min-width:0}
+@media(max-width:700px){.st-pb{grid-template-columns:1fr}.st-pb .dnsolo .dnsvg{max-width:220px}}
+.pbdot{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
 .st-sec{margin:18px 0 6px;font-size:16px;font-weight:700;border-left:4px solid var(--brand);padding-left:8px;break-after:avoid}
 /* 右側面板可收合的段落 */
 .msec>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px;user-select:none}.msec>summary::-webkit-details-marker{display:none}
@@ -1129,7 +1133,7 @@ const GUIDES = {
     gStep(6,'📍 缺失區域分析（圓餅圖、曲線圖）', gC(gR(`<svg viewBox="0 0 120 120" style="width:84px;height:84px;flex:none"><circle cx="60" cy="60" r="44" fill="none" stroke="#2a78d6" stroke-width="20" stroke-dasharray="96 400" transform="rotate(-90 60 60)"/><circle cx="60" cy="60" r="44" fill="none" stroke="#eb6834" stroke-width="20" stroke-dasharray="0 98 64 400" transform="rotate(-90 60 60)"/><circle cx="60" cy="60" r="44" fill="none" stroke="#1baf7a" stroke-width="20" stroke-dasharray="0 164 44 400" transform="rotate(-90 60 60)"/><circle cx="60" cy="60" r="44" fill="none" stroke="#9aa3b2" stroke-width="20" stroke-dasharray="0 210 66 400" transform="rotate(-90 60 60)"/><text x="60" y="66" text-anchor="middle" font-size="20" font-weight="800" fill="#16213a">90</text></svg><span style="display:flex;flex-direction:column;gap:3px;font-size:11px;flex:1"><span><i style="display:inline-block;width:9px;height:9px;background:#2a78d6;border-radius:2px"></i> 包裝區　<b>28</b>　31%</span><span><i style="display:inline-block;width:9px;height:9px;background:#eb6834;border-radius:2px"></i> 打漿區　<b>19</b>　21%</span><span><i style="display:inline-block;width:9px;height:9px;background:#1baf7a;border-radius:2px"></i> 緩衝區　<b>12</b>　13%</span><span><i style="display:inline-block;width:9px;height:9px;background:#9aa3b2;border-radius:2px"></i> 其它區域</span></span>${gN(1)}`),'缺失區域分布') + gC(`<svg viewBox="0 0 200 60" style="width:100%;height:auto;display:block"><line x1="6" x2="196" y1="54" y2="54" stroke="#c9bda6"/><polyline points="6,40 44,30 82,20 120,34 158,26 196,10" fill="none" stroke="#2a78d6" stroke-width="2"/><polyline points="6,46 44,42 82,36 120,30 158,40 196,38" fill="none" stroke="#eb6834" stroke-width="2"/><polyline points="6,50 44,48 82,44 120,46 158,36 196,44" fill="none" stroke="#1baf7a" stroke-width="2"/></svg>`+gR(`<span class="gx-s">${gN(2)}各缺失區域每月件數</span>`)),
       `<p>統計頁最下面「📍 缺失區域分析」可以選<b>年度、每季、每月</b>，按 ◀ ▶ 跳上一期／下一期（跟最上面的統計期間同步，依發現日期）：</p><p><b>圓餅圖</b>${gN(1)}：這段期間各缺失區域佔多少，右邊列出件數、佔比和<b>比上期 ▲▼ %</b>（上月／上季／去年，本期還沒過完就比到同一天）；<b>全部區域都列出來</b>，每一區一個顏色。<b>點一塊或右邊清單</b>就列出那個區域的案件。</p><p><b>曲線圖</b>${gN(2)}：各缺失區域每個時間點幾件（選年看 12 個月、選季看 3 個月、選月看每週），看哪一區最近變多或變少；滑過看數字、點圓點看那個月的案件、點圖例只看一條線。</p><p>要看<b>各區域的年、季、月分析、跟上期比、下載 Excel／Word</b>，按右上角「🗺️ 到廠區地圖看各區細部分析」（見廠區地圖使用說明第 12 步）。</p><p class="muted small">同一個區域在圓餅圖和曲線圖是同一個顏色。區域名稱寫法不同（例：1F倉儲區、1樓倉儲區）會被當成兩區，可以到「常用選項」合併。</p>`),
     gStep(7,'▲▼ 跟上期比幾 %（給主管看）', gC(gR(`<span class="gx-k">59<small>新增<br><b style="color:#b42318">▲ +20%</b></small></span>${gN(1)}<span class="gx-k ok">26<small>結案<br><b style="color:#167a3e">▲ +8%</b></small></span>`)+gR(`<span class="gx-s" style="width:54px">包裝區</span><span class="gx-bar" style="width:55%"></span><b style="color:#b42318;font-size:11px">▲ +35%</b>${gN(2)}`)+gR(`<span class="gx-s" style="width:54px">冷藏庫</span><span class="gx-bar" style="width:25%"></span><b style="color:#167a3e;font-size:11px">▼ −40%</b>`)),
-      `<p>統計頁的數字、長條、表格、圓餅圖、折線圖旁邊都有 <b>▲▼ 百分比</b>，主管一眼就知道變多還是變少：</p><p><b style="color:#b42318">紅色＝變差</b>（缺失、逾期、尚未結案變多，或結案變少）；<b style="color:#167a3e">綠色＝變好</b>。滑鼠移上去看上期是幾件。上期是 0 件時顯示「新增」；結案率用「百分點」（例：60% → 65% ＝ ▲ +5 個百分點）。</p><p><b>跟誰比？</b>四個數字${gN(1)}、區域長條${gN(2)}、類別和等級表：跟<b>上月／上季／去年</b>比；本期還沒過完時，上期<b>只算到同一天</b>（例：11/1～11/19 比 10/1～10/19），不會拿半個月比整個月。右邊三張卡、📈 每月趨勢、📍 缺失區域分析：比<b>去年同期</b>。舊的趨勢圖下方一排是「比前一期」；新折線圖滑過某個月，數字旁的 % 是比前一個月。</p><p><b>想知道增加了什麼</b>：「哪個區域缺失最多」的每一條長條、「缺失類別排行」「缺失等級」表格的每一列都可以<b>點一下</b>，會列出本期這一項的缺失（含缺失類別、描述），上方寫上期幾件 → 本期幾件；點案件可以直接打開。</p><p class="muted small">Word 報表也會帶出這些百分比。</p>`),
+      `<p>統計頁的數字、長條、表格、圓餅圖、折線圖旁邊都有 <b>▲▼ 百分比</b>，主管一眼就知道變多還是變少：</p><p><b style="color:#b42318">紅色＝變差</b>（缺失、逾期、尚未結案變多，或結案變少）；<b style="color:#167a3e">綠色＝變好</b>。滑鼠移上去看上期是幾件。上期是 0 件時顯示「新增」；結案率用「百分點」（例：60% → 65% ＝ ▲ +5 個百分點）。</p><p><b>跟誰比？</b>四個數字${gN(1)}、區域長條${gN(2)}、類別和等級表：跟<b>上月／上季／去年</b>比；本期還沒過完時，上期<b>只算到同一天</b>（例：11/1～11/19 比 10/1～10/19），不會拿半個月比整個月。右邊三張卡、📈 每月趨勢、📍 缺失區域分析：比<b>去年同期</b>。舊的趨勢圖下方一排是「比前一期」；新折線圖滑過某個月，數字旁的 % 是比前一個月。</p><p><b>圓餅圖＋長條圖</b>：「哪個區域缺失最多」「缺失類別排行」「缺失等級」都是<b>左邊圓餅、右邊長條（或表格）</b>，同一項同一個顏色，跟上方選的年度／每季／每月一起變；「下載 Word 報表」也會放進同樣的圓餅＋長條圖。</p><p><b>想知道增加了什麼</b>：「哪個區域缺失最多」的每一條長條、「缺失類別排行」「缺失等級」表格的每一列都可以<b>點一下</b>，會列出本期這一項的缺失（含缺失類別、描述），上方寫上期幾件 → 本期幾件；點案件可以直接打開。</p><p class="muted small">Word 報表也會帶出這些百分比。</p>`),
     gStep(8,'⏱ 結案率與改善天數（不含六日）', gC(`<div style="font-size:11px;width:100%"><div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:2px;background:#f3ece0;padding:3px 4px;border-radius:4px;font-weight:700"><span>負責單位</span><span>一般</span><span>限期改善</span><span>重大</span></div><div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:2px;padding:3px 4px"><span>打漿組</span><span>2 天<br><b style="color:#167a3e">▼ −20%</b></span><span>12 天<br><b style="color:#b42318">▲ +9%</b></span><span>1 天</span></div></div>${gN(1)}`,'⏱ 各負責單位平均天數'),
       `<p>統計頁「⏱ 結案率與改善天數」${gN(1)}：</p><p><b>結案率</b>＝本期發現的案件中已結案的比例；<b>天數</b>＝發現日期到<b>複查通過日</b>（沒有複查紀錄、以其它依據結案的用結案日），<b>只算週一～週五</b>，也不算你在「常用選項」設定的<b>公司休假日</b>（週五發現、下週一複查通過＝1 天）。只算本期發現、已複查通過的案件。</p><p>上面一張表是全部的結案率、平均天數（一般缺失、限期改善、重大缺失分開）；下面是<b>各負責單位</b>、<b>各缺失區域</b>的平均天數，每一格寫幾天、幾件，下面的 ▲▼ % 是比上期：天數<b style="color:#b42318">變多＝紅（變慢）</b>、<b style="color:#167a3e">變少＝綠（變快）</b>。</p><p>「下載 Word 報表」會把這幾張表一起放進月報／季報／年報。缺失清單上方的<b>本月結案率</b>卡片也會顯示本月平均天數和比上月同期。</p>`)
   ]},
@@ -1157,7 +1161,7 @@ const GUIDES = {
     gStep(11,'📊 地圖統計：區域分布圓餅圖與趨勢', gC(gR(`<svg viewBox="0 0 120 120" style="width:84px;height:84px;flex:none"><circle cx="60" cy="60" r="44" fill="none" stroke="#2a78d6" stroke-width="20" stroke-dasharray="96 400" transform="rotate(-90 60 60)"/><circle cx="60" cy="60" r="44" fill="none" stroke="#eb6834" stroke-width="20" stroke-dasharray="0 98 64 400" transform="rotate(-90 60 60)"/><circle cx="60" cy="60" r="44" fill="none" stroke="#1baf7a" stroke-width="20" stroke-dasharray="0 164 44 400" transform="rotate(-90 60 60)"/><circle cx="60" cy="60" r="44" fill="none" stroke="#9aa3b2" stroke-width="20" stroke-dasharray="0 210 66 400" transform="rotate(-90 60 60)"/><text x="60" y="66" text-anchor="middle" font-size="20" font-weight="800" fill="#16213a">90</text></svg><span style="display:flex;flex-direction:column;gap:3px;font-size:11px;flex:1"><span><i style="display:inline-block;width:9px;height:9px;background:#2a78d6;border-radius:2px"></i> 包裝區　<b>28</b>　31%</span><span><i style="display:inline-block;width:9px;height:9px;background:#eb6834;border-radius:2px"></i> 打漿區　<b>19</b>　21%</span><span><i style="display:inline-block;width:9px;height:9px;background:#1baf7a;border-radius:2px"></i> 緩衝區　<b>12</b>　13%</span><span><i style="display:inline-block;width:9px;height:9px;background:#9aa3b2;border-radius:2px"></i> 其它區域</span></span>${gN(1)}`),'各區域缺失分布') + gC(`<svg viewBox="0 0 200 60" style="width:100%;height:auto;display:block"><line x1="6" x2="196" y1="54" y2="54" stroke="#c9bda6"/><polyline points="6,40 44,30 82,20 120,34 158,26 196,10" fill="none" stroke="#2a78d6" stroke-width="2"/><polyline points="6,46 44,42 82,36 120,30 158,40 196,38" fill="none" stroke="#eb6834" stroke-width="2"/><polyline points="6,50 44,48 82,44 120,46 158,36 196,44" fill="none" stroke="#1baf7a" stroke-width="2"/></svg>`+gR(`<span class="gx-s">${gN(2)}各區域每月件數（最近 6 個月）</span>`)),
       `<p>地圖下方「📊 地圖統計」最下面有兩張圖，範圍跟著上方選的期間：</p><p><b>圓餅圖</b>${gN(1)}：這張地圖<b>全部區域</b>的缺失各佔多少（每一區一塊、顏色都不一樣；折線圖還是前 5 名＋其它，線太多會看不清楚），清單右邊有<b>比上期 ▲▼ %</b>；<b>點一塊或右邊清單</b>列出那一區的案件。</p><p><b>折線圖</b>${gN(2)}：各區域每個時間點幾件——選年看 12 個月、選季看 3 個月、選月看每週；圖例旁的 ▲▼ % 是合計比上期，滑過某一點是比前一個月（週）。點圓點看那個時間的案件。</p><p><b>點地圖上某個區域</b>時，兩張圖會自動變成<b>那一區各位置</b>的分布和趨勢（沒指定位置的算「未指定位置」）；按「看全部區域」回到全廠。</p>`),
     gStep(12,'📋 各區域分析：年、季、月與下載', gC(gR(`${gN(1)}${gTag('年度','dk')}${gTag('每季')}${gTag('每月')}<span class="gx-s">◀ 2026 年 ▾ ▶</span>`)+gR(`<div style="font-size:11px;width:100%"><div style="display:grid;grid-template-columns:2fr 1fr 1.3fr 1fr;gap:2px;background:#f3ece0;padding:3px 4px;border-radius:4px;font-weight:700"><span>區域</span><span>件數</span><span>跟上期比</span><span>結案率</span></div><div style="display:grid;grid-template-columns:2fr 1fr 1.3fr 1fr;gap:2px;padding:3px 4px"><span>包裝區</span><b>26</b><b style="color:#b42318">▲ +11（+73%）</b><span>65%</span></div><div style="display:grid;grid-template-columns:2fr 1fr 1.3fr 1fr;gap:2px;padding:3px 4px"><span>出貨平台</span><b>4</b><b style="color:#167a3e">▼ −6（−60%）</b><span>25%</span></div></div>${gN(2)}`),'📊 地圖統計') + gC(gR(`${gB('📗 下載區域分析（Excel）',{hl:1,n:3})}`)+gR(`${gB('📄 下載區域分析（Word）',{dk:1,hl:1,n:4})}`)),
-      `<p>「📊 地圖統計」選<b>年度、每季或每月</b>${gN(1)}，再選年份、第幾季或幾月；按 <b>◀ ▶</b> 可以直接跳上一期／下一期（跨年會自動換年份）。整個統計（數字卡、長條、圓餅圖、折線圖）都跟著換。右邊另一組可以選全部期間、最近三個月、最近六個月或自訂日期。折線圖選年看 12 個月、選季看 3 個月、選月看每週。</p><p><b>📋 各區域分析表</b>${gN(2)}：每一區的件數、<b>跟上期比</b>（▲ 紅色＝變多、▼ 綠色＝變少，括號是<b>幾 %</b>）、未結案、逾期、結案率、重複發生、最多的類別。上期＝選月比上個月、選季比上一季、選年比<b>去年同期</b>；這個月／這一季還沒過完時，上期只算到同一天。</p><p><b>▲▼ 百分比</b>也會出現在「缺失總數」「重複發生」數字卡、各區域與類型長條、圓餅圖清單、折線圖圖例（跟上期比）；「缺失趨勢」長條和折線圖滑過的數字是跟<b>前一個月（選月時前一週）</b>比。未結案、逾期不比百分比，因為越早的案件有越多時間結案，比起來不公平。數字可以點開看案件；點地圖上某一區，表格就變成那一區各位置。</p><p><b>📍 各區域位置缺失次數</b>：看全部區域時，下面會把<b>每一區的各位置件數</b>一次列出來（每區一張小卡，多到少、0 件也列出、比上期 ▲▼），不用一區一區點；點一列看案件，按「看地圖」跳到那一區。</p><p><b>📗 Excel</b>${gN(3)}：四段——各區域總表、區域 × 月份（或週）、區域 × 缺失類別、各區域的位置明細，可以自己排序、畫圖。</p><p><b>📄 Word</b>${gN(4)}：一頁摘要（哪幾區變多、變少）＋總表＋<b>平面圖</b>（每個區域、位置旁用紅色數字寫<b>選的期間（月／季／年）發現幾件缺失</b>）＋<b>圓餅圖、折線圖</b>＋各表格，可以直接列印交報告。</p><p class="muted small">統計分析頁的「📍 缺失區域分析」也有「🗺️ 到廠區地圖看各區細部分析」按鈕可以直接過來。</p>`),
+      `<p>「📊 地圖統計」選<b>年度、每季或每月</b>${gN(1)}，再選年份、第幾季或幾月；按 <b>◀ ▶</b> 可以直接跳上一期／下一期（跨年會自動換年份）。整個統計（數字卡、長條、圓餅圖、折線圖）都跟著換。右邊另一組可以選全部期間、最近三個月、最近六個月或自訂日期。折線圖選年看 12 個月、選季看 3 個月、選月看每週。</p><p><b>📋 各區域分析表</b>${gN(2)}：每一區的件數、<b>跟上期比</b>（▲ 紅色＝變多、▼ 綠色＝變少，括號是<b>幾 %</b>）、未結案、逾期、結案率、重複發生、最多的類別。上期＝選月比上個月、選季比上一季、選年比<b>去年同期</b>；這個月／這一季還沒過完時，上期只算到同一天。</p><p><b>▲▼ 百分比</b>也會出現在「缺失總數」「重複發生」數字卡、各區域與類型長條、圓餅圖清單、折線圖圖例（跟上期比）；「缺失趨勢」長條和折線圖滑過的數字是跟<b>前一個月（選月時前一週）</b>比。未結案、逾期不比百分比，因為越早的案件有越多時間結案，比起來不公平。數字可以點開看案件；點地圖上某一區，表格就變成那一區各位置。</p><p><b>圓餅圖＋長條圖</b>：「各區域缺失數」「缺失類型分布」都是<b>左邊圓餅、右邊長條</b>，同一項同一個顏色；點圓餅一塊或長條一列都能看案件。</p><p><b>📍 各區域位置缺失次數</b>：看全部區域時，下面會把<b>每一區的各位置件數</b>一次列出來（每區一張卡，左邊圓餅、右邊長條，多到少、0 件也列出、比上期 ▲▼），不用一區一區點；點一列看案件，按「看地圖」跳到那一區。</p><p><b>📗 Excel</b>${gN(3)}：四段——各區域總表、區域 × 月份（或週）、區域 × 缺失類別、各區域的位置明細，可以自己排序、畫圖。</p><p><b>📄 Word</b>${gN(4)}：一頁摘要（哪幾區變多、變少）＋總表＋<b>平面圖</b>（每個區域、位置旁用紅色數字寫<b>選的期間（月／季／年）發現幾件缺失</b>）＋<b>圓餅圖＋長條圖</b>（各區域、缺失類型、各區域的位置）＋<b>折線圖</b>＋各表格，可以直接列印交報告。</p><p class="muted small">統計分析頁的「📍 缺失區域分析」也有「🗺️ 到廠區地圖看各區細部分析」按鈕可以直接過來。</p>`),
     gStep(13,'給同事用同一張地圖', gC(gR(`${gB('匯出地圖設定',{hl:1,n:1})}${gB('匯入地圖設定',{hl:1,n:2})}`)) + `<div class="gx-s" style="text-align:center">含平面圖・區域・位置・稽核重點・參考照片<br>＋清潔分區・易碎品・動線・病媒防治・顏色設定<br>不含案件，不會蓋掉同事的案件</div>`,
       `<p>按「匯出地圖設定」${gN(1)}存成檔案給同事，同事按「匯入地圖設定」${gN(2)}就有同一張地圖。</p><p>「匯出地圖設定」包含<b>所有圖層</b>（清潔分區、易碎品、動線、病媒防治）和顏色設定；只有地圖，不含案件、稽核紀錄、易碎品檢查紀錄。</p><p>要放進報告或貼公告時，按上方<b>「🖼 匯出平面圖（圖片）」</b>，會把目前這一層存成清晰的 PNG：平面圖多的空白會自動裁掉、放大到約佔 8～9 成寬（四周留一點白，邊緣的標記不會被切掉），附圖例（缺失層依目前風險顏色開／關）。</p><p class="muted small">要連案件一起帶走，請用缺失清單的「下載備份」。平面圖屬公司內部資料，不會上傳也不會送給 AI；匯出的圖片傳給別人前請先確認可以外流。</p>`),
     gStep(14,'切換圖層（缺失以外的圖）', gC(gR(`${gN(1)}<span class="gx-seg" style="flex-wrap:wrap"><i class="on">🔍 缺失</i><i>🧼 清潔分區</i><i>🔶 易碎品</i><i>➡️ 動線與設施</i><i>🐭 病媒防治</i></span>`)+gR(`${gB('🧼 疊清潔分區（開）',{dk:1,hl:1,n:2})}${gB('🖼 匯出平面圖（圖片）',{hl:1,n:3})}`)),
@@ -3552,27 +3556,29 @@ function mstShow(k){ const o = MST_L[k]; if(!o) return; if(!o.rs.length){ flash(
   const rs = o.rs.slice().sort((a,b)=>(a.closed?1:0)-(b.closed?1:0) || (b.foundDate||'').localeCompare(a.foundDate||''));
   caseListModal(esc(o.title), MST_SCOPE, rs); }
 let MST_SCOPE = '';
+/* 這次重畫用的範圍文字（MST_SCOPE 在 mapStatsHTML 後段才設定） */
+function MST_SCOPE_PRE(){ const selA = MV.sel ? (MV.sel.t==='area' ? areaById(MV.sel.id) : areaById((locById(MV.sel.id)||{}).areaId)) : null; return `${selA ? selA.name : ((MAPD.maps.find(m=>m.id===MV.mapId)||{}).name||'')+'・全部區域'}・${mstLabel()}`; }
 /* 各區域位置缺失次數：每一區一張小卡，列出這一區每個位置的件數（含未指定位置），可以點開看案件 */
 function mapLocCountsHTML(as, inP, inQ, PP, perName){
   const cards = as.map(a => {
     const ls = MAPD.locs.filter(l=>l.areaId===a.id), allA = recsForArea(a), lid = new Set(ls.map(l=>l.id));
-    const rows = ls.map(l => { const rs = recsForLoc(l).filter(inP); return {name:(l.code+' '+l.name).trim(), rs, pn: PP ? recsForLoc(l).filter(inQ).length : null, open: rs.filter(r=>!r.closed).length}; });
+    const rows = ls.map(l => { const rs = recsForLoc(l).filter(inP); const prs = PP ? recsForLoc(l).filter(inQ) : []; return {name:(l.code+' '+l.name).trim(), rs, prs, pn: PP ? prs.length : null, open: rs.filter(r=>!r.closed).length}; });
     const un = allA.filter(r=>!(r.locId && lid.has(r.locId))), unRs = un.filter(inP);
-    if(unRs.length || (PP && un.filter(inQ).length)) rows.push({name:'（未指定位置）', rs:unRs, pn: PP ? un.filter(inQ).length : null, open: unRs.filter(r=>!r.closed).length, un:true});
+    if(unRs.length || (PP && un.filter(inQ).length)) rows.push({name:'（未指定位置）', rs:unRs, prs: PP ? un.filter(inQ) : [], pn: PP ? un.filter(inQ).length : null, open: unRs.filter(r=>!r.closed).length, un:true});
     rows.sort((x,y)=>y.rs.length-x.rs.length || (x.un?1:0)-(y.un?1:0));
     const tot = allA.filter(inP).length, ptot = PP ? allA.filter(inQ).length : null, mx = Math.max(1, ...rows.map(r=>r.rs.length));
     return {a, rows, tot, ptot, nloc: ls.length};
   }).filter(c => c.tot || c.nloc).sort((x,y)=>y.tot-x.tot);
   if(!cards.length) return '';
-  const bar = (r, mx, aname) => `<div class="hb ${r.rs.length?'click':''}" ${r.rs.length?`onclick="${mstReg(aname+'・'+r.name, r.rs)}"`:''}><span class="${r.un?'muted':''}">${esc(r.name)}</span><span class="b"><i style="width:${r.rs.length/mx*100}%"></i></span><span class="v">${r.rs.length}${r.open?`<small class="bad">（未結 ${r.open}）</small>`:''}${PP?' '+chgHTML(r.rs.length, r.pn):''}</span></div>`;
+  const bar = (r, mx, aname, cm) => `<div class="hb ${r.rs.length?'click':''}" ${r.rs.length?`onclick="${mstReg(aname+'・'+r.name, r.rs)}"`:''}><span class="${r.un?'muted':''}">${esc(r.name)}</span><span class="b"><i style="width:${r.rs.length/mx*100}%;${cm.get(r.name)?'background:'+cm.get(r.name):''}"></i></span><span class="v">${r.rs.length}${r.open?`<small class="bad">（未結 ${r.open}）</small>`:''}${PP?' '+chgHTML(r.rs.length, r.pn):''}</span></div>`;
   return `<div class="st-sec" style="margin-top:16px">📍 各區域位置缺失次數（${esc(perName)}）</div>
     <div class="muted small" style="margin-bottom:6px">每一區列出各位置的件數（多到少），0 件的位置也列出來；點一列看案件。${PP?'▲▼ 是比上期。':''}還沒放位置的區域，可以在「✏️ 編輯模式」按「📍 新增位置」。</div>
-    <div class="mloc">${cards.map(c => { const mx = Math.max(1, ...c.rows.map(r=>r.rs.length));
+    <div class="mloc">${cards.map(c => { const mx = Math.max(1, ...c.rows.map(r=>r.rs.length)), P = pieSetG('mpLoc_'+c.a.id, `${c.a.name} 各位置缺失數（${perName}）`, c.rows.map(r=>({name:r.name, rs:r.rs, prs:r.prs})), `${c.a.name}・${perName}`);
       return `<div class="mlc"><div class="mlh"><b>${esc(c.a.name)}</b><span class="small">共 <b>${c.tot}</b> 件${PP?' '+chgHTML(c.tot, c.ptot):''}</span><button class="lite" onclick="MV.sel={t:'area',id:'${c.a.id}'};renderMap();document.getElementById('mapView').scrollIntoView({behavior:'smooth'})" title="在地圖上看這一區">看地圖</button></div>
-        ${c.rows.length ? c.rows.map(r=>bar(r, mx, c.a.name)).join('') : '<div class="muted small">這一區還沒有放位置。</div>'}</div>`; }).join('')}</div>`;
+        ${c.rows.length ? `<div class="st-pb mlpb" data-pb="mpLoc_${c.a.id}"><div class="pbl">${c.tot?P.pie:''}</div><div class="pbr">${c.rows.map(r=>bar(r, mx, c.a.name, P.cm)).join('')}</div></div>` : '<div class="muted small">這一區還沒有放位置。</div>'}</div>`; }).join('')}</div>`;
 }
 function mapStatsHTML(){
-  MST_L = {};
+  MST_L = {}; Object.keys(PB).forEach(k=>{ if(k.startsWith('mp')) delete PB[k]; });
   if(!mapAreas().length) return '';
   const selA = MV.sel ? (MV.sel.t==='area' ? areaById(MV.sel.id) : areaById((locById(MV.sel.id)||{}).areaId)) : null;
   const as = selA ? [selA] : mapAreas();
@@ -3591,17 +3597,22 @@ function mapStatsHTML(){
   MST_SCOPE = `${selA ? selA.name : ((MAPD.maps.find(m=>m.id===MV.mapId)||{}).name||'')+'・全部區域'}・${perName}`;
   /* 連續 3 個月警示：列出構成警示的那幾件（同位置或區域、同類別、警示的月份內） */
   const st3rs = [...new Map(st3s.flatMap(x => (x.lid ? recsForLoc(locById(x.lid)) : recsForArea(areaById(x.aid))).filter(r => r.defType===x.type && monthIdx(r.foundDate||'')>=x.from && monthIdx(r.foundDate||'')<=x.to)).map(r=>[r.id,r])).values()];
-  const bars = (rows, mx, cls) => rows.length ? rows.map(([k,v,extra,on,ch])=>`<div class="hb ${on?'click':''}" ${on?`onclick="${on}"`:''}><span>${esc(k)}</span><span class="b"><i style="width:${mx?v/mx*100:0}%" class="${cls||''}"></i></span><span class="v">${v}${extra||''}${ch?' '+ch:''}</span></div>`).join('') : '<div class="muted small">這段期間沒有資料。</div>';
+  const bars = (rows, mx, cls, cm) => rows.length ? rows.map(([k,v,extra,on,ch])=>`<div class="hb ${on?'click':''}" ${on?`onclick="${on}"`:''}><span>${esc(k)}</span><span class="b"><i style="width:${mx?v/mx*100:0}%;${cm&&cm.get(k)?'background:'+cm.get(k):''}" class="${cls||''}"></i></span><span class="v">${v}${extra||''}${ch?' '+ch:''}</span></div>`).join('') : '<div class="muted small">這段期間沒有資料。</div>';
   /* 全部區域時比較各區域；選了某一區時改成比較這一區的各個位置 */
   const go = (k,id) => `MV.sel={t:'${k}',id:'${id}'};renderMap();document.getElementById('mapView').scrollIntoView({behavior:'smooth'})`;
   const byArea = selA
-    ? [...locs.map(l=>{ const rs = recsForLoc(l).filter(inP), nm = (l.code+' '+l.name).trim(); return [nm, rs.length, rs.filter(r=>!r.closed).length, mstReg(nm, rs), pc(rs.length, recsForLoc(l).filter(inQ))]; }),
-       ...(()=>{ const un = r=>!(r.locId && locs.some(l=>l.id===r.locId)), rs = all.filter(un); return rs.length ? [['（未指定位置）', rs.length, rs.filter(r=>!r.closed).length, mstReg('未指定位置', rs), pc(rs.length, (pall||[]).filter(un))]] : []; })()].sort((x,y)=>y[1]-x[1])
-    : as.map(a=>{ const rs = recsForArea(a).filter(inP); return [a.name, rs.length, rs.filter(r=>!r.closed).length, mstReg(a.name, rs), pc(rs.length, recsForArea(a).filter(inQ))]; }).sort((x,y)=>y[1]-x[1]);
+    ? [...locs.map(l=>{ const rs = recsForLoc(l).filter(inP), nm = (l.code+' '+l.name).trim(); return [nm, rs.length, rs.filter(r=>!r.closed).length, mstReg(nm, rs), pc(rs.length, recsForLoc(l).filter(inQ)), rs, recsForLoc(l).filter(inQ)]; }),
+       ...(()=>{ const un = r=>!(r.locId && locs.some(l=>l.id===r.locId)), rs = all.filter(un); return rs.length ? [['（未指定位置）', rs.length, rs.filter(r=>!r.closed).length, mstReg('未指定位置', rs), pc(rs.length, (pall||[]).filter(un)), rs, (pall||[]).filter(un)]] : []; })()].sort((x,y)=>y[1]-x[1])
+    : as.map(a=>{ const rs = recsForArea(a).filter(inP); return [a.name, rs.length, rs.filter(r=>!r.closed).length, mstReg(a.name, rs), pc(rs.length, recsForArea(a).filter(inQ)), rs, recsForArea(a).filter(inQ)]; }).sort((x,y)=>y[1]-x[1]);
   const mxA = Math.max(1,...byArea.map(x=>x[1]));
   const tm = new Map(); all.forEach(r=>{ const k = r.defType ? typeName(r.defType) : '未選類別'; if(!tm.has(k)) tm.set(k, []); tm.get(k).push(r); });
   const ptm = new Map(); (pall||[]).forEach(r=>{ const k = r.defType ? typeName(r.defType) : '未選類別'; ptm.set(k,(ptm.get(k)||0)+1); });
-  const types = [...tm.entries()].sort((a,b)=>b[1].length-a[1].length).slice(0,8).map(([k,rs])=>[k, rs.length, '', mstReg(k, rs), PP ? chgHTML(rs.length, ptm.get(k)||0) : '']);
+  const ptmL = new Map(); (pall||[]).forEach(r=>{ const k = r.defType ? typeName(r.defType) : '未選類別'; if(!ptmL.has(k)) ptmL.set(k, []); ptmL.get(k).push(r); });
+  const types = [...tm.entries()].sort((a,b)=>b[1].length-a[1].length).map(([k,rs])=>[k, rs.length, '', mstReg(k, rs), PP ? chgHTML(rs.length, ptm.get(k)||0) : '', rs, ptmL.get(k)||[]]);
+  /* 圓餅（左）＋長條（右）：各區域（或各位置）、缺失類型 */
+  const uW = selA ? '位置' : '區域';
+  const PAr = pieSetG('mpArea', `各${uW}缺失數（${perName}）`, byArea.map(x=>({name:x[0], rs:x[5], prs:x[6]})), MST_SCOPE_PRE());
+  const PTy = pieSetG('mpType', `缺失類型分布（${perName}）`, types.map(x=>({name:x[0], rs:x[5], prs:x[6]})), MST_SCOPE_PRE());
   const months = []; { const d = new Date(); for(let i=5;i>=0;i--){ const x = new Date(d.getFullYear(), d.getMonth()-i, 1); months.push(x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')); } }
   const mAll = [...new Map(as.flatMap(a=>recsForArea(a)).map(r=>[r.id,r])).values()];
   /* 區域分布圓餅＋各區域（點某一區時改成各位置）最近 6 個月曲線 */
@@ -3632,15 +3643,17 @@ function mapStatsHTML(){
     <div class="mkpi">${[...(selA?[]:[['廠區（區域）',as.length,'']]),['已建立位置',locs.length,''],['連續 3 個月警示',st3,'v',mstReg('連續 3 個月警示', st3rs)],['缺失總數',all.length,'',mstReg('缺失總數', all),pc(all.length,pall)],['未結案',open,'o',mstReg('未結案', all.filter(r=>!r.closed))],['逾期',over,'v',mstReg('逾期', all.filter(isOverdue))],['重複發生',rp,'v',mstReg('重複發生', all.filter(r=>rep.has(r.id))),PP?chgHTML(rp,pall.filter(r=>rep.has(r.id)).length):''],['最近稽核不合格',lastFail,'v'],['改善完成率',done+'%','g',mstReg('已結案（改善完成）', all.filter(r=>r.closed))]].map(([t,n,c,on,ch])=>`<div class="${c} ${on?'click':''}" ${on?`onclick="${on}" role="button" tabindex="0" onkeydown="if(event.key==='Enter')this.click()" title="點一下看案件"`:''}><b>${n}</b>${t}${ch?`<span class="kchg">${ch}</span>`:''}</div>`).join('')}</div>
     <div class="row" style="margin:12px 0 4px;align-items:center"><b style="font-size:14px">${esc(perName)}</b>${A.hasPrev?`<span class="muted small">跟 ${esc(A.prevLabel)} 比</span>`:''}<span style="flex:1"></span><button id="anaXls" onclick="mapAnaXlsx()">📗 下載區域分析（Excel）</button><button id="anaDoc" onclick="mapAnaWord()">📄 下載區域分析（Word）</button></div>
     ${mapAnaTableHTML(A)}
+    <div class="st-sec">${selA?'各位置缺失數':'各區域缺失數'}（${esc(perName)}，括號＝未結案）</div>
+    <div class="st-pb" data-pb="mpArea"><div class="pbl">${PAr.pie}</div><div class="pbr mcharts1">${bars(byArea.filter(x=>x[1]||!selA).map(([k,n,o,on,ch])=>[k,n,o?`<small class="bad">（未結 ${o}）</small>`:'',on,ch]), mxA, '', PAr.cm)}</div></div>
+    <div class="st-sec">缺失類型分布（${esc(perName)}）</div>
+    <div class="st-pb" data-pb="mpType"><div class="pbl">${PTy.pie}</div><div class="pbr mcharts1">${bars(types, Math.max(1,...types.map(x=>x[1])), '', PTy.cm)}</div></div>
     <div class="mcharts">
-      <div><div class="st-sec">${selA?'各位置缺失數（未結案）':'各區域缺失數（未結案）'}</div>${bars(byArea.map(([k,n,o,on,ch])=>[k,n,o?`<small class="bad">（未結 ${o}）</small>`:'',on,ch]), mxA)}</div>
-      <div><div class="st-sec">缺失類型分布</div>${bars(types, Math.max(1,...types.map(x=>x[1])))}</div>
       <div><div class="st-sec">缺失趨勢（${MST.per==='month'?'每週':'每月'}，▲▼ 比前一${MST.per==='month'?'週':'個月'}）</div>${bars(trend, Math.max(1,...trend.map(x=>x[1])))}</div>
       <div><div class="st-sec">高風險位置排行</div>${hot.length ? `<ol class="mhot">${hot.map(x=>`<li class="click" onclick="MV.sel={t:'loc',id:'${x.l.id}'};renderMap();document.getElementById('mapView').scrollIntoView({behavior:'smooth'})"><b>${esc((x.l.code+' '+x.l.name).trim())}</b><span class="muted small">${esc(x.a?x.a.name:'')}</span><span class="small">共 ${x.n}・未結 ${x.o}${x.v?'・<b class="bad">逾期 '+x.v+'</b>':''}${x.p?'・🔁 重複 '+x.p:''}</span></li>`).join('')}</ol>` : '<div class="muted small">目前沒有需要優先注意的位置。</div>'}
         <div class="muted small" style="margin-top:4px">排序依：未結案、逾期、重複發生與件數加權。</div></div>
     </div>
     ${selA ? '' : mapLocCountsHTML(as, inP, inQ, PP, perName)}
-    <div class="lcgrid" style="margin-top:14px">${pieHTML('dnMap', `各${unitWord}缺失分布（全部 ${dnItems.filter(x=>x.rs.length).length} 個）`, paint(dnItems.slice().sort((a,b)=>b.rs.length-a.rs.length), dnCM), MST_SCOPE, '其它'+unitWord, PP ? '比'+A.prevLabel : '', 999)}${lineChartHTML('lcMap', `各${unitWord}${MST.per==='month'?'每週':'每月'}件數（${esc(perName)}，前 5 名）`, B.map(b=>b.label), paint(lcSeries, dnCM), {scopes:B.map(b=>`${A.scopeBase}・${b.scope}`), cmp: PP ? '比'+A.prevLabel : '', step: MST.per==='month' ? '前一週' : '前一個月'})}</div>
+    <div class="lcgrid" style="margin-top:14px">${lineChartHTML('lcMap', `各${unitWord}${MST.per==='month'?'每週':'每月'}件數（${esc(perName)}，前 5 名）`, B.map(b=>b.label), paint(lcSeries, dnCM), {scopes:B.map(b=>`${A.scopeBase}・${b.scope}`), cmp: PP ? '比'+A.prevLabel : '', step: MST.per==='month' ? '前一週' : '前一個月'})}</div>
     <div class="muted small" style="margin-top:8px">💡 數字卡、長條、圓餅、圓點都可以點，會列出那幾件案件；點案件可以直接打開。<br>▲▼ 百分比：數字卡、各區域長條、類型長條、圓餅圖、折線圖圖例都是${PP?`跟 <b>${esc(A.prevLabel)}</b> 比`:'跟上期比（「全部期間」沒有上期，不顯示）'}；「缺失趨勢」長條和折線圖滑過的數字是跟前一${MST.per==='month'?'週':'個月'}比。<b style="color:var(--bad)">紅＝變多</b>、<b style="color:var(--ok)">綠＝變少</b>。
     </div>
   </details>`;
@@ -3732,13 +3745,15 @@ async function mapAnaWord(){
     const addChart = async (sel, title, legendSel) => { const svg = document.querySelector(sel); if(!svg) return;
       const legend = [...document.querySelectorAll(legendSel)].map(b=>({c:getComputedStyle(b.querySelector('i')).backgroundColor, t:b.innerText.replace(/\s+/g,' ').trim()}));
       const r = await svgPng(svg, title, legend); media.push(r.png); id = media.length; const cx = 5760000, cy = Math.round(cx*r.h/r.w); body += docxImg(id, cx, cy); };
-    try{ body += S(`二、各${A.unitWord}缺失分布（圓餅圖）`); await addChart('[data-dn="dnMap"] .dnsvg', `各${A.unitWord}缺失分布（${A.label}）`, '[data-dn="dnMap"] .dnleg button'); }catch(e){ body += wPara('（圖表無法產生）', {sz:19, color:'5D6779'}); }
+    const pbAdd = async (key, title) => { const r = await pieBarPng(key, title); if(!r) return; media.push(r.png); id = media.length; const cx = 5760000, cy = Math.round(cx*r.h/r.w); body += docxImg(id, cx, cy); };
+    try{ body += S(`二、各${A.unitWord}缺失數、缺失類型（圓餅圖＋長條圖）`); await pbAdd('mpArea', `各${A.unitWord}缺失數（${A.label}）`); await pbAdd('mpType', `缺失類型分布（${A.label}）`); }catch(e){ body += wPara('（圖表無法產生）', {sz:19, color:'5D6779'}); }
     try{ body += S(`三、各${A.unitWord}${MST.per==='month'?'每週':'每月'}趨勢（折線圖）`); await addChart('[data-lc="lcMap"] .lcplot svg', `各${A.unitWord}${MST.per==='month'?'每週':'每月'}件數（${A.label}）`, '[data-lc="lcMap"] .lcleg button'); }catch(e){ body += wPara('（圖表無法產生）', {sz:19, color:'5D6779'}); }
     body += S(`四、各${A.unitWord} × ${MST.per==='month'?'週':'月份'}`) + wTable(T.time.map(r=>r.map(String)));
     const tk = T.typeKeys, keep = tk.slice(0,6), restK = tk.slice(6);
     const typeRows = [[A.unitWord, ...keep, ...(restK.length?['其它類別']:[]), '合計'], ...A.units.map(u=>[u.name, ...keep.map(k=>u.types.get(k)||0), ...(restK.length?[restK.reduce((n,k)=>n+(u.types.get(k)||0),0)]:[]), u.n])];
     body += S(`五、各${A.unitWord} × 缺失類別`) + wTable(typeRows.map(r=>r.map(String)));
     if(T.locs) body += S('六、各區域的位置明細') + wTable(T.locs.map(r=>r.map(String)));
+    if(!A.selA){ const keys = Object.keys(PB).filter(k=>k.startsWith('mpLoc_') && PB[k].items.length); if(keys.length){ body += S('七、各區域位置缺失次數（圓餅圖＋長條圖）'); for(const k of keys){ try{ await pbAdd(k); }catch(e){} } } }
     body += wPara('Casevoras 衛生缺失追蹤助手．本報告依本機資料產生．跟上期比：▲ 增加、▼ 減少', {sz:16, color:'888888', before:120, jc:'center'});
     await download(docxPack(body, media), anaFile(A,'docx'), 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
     flash('已送出下載：區域分析 Word');
@@ -4946,6 +4961,11 @@ function statHTML(view,y,a){
   const cmp = diff>0?`比${pw}多 ${diff} 件`:diff<0?`比${pw}少 ${-diff} 件`:`與${pw}相同`;
   const tchg = (n,pn,good) => `<div class="tchg">${chgHTML(n,pn,good)} 比${esc(pw)}（${pn}）</div>`;
   const pArea = new Map(pc.areaList), pType = new Map(pc.types.map(x=>[x.name,x.n])), pCat = new Map(pc.cats.map(x=>[x.name,x.n]));
+  /* 圓餅圖：區域、類別、等級（跟右邊長條、表格同色） */
+  const inRg = (r,g) => r.foundDate && r.foundDate>=g.start && r.foundDate<=g.end, CS = live().filter(r=>inRg(r,rg)), PS = live().filter(r=>inRg(r,pr));
+  const PA = pieSet('stArea', `哪個區域缺失最多（${tw}）`, CS, PS, r=>(r.area||'').trim()||'（未填）', c.areaList.map(x=>x[0]), rg.label);
+  const PT = pieSet('stType', `缺失類別排行（${tw}）`, CS, PS, r=>r.defType ? r.defType+' '+((TYPES.find(t=>t[0]===r.defType)||[])[1]||'') : '未選類別', c.types.map(x=>x.name), rg.label);
+  const PC = pieSet('stCat', `缺失等級（${tw}）`, CS, PS, r=>CAT[r.category]||'未判定', c.cats.map(x=>x.name), rg.label);
   const bad = c.over+c.cross.length>0;
   const sum = c.total===0 && c.cross.length===0 && c.del===0
     ? `${rg.label}：尚無資料`
@@ -4975,15 +4995,15 @@ function statHTML(view,y,a){
       ${c.cross.map(r=>`<tr${view?` class="click" onclick="openRecord('${r.id}')"`:''}><td>${esc(r.id)}</td><td>${fmtDate(r.foundDate)}</td><td>${esc(r.area)}</td><td>${esc(ownerText(r))}</td><td>${fmtDate(r.deadline)}</td><td>${Math.max(1,daysBetween(r.deadline,c.asOf))} 天</td></tr>`).join('')}</tbody></table></div>`:'<div class="muted small">沒有跨月逾期的案件。</div>'}
 
     <div class="st-sec">哪個區域缺失最多（${esc(tw)}新增，全部區域）</div>
-    ${c.areaList.length?c.areaList.map(([n,v])=>`<div class="st-bar click" role="button" tabindex="0" title="點一下看是哪些缺失" data-k="${esc(n)}" onclick="statPick('area',this.dataset.k)" onkeydown="if(event.key==='Enter')this.click()"><div>${esc(n)}</div><div class="b"><i style="width:${Math.round(v/maxA*100)}%"></i></div><div class="v">${v}</div><div class="c">${chgHTML(v,pArea.get(n)||0)}</div></div>`).join(''):'<div class="muted small">尚無資料</div>'}
+    ${c.areaList.length?`<div class="st-pb" data-pb="stArea"><div class="pbl">${PA.pie}</div><div class="pbr">${c.areaList.map(([n,v])=>`<div class="st-bar click" role="button" tabindex="0" title="點一下看是哪些缺失" data-k="${esc(n)}" onclick="statPick('area',this.dataset.k)" onkeydown="if(event.key==='Enter')this.click()"><div>${esc(n)}</div><div class="b"><i style="width:${Math.round(v/maxA*100)}%;background:${PA.cm.get(n)||'var(--brand)'}"></i></div><div class="v">${v}</div><div class="c">${chgHTML(v,pArea.get(n)||0)}</div></div>`).join('')}</div></div>`:'<div class="muted small">尚無資料</div>'}
 
     <div class="st-sec">缺失類別排行（${esc(tw)}新增，由多到少）</div>
-    ${c.types.length?`<table class="st-table"><thead><tr><th>缺失類別</th><th>件數</th><th>比${esc(pw)}</th><th>其中逾期</th></tr></thead><tbody>
-      ${c.types.map(x=>`<tr class="click" title="點一下看是哪些缺失" data-k="${esc(x.name)}" onclick="statPick('type',this.dataset.k)"><td>${esc(x.name)}</td><td><b>${x.n}</b></td><td>${chgHTML(x.n,pType.get(x.name)||0)}</td><td>${x.over?`<b style="color:var(--bad)">${x.over}</b>`:'0'}</td></tr>`).join('')}</tbody></table>`:'<div class="muted small">尚無資料</div>'}
+    ${c.types.length?`<div class="st-pb" data-pb="stType"><div class="pbl">${PT.pie}</div><div class="pbr"><table class="st-table"><thead><tr><th>缺失類別</th><th>件數</th><th>比${esc(pw)}</th><th>其中逾期</th></tr></thead><tbody>
+      ${c.types.map(x=>`<tr class="click" title="點一下看是哪些缺失" data-k="${esc(x.name)}" onclick="statPick('type',this.dataset.k)"><td><i class="pbdot" style="background:${PT.cm.get(x.name)||'#9aa3b2'}"></i>${esc(x.name)}</td><td><b>${x.n}</b></td><td>${chgHTML(x.n,pType.get(x.name)||0)}</td><td>${x.over?`<b style="color:var(--bad)">${x.over}</b>`:'0'}</td></tr>`).join('')}</tbody></table></div></div>`:'<div class="muted small">尚無資料</div>'}
 
     <div class="st-sec">缺失等級（${esc(tw)}新增）</div>
-    <table class="st-table"><thead><tr><th>等級</th><th>件數</th><th>比${esc(pw)}</th><th>其中逾期</th></tr></thead><tbody>
-      ${c.cats.filter(x=>x.n>0||x.name!=='未判定').map(x=>`<tr class="click" title="點一下看是哪些缺失" data-k="${esc(x.name)}" onclick="statPick('cat',this.dataset.k)"><td>${esc(x.name)}</td><td><b>${x.n}</b></td><td>${chgHTML(x.n,pCat.get(x.name)||0)}</td><td>${x.over?`<b style="color:var(--bad)">${x.over}</b>`:'0'}</td></tr>`).join('')}</tbody></table>
+    <div class="st-pb" data-pb="stCat"><div class="pbl">${PC.pie}</div><div class="pbr"><table class="st-table"><thead><tr><th>等級</th><th>件數</th><th>比${esc(pw)}</th><th>其中逾期</th></tr></thead><tbody>
+      ${c.cats.filter(x=>x.n>0||x.name!=='未判定').map(x=>`<tr class="click" title="點一下看是哪些缺失" data-k="${esc(x.name)}" onclick="statPick('cat',this.dataset.k)"><td><i class="pbdot" style="background:${PC.cm.get(x.name)||'#9aa3b2'}"></i>${esc(x.name)}</td><td><b>${x.n}</b></td><td>${chgHTML(x.n,pCat.get(x.name)||0)}</td><td>${x.over?`<b style="color:var(--bad)">${x.over}</b>`:'0'}</td></tr>`).join('')}</tbody></table></div></div>
 
     <div class="st-block"><div class="st-sec">趨勢（${trendName}）</div>
     <figure class="chartfig" data-title="衛生缺失趨勢（${esc(trendName)}）">
@@ -5090,6 +5110,48 @@ const LC_COL = ['#2a78d6','#eb6834','#1baf7a','#eda100','#e87ba4','#6250d6'];
 const lcCol = (x, i) => x.c || (x.other ? '#9aa3b2' : LC_COL[i%LC_COL.length]);
 /* 依名稱固定顏色：圓餅圖和曲線圖同一個項目同一個顏色 */
 /* 全部項目都要不同色：固定色用完接延伸色 */
+/* 左圓餅、右長條的組合圖（Word、圖片用）；PB[key]＝{title, items:[{name,n,c}]} */
+const PB = {};
+function pieBarCanvas(title, items){
+  items = items.filter(x=>x.n>0); const F = '"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif';
+  const W = 1600, rowH = 48, T = title ? 70 : 20, H = Math.max(600, T + Math.max(1, items.length)*rowH + 50);
+  const c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d');
+  g.fillStyle = '#fff'; g.fillRect(0,0,W,H); g.textBaseline = 'middle';
+  if(title){ g.fillStyle = '#16213a'; g.font = `700 34px ${F}`; g.fillText(title, 30, 38); }
+  const tot = items.reduce((a,x)=>a+x.n,0), cx = 320, cy = T + (H-T)/2, R0 = 250, R1 = 150;
+  let a0 = -Math.PI/2;
+  items.forEach(x => { const a1 = a0 + x.n/tot*Math.PI*2; g.beginPath(); g.arc(cx, cy, R0, a0, a1); g.arc(cx, cy, R1, a1, a0, true); g.closePath(); g.fillStyle = x.c; g.fill(); g.lineWidth = 3; g.strokeStyle = '#fff'; g.stroke(); a0 = a1; });
+  if(!items.length){ g.beginPath(); g.arc(cx, cy, R0, 0, Math.PI*2); g.arc(cx, cy, R1, Math.PI*2, 0, true); g.fillStyle = '#e8e2d6'; g.fill(); }
+  g.textAlign = 'center'; g.fillStyle = '#16213a'; g.font = `800 72px ${F}`; g.fillText(String(tot), cx, cy-12); g.font = `28px ${F}`; g.fillStyle = '#6b6455'; g.fillText('件', cx, cy+44); g.textAlign = 'left';
+  const x0 = 640, lw = 330, bx = x0 + 34 + lw, bw = W - bx - 230, mx = Math.max(1, ...items.map(x=>x.n));
+  const fit = (t, w) => { if(g.measureText(t).width <= w) return t; while(t.length > 1 && g.measureText(t+'…').width > w) t = t.slice(0,-1); return t+'…'; };
+  const top = T + Math.max(0, ((H-T) - items.length*rowH)/2);
+  items.forEach((x, k) => { const y = top + k*rowH + rowH/2;
+    g.fillStyle = x.c; g.fillRect(x0, y-11, 22, 22);
+    g.fillStyle = '#16213a'; g.font = `27px ${F}`; g.fillText(fit(x.name, lw), x0+34, y);
+    g.fillStyle = '#efe7d8'; g.fillRect(bx, y-12, bw, 24); g.fillStyle = x.c; g.fillRect(bx, y-12, Math.max(3, bw*x.n/mx), 24);
+    g.fillStyle = '#16213a'; g.font = `700 27px ${F}`; g.fillText(String(x.n), bx+bw+18, y); g.font = `24px ${F}`; g.fillStyle = '#6b6455'; g.fillText(Math.round(x.n/tot*100)+'%', bx+bw+90, y); });
+  if(!items.length){ g.fillStyle = '#6b6455'; g.font = `28px ${F}`; g.fillText('這段期間沒有資料', x0, cy); }
+  return c;
+}
+async function pieBarPng(key, title){ const d = PB[key]; if(!d) return null; const c = pieBarCanvas(title==null ? d.title : title, d.items);
+  const b = await new Promise(r=>c.toBlob(r,'image/png')); return {png:new Uint8Array(await b.arrayBuffer()), w:c.width, h:c.height}; }
+/* 頁面上：圓餅（左）＋長條或表格（右）同一組顏色 */
+function pieSet(id, title, rs, prs, keyOf, order, scope){
+  const g = new Map(), pg = new Map(); rs.forEach(r=>{ const k = keyOf(r); if(!g.has(k)) g.set(k,[]); g.get(k).push(r); }); prs.forEach(r=>{ const k = keyOf(r); if(!pg.has(k)) pg.set(k,[]); pg.get(k).push(r); });
+  const names = (order || [...g.keys()].sort((a,b)=>g.get(b).length-g.get(a).length)).filter(n=>g.has(n)), cm = colorMapAll(names);
+  const items = paint(names.map(n=>({name:n, rs:g.get(n), prs:pg.get(n)||[]})), cm);
+  PB[id] = {title, items:items.map(x=>({name:x.name, n:x.rs.length, c:x.c}))};
+  const pie = pieHTML(id, '', items, scope||'', '', '', 999, true); if(DN[id]) DN[id].title = title.replace(/（[^（]*）$/,'');
+  return {cm, pie};
+}
+function pieSetG(id, title, groups, scope){
+  const gs = groups.filter(x=>x.rs.length).sort((a,b)=>b.rs.length-a.rs.length), cm = colorMapAll(gs.map(x=>x.name));
+  const items = paint(gs.map(x=>({name:x.name, rs:x.rs, prs:x.prs||[]})), cm);
+  PB[id] = {title, items:items.map(x=>({name:x.name, n:x.rs.length, c:x.c}))};
+  const pie = pieHTML(id, '', items, scope||'', '', '', 999, true); if(DN[id]) DN[id].title = title.replace(/（[^（]*）$/,'');
+  return {cm, pie};
+}
 function colorMapAll(names){ const PAL = LC_COL.concat(LC_EXT), m = new Map(); names.forEach((n,i)=>m.set(n, PAL[i%PAL.length])); return m; }
 function colorMap(names){ const m = new Map(); names.forEach((n,i)=>m.set(n, LC_COL[i%LC_COL.length])); return m; }
 /* 前 6 個用固定色，之後用延伸色（區域很多時每一塊顏色都不一樣） */
@@ -5154,7 +5216,7 @@ document.addEventListener('click', e => {
 });
 /* ---------- 圓餅圖（甜甜圈）：前 5 名各一塊，其餘合成「其它」；點一塊或右邊清單看案件 ---------- */
 const DN = {};
-function pieHTML(id, title, items, scope, other, cmp, max){
+function pieHTML(id, title, items, scope, other, cmp, max, noLeg){
   items = items.filter(x=>x.rs.length).sort((a,b)=>b.rs.length-a.rs.length);
   const uniq = a => [...new Map(a.map(r=>[r.id,r])).values()];
   const MX = max || 6; if(items.length > MX){ const rest = items.slice(MX-1); items = items.slice(0,MX-1).concat([{name:`${other||'其它'}（${rest.length} 個）`, rs:uniq(rest.flatMap(x=>x.rs)), prs: cmp ? uniq(rest.flatMap(x=>x.prs||[])) : null, other:true}]); }
@@ -5169,6 +5231,7 @@ function pieHTML(id, title, items, scope, other, cmp, max){
     arcs += items.length===1 ? `<circle cx="${C}" cy="${C}" r="${R}" class="dns" data-k="${k}" style="stroke:${col(x,k)}"><title>${esc(x.name)}：${x.rs.length} 件（100%）</title></circle>`
       : `<path d="M${pt(s0)} A${R},${R} 0 ${big} 1 ${pt(s1)}" class="dns" data-k="${k}" style="stroke:${col(x,k)}"><title>${esc(x.name)}：${x.rs.length} 件（${Math.round(f*100)}%）</title></path>`;
     a0 = a1; });
+  if(noLeg) return `<div class="dnbox dnsolo" data-dn="${id}">${title?`<div class="st-sec">${title}</div>`:''}<div class="dnwrap"><svg viewBox="0 0 180 180" class="dnsvg" role="img" aria-label="${esc(title||'圓餅圖')}">${arcs}<text x="${C}" y="${C-4}" class="dnt">${total}</text><text x="${C}" y="${C+16}" class="dnu">件</text></svg></div></div>`;
   return `<div class="dnbox" data-dn="${id}"><div class="st-sec">${title}</div><div class="dnwrap">
     <svg viewBox="0 0 180 180" class="dnsvg" role="img" aria-label="${esc(title)}圓餅圖">${arcs}<text x="${C}" y="${C-4}" class="dnt">${total}</text><text x="${C}" y="${C+16}" class="dnu">件</text></svg>
     <div class="dnleg${cmp?' cmp':''}">${items.map((x,k)=>`<button type="button" data-k="${k}" title="點一下看案件"><i style="background:${col(x,k)}"></i><span class="dnn">${esc(x.name)}</span><b>${x.rs.length}</b><span class="dnp">${Math.round(x.rs.length/total*100)}%</span>${cmp?`<span class="dnc">${chgHTML(x.rs.length,(x.prs||[]).length)}</span>`:''}</button>`).join('')}${cmp?`<div class="dncmp">▲▼ 件數${esc(cmp)}（滑過看上期件數）</div>`:''}</div></div></div>`;
@@ -5327,7 +5390,11 @@ async function dlStatsWord(){
     const txt = el => el.textContent.replace(/\s+/g,' ').trim();
     let body = wPara('衛生缺失統計'+name, {b:1, sz:32, jc:'center', after:60}) + wPara(rg.label+'　產出日期：'+fmtDate(today()), {jc:'center', sz:20, color:'5D6779', after:200});
     const media = [];
-    for(const el of box.children){
+    const pbImg = async key => { const r = await pieBarPng(key, ''); if(!r) return; media.push(r.png); const id = media.length, cx = 5760000, cy = Math.round(cx*r.h/r.w);
+      body += `<w:p><w:pPr><w:jc w:val="center"/></w:pPr><w:r><w:drawing><wp:inline><wp:extent cx="${cx}" cy="${cy}"/><wp:docPr id="${id}" name="chart${id}"/><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:nvPicPr><pic:cNvPr id="${id}" name="chart${id}.png"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="rImg${id}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${cx}" cy="${cy}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></w:drawing></w:r></w:p>`; };
+    const els = []; for(const el of box.children){ if(el.classList.contains('st-pb')){ els.push({pb:el.dataset.pb}); els.push(...el.querySelector('.pbr').children); } else els.push(el); }
+    for(const el of els){
+      if(el.pb){ try{ await pbImg(el.pb); }catch(e){} continue; }
       if(el.classList.contains('st-sum')) body += wPara(txt(el), {b:1, shade:el.classList.contains('warn')?'FDECEA':'E6F5EC', after:120});
       else if(el.classList.contains('st-tiles')){ const t=[...el.querySelectorAll('.st-tile')]; body += wTable([t.map(x=>txt(x.querySelector('.l'))), t.map(x=>txt(x.querySelector('.n'))+' 件'), t.map(x=>txt(x.querySelector('.d'))), t.map(x=>x.querySelector('.tchg')?txt(x.querySelector('.tchg')):'')]); }
       else if(el.classList.contains('st-extra')) body += wTable([...el.querySelectorAll('.box')].map(x=>[txt(x.querySelector('.l')), txt(x.querySelector('.n'))+' 件', txt(x.querySelector('.st-note'))]), false);
