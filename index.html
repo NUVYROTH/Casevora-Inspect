@@ -136,6 +136,7 @@ body.wide main{max-width:none}
 .mcnt{display:inline-block;min-width:calc(18px*var(--ms));text-align:center;background:var(--bad);color:#fff;border-radius:9px;padding:0 calc(5px*var(--ms));margin-left:2px}
 .mres{position:absolute;right:-6px;bottom:-6px;width:14px;height:14px;background:#fff;border:2px solid var(--c);border-radius:3px;cursor:nwse-resize}
 .mpin{position:absolute;transform:translate(-50%,-50%);min-width:calc(26px*var(--ms));height:calc(26px*var(--ms));padding:0 calc(6px*var(--ms));border-radius:13px;background:#16213a;color:#fff;font-size:calc(11.5px*var(--ms));font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap}
+.mpin .pcnt{position:absolute;top:calc(-11px*var(--ms));right:calc(-12px*var(--ms));min-width:calc(18px*var(--ms));height:calc(18px*var(--ms));padding:0 calc(4px*var(--ms));border-radius:calc(9px*var(--ms));background:#fff;color:var(--bad);border:2px solid var(--bad);font-size:calc(11px*var(--ms));font-weight:800;display:flex;align-items:center;justify-content:center;line-height:1;pointer-events:none}
 .mpin.hot{background:var(--bad)}.mpin.sel{outline:3px solid var(--gold)}.editing .mpin{cursor:move}
 .mpoly{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
 .mpoly polygon{pointer-events:visiblePainted;fill:color-mix(in srgb,var(--c) 10%,transparent);stroke:var(--c);stroke-width:2;vector-effect:non-scaling-stroke;cursor:pointer}
@@ -1150,7 +1151,7 @@ const GUIDES = {
     gStep(8,'現場稽核', gC(gR(`${gB('＋ 新增稽核重點',{n:1})}${gB('載入範例')}`)+gR(gB('📋 開始稽核',{ok:1,hl:1,n:2}))) + gC(gR(`<span class="gx-s" style="flex:1">排水溝清潔暢通</span>${gN(3)}${gB('✅ 合格',{ok:1})}${gB('❌ 不合格',{rd:1,hl:1})}`)),
       `<p>點地圖上的區域，右邊「稽核重點」按「＋ 新增稽核重點」${gN(1)}寫清楚<b>查核標準</b>（或載入範例 8 項）；<b>檢視、編輯模式都可以</b>新增、編輯、刪除。</p><p>每一項稽核重點可以放照片給稽核人員對照：<b>✅ 應有的樣子</b>（正常、清潔時）和 <b>❌ 不合格範例</b>（髒污、不符合時），各最多 3 張，可以直接 📸 拍照；右邊清單會顯示小圖。「<b>📗 匯出稽核重點（含圖片）</b>」可以選只匯出這一區，或這張地圖全部區域，做成一份有照片的稽核標準表。</p><p><b>區域很大、稽核點很多時</b>：建議先在區域裡放好「細部位置」（例：P01 洗手台、P02 輸送帶），稽核重點選「對應位置」；開始稽核時上方會出現位置按鈕，可以<b>照位置一段一段稽核</b>，按鈕上會顯示還沒填幾項。</p><p>右邊的「細部位置」「稽核紀錄」「稽核重點」「參考照片」標題都可以<b>點一下收合</b>，開／關會記住。</p><p>到現場按「📋 開始稽核」${gN(2)}，每項選${gN(3)}：✅ 合格、❌ 不合格（可「＋ 建立缺失」）、👁 觀察事項、⊘ 不適用。稽核頁上方有<b>📖 怎麼用</b>（可收合）和這一區的<b>參考照片</b>；對應到位置的項目旁邊也有那個位置的參考照片，點一下看大圖。</p><p>不合格、觀察事項的說明以「<b>現場稽核發現</b>」開頭；按 <b>📸 開相機拍照</b>直接用手機相機拍，或 🖼 從相簿選；拍好的照片點一下看大圖、按 ✕ 刪掉。</p>`),
     gStep(9,'風險顏色、連續發生警示、地圖統計', gC(gR(`${gB('🎨 風險顏色（開）',{dk:1,hl:1,n:1})}`)+gR(`<span class="gx-sw" style="background:#b42318"></span><span class="gx-s">重大／逾期／重複</span><span class="gx-sw" style="background:#d97706"></span><span class="gx-s">未結案</span><span class="gx-sw" style="background:#167a3e"></span><span class="gx-s">都結案</span>`)) + gC(gR(`${gN(2)}${gTag('年度','dk')}${gTag('每季')}${gTag('每月')}${gTag('自訂')}`),'📊 地圖統計'),
-      `<p>檢視模式依缺失狀況自動上色${gN(1)}：紅＝重大、逾期或<b>重複發生</b>；黃＝有未結案；綠＝都結案；灰＝沒紀錄。</p><p><b>⚠ 連續發生警示</b>：同一位置同一類缺失<b>連續 3 個月</b>都發生，位置標記會閃動並加 ⚠，右邊面板會提醒檢討根本原因。</p><p>地圖下方「📊 地圖統計」${gN(2)}選期間（年度、每季、每月，按 ◀ ▶ 跳上一期／下一期；或全部期間、最近三個月、最近六個月、自訂）；<b>點某個區域時，統計會變成那一區各位置的分布</b>，按「看全部區域」回到全廠。</p><p class="muted small">地圖統計的數字卡和長條都可以點開看案件，見第 10 步。</p>`),
+      `<p><b>🔢 地圖上的數字</b>：檢視模式上方可以選數字代表什麼——<b>本月件數</b>（預設，這個月發現幾件）、<b>地圖統計期間</b>（跟下方地圖統計選的月／季／年一樣）或<b>未結案件數</b>。區域名稱旁、位置右上角的紅色數字就是件數；0 件不顯示。「🖼 匯出平面圖」也會照你選的數字畫。</p><p>檢視模式依缺失狀況自動上色${gN(1)}：紅＝重大、逾期或<b>重複發生</b>；黃＝有未結案；綠＝都結案；灰＝沒紀錄。</p><p><b>⚠ 連續發生警示</b>：同一位置同一類缺失<b>連續 3 個月</b>都發生，位置標記會閃動並加 ⚠，右邊面板會提醒檢討根本原因。</p><p>地圖下方「📊 地圖統計」${gN(2)}選期間（年度、每季、每月，按 ◀ ▶ 跳上一期／下一期；或全部期間、最近三個月、最近六個月、自訂）；<b>點某個區域時，統計會變成那一區各位置的分布</b>，按「看全部區域」回到全廠。</p><p class="muted small">地圖統計的數字卡和長條都可以點開看案件，見第 10 步。</p>`),
     gStep(10,'📊 地圖統計：點開看案件', gC(gR(`<span class="gx-k">8<small>缺失總數</small></span>${gN(1)}<span class="gx-k b" style="box-shadow:0 0 0 2px var(--gold)">2<small>未結案</small></span><span class="gx-k rd">2<small>逾期</small></span>`)+gR(`<span class="gx-s" style="width:52px">包裝區</span><span style="flex:1;height:8px;border-radius:4px;background:#16213a;max-width:120px"></span><span class="gx-s">7</span>${gN(2)}`),'📊 地圖統計') + gC(gR(`<span class="gx-s" style="flex:1"><b>QA-001</b>　包裝區　待改善（逾期）</span>${gN(3)}`)+gR(`<span class="gx-s" style="flex:1"><b>QA-002</b>　包裝區　待改善</span>`)+gR(`<span style="flex:1"></span>${gB('關閉',{dk:1})}`),'未結案　一樓・全部區域・全部期間 2 件'),
       `<p>地圖下方「📊 地圖統計」的<b>數字卡</b>${gN(1)}可以點：缺失總數、未結案、逾期、重複發生、連續 3 個月警示、改善完成率（列出已結案的）。</p><p><b>長條</b>${gN(2)}也可以點：各區域（或各位置）、缺失類型、月份趨勢，會列出那一項的案件。</p><p>跳出的清單${gN(3)}上方寫著範圍（地圖・區域・期間），未結案排前面；<b>點案件就直接打開</b>，可以補資料或結案。</p><p class="muted small">範圍跟著上方選的期間；點了地圖上某個區域，就只列那一區。「廠區」「已建立位置」「最近稽核不合格」不是缺失案件，不能點。</p>`),
     gStep(11,'📊 地圖統計：區域分布圓餅圖與趨勢', gC(gR(`<svg viewBox="0 0 120 120" style="width:84px;height:84px;flex:none"><circle cx="60" cy="60" r="44" fill="none" stroke="#2a78d6" stroke-width="20" stroke-dasharray="96 400" transform="rotate(-90 60 60)"/><circle cx="60" cy="60" r="44" fill="none" stroke="#eb6834" stroke-width="20" stroke-dasharray="0 98 64 400" transform="rotate(-90 60 60)"/><circle cx="60" cy="60" r="44" fill="none" stroke="#1baf7a" stroke-width="20" stroke-dasharray="0 164 44 400" transform="rotate(-90 60 60)"/><circle cx="60" cy="60" r="44" fill="none" stroke="#9aa3b2" stroke-width="20" stroke-dasharray="0 210 66 400" transform="rotate(-90 60 60)"/><text x="60" y="66" text-anchor="middle" font-size="20" font-weight="800" fill="#16213a">90</text></svg><span style="display:flex;flex-direction:column;gap:3px;font-size:11px;flex:1"><span><i style="display:inline-block;width:9px;height:9px;background:#2a78d6;border-radius:2px"></i> 包裝區　<b>28</b>　31%</span><span><i style="display:inline-block;width:9px;height:9px;background:#eb6834;border-radius:2px"></i> 打漿區　<b>19</b>　21%</span><span><i style="display:inline-block;width:9px;height:9px;background:#1baf7a;border-radius:2px"></i> 緩衝區　<b>12</b>　13%</span><span><i style="display:inline-block;width:9px;height:9px;background:#9aa3b2;border-radius:2px"></i> 其它區域</span></span>${gN(1)}`),'各區域缺失分布') + gC(`<svg viewBox="0 0 200 60" style="width:100%;height:auto;display:block"><line x1="6" x2="196" y1="54" y2="54" stroke="#c9bda6"/><polyline points="6,40 44,30 82,20 120,34 158,26 196,10" fill="none" stroke="#2a78d6" stroke-width="2"/><polyline points="6,46 44,42 82,36 120,30 158,40 196,38" fill="none" stroke="#eb6834" stroke-width="2"/><polyline points="6,50 44,48 82,44 120,46 158,36 196,44" fill="none" stroke="#1baf7a" stroke-width="2"/></svg>`+gR(`<span class="gx-s">${gN(2)}各區域每月件數（最近 6 個月）</span>`)),
@@ -2443,7 +2444,7 @@ async function download(content, name, type){
 
 /* ---------- 備份 / 還原 ---------- */
 /* 畫面設定（風險顏色、磁鐵、圖層、地圖高度、隱藏的圖例、說明展開…）：只帶設定，不含資料 */
-const PREF_KEYS = ['mapH','mapZ','mapRisk','mapLock','mapStat','mapLayer','mapZbg','mapHide','mapSnap','mapSW','mapSec','audGuide','fcGuide'];
+const PREF_KEYS = ['mapNum','mapH','mapZ','mapRisk','mapLock','mapStat','mapLayer','mapZbg','mapHide','mapSnap','mapSW','mapSec','audGuide','fcGuide'];
 function prefsGet(){ const o = {}; try{ for(let i=0;i<localStorage.length;i++){ const k = localStorage.key(i); if(!k.startsWith(KEY+'_')) continue; const n = k.slice(KEY.length+1); if(PREF_KEYS.includes(n) || n.startsWith('guide_')) o[n] = localStorage.getItem(k); } }catch(e){} return o; }
 function prefsSet(o){ if(!o || typeof o!=='object') return; try{ Object.entries(o).forEach(([n,v])=>{ if((PREF_KEYS.includes(n) || /^guide_\w+$/.test(n)) && typeof v==='string') localStorage.setItem(KEY+'_'+n, v); }); }catch(e){} }
 async function backup(){
@@ -2481,7 +2482,7 @@ function restore(input){
       if(data.map && Array.isArray(data.map.maps) && data.map.maps.length) await mapApply(data.map, data.mapImages);
       if(Array.isArray(data.audits)) await auditsRestore(data.audits);
       if(Array.isArray(data.fragChecks)){ FRAGCHK = data.fragChecks.filter(c=>c && c.id && Array.isArray(c.results)); saveFragChk(); }
-      if(data.prefs){ prefsSet(data.prefs); MV_RISK = lyLS('mapRisk')!=='0'; MV_LOCK = lyLS('mapLock')==='1'; MV_ZBG = lyLS('mapZbg')!=='0'; MV_SNAP = lyLS('mapSnap')!=='0'; try{ MV_HIDE = new Set(JSON.parse(lyLS('mapHide')||'[]')); }catch(e){} if(LAYERS[lyLS('mapLayer')]) MV.layer = lyLS('mapLayer'); }
+      if(data.prefs){ prefsSet(data.prefs); { const v = lyLS('mapNum'); if(['month','mst','open'].includes(v)) MV_NUM = v; } MV_RISK = lyLS('mapRisk')!=='0'; MV_LOCK = lyLS('mapLock')==='1'; MV_ZBG = lyLS('mapZbg')!=='0'; MV_SNAP = lyLS('mapSnap')!=='0'; try{ MV_HIDE = new Set(JSON.parse(lyLS('mapHide')||'[]')); }catch(e){} if(LAYERS[lyLS('mapLayer')]) MV.layer = lyLS('mapLayer'); }
       optUnify(); flash('還原完成'); showList();
     }catch(e){ say('無法讀取：這不是本工具的備份檔。'); }
   };
@@ -2554,6 +2555,7 @@ function renderMap(){
         <button onclick="mapRename()">地圖改名</button>
         <button onclick="this.nextElementSibling.click()">換圖片</button><input type="file" accept="image/jpeg,image/png" hidden onchange="mapUpload(this,MV.mapId)">
         <button class="danger" onclick="mapDelete()">刪除地圖</button>` : ''}
+      ${MV.mode==='view'&&MV.layer==='defect'?`<select aria-label="地圖數字" title="區域名稱旁、位置右上角的數字代表什麼" style="width:auto" onchange="mapNumSet(this.value)"><option value="month" ${MV_NUM==='month'?'selected':''}>🔢 數字：本月件數</option><option value="mst" ${MV_NUM==='mst'?'selected':''}>🔢 數字：地圖統計期間（${esc(mstLabel())}）</option><option value="open" ${MV_NUM==='open'?'selected':''}>🔢 數字：未結案件數</option></select>`:''}
       ${MV.mode==='view'&&MV.layer==='defect'?`<button class="${MV_RISK?'primary':''}" onclick="mapRiskToggle()" title="依缺失狀況自動上色">🎨 風險顏色${MV_RISK?'（開）':'（關）'}</button>`:''}
       ${MV.layer==='zone' && lyList('zone').length ? `<button class="${lyZoneMul()?'primary':''}" onclick="lyZoneMulToggle()" title="開：分區顏色墊在底稿文字下面（白底平面圖最適合）；關：顏色半透明蓋在上面">🔤 文字在顏色上${lyZoneMul()?'（開）':'（關）'}</button>` : ''}
       ${(MV.layer==='zone' || (MV_ZBG && ['frag','flow','pest'].includes(MV.layer))) && lyList('zone').length ? `<label class="lyalpha" title="只改分區顏色的透明程度，顏色本身不變；匯出圖片也一樣">🎨 分區顏色　淡<input type="range" min="10" max="95" step="5" value="${Math.round(lyZoneAlpha()*100)}" aria-label="分區顏色濃淡" oninput="lyAlpha(this.value,false)" onchange="lyAlpha(this.value,true)">濃<b id="lyAlphaV">${Math.round(lyZoneAlpha()*100)}%</b></label>` : ''}
@@ -2568,11 +2570,11 @@ function renderMap(){
         <img id="mapImg" alt="${esc(m.name)}" draggable="false">
         ${MV.layer!=='defect' ? `<div id="lyOv">${lyOverlay(m)}</div>` : `<svg class="mpoly" viewBox="0 0 100 100" preserveAspectRatio="none">${mapAreas().filter(a=>a.pts).map(a=>`<polygon data-aid="${a.id}" class="${MV.sel&&MV.sel.t==='area'&&MV.sel.id===a.id?'sel':''} ${MV_RISK&&MV.mode==='view'?'rk':''}" style="--c:${esc(areaColor(a, REP))}" points="${ptsAttr(a.pts)}"/>`).join('')}
           ${MV.tool==='poly'&&MV.poly&&MV.poly.pts.length?`<polyline class="mtmp" points="${ptsAttr(MV.poly.pts)}"/>`:''}</svg>
-        ${mapAreas().filter(a=>a.pts).map(a=>{ const s = mapStats(recsForArea(a)); return `<span class="mlab mplab ${MV_RISK&&MV.mode==='view'?'rk':''}" data-lab="${a.id}" style="left:${a.pts[0][0]*100}%;top:${a.pts[0][1]*100}%;--c:${esc(areaColor(a, REP))}">${esc(a.name)}${s.open?` <b class="mcnt">${s.open}</b>`:''}${STREAK.some(x=>x.aid===a.id)?' <b class="mwarn" title="連續發生警示">⚠</b>':''}</span>`; }).join('')}
+        ${mapAreas().filter(a=>a.pts).map(a=>{ const s = mapStats(recsForArea(a)); return `<span class="mlab mplab ${MV_RISK&&MV.mode==='view'?'rk':''}" data-lab="${a.id}" style="left:${a.pts[0][0]*100}%;top:${a.pts[0][1]*100}%;--c:${esc(areaColor(a, REP))}">${esc(a.name)}${mapNumBadge(recsForArea(a))}${STREAK.some(x=>x.aid===a.id)?' <b class="mwarn" title="連續發生警示">⚠</b>':''}</span>`; }).join('')}
         ${MV.mode==='edit'&&!MV_LOCK&&MV.sel&&MV.sel.t==='area'&&areaById(MV.sel.id)&&areaById(MV.sel.id).pts&&MV.tool!=='poly'?(P=>P.map((q,i)=>{ const r = P[(i+1)%P.length]; return `<i class="mmid" data-aid="${MV.sel.id}" data-mid="${i}" title="拖曳可加一個角" style="left:${(q[0]+r[0])*50}%;top:${(q[1]+r[1])*50}%">+</i>`; }).join('')+P.map((q,i)=>`<i class="mvtx" data-aid="${MV.sel.id}" data-vtx="${i}" title="拖曳調整；連點兩下刪除這個角" style="left:${q[0]*100}%;top:${q[1]*100}%"></i>`).join(''))(areaById(MV.sel.id).pts):''}
         ${MV.tool==='poly'&&MV.poly?MV.poly.pts.map((q,i)=>`<i class="mdot ${i===0?'first':''}" style="left:${q[0]*100}%;top:${q[1]*100}%"></i>`).join(''):''}
-        ${mapAreas().filter(a=>!a.pts).map(a=>{ const s = mapStats(recsForArea(a)); return `<div class="marea ${MV.sel&&MV.sel.t==='area'&&MV.sel.id===a.id?'sel':''} ${MV_RISK&&MV.mode==='view'?'rk':''}" data-aid="${a.id}" style="left:${a.x*100}%;top:${a.y*100}%;width:${a.w*100}%;height:${a.h*100}%;--c:${esc(areaColor(a, REP))}"><span class="mlab">${esc(a.name)}${s.open?` <b class="mcnt">${s.open}</b>`:''}${STREAK.some(x=>x.aid===a.id)?' <b class="mwarn" title="連續發生警示">⚠</b>':''}</span>${MV.mode==='edit'&&!MV_LOCK?'<i class="mres" data-res="1"></i>':''}</div>`; }).join('')}
-        ${MAPD.locs.filter(l=>areaById(l.areaId)&&areaById(l.areaId).mapId===MV.mapId).map(l=>{ const s = mapStats(recsForLoc(l)); return `<div class="mpin ${locRiskCls(l, REP)} ${STREAK.some(x=>x.lid===l.id)?'warn3':''} ${MV.sel&&MV.sel.t==='loc'&&MV.sel.id===l.id?'sel':''}" data-lid="${l.id}" style="left:${l.x*100}%;top:${l.y*100}%" title="${esc((l.code+' '+l.name).trim())}">${esc(l.code||'•')}</div>`; }).join('')}`}
+        ${mapAreas().filter(a=>!a.pts).map(a=>{ const s = mapStats(recsForArea(a)); return `<div class="marea ${MV.sel&&MV.sel.t==='area'&&MV.sel.id===a.id?'sel':''} ${MV_RISK&&MV.mode==='view'?'rk':''}" data-aid="${a.id}" style="left:${a.x*100}%;top:${a.y*100}%;width:${a.w*100}%;height:${a.h*100}%;--c:${esc(areaColor(a, REP))}"><span class="mlab">${esc(a.name)}${mapNumBadge(recsForArea(a))}${STREAK.some(x=>x.aid===a.id)?' <b class="mwarn" title="連續發生警示">⚠</b>':''}</span>${MV.mode==='edit'&&!MV_LOCK?'<i class="mres" data-res="1"></i>':''}</div>`; }).join('')}
+        ${MAPD.locs.filter(l=>areaById(l.areaId)&&areaById(l.areaId).mapId===MV.mapId).map(l=>{ const s = mapStats(recsForLoc(l)); return `<div class="mpin ${locRiskCls(l, REP)} ${STREAK.some(x=>x.lid===l.id)?'warn3':''} ${MV.sel&&MV.sel.t==='loc'&&MV.sel.id===l.id?'sel':''}" data-lid="${l.id}" style="left:${l.x*100}%;top:${l.y*100}%" title="${esc((l.code+' '+l.name).trim())}">${esc(l.code||'•')}${mapNumPin(recsForLoc(l))}</div>`; }).join('')}`}
         <div class="mdraw" id="mDraw" hidden></div><i class="msnapx" id="mSnapX" hidden></i><i class="msnapy" id="mSnapY" hidden></i><i class="msnap" id="mSnap" hidden></i>
       </div></div>
       <div class="mgrip" id="mGrip" role="separator" aria-label="拖曳調整地圖高度" title="上下拖曳調整高度；連點兩下＝整張顯示">⇕ 拖這裡調整地圖高度（連點兩下＝整張顯示）</div><i class="mcorner" id="mCorner" role="separator" aria-label="拖曳同時調整地圖寬度和高度" title="拖曳同時調整寬度和高度"></i></div>
@@ -3335,6 +3337,17 @@ function riskOf(rs, aid, rep){
   return 'green';
 }
 let MV_RISK = true; try{ MV_RISK = localStorage.getItem('qaHygieneTracker_v1_mapRisk')!=='0'; }catch(e){}
+/* 地圖上的數字：本月件數（預設）／地圖統計期間件數／未結案件數 */
+let MV_NUM = 'month'; try{ const v = localStorage.getItem('qaHygieneTracker_v1_mapNum'); if(['month','mst','open'].includes(v)) MV_NUM = v; }catch(e){}
+function mapNumSet(v){ MV_NUM = v; try{ localStorage.setItem('qaHygieneTracker_v1_mapNum', v); }catch(e){} renderMap(); }
+function mapNumPer(){ const t = today();
+  if(MV_NUM==='month'){ const y = +t.slice(0,4), m = +t.slice(5,7); return {f:ymdOf(y,m,1), t:ymdOf(y,m,lastDay(y,m)), label:`${y} 年 ${m} 月`}; }
+  if(MV_NUM==='mst'){ const [f,tt] = mstRange(); return {f, t:tt, label:mstLabel()}; }
+  return null; }
+function mapNumOf(rs){ const p = mapNumPer(); return p ? rs.filter(r=>r.foundDate && r.foundDate>=p.f && r.foundDate<=p.t).length : rs.filter(r=>!r.closed).length; }
+const mapNumWord = () => MV_NUM==='open' ? '未結案件數' : (mapNumPer().label + ' 發現件數');
+function mapNumBadge(rs){ const n = mapNumOf(rs); return n ? ` <b class="mcnt" title="${esc(mapNumWord())}">${n}</b>` : ''; }
+function mapNumPin(rs){ if(MV_NUM==='open') return ''; const n = mapNumOf(rs); return n ? `<b class="pcnt" title="${esc(mapNumWord())}">${n}</b>` : ''; }
 function mapRiskToggle(){ MV_RISK = !MV_RISK; try{ localStorage.setItem('qaHygieneTracker_v1_mapRisk', MV_RISK?'1':'0'); }catch(e){} renderMap(); }
 function areaColor(a, rep){ return MV_RISK && MV.mode==='view' ? RISK[riskOf(recsForArea(a), a.id, rep)].c : (a.color||'#b8955a'); }
 /* 匯出畫好的平面圖（PNG）：平面圖＋區域＋位置標記，依目前的顯示方式（風險顏色開／關），放大繪製讓文字清晰 */
@@ -3359,8 +3372,9 @@ function exportTrim(c, HEAD, FOOT){
   return o;
 }
 /* per＝{f,t,label}：給區域分析 Word 用，區域、位置旁寫「這段期間發現幾件」，回傳圖片（不下載） */
-async function mapExportImage(per){
+async function mapExportImage(per, asCanvas){
   if(!per && MV.layer && MV.layer!=='defect') return layerExportImage();
+  if(!per && MV_NUM!=='open') per = mapNumPer();   /* 匯出圖片跟著地圖上選的數字 */
   const m = MAPD.maps.find(x=>x.id===MV.mapId); if(!m) return;
   const u = await phGet(m.img); if(!u){ say('平面圖找不到，請重新上傳。'); return; }
   const img = new Image(); img.src = u; try{ await img.decode(); }catch(e){ say('平面圖讀取失敗。'); return; }
@@ -3431,7 +3445,7 @@ async function mapExportImage(per){
   if(risk){ Object.values(RISK).forEach(v => { g.fillStyle = v.c; g.fillRect(fx, fy-10*u1, 20*u1, 20*u1); fx += 28*u1; g.fillStyle = '#16213a'; const t = v.t.replace(/^.：/,''); g.fillText(t, fx, fy); fx += g.measureText(t).width + 34*u1; }); }
   else { g.fillStyle = '#5d6779'; g.fillText(per ? `區域、位置旁的紅色數字＝${per.label}發現的缺失件數（依發現日期）；紅色位置＝這段期間有缺失` : '區域旁紅色數字＝未結案件數；紅色位置標記＝有未結案缺失；⚠＝連續 3 個月發生', fx, fy); }
   const out = exportTrim(c, HEAD, FOOT);
-  if(per) return out;
+  if(asCanvas) return out;
   const blob = await new Promise(r => out.toBlob(r, 'image/png'));
   if(!blob){ say('圖片產生失敗，請重試。'); return; }
   await download(blob, `Casevoras_廠區地圖_${m.name}_${today()}.png`.replace(/[\\/:*?"<>|\s]+/g,'_'), 'image/png');
@@ -3711,7 +3725,7 @@ async function mapAnaWord(){
     body += S(`一、各${A.unitWord}總表`) + wTable(T.sum.map(r=>r.map(String)));
     const media = []; let id = 0;
     /* 平面圖：區域、位置旁寫這段期間的缺失件數 */
-    try{ const [pf, pt] = mstRange(), cv = await mapExportImage({f:pf, t:pt, label:A.label});
+    try{ const [pf, pt] = mstRange(), cv = await mapExportImage({f:pf, t:pt, label:A.label}, true);
       if(cv){ const png = new Uint8Array(await (await new Promise(r=>cv.toBlob(r,'image/png'))).arrayBuffer()); media.push(png); id = media.length;
         body += S(`平面圖（${A.label}各區域、位置缺失件數）`) + docxImg(id, 6120000, Math.round(6120000*cv.height/cv.width)) + wPara('紅色數字＝這段期間發現的缺失件數（依發現日期）；沒有數字的位置＝這段期間沒有缺失。', {sz:17, color:'5D6779', after:120}); } }
     catch(e){ body += wPara('（平面圖無法產生）', {sz:19, color:'5D6779'}); }
